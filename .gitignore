@@ -3,3 +3,6 @@
 
 #Node Modules Folder
 node_modules
+
+#No Real Config
+config.js

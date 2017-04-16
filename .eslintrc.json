@@ -15,7 +15,6 @@
 		"no-console": [ 1 ]
 	},
 	"globals": {
-		"_c": true,
 		"log": true,
 		"_dr": true,
 
@@ -26,6 +25,11 @@
 		"http": true,
 		"https": true,
 
-		"Koa": true
+		"Promise": true,
+		"jsdom": true,
+
+		"conf": true,
+		"func": true,
+		"work": true
 	}
 }
