@@ -1,26 +1,20 @@
+let request = require('request');
 
 module.exports = async (cookie, path) => {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		let options = {
-			hostname: 'www.pixiv.net',
-			path: path,
-			method: 'GET',
+			url: 'https://www.pixiv.net'+path,
 			headers: {
-				'Accept-Encoding': '',
 				'Cookie': `PHPSESSID=${cookie}`
-			}
+			},
+			encoding: null
 		};
 
-		http.request(options, res => {
-			let rawData = [];
-
-			res.on('data', (chunk) => {
-				rawData.push(chunk);
-			});
-
-			res.on('end', () => {
-				resolve(Buffer.concat(rawData));
-			});
-		}).end();
+		request(options, function (error, response, buffer) {
+			if(error)
+				reject(error);
+			else
+				resolve(buffer);
+		});
 	});
 };

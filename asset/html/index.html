@@ -2,9 +2,78 @@
 <html>
 	<head>
 		<title>Picov</title>
+
+		<link href="css/fa.min.css" rel="stylesheet">
+		<link href="css/flex.css" rel="stylesheet">
+		<link href="css/small.css" rel="stylesheet">
+		<link href="css/test.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+		<link href="css/color.css" rel="stylesheet">
 	</head>
 	<body>
-		<div id="main">
+		<div class="Frame clrFont flex drr wpn jcs aic wpn">
+			<div class="Main blrBack flex drc jcc aic wpn">
+				<div class="Records flex drr jca aic aca wpw">
+					<div class="Record flex drr jcs ais ace wpw">
+						<div class="Detail flex drr jcs aic acc">
+							<div class="Icon flex jcc aic acc"><i class="fa fa-address-card-o"></i></div>
+							<span class="Show sTitle"></span>
+						</div>
+						<div class="Detail flex drr jcs aic acc">
+							<div class="Icon flex jcc aic acc"><i class="fa fa-user-o"></i></div>
+							<span class="Show sUser"></span>
+						</div>
+					</div>
+				</div>
+				<div class="Pager flex jcb aic">
+					<a id="RecordPrev" class="PagerPrev flex jcc aic">上一页</a>
+					<div class="PagerCount flex jcc aic">
+						第<input id="RecordPage" class="Page" type="text"></input>页
+					</div>
+					<a id="RecordNext" class="PagerNext flex jcc aic">下一页</a>
+				</div>
+			</div>
+			<div class="Navi blrNavi">
+				<div class="TabHeader RightNavi flex jca aih wpn">
+					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Basic">表单</a>
+					<a class="TabHead RightNavi flex jcc aic" data-taber-page="Config" data-notab>配置</a>
+					<a class="TabHead RightNavi flex jcc aic" data-taber-page="About" data-notab>关于</a>
+				</div>
+				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Basic">
+					<div class="NaviColumn flex jcb aic wpn">
+						<div class="CondBar2 flex jca aic wpw">
+							<input id="CondName" class="wf Input" type="text" placeholder="关键词"/>
+						</div>
+						<a id="Search" class="w4 Button Click">搜索</a>
+					</div>
+				</div>
+				<div class="TabItem RightNavi clrFontDark flex drc jcs aic wpn" data-taber-page="Config">
+				</div>
+				<div class="TabItem RightNavi flex drr jcc aic wpn" data-taber-page="About">
+					<div class="TabItem RightNavi2 clrFontDark fs20 flex drc jcb aic wpw">
+						<div>
+							<span class="fs24 fsb clrFont">P</span>icov&nbsp;
+						</div>
+						<div>
+							<span class="fs24 fsb clrFont">Pixiv 浏览器</span>
+						</div>
+						<div>
+							基于<span class="fs24 fsb clrFont">网页</span>
+						</div>
+						<div>
+							自搭建<span class="fs24 fsb clrFont">服务器</span>
+						</div>
+						<div>
+							强迫症患者的
+							<span class="fs24 fsb clrFont">抓图工具</span>
+						</div>
+						<div>
+							Make&nbsp;by&nbsp;
+							<span class="fs24 fsb clrFont">DanoR</span>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<script type="text/javascript">window.d = { v: {}, e: {}, t: {}, f:{} };</script>
@@ -13,6 +82,8 @@
 
 		<script type="text/javascript" src="js/pre.js"></script>
 		<script type="text/javascript" src="js/tool/comm.js"></script>
+		<script type="text/javascript" src="js/tool/pager.js"></script>
+		<script type="text/javascript" src="js/tool/taber.js"></script>
 		<script type="text/javascript" src="js/func.js"></script>
 		<script type="text/javascript" src="js/init.js"></script>
 	</body>

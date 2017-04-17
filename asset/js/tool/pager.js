@@ -2,32 +2,30 @@
 	d.t.pagerDeal = function(now, max, pager) {
 		var eNow = pager.eNow, eMax = pager.eMax;
 
-		if(now && max) {
+		if(eNow && typeof now == 'number') {
 			pager.now = now;
+
+			if(typeof eNow == 'function') eNow(pager);
+			if(typeof eNow == 'object') eNow.html(now);
+		}
+
+		if(eMax && typeof max == 'number') {
 			pager.max = max;
 
-			if(eNow) {
-				if(typeof eNow == 'function') eNow(pager);
-				if(typeof eNow == 'object') eNow.html(pager.now);
-			}
+			if(typeof eMax == 'function') eMax(pager);
+			if(typeof eMax == 'object') eMax.html(max);
+		}
 
-			if(eMax) {
-				if(typeof eMax == 'function') eMax(pager);
-				if(typeof eMax == 'object') eMax.html(pager.max);
-			}
-
-			if(pager.edge) {
-				pager.ePrev[now == 1 ? 'addClass' : 'removeClass'](pager.edge);
-				pager.eNext[now == max ? 'addClass' : 'removeClass'](pager.edge);
-			}
+		if(pager.edge) {
+			pager.ePrev[now == 1 ? 'addClass' : 'removeClass'](pager.edge);
+			pager.eNext[now == max && eMax ? 'addClass' : 'removeClass'](pager.edge);
 		}
 	};
 
 	var clicker = function() {
 		var $this = $(this), data = $this.data(),
 			key = data.pagerKey, pager = d.v.pager[key], page = pager.now + data.pagerOffset;
-
-		if(pager && pager.turn && page > 0 && page <= pager.max) pager.turn(page);
+		if(pager && pager.turn && page > 0 && (page <= pager.max || !pager.eMax)) pager.turn(page);
 	};
 
 	d.v.pager = {};

@@ -3,8 +3,6 @@ module.exports = async (page) => {
 		let buf = await func.get(conf.cookie, `/bookmark_new_illust.php?p=${page || 1}`),
 			str = buf.toString();
 
-		fs.writeFileSync('../1.html', buf);
-
 		let take = (err, window) => {
 			let $ = window.$, result = [];
 			$('li.image-item').each(function() {
@@ -12,14 +10,13 @@ module.exports = async (page) => {
 
 				result.push({
 					iid: img.data('id'),
-					title: $$.find('h1.title').html(),
+					title: $$.find('h1.title').attr('title'),
 					uid: img.data('userId'),
-					user: $$.find('a.user').html(),
+					user: $$.find('a.user').data('user_name'),
 					tags: img.data('tags').split(' '),
 					time: img.data('src').match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0],
 					type: img.data('type'),
 					multi: $$.find('a._work').hasClass('multiple')
-
 				});
 			});
 
