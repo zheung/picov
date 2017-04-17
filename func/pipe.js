@@ -1,3 +1,5 @@
+let request = require('request');
+
 module.exports = async (cookie, path) => {
 	return new Promise((resolve, reject) => {
 		let options = {

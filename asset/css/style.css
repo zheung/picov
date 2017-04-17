@@ -288,6 +288,10 @@ a:visited {
 	border: 2px solid transparent;
 
 	width: 100%;
+	height: 12%;
+}
+.Detail.Thumb {
+	height: 76%;
 }
 .Detail>.Icon {
 	width: 14%;
@@ -299,6 +303,10 @@ a:visited {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+.sThumb {
+	max-height: 77%
+}
+
 .sPass {
 	font-family: monospace;
 	font-weight: bold;

@@ -27,6 +27,7 @@
 
 		"Promise": true,
 		"jsdom": true,
+		"request": true,
 
 		"conf": true,
 		"func": true,

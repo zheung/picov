@@ -10,7 +10,7 @@
 				if(record) {
 					eRecord.find('.sTitle').html(record.title);
 					eRecord.find('.sUser').html(record.user);
-					// eRecord.find('.sUser').attr('href', 'http://'+record.domn[0]);
+					eRecord.find('.sThumb').attr('src', '/thumb?iid='+record.iid+'&time='+record.time);
 				}
 
 				eRecord.children()[record ? 'removeClass' : 'addClass']('hide');
