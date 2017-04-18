@@ -1,18 +1,28 @@
-module.exports = async (cookie, path) => {
+module.exports = async (path, type) => {
 	return new Promise((resolve, reject) => {
-		let options = {
-			url: 'https://www.pixiv.net'+path,
+		let option = {
+			url: path,
 			headers: {
-				'Cookie': `PHPSESSID=${cookie}`
+				'Cookie': `PHPSESSID=${conf.cookie}`,
+				'Referer': 'http://www.pixiv.net/'
 			},
 			encoding: null
 		};
 
-		request(options, function (error, response, buffer) {
-			if(error)
-				reject(error);
-			else
-				resolve(buffer);
-		});
+		if(type == 1) {
+			log('请求', path);
+
+			request(option, function (error, response, buffer) {
+				if(error)
+					reject(error);
+				else
+					resolve(buffer);
+			});
+		}
+		else if(type == 2) {
+			log('代理', path);
+
+			resolve(request(option));
+		}
 	});
 };

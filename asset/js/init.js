@@ -3,6 +3,8 @@
 	d.t.taber('RightNavi', d.e.TabHeadRightNavi, d.e.TabItemRightNavi, ['Basic', 'Config', 'About'], 'active');
 
 	d.e.Search.on('click', d.f.pageTurn);
+
+	$('.sThumb').on('click', d.f.open);
 })();
 
 // Init
