@@ -1,4 +1,4 @@
-module.exports = async (path, type) => {
+module.exports = async (path, type, isLog = true) => {
 	return new Promise((resolve, reject) => {
 		let option = {
 			url: path,
@@ -10,7 +10,7 @@ module.exports = async (path, type) => {
 		};
 
 		if(type == 1) {
-			log('请求', path);
+			if(isLog) log('请求', path);
 
 			request(option, function (error, response, buffer) {
 				if(error)
@@ -20,7 +20,7 @@ module.exports = async (path, type) => {
 			});
 		}
 		else if(type == 2) {
-			log('代理', path);
+			if(isLog) log('代理', path);
 
 			resolve(request(option));
 		}

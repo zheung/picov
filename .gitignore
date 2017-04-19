@@ -7,5 +7,6 @@ node_modules
 #No Real Config
 config.js
 
-#No Cache Folder
+#No Picture Folder
 cache
+save

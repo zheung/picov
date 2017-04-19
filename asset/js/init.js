@@ -4,7 +4,7 @@
 
 	d.e.Search.on('click', d.f.pageTurn);
 
-	$('.sThumb').on('click', d.f.open);
+	$('.Record').on('dblclick', d.f.open);
 })();
 
 // Init

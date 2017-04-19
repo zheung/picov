@@ -5,36 +5,16 @@
 	},
 	"extends": "eslint:recommended",
 	"rules": {
-		"indent": [
-			"warn",
-			"tab"
-		],
-		"linebreak-style": [
-			"error",
-			"windows"
-		],
-		"quotes": [
-			"error",
-			"single"
-		],
-		"semi": [
-			"error",
-			"always"
-		],
-		"no-unused-vars": [
-			"warn",
-			{ "vars": "all", "args": "after-used" }
-		]
+		"indent": [ 1, "tab" ],
+		"linebreak-style": [ 2, "windows" ],
+		"quotes": [ 2, "single" ],
+		"semi": [ 2, "always" ],
+		"no-unused-vars": [ 1, { "vars": "all", "args": "after-used" } ],
+		"no-console": [ 0 ]
 	},
 	"globals": {
 		"$": true,
 
-		"d": true,
-
-		"kq": true,
-		"kqe": true,
-		"kqv": true,
-		"gDict": true,
-		"kqf": true
+		"d": true
 	}
 }
