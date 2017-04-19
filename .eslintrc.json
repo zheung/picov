@@ -31,6 +31,7 @@
 
 		"conf": true,
 		"func": true,
-		"work": true
+		"work": true,
+		"cache": true
 	}
 }
