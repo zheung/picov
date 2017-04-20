@@ -1,53 +1,48 @@
-let ext = ['png', 'jpg'];
+let head = async(iid, time, pid, ext = 'png') => {
+		let url = `http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, code = await func.head(url);
 
-module.exports = async (iid, time) => {
-	let found = true, pid = 0;
+		if(code == 200)
+			return [url, pid];
+		else if(code == 404 && ext == 'png')
+			return await head(iid, time, pid, 'jpg');
+		else if(typeof code != 'number') {
+			log(code);
 
-	while(found) {
-		let url, eid = 0;
+			return false;
+		}
+	},
+	down = async(url, iid, now, pid) => {
+		try {
+			let getStream = await func.get(url[0], 2, false);
 
-		while(eid < 2)
-			try {
-				let test = `http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext[eid]}`;
+			await new Promise((resolve) => {
+				if(getStream && getStream.pipe) {
+					getStream.pipe(
+						fs.createWriteStream(`save/${iid}_p${url[1]}.png`)
+						.on('finish', () => {
+							log('下载', iid, `(${now}/${pid})`, '完毕');
 
-				await func.head(test);
-
-				url = test;
-
-				break;
-			} catch (err) {
-				if(err == 404)
-					eid++;
-				else if(err.code != 'ETIMEDOUT')
-					log(err);
-			}
-
-		if(url) {
-			log('下载', iid, pid);
-
-			try {
-				let thumbStream = await func.get(url, 2, false);
-
-				if(thumbStream && thumbStream.pipe) {
-					let saveStream = fs.createWriteStream(`save/${iid}_p${pid}.png`),
-						now = pid;
-
-					saveStream.on('finish', () => { log('下载', iid, now, '完毕'); });
-
-					thumbStream.pipe(saveStream);
+							resolve();
+						})
+					);
 				}
-			} catch (error) {
-				log(error);
-			}
+			});
+		} catch (err) {
+			log(err);
 		}
-		else {
-			found = false;
+	};
 
-			// log('枚举', '完毕', iid, `共${pid}张`);
-		}
+module.exports = async(iid, time) => {
+	let pid = 0, urls = [], url;
 
-		pid++;
-	}
+	while((url = await head(iid, time, pid++)))
+		urls.push(url);
+
+	log('下载', iid, `共${--pid}张`);
+
+	await Promise.mapSeries(urls, (url, now) => {
+		return down(url, iid, now+1, pid);
+	});
 
 	return pid;
 };

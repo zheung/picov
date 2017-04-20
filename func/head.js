@@ -1,5 +1,5 @@
 module.exports = async (path) => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		let option = {
 			url: path,
 			method: 'HEAD',
@@ -11,14 +11,14 @@ module.exports = async (path) => {
 
 		request(option).on('response', function(response) {
 			if(response.statusCode != 200)
-				reject(response.statusCode);
+				resolve(response.statusCode);
 			else
 				resolve(200);
 		})
 		.on('error', function(err) {
 			log(err);
 
-			reject(err);
+			resolve(err);
 		});
 	});
 };
