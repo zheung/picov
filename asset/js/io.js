@@ -6,9 +6,12 @@
 			eRecord.data('record', record);
 
 			if(record) {
-				var title = (record.ugoira?'[U]':'')+(record.multi?'[M]':'')+record.title;
+				var color = '#E0E2E4';
 
-				eRecord.find('.sTitle').html(title).attr('title', record.title);
+				if(record.multi) color = 'aqua';
+				if(record.ugoira) color = 'violet';
+
+				eRecord.find('.sTitle').html(record.title).attr('title', record.title).css('color', color);
 				eRecord.find('.sUser').html(record.user);
 				eRecord.find('.sThumb').attr('src', '').attr('src', '/thumb?iid='+record.iid+'&time='+record.time+'&ugoira='+record.ugoira);
 			}
