@@ -16,6 +16,10 @@
 	},
 	"globals": {
 		"log": true,
+		"rog": true,
+		"sog": true,
+		"eog": true,
+
 		"_dr": true,
 
 		"fs": true,
@@ -28,6 +32,8 @@
 		"Promise": true,
 		"jsdom": true,
 		"request": true,
+
+		"io": true,
 
 		"conf": true,
 		"func": true,

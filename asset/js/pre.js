@@ -20,12 +20,16 @@
 		records.push($(record));
 	}
 
-
 	d.e.records = records;
 })();
 // 功能Div入库
 (function() {
+	d.s = io();
+
 	d.e.Search = $('#Search');
+
+	d.e.sMean = $('.sMean');
+	d.e.sLogBox = $('.sLogBox');
 
 	d.e.RecordPrev = $('#RecordPrev');
 	d.e.RecordNext = $('#RecordNext');

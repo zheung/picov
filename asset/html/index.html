@@ -38,8 +38,7 @@
 			</div>
 			<div class="Navi blrNavi">
 				<div class="TabHeader RightNavi flex jca aih wpn">
-					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Basic">表单</a>
-					<a class="TabHead RightNavi flex jcc aic" data-taber-page="Config" data-notab>配置</a>
+					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Basic">控制台</a>
 					<a class="TabHead RightNavi flex jcc aic" data-taber-page="About" data-notab>关于</a>
 				</div>
 				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Basic">
@@ -49,8 +48,14 @@
 						</div>
 						<a id="Search" class="w4 Button Click">搜索</a>
 					</div>
-				</div>
-				<div class="TabItem RightNavi clrFontDark flex drc jcs aic wpn" data-taber-page="Config">
+					<div class="NaviColumn flex jcb aic wpn">
+						<span class="sMean">当前列表：</span>
+					</div>
+					<div class="LogBox NaviColumn fs11 clrFontDark drc flex jcs ais wpn">
+						<div class="sLogBox fs11 clrFontDark drc flex jcs ais wpn">
+
+						</div>
+					</div>
 				</div>
 				<div class="TabItem RightNavi flex drr jcc aic wpn" data-taber-page="About">
 					<div class="TabItem RightNavi2 clrFontDark fs20 flex drc jcb aic wpw">
@@ -82,12 +87,13 @@
 		<script type="text/javascript">window.d = { v: {}, e: {}, t: {}, f:{} };</script>
 
 		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/socket.io.js"></script>
 
 		<script type="text/javascript" src="js/pre.js"></script>
-		<script type="text/javascript" src="js/tool/comm.js"></script>
 		<script type="text/javascript" src="js/tool/pager.js"></script>
 		<script type="text/javascript" src="js/tool/taber.js"></script>
 		<script type="text/javascript" src="js/func.js"></script>
+		<script type="text/javascript" src="js/io.js"></script>
 		<script type="text/javascript" src="js/init.js"></script>
 	</body>
 </html>

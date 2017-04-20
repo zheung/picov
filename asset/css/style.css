@@ -533,3 +533,17 @@ kqud {
 .NaviColumn>.NaviItem:nth-child(1) {
 	padding-top: 10px;
 }
+
+.LogBox {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.sLogBox {
+	width: 97%;
+	height: 100%;
+	margin-left: 3%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}

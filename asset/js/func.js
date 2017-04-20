@@ -1,37 +1,28 @@
 //翻页
 (function() {
 	d.f.pageTurn = function(page) {
-		d.t.get('list', { p: (typeof page == 'number' && page ? page : 1) }, function(obj) {
-			d.e.records.map(function(eRecord, i) {
-				var record = obj.records[i];
-
-				eRecord.data('record', record);
-
-				if(record) {
-					var title = (record.ugoira?'[U]':'')+(record.multi?'[M]':'')+record.title;
-
-					eRecord.find('.sTitle').html(title).attr('title', record.title);
-					eRecord.find('.sUser').html(record.user);
-					eRecord.find('.sThumb').attr('src', '').attr('src', '/thumb?iid='+record.iid+'&time='+record.time+'&ugoira='+record.ugoira);
-				}
-
-				eRecord.children()[record ? 'removeClass' : 'addClass']('hide');
-				eRecord[record ? 'removeClass' : 'addClass']('hidden');
-			});
-
-			d.t.pagerDeal(obj.now, null, d.v.pager['record']);
-		});
+		d.s.emit('list', { p: (typeof page == 'number' && page ? page : 1) });
 	};
-})();
-(function() {
-	d.f.open = function() {
+
+	d.f.save = function() {
 		var $this = $(this), record = $this.data('record');
 
 		if(!~~record.ugoira)
-			d.t.get('save', { iid: record.iid, time: record.time }, function() {
-				console.log(record.iid, 'saving');
-			});
+			d.s.emit('save', { iid: record.iid, time: record.time });
 
 		// window.open('https://www.pixiv.net/member_illust.php?mode='+(~~data.multi ? 'manga': 'medium')+'&illust_id='+data.iid);
+	};
+
+	d.f.log = function(text, id_) {
+		var box = d.e.sLogBox, ts = box.children(), id = 'log-'+id_, span = ts.filter('#'+id);
+
+		if(span.length)
+			span.html(text);
+		else {
+			box.append($('<span>').attr('id', id).html(text));
+
+			if(ts.length+1 > 34)
+				ts.filter(':first').remove();
+		}
 	};
 })();

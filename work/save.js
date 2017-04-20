@@ -1,47 +1,65 @@
-let head = async(iid, time, pid, ext = 'png') => {
-		let url = `http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, code = await func.head(url);
-
-		if(code == 200)
-			return [url, pid];
-		else if(code == 404 && ext == 'png')
-			return await head(iid, time, pid, 'jpg');
-		else if(typeof code != 'number') {
-			log(code);
-
-			return false;
-		}
-	},
-	down = async(url, iid, now, pid) => {
+let down = async(url, iid, proc, socket, ts) => {
 		try {
 			let getStream = await func.get(url[0], 2, false);
 
 			await new Promise((resolve) => {
-				if(getStream && getStream.pipe) {
-					getStream.pipe(
-						fs.createWriteStream(`save/${iid}_p${url[1]}.png`)
-						.on('finish', () => {
-							log('下载', iid, `(${now}/${pid})`, '完毕');
+				let writeStream = fs.createWriteStream(`save/${iid}_p${url[1]}.png`), total;
 
-							resolve();
-						})
-					);
+				if(getStream && getStream.pipe) {
+					getStream
+					.on('response', (res) => {
+						total = res['content-length'];
+					})
+					.on('data', (chunk) => {
+						passedLength += chunk.length;
+
+						if(writeStream.write(chunk) === false) {
+							readStream.pause();
+						}
+						// rog(socket, ts, '下载', iid, proc, chunk);
+					})
+				readStream.on('end', function() {
+				writeStream.end();
+				});
+				writeStream.on('drain', function() {
+				readStream.resume();
+				});
+					// .pipe(
+
+					// 	.on('finish', () => {
+					// 		rog(socket, ts, '下载', iid, proc, '完毕');
+
+					// 		resolve();
+					// 	})
+					// )
+					;
 				}
 			});
+
+			return true;
 		} catch (err) {
 			log(err);
+
+			return false;
 		}
 	};
 
-module.exports = async(iid, time) => {
-	let pid = 0, urls = [], url;
+module.exports = async(iid, time, socket) => {
+	let info = JSON.parse((await func.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 1)).toString()),
+		urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext;
 
-	while((url = await head(iid, time, pid++)))
-		urls.push(url);
+	while(pid < count)
+		urls.push([`http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
 
-	log('下载', iid, `共${--pid}张`);
+	sog(socket, '下载', iid, `共${count}张`);
 
-	await Promise.mapSeries(urls, (url, now) => {
-		return down(url, iid, now+1, pid);
+	await Promise.mapSeries(urls, async(url, now) => {
+		let tid = 0, proc = `(${now+1}/${pid})`, retry = ~~conf.retry, ts = new Date().getTime();
+
+		rog(socket, ts, '下载', iid, proc);
+
+		while(!await down(url, iid, proc, socket, ts) && tid++ <= retry)
+			rog(socket, ts, '下载', iid, proc, '失败', `第(${tid}/${retry})次重试`);
 	});
 
 	return pid;
