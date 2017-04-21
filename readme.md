@@ -19,13 +19,20 @@ $ cd 代码目录
 ```
 $ npm i
 ```
-4. 复制`config_default.js`为`config.js`，填写你的配置（注意格式）
-```
+4. 复制`config_default.js`为`config.js`，填写你的配置（注意格式，和保证图片目录已创建）
+```javascript
 module.exports = {
 	cookie: 'Your PHPSESSID',
 
-	address: '127.0.0.1',
-	port: 910
+	ip: '127.0.0.1',
+	port: 910,
+
+	retry: 5,
+
+	path: {
+		large: 'Your Large Picture Path',
+		cache: 'Your Cache Path'
+	}
 };
 ```
 5. 运行程序
@@ -35,3 +42,24 @@ $ node app.js
 6. 打开浏览器，输入地址 [http://127.0.0.1:910/](http://127.0.0.1:910/)
 
 7. Enjoy Pixiv!
+
+## 当前特性
+- 浏览关注的作品
+- 双击图片后台下载，单击动图打开链接
+- 快捷键：
+```
+	Shift+C 清楚控制台记录
+	Shift+G 聚焦到页码
+	PageDown 下一页
+	PageUp 上一页
+```
+
+## 计划特性
+- 浏览某一作家/搜索的列表
+- 保存动图（Ugoria）
+- 更多操作模式
+- 界面里查看大图
+- 自动下载
+- 大图管理
+- 缓存定期清楚
+- 多图作品预览

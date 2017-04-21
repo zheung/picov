@@ -4,7 +4,7 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 
 		await new Promise((resolve, reject) => {
 			let total, passed = 0,
-				writeStream = fs.createWriteStream(`./save/${iid}_p${url[1]}.${ext}`)
+				writeStream = fs.createWriteStream(path.join(conf.path.large, `${iid}_p${url[1]}.${ext}`))
 				.on('drain', () => {
 					getStream.resume();
 				})
