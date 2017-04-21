@@ -16,9 +16,7 @@
 	},
 	"globals": {
 		"log": true,
-		"rog": true,
-		"sog": true,
-		"eog": true,
+		"soger": true,
 
 		"_dr": true,
 
