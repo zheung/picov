@@ -5,6 +5,7 @@ module.exports = async (page) => {
 
 		let take = (err, window) => {
 			let $ = window.$, result = [];
+
 			$('li.image-item').each(function() {
 				let $$ = $(this), img = $$.find('img._thumbnail');
 

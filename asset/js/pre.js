@@ -35,6 +35,8 @@
 	d.e.RecordNext = $('#RecordNext');
 	d.e.RecordPage = $('#RecordPage');
 
+	d.e.Word = $('#Word');
+
 	d.e.TabHeadRightNavi = $('.TabHead.RightNavi');
 	d.e.TabItemRightNavi = $('.TabItem.RightNavi');
 })();

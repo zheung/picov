@@ -1,7 +1,12 @@
-//翻页
 (function() {
-	d.f.pageTurn = function(page) {
-		d.s.emit('list', { p: (~~page > 0 ? ~~page : 1) });
+	d.f.turn = function(page) {
+		d.s.emit(d.v.meanNow, d.f.params(page));
+	};
+	d.f.search = function(word) {
+		d.v.wordNow = typeof word == 'string' ? word : d.e.Word.val();
+		d.v.meanNow = 'listSearch';
+
+		d.f.turn(1);
 	};
 
 	d.f.save = function() {
@@ -24,5 +29,23 @@
 			if(ts.length+1 > 77)
 				ts.filter(':first').remove();
 		}
+	};
+
+	d.f.clear = function() {
+		$('.sLogBox>span').remove();
+	};
+
+	d.f.params = function(page) {
+		var mean = d.v.meanNow;
+
+		if(mean == 'listFollow')
+			return {
+				p: (~~page > 0 ? ~~page : 1)
+			};
+		else if(mean == 'listSearch')
+			return {
+				p: (~~page > 0 ? ~~page : 1),
+				w: d.v.wordNow,
+			};
 	};
 })();
