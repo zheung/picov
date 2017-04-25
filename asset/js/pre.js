@@ -30,6 +30,7 @@
 
 	d.e.sMean = $('.sMean');
 	d.e.sLogBox = $('.sLogBox');
+	d.e.sTagBox = $('.sTagBox');
 
 	d.e.RecordPrev = $('#RecordPrev');
 	d.e.RecordNext = $('#RecordNext');

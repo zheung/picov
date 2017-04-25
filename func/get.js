@@ -24,5 +24,15 @@ module.exports = async (path, type, isLog = true) => {
 
 			resolve(request(option));
 		}
+		else if(type == 3) {
+			if(isLog) log('请求', path);
+
+			request(option, function (error, response, buffer) {
+				if(error)
+					reject(error);
+				else
+					resolve(buffer.toString());
+			});
+		}
 	});
 };

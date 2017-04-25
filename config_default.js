@@ -9,5 +9,11 @@ module.exports = {
 	path: {
 		large: 'Your Large Picture Path',
 		cache: 'Your Cache Path'
-	}
+	},
+
+	tags: [
+		'Tag You Like Name 1', 'Tag 1',
+		'Tag You Like Name 2', 'Tag 2',
+		'Tag You Like Name 3', 'Tag 3'
+	]
 };

@@ -1,6 +1,10 @@
+let dictProc = {}, countProc = 0;
+
 let down = async(url, iid, proc, ext, ts, sog) => {
 	try {
 		let getStream = await func.get(url[0], 2, false);
+
+		sog.r('CountProc', '下载中的作品：', ++countProc);
 
 		await new Promise((resolve, reject) => {
 			let total, passed = 0,
@@ -10,6 +14,8 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 				})
 				.on('finish', () => {
 					sog.r(ts, '下载', iid, proc, '完成');
+
+					sog.r('CountProc', '下载中的作品：', --countProc);
 
 					resolve();
 				});
@@ -28,12 +34,14 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 					if(writeStream.write(chunk) == false)
 						getStream.pause();
 
-					sog.r(ts, '下载', iid, proc, Math.round(passed * 100 / total)+'%');
+					sog.rc(ts, 'white', '下载', iid, proc, Math.round(passed * 100 / total)+'%');
 				})
 				.on('end', () => {
 					writeStream.end();
 				});
 		});
+
+
 
 		return true;
 	} catch (err) {
@@ -44,22 +52,38 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 };
 
 module.exports = async(iid, time, sog) => {
-	let info = JSON.parse((await func.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 1)).toString()),
-		urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext;
+	if(dictProc[iid]) {
+		sog.l('拒绝', iid, '正在下载');
 
-	while(pid < count)
-		urls.push([`http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
+		return;
+	}
+	else {
+		dictProc[iid] = true;
 
-	sog.ll('下载', iid, `共${count}张`);
+		let tsMeta = `${new Date().getTime()}${iid}`;
 
-	await Promise.map(urls, async(url, now) => {
-		let tid = 0, proc = `(${now+1}/${pid})`, retry = ~~conf.retry, ts = `${new Date().getTime()}${url[1]}`;
+		sog.r(tsMeta, '下载', iid, '抓取元信息');
 
-		sog.r(ts, '下载', iid, proc);
+		let info = JSON.parse(await func.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3)),
+			urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext;
 
-		while(!await down(url, iid, proc, ext, ts, sog) && tid++ <= retry)
-			sog.ll('下载', iid, proc, '失败', `第(${tid}/${retry})次重试`);
-	});
+		sog.rl(tsMeta, '下载', iid, `共${count}张`, info.body[iid].illust_title);
 
-	return pid;
+		while(pid < count)
+			urls.push([`http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
+
+		await Promise.map(urls, async(url, now) => {
+			let tid = 0, proc = `(${now+1}/${pid})`, retry = ~~conf.retry, tsProc = `${new Date().getTime()}${url[1]}`;
+
+			sog.rc(tsProc, 'white', '下载', iid, proc);
+
+			while(!await down(url, iid, proc, ext, tsProc, sog) && tid++ <= retry) {
+				sog.r('CountProc', '下载中的作品：', --countProc);
+
+				sog.ll('下载', iid, proc, '失败', `第(${tid}/${retry})次重试`);
+			}
+		});
+
+		dictProc[iid] = false;
+	}
 };

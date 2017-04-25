@@ -13,7 +13,8 @@
 
 				eRecord.find('.sTitle').html(record.title).attr('title', record.title).css('color', color);
 				eRecord.find('.sUser').html(record.user);
-				eRecord.find('.sThumb').attr('src', '').attr('src', '/thumb?iid='+record.iid+'&time='+record.time+'&ugoira='+record.ugoira);
+				eRecord.find('.sThumb').attr('src', '').attr('title', record.iid)
+					.attr('src', '/proxy/thumb?iid='+record.iid+'&time='+record.time+'&ugoira='+record.ugoira);
 			}
 
 			eRecord.children()[record ? 'removeClass' : 'addClass']('hide');
@@ -25,4 +26,12 @@
 	});
 
 	d.s.on('log', d.f.log);
+
+	d.s.on('listTag', function(list) {
+		var box = d.e.sTagBox;
+
+		list.map(function(tag) {
+			box.append($('<span>').html(tag[0]).addClass('tagLike').data('tagWord', tag[1]).on('click', d.f.searchByTagLike));
+		});
+	});
 })();

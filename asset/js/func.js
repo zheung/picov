@@ -6,6 +6,19 @@
 		d.v.wordNow = typeof word == 'string' ? word : d.e.Word.val();
 		d.v.meanNow = 'listSearch';
 
+		d.e.Word.val(d.v.wordNow);
+
+		d.f.turn(1);
+	};
+
+	d.f.searchByTagLike = function() {
+		d.f.search($(this).data('tagWord'));
+	};
+	d.f.pageFollow = function() {
+		d.v.meanNow = 'listFollow';
+
+		d.e.Word.val('');
+
 		d.f.turn(1);
 	};
 
@@ -18,21 +31,25 @@
 			d.s.emit('save', { iid: record.iid, time: record.time });
 	};
 
-	d.f.log = function(text, id_) {
-		var box = d.e.sLogBox, ts = box.children(), id = 'log-'+id_, span = ts.filter('#'+id);
+	d.f.log = function(text, id_, color) {
+		var box = d.e.sLogBox, ts = box.children(), id = 'log-'+id_, span = ts.filter('#'+id), isExist = id_ && span.length;
 
-		if(id_ && span.length)
-			span.html(text);
-		else {
-			box.append($('<span>').attr('id', id).html(text));
+		if(!isExist) {
+			span = $('<span>').attr('id', id);
+
+			box.append(span);
 
 			if(ts.length+1 > 77)
-				ts.filter(':first').remove();
+				ts.filter(':not(#log-CountProc):first').remove();
+
+			box[0].scrollTop = box[0].scrollHeight;
 		}
+
+		span.html(text).css('color', color || '#557799');
 	};
 
 	d.f.clear = function() {
-		$('.sLogBox>span').remove();
+		$('.sLogBox>span:not(#log-CountProc)').remove();
 	};
 
 	d.f.params = function(page) {

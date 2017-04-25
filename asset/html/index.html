@@ -38,10 +38,11 @@
 			</div>
 			<div class="Navi blrNavi">
 				<div class="TabHeader RightNavi flex jca aih wpn">
-					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Basic">控制台</a>
+					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Center">中心</a>
+					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Like">收藏</a>
 					<a class="TabHead RightNavi flex jcc aic" data-taber-page="About" data-notab>关于</a>
 				</div>
-				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Basic">
+				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Center">
 					<div class="NaviColumn flex jcb aic wpn">
 						<div class="CondBar2 flex jca aic wpw">
 							<input id="Word" class="wf Input" type="text" placeholder="关键词"/>
@@ -54,9 +55,18 @@
 					</div>
 					<div class="LogBox NaviColumn fs11 clrFontDark drc flex jcs ais wpn">
 						<div class="sLogBox fs11 clrFontDark drc flex jcs ais wpn">
-
+							<span id="log-CountProc">下载中的作品： 0</span>
 						</div>
 					</div>
+				</div>
+				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Like">
+					<div class="NaviColumn flex jcb aic wpn">
+						<span class="PageFollow curp"><i class="Clear fa fa-tag"></i>关注的作品</span>
+					</div>
+					<div class="NaviColumn flex jcb aic wpn">
+						<span><i class="Clear fa fa-tag"></i>喜爱的标签</span>
+					</div>
+					<div class="sTagBox NaviColumn clrFontDark curp drr flex jcs ais wpw"></div>
 				</div>
 				<div class="TabItem RightNavi flex drr jcc aic wpn" data-taber-page="About">
 					<div class="TabItem RightNavi2 clrFontDark fs20 flex drc jcb aic wpw">
@@ -94,6 +104,7 @@
 		<script type="text/javascript" src="js/tool/pager.js"></script>
 		<script type="text/javascript" src="js/tool/taber.js"></script>
 		<script type="text/javascript" src="js/func.js"></script>
+		<script type="text/javascript" src="js/key.js"></script>
 		<script type="text/javascript" src="js/io.js"></script>
 		<script type="text/javascript" src="js/init.js"></script>
 	</body>
