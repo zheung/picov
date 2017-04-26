@@ -7,13 +7,15 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 		sog.r('CountProc', '下载中的作品：', ++countProc);
 
 		await new Promise((resolve, reject) => {
-			let total, passed = 0,
-				writeStream = fs.createWriteStream(path.join(conf.path.large, `${iid}_p${url[1]}.${ext}`))
+			let total, passed = 0, fileName = `${iid}_p${url[1]}.${ext}` , tempPath = path.join(conf.path.cache, 'large', fileName),
+				writeStream = fs.createWriteStream(tempPath)
 				.on('drain', () => {
 					getStream.resume();
 				})
 				.on('finish', () => {
 					sog.r(ts, '下载', iid, proc, '完成');
+
+					fs.moveSync(tempPath, path.join(conf.path.large, fileName));
 
 					sog.r('CountProc', '下载中的作品：', --countProc);
 
@@ -40,8 +42,6 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 					writeStream.end();
 				});
 		});
-
-
 
 		return true;
 	} catch (err) {
