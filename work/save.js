@@ -15,7 +15,7 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 				.on('finish', () => {
 					sog.r(ts, '下载', iid, proc, '完成');
 
-					fs.moveSync(tempPath, path.join(conf.path.large, fileName));
+					fs.moveSync(tempPath, path.join(conf.path.large, fileName), { overwrite: true });
 
 					sog.r('CountProc', '下载中的作品：', --countProc);
 
