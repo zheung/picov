@@ -15,6 +15,8 @@
 			this.src = src.replace(/\?/, '?fr=1&');
 		}
 	});
+
+	d.t.swier('isR18', d.e.R18, ['全年龄', 'R18']);
 })();
 
 // Init

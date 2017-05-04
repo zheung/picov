@@ -63,6 +63,7 @@
 			return {
 				p: (~~page > 0 ? ~~page : 1),
 				w: d.v.wordNow,
+				l: ~~d.e.R18.data('swierNow')
 			};
 	};
 })();

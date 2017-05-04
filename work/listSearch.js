@@ -1,6 +1,6 @@
-module.exports = async (word, page) => {
+module.exports = async (word, page, r18) => {
 	return new Promise(async resolve => {
-		let buf = await func.get(encodeURI(`https://www.pixiv.net/search.php?s_mode=s_tag&word=${word}&p=${page || 1}`), 1),
+		let buf = await func.get(encodeURI(`https://www.pixiv.net/search.php?s_mode=s_tag&word=${word}&p=${page || 1}&r18=${r18}`), 1),
 			str = buf.toString();
 
 		let take = (err, window) => {
