@@ -15,6 +15,9 @@
 	"globals": {
 		"$": true,
 
-		"d": true
+		"d": true,
+		"app": true,
+
+		"Vue": true
 	}
 }

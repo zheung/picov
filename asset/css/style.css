@@ -1,4 +1,4 @@
-body {
+body * {
 	margin: 0;
 
 	cursor: default;
@@ -61,6 +61,9 @@ a:visited {
 
 .Main {
 	height: 100%;
+	width: 100%;
+
+	flex: 1
 }
 .Navi {
 	width: 450px;

@@ -1,6 +1,7 @@
 ## Picov - Pixiv图片收集网站系统
 - 基于JavaScript、Node与Koa
 - 根据作者的习惯制作
+- ``当前分支为dev-on-vue，尝试使用vue重构页面。``
 ##
 - 本质是一个服务器程序，可运行在本地或远程服务器上
 - 因为HTML容易制作UI界面，所以选择了B/S模式

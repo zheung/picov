@@ -1,0 +1,39 @@
+body * {
+	display: flex;
+}
+
+body {
+	margin: 0;
+
+	overflow: hidden;
+
+	color: #E0E2E4;
+
+	font-family: "Microsoft YaHei";
+}
+
+#app {
+	height: 100%;
+	width: 100%;
+
+	background-color: green;
+}
+
+#mainBox {
+	height: 100%;
+	width: 100%;
+
+	flex: 1
+}
+#naviBox {
+	height: 100%;
+	width: 450px;
+
+	overflow: hidden;
+	overflow-y: auto;
+}
+
+#recoBox {
+	width: 100%;
+	height: 95%;
+}

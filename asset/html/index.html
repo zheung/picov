@@ -6,43 +6,52 @@
 		<link href="css/fa.min.css" rel="stylesheet">
 		<link href="css/flex.css" rel="stylesheet">
 		<link href="css/small.css" rel="stylesheet">
-		<link href="css/test.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
 		<link href="css/color.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+
+		<link href="css/app.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="Frame clrFont flex drr wpn jcs aic wpn">
-			<div class="Main blrBack flex drc jcc aic wpn">
-				<div class="Records flex drr jca aic aca wpw">
-					<div class="Record flex drc jcs ais ace wpn">
+		<div id="app" class="drr wpn jcs aic wpn">
+			<div id="mainBox" class="blrBack drc jcc aic wpn">
+				<div id="recoBox" class="drr jca aic aca wpw">
+					<div v-for="reco in list" class="Record flex drc jcs ais ace wpn">
 						<div class="Detail Thumb flex drr jcc aic acc">
-							<img class="sThumb"></img>
+							<img
+								class="sThumb"
+								:src="'/proxy/thumb?iid='+reco.iid+'&time='+reco.time+'&ugoira='+reco.ugoira"
+								:title="reco.iid"
+							></img>
 						</div>
 						<div class="Detail Title flex drr jcs aic acc">
 							<div class="Icon flex jcc aic acc"><i class="fa fa-address-card-o"></i></div>
-							<span class="Show sTitle"></span>
+							<span
+								class="Show sTitle"
+								:title="reco.title"
+								:style="{ color: (reco.multi ? 'aqua' : (reco.ugoira ? 'violet' : '#E0E2E4'))}"
+							>{{reco.title}}</span>
 						</div>
 						<div class="Detail User flex drr jcs aic acc">
 							<div class="Icon flex jcc aic acc"><i class="fa fa-user-o"></i></div>
-							<span class="Show sUser"></span>
+							<span class="Show sUser">{{reco.user}}</span>
 						</div>
 					</div>
 				</div>
 				<div class="Pager flex jcb aic">
-					<a id="RecordPrev" class="PagerPrev flex jcc aic">上一页</a>
+					<a class="PagerPrev flex jcc aic" v-on:click="pageNow > 1 ? pageTurn(pageNow-1) : null">上一页</a>
 					<div class="PagerCount flex jcc aic">
-						第<input id="RecordPage" class="Page" type="text"></input>页
+						第<input v-model="pageNow" v-on:keyup.enter="pageTurn(pageNow)" class="Page" type="text"></input>页
 					</div>
-					<a id="RecordNext" class="PagerNext flex jcc aic">下一页</a>
+					<a class="PagerNext flex jcc aic" v-on:click="pageTurn(pageNow+1)">下一页</a>
 				</div>
 			</div>
-			<div class="Navi blrNavi">
+			<div id="naviBox" class="blrNavi drc">
 				<div class="TabHeader RightNavi flex jca aih wpn">
-					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Center">中心</a>
-					<a class="TabHead RightNavi active flex jcc aic" data-taber-page="Like">收藏</a>
-					<a class="TabHead RightNavi flex jcc aic" data-taber-page="About" data-notab>关于</a>
+					<a v-on:click="tabRightNavi=1" v-bind:class="{ active: tabRightNavi==1 }" class="TabHead RightNavi flex jcc aic">中心</a>
+					<a v-on:click="tabRightNavi=2" v-bind:class="{ active: tabRightNavi==2 }" class="TabHead RightNavi flex jcc aic">收藏</a>
+					<a v-on:click="tabRightNavi=3" v-bind:class="{ active: tabRightNavi==3 }" class="TabHead RightNavi flex jcc aic" data-notab>关于</a>
 				</div>
-				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Center">
+				<div v-if="tabRightNavi==1" class="TabItem RightNavi flex drc aic jcs wpn">
 					<div class="NaviColumn flex jcb aic wpn">
 						<div class="CondBar2 flex jca aic wpw">
 							<input id="Word" class="wf Input" type="text" placeholder="关键词"/>
@@ -51,7 +60,7 @@
 						<a id="Search" class="w4 Button Click">搜索</a>
 					</div>
 					<div class="NaviColumn flex jcb aic wpn">
-						<span class="sMean">当前列表：</span>
+						<span class="sMean">当前列表：{{mean}}</span>
 						<i class="Clear fa fa-refresh"></i>
 					</div>
 					<div class="LogBox NaviColumn fs11 clrFontDark drc flex jcs ais wpn">
@@ -60,7 +69,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="TabItem RightNavi flex drc aic jcs wpn" data-taber-page="Like">
+				<div v-if="tabRightNavi==2" class="TabItem RightNavi flex drc aic jcs wpn">
 					<div class="NaviColumn flex jcb aic wpn">
 						<span class="PageFollow curp"><i class="Clear fa fa-tag"></i>关注的作品</span>
 					</div>
@@ -69,7 +78,7 @@
 					</div>
 					<div class="sTagBox NaviColumn clrFontDark curp drr flex jcs ais wpw"></div>
 				</div>
-				<div class="TabItem RightNavi flex drr jcc aic wpn" data-taber-page="About">
+				<div v-if="tabRightNavi==3" class="TabItem RightNavi flex drr jcc aic wpn">
 					<div class="TabItem RightNavi2 clrFontDark fs20 flex drc jcb aic wpw">
 						<div>
 							<span class="fs24 fsb clrFont">P</span>icov&nbsp;
@@ -96,18 +105,20 @@
 			</div>
 		</div>
 
-		<script type="text/javascript">window.d = { v: {}, e: {}, t: {}, f:{} };</script>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/socket.io.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<!--<script type="text/javascript">window.d = { v: {}, e: {}, t: {}, f:{} };</script>
 
 		<script type="text/javascript" src="js/jquery.js"></script>
-		<script type="text/javascript" src="js/socket.io.js"></script>
 
 		<script type="text/javascript" src="js/pre.js"></script>
+		<script type="text/javascript" src="js/io.js"></script>
 		<script type="text/javascript" src="js/tool/pager.js"></script>
 		<script type="text/javascript" src="js/tool/taber.js"></script>
 		<script type="text/javascript" src="js/tool/swier.js"></script>
 		<script type="text/javascript" src="js/func.js"></script>
 		<script type="text/javascript" src="js/key.js"></script>
-		<script type="text/javascript" src="js/io.js"></script>
-		<script type="text/javascript" src="js/init.js"></script>
+		<script type="text/javascript" src="js/init.js"></script>-->
 	</body>
 </html>
