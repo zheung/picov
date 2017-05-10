@@ -7,98 +7,104 @@
 		<link href="css/flex.css" rel="stylesheet">
 		<link href="css/small.css" rel="stylesheet">
 		<link href="css/color.css" rel="stylesheet">
-		<link href="css/style.css" rel="stylesheet">
+		<!--<link href="css/style.css" rel="stylesheet">-->
 
 		<link href="css/app.css" rel="stylesheet">
 	</head>
 	<body>
 		<div id="app" class="drr wpn jcs aic wpn">
 			<div id="mainBox" class="blrBack drc jcc aic wpn">
-				<div id="recoBox" class="drr jca aic aca wpw">
-					<div v-for="reco in list" class="Record flex drc jcs ais ace wpn">
-						<div class="Detail Thumb flex drr jcc aic acc">
+				<div class="recoBox drr jca aic aca wpw">
+					<div class="item drc jcs ais ace wpn" v-for="reco in records" @dblclick="save(reco)">
+						<div class="detail thumb drr jcc aic acc">
 							<img
-								class="sThumb"
+								class="thumb"
 								:src="'/proxy/thumb?iid='+reco.iid+'&time='+reco.time+'&ugoira='+reco.ugoira"
 								:title="reco.iid"
 							></img>
 						</div>
-						<div class="Detail Title flex drr jcs aic acc">
-							<div class="Icon flex jcc aic acc"><i class="fa fa-address-card-o"></i></div>
+						<div class="detail drr jcs aic acc">
+							<div class="icon jcc aic acc"><i class="fa fa-address-card-o"></i></div>
 							<span
-								class="Show sTitle"
+								class="text"
 								:title="reco.title"
 								:style="{ color: (reco.multi ? 'aqua' : (reco.ugoira ? 'violet' : '#E0E2E4'))}"
-							>{{reco.title}}</span>
+							>
+								{{reco.title}}
+							</span>
 						</div>
-						<div class="Detail User flex drr jcs aic acc">
-							<div class="Icon flex jcc aic acc"><i class="fa fa-user-o"></i></div>
-							<span class="Show sUser">{{reco.user}}</span>
+						<div class="detail drr jcs aic acc">
+							<div class="icon jcc aic acc"><i class="fa fa-user-o"></i></div>
+							<span class="text">{{reco.user}}</span>
 						</div>
 					</div>
 				</div>
-				<div class="Pager flex jcb aic">
-					<a class="PagerPrev flex jcc aic" v-on:click="pageNow > 1 ? pageTurn(pageNow-1) : null">上一页</a>
-					<div class="PagerCount flex jcc aic">
-						第<input v-model="pageNow" v-on:keyup.enter="pageTurn(pageNow)" class="Page" type="text"></input>页
+
+				<div class="pageBox jcb aic">
+					<a class="prev jcc aic" @click="pageNow > 1 ? turn(pageNow-1) : null">上一页</a>
+					<div class="count jcc aic">
+						第<input type="text" v-model="pageNow" @keyup.enter="turn(pageNow)"></input>页
 					</div>
-					<a class="PagerNext flex jcc aic" v-on:click="pageTurn(pageNow+1)">下一页</a>
+					<a class="next jcc aic" @click="turn(pageNow+1)">下一页</a>
 				</div>
 			</div>
-			<div id="naviBox" class="blrNavi drc">
-				<div class="TabHeader RightNavi flex jca aih wpn">
-					<a v-on:click="tabRightNavi=1" v-bind:class="{ active: tabRightNavi==1 }" class="TabHead RightNavi flex jcc aic">中心</a>
-					<a v-on:click="tabRightNavi=2" v-bind:class="{ active: tabRightNavi==2 }" class="TabHead RightNavi flex jcc aic">收藏</a>
-					<a v-on:click="tabRightNavi=3" v-bind:class="{ active: tabRightNavi==3 }" class="TabHead RightNavi flex jcc aic" data-notab>关于</a>
-				</div>
-				<div v-if="tabRightNavi==1" class="TabItem RightNavi flex drc aic jcs wpn">
-					<div class="NaviColumn flex jcb aic wpn">
-						<div class="CondBar2 flex jca aic wpw">
-							<input id="Word" class="wf Input" type="text" placeholder="关键词"/>
-						</div>
-						<a id="R18" class="w4 Button Click">R18</a>
-						<a id="Search" class="w4 Button Click">搜索</a>
+			<div id="naviBox" class="blrNavi">
+				<div class="tabBox Dash drc">
+					<div class="headBox jca aih wpn">
+						<a class="head jcc aic" @click="tabDash=1" v-bind:class="{ active: tabDash==1 }">中心</a>
+						<a class="head jcc aic" @click="tabDash=2" v-bind:class="{ active: tabDash==2 }">收藏</a>
+						<a class="head jcc aic" @click="tabDash=3" v-bind:class="{ active: tabDash==3 }">关于</a>
 					</div>
-					<div class="NaviColumn flex jcb aic wpn">
-						<span class="sMean">当前列表：{{mean}}</span>
-						<i class="Clear fa fa-refresh"></i>
-					</div>
-					<div class="LogBox NaviColumn fs11 clrFontDark drc flex jcs ais wpn">
-						<div class="sLogBox fs11 clrFontDark drc flex jcs ais wpn">
-							<span id="log-CountProc">下载中的作品： 0</span>
+					<div class="item drc aic jcs wpn" v-if="tabDash==1">
+						<div class="wordBox NaviColumn jcb aic wpn">
+							<input class="wf word" type="text" placeholder="关键词" v-model="wordNow" @keyup.enter="search"></input>
+							<a class="w3 ButtonClick jcc" @click="r18Now = !r18Now" @click="r18Now = !r18Now" >{{r18Now ? 'R18' : '全年龄'}}</a>
+							<a class="w4 ButtonClick jcc" @click="search">搜索</a>
+						</div>
+						<div class="NaviColumn jcb aic wpn">
+							<span class="sMean">当前列表：{{pageMean}}</span>
+							<i class="Clear fa fa-refresh" @click="logs = []; logDict = { CountProc: logDict.CountProc }"></i>
+						</div>
+						<div class="LogBox NaviColumn fs11 clrFontDark drc flex jcs ais wpn">
+							<div class="sLogBox fs11 clrFontDark drc flex jcs ais wpn">
+								<span :style="{ color: logDict.CountProc.color }">{{logDict.CountProc.text}}</span>
+								<span v-for="log in logs" :style="{ color: log.color }">{{log.text}}</span>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div v-if="tabRightNavi==2" class="TabItem RightNavi flex drc aic jcs wpn">
-					<div class="NaviColumn flex jcb aic wpn">
-						<span class="PageFollow curp"><i class="Clear fa fa-tag"></i>关注的作品</span>
+					<div class="item drc aic jcs wpn" v-if="tabDash==2">
+						<div class="NaviColumn jcb aic wpn">
+							<span class="curp aic" @click="pageFollow"><i class="Clear fa fa-tag"></i>关注的作品</span>
+						</div>
+						<div class="NaviColumn jcb aic wpn">
+							<span class="aic"><i class="Clear fa fa-tag"></i>喜爱的标签</span>
+						</div>
+						<div class="tagBox NaviColumn clrFontDark curp drr flex jcs ais wpw">
+							<span class="tag" @click="search(tag[1])" :title="tag[1]" v-for="tag in tags">{{tag[0]}}</span>
+						</div>
 					</div>
-					<div class="NaviColumn flex jcb aic wpn">
-						<span><i class="Clear fa fa-tag"></i>喜爱的标签</span>
-					</div>
-					<div class="sTagBox NaviColumn clrFontDark curp drr flex jcs ais wpw"></div>
-				</div>
-				<div v-if="tabRightNavi==3" class="TabItem RightNavi flex drr jcc aic wpn">
-					<div class="TabItem RightNavi2 clrFontDark fs20 flex drc jcb aic wpw">
-						<div>
-							<span class="fs24 fsb clrFont">P</span>icov&nbsp;
-						</div>
-						<div>
-							<span class="fs24 fsb clrFont">Pixiv 浏览器</span>
-						</div>
-						<div>
-							基于<span class="fs24 fsb clrFont">网页</span>
-						</div>
-						<div>
-							自搭建<span class="fs24 fsb clrFont">服务器</span>
-						</div>
-						<div>
-							强迫症患者的
-							<span class="fs24 fsb clrFont">抓图工具</span>
-						</div>
-						<div>
-							Make&nbsp;by&nbsp;
-							<span class="fs24 fsb clrFont">DanoR</span>
+					<div class="item drr jcc aic wpn" v-if="tabDash==3">
+						<div class="item2 h81p clrFontDark fs20 flex drc jcb aic wpw">
+							<div>
+								<span class="fs24 fsb clrFont">P</span>icov&nbsp;
+							</div>
+							<div>
+								<span class="fs24 fsb clrFont">Pixiv 浏览器</span>
+							</div>
+							<div>
+								基于<span class="fs24 fsb clrFont">网页</span>
+							</div>
+							<div>
+								自搭建<span class="fs24 fsb clrFont">服务器</span>
+							</div>
+							<div>
+								强迫症患者的
+								<span class="fs24 fsb clrFont">抓图工具</span>
+							</div>
+							<div>
+								Make&nbsp;by&nbsp;
+								<span class="fs24 fsb clrFont">DanoR</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -108,17 +114,6 @@
 		<script type="text/javascript" src="js/vue.js"></script>
 		<script type="text/javascript" src="js/socket.io.js"></script>
 		<script type="text/javascript" src="js/app.js"></script>
-		<!--<script type="text/javascript">window.d = { v: {}, e: {}, t: {}, f:{} };</script>
-
-		<script type="text/javascript" src="js/jquery.js"></script>
-
-		<script type="text/javascript" src="js/pre.js"></script>
 		<script type="text/javascript" src="js/io.js"></script>
-		<script type="text/javascript" src="js/tool/pager.js"></script>
-		<script type="text/javascript" src="js/tool/taber.js"></script>
-		<script type="text/javascript" src="js/tool/swier.js"></script>
-		<script type="text/javascript" src="js/func.js"></script>
-		<script type="text/javascript" src="js/key.js"></script>
-		<script type="text/javascript" src="js/init.js"></script>-->
 	</body>
 </html>

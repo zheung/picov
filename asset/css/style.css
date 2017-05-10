@@ -1,50 +1,5 @@
-body * {
-	margin: 0;
 
-	cursor: default;
 
-	overflow: hidden;
-
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-
-	color: #E0E2E4;
-
-	font-family: "Microsoft YaHei";
-}
-
-input, span {
-	outline: none;
-}
-
-input {
-	border: 1px solid transparent;
-
-	background-color: #34495e;
-	color: #E0E2E4;
-
-	font-size: 16px;
-}
-input:focus {
-	border-bottom: 1px solid #E0E2E4;
-}
-select {
-	width: 50%;
-	background-color: #34495e;
-	color: #E0E2E4;
-	border-radius: 2px;
-	border: 2px solid transparent;
-	border-left: 2px solid #E0E2E4;
-}
-
-a {
-	text-decoration: none;
-	color: #E0E2E4
-}
-a:visited {
-	color: #E0E2E4;
-}
 
 .Show {
 	user-select: text;
@@ -54,45 +9,7 @@ a:visited {
 	cursor: auto;
 }
 
-.Frame {
-	width: 100%;
-	height: 100%;
-}
 
-.Main {
-	height: 100%;
-	width: 100%;
-
-	flex: 1
-}
-.Navi {
-	width: 450px;
-	height: 100%;
-
-	overflow-x: hidden;
-	overflow-y: auto;
-}
-
-.NaviColumnSpace {
-	width: 90%;
-	height: 24px;
-	min-height: 24px;
-}
-.NaviColumn {
-	width: 90%;
-	height: auto;
-	min-height: 45px;
-}
-.NaviColumn2x {
-	width: 90%;
-	height: auto;
-	min-height: 90px;
-}
-.NaviColumn3x {
-	width: 90%;
-	height: auto;
-	min-height: 135px;
-}
 
 .Toggle {
 	margin: 3px;
@@ -123,25 +40,6 @@ a:visited {
 	min-width: 24px;
 }
 
-.Button.Click {
-	margin: 3px;
-	min-width: 30px;
-
-	border: 2px solid #557799;
-
-	padding: 4px;
-	padding-left: 3px;
-	padding-right: 3px;
-
-	border-radius: 4px;
-
-	text-align: center;
-
-	color: #E0E2E4;
-	background-color: #557799;
-
-	cursor: pointer;
-}
 .Button.AddGroup {
 	height: 45px;
 	width: 100%;
@@ -156,62 +54,9 @@ a:visited {
 	border: 2px dashed #E0E2E4;
 }
 
-.Input {
-	margin: 3px;
 
-	min-width: 30px;
-	height: 33px;
 
-	border: 2px solid #557799;
-	background-color: #E0E2E4;
 
-	padding: 4px;
-	padding-left: 3px;
-	padding-right: 3px;
-
-	border-radius: 4px;
-
-	text-align: center;
-	color: #557799;
-	font-size: 17px;
-
-	cursor: auto;
-}
-.Input:focus {
-	border-bottom: 2px solid #557799;
-}
-
-.TabHeader.RightNavi {
-	width: 100%;
-	height: 45px;
-	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-
-	background-color: #34495e;
-}
-.TabHead.RightNavi {
-	width: 100%;
-
-	border: 2px solid #34495e;
-
-	margin: 0;
-	margin-right: 2px;
-
-	color: #E0E2E4;
-
-	cursor: pointer;
-}
-.TabHead.RightNavi:hover {
-	border-bottom: 2px solid #148474;
-}
-.TabHead.RightNavi.active {
-	border-radius: 4px;
-	border: 2px solid #148474;
-	background-color: #148474;
-}
-.TabItem.RightNavi {
-	height: 93%;
-	width: 100%;
-}
 
 .TabHeader.RightNavi2 {
 	width: 100%;
@@ -266,50 +111,6 @@ a:visited {
 	width: 100%;
 	height: 95%;
 }
-.Pager {
-	width: 100%;
-	height: 5%;
-}
-
-.Record {
-	border: 2px solid #557799;
-	border-radius: 4px;
-
-	width: 19%;
-	height: 24%;
-
-	font-size: 14px;
-}
-.Record:hover {
-	border: 2px solid #E0E2E4;
-}
-.Record.hidden {
-	border: 2px solid transparent;
-}
-
-.Detail {
-	border: 2px solid transparent;
-
-	width: 100%;
-	height: 14%;
-}
-.Detail.Thumb {
-	height: 70%;
-}
-.Detail>.Icon {
-	width: 14%;
-}
-.Detail>.Show {
-	width: 72%;
-
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-.sThumb {
-	height: 100%;
-	object-fit: cover;
-}
 
 .sPass {
 	font-family: monospace;
@@ -345,28 +146,7 @@ a:visited {
 	white-space: nowrap;
 }
 
-.PagerPrev, .PagerNext {
-	width: 33%;
 
-	cursor: pointer;
-}
-.PagerCount {
-	width: 33%;
-}
-.PagerCount>* {
-	padding-top: 1px;
-}
-.Page {
-	width: 40px;
-	padding-top: 3px;
-
-	text-align: center;
-
-	color: #E0E2E4;
-	background-color: #293134;
-
-	cursor: auto;
-}
 
 .Imgbox {
 	width: 15%;
@@ -549,12 +329,4 @@ kqud {
 	margin-left: 3%;
 	overflow-x: hidden;
 	overflow-y: scroll;
-}
-
-.tagLike {
-	border: 2px solid;
-	border-radius: 2px;
-
-	padding: 4px;
-	margin: 2px;
 }

@@ -6,7 +6,7 @@ module.exports = async (word, page, r18) => {
 		let take = (err, window) => {
 			let $ = window.$, result = [];
 
-			$('li.image-item').each(function() {
+			$('.column-search-result li.image-item').each(function() {
 				let $$ = $(this), img = $$.find('img._thumbnail');
 
 				result.push({

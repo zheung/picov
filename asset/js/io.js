@@ -1,19 +1,29 @@
 (function() {
 	app.io.on('list', function(result) {
-		app.list = result.records;
+		app.records = result.records;
 		app.pageNow = result.now;
-		app.mean = result.mean;
+		app.pageMean = result.mean;
 	});
 
-	app.io.emit('listFollow', { p:1 });
+	app.io.on('listTag', function(list) {
+		app.tags = list;
+	});
 
-	d.s.on('log', d.f.log);
+	app.io.on('log', function(text, id, color) {
+		var log = { text: text, color: color || '#557799' }, logOld = app.logDict[id];
 
-	d.s.on('listTag', function(list) {
-		var box = d.e.sTagBox;
+		if(logOld) {
+			logOld.text = text;
+			logOld.color = color || '#557799';
+		}
+		else {
+			if(id) app.logDict[id] = log;
 
-		list.map(function(tag) {
-			box.append($('<span>').html(tag[0]).addClass('tagLike').data('tagWord', tag[1]).on('click', d.f.searchByTagLike));
-		});
+			app.logs.push(log);
+		}
+
+		// if(this.logs.length > 77)
+		// 	ts.filter(':not(#log-CountProc):first').remove();
+		// box[0].scrollTop = box[0].scrollHeight;
 	});
 })();
