@@ -1,37 +1,38 @@
 (function() {
-	$(document).on('keyup', function(e) {
-		var ae = document.activeElement, tagName = ae.tagName.toLowerCase();
+	var isInput =function(tagName) {
+			return tagName != 'input' && tagName != 'textarea'
+		},
+		inArr =function(code, arr) {
+			for(var i in arr)
+				if(arr[i] == code)
+					return true;
 
-		if(tagName == 'input' || tagName == 'textarea') {
-			if(e.keyCode == 13) {
-				if(ae === d.e.Word[0]) {
-					d.e.Search.click();
+			return false;
+		};
+
+	window.keyInit = function() {
+		document.addEventListener('keyup', function(e) {
+			var ae = document.activeElement, tagName = ae.tagName.toLowerCase();
+
+			if(!isInput(tagName)) {
+				if(inArr(e.keyCode, [65,33,74])) { app.turn(app.pageNow-1); return false; }
+				else if(inArr(e.keyCode, [68,34,75])) { app.turn(app.pageNow+1); return false; }
+				else if(e.keyCode == 67 && e.shiftKey) {
+					app.clear();
 
 					return false;
 				}
-				else if(ae == d.e.RecordPage[0]) {
-					d.f.turn(d.e.RecordPage.val());
-					d.e.RecordPage.blur();
+				else if(e.keyCode == 71 && e.shiftKey) {
+					app.$refs.pager.focus();
+
+					return false;
+				}
+				else if(e.keyCode == 83 && e.shiftKey) {
+					app.$refs.worder.focus();
 
 					return false;
 				}
 			}
-
-			return true;
-		}
-		else {
-			if(e.keyCode == 65 || e.keyCode == 33 || e.keyCode == 74) { d.e.RecordPrev.click(); return false; }
-			else if(e.keyCode == 68 ||e.keyCode == 34 || e.keyCode == 75) { d.e.RecordNext.click(); return false; }
-			else if(e.keyCode == 67 && e.shiftKey) {
-				d.f.clear();
-
-				return false;
-			}
-			else if(e.keyCode == 71 && e.shiftKey) {
-				d.e.RecordPage.focus();
-
-				return false;
-			}
-		}
-	});
+		});
+	};
 })();

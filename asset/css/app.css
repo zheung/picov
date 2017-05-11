@@ -261,3 +261,22 @@ a:visited {
 	padding: 4px;
 	margin: 2px;
 }
+
+/*-------logBox-------*/
+.logBox {
+	width: 100%;
+	height: 100%;
+
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.logBox>.logs {
+	display: block;
+
+	width: 97%;
+	height: 100%;
+
+	margin-left: 3%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}

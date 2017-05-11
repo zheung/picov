@@ -20,7 +20,8 @@ window.app = new Vue({
 	},
 	methods: {
 		turn: function (page) {
-			this.io.emit(this.meanNow, this.params(page, this.meanNow));
+			if(page > 0)
+				this.io.emit(this.meanNow, this.params(page, this.meanNow));
 		},
 		search: function(word) {
 			this.wordNow = typeof word == 'string' ? word : this.wordNow;
@@ -34,6 +35,13 @@ window.app = new Vue({
 			this.wordNow = '';
 
 			this.turn(1);
+		},
+		pageTurn:function() {
+			this.turn(~~this.pageNow);
+
+			Vue.nextTick(function() {
+				this.$refs.pager.blur();
+			}, this);
 		},
 		params: function(page, mean) {
 
@@ -53,7 +61,21 @@ window.app = new Vue({
 				window.open('https://www.pixiv.net/member_illust.php?mode=medium&illust_id='+reco.iid);
 			else
 				this.io.emit('save', { iid: reco.iid, time: reco.time });
+		},
+		imgError: function() {
+			var src = this.src;
+
+			if(!/fr=/.test(src)) {
+				this.src = src.replace(/\?/, '?fr=1&');
+			}
+		},
+		clear: function() {
+			this.logs = [];
+			this.logDict = { CountProc: this.logDict.CountProc };
 		}
+	},
+	mounted: function() {
+		window.keyInit();
 	}
 });
 

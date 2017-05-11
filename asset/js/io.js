@@ -19,11 +19,7 @@
 		else {
 			if(id) app.logDict[id] = log;
 
-			app.logs.push(log);
+			app.logs.unshift(log);
 		}
-
-		// if(this.logs.length > 77)
-		// 	ts.filter(':not(#log-CountProc):first').remove();
-		// box[0].scrollTop = box[0].scrollHeight;
 	});
 })();

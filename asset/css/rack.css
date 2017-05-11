@@ -1,0 +1,91 @@
+.iflex { display: inline-flex; }
+
+/*-------flex-direction-------*/
+.drr { flex-direction: row; }
+.drrr { flex-direction: row-reverse; }
+.drc { flex-direction: column; }
+.drcr { flex-direction: column-reverse; }
+
+/*-------justify-content-------*/
+.jcs { justify-content: flex-start; }
+.jce { justify-content: flex-end; }
+.jcc { justify-content: center; }
+.jcb { justify-content: space-between; }
+.jca { justify-content: space-around; }
+
+/*-------align-items-------*/
+.ais { align-items: flex-start; }
+.aie { align-items: flex-end; }
+.aic { align-items: center; }
+.aib { align-items: baseline; }
+.aih { align-items: stretch; }
+
+/*-------flex-wrap-------*/
+.wpn { flex-wrap: nowrap; }
+.wpw { flex-wrap: wrap; }
+.wpwr { flex-wrap: wrap-reverse; }
+
+/*-------align-content-------*/
+.acs { align-content: flex-start; }
+.ace { align-content: flex-end; }
+.acc { align-content: center; }
+.acb { align-content: space-between; }
+.aca { align-content: space-around; }
+.ach { align-content: stretch; }
+
+/*-------color-------*/
+.clrBack { color: #293134; }
+.blrBack { background-color: #293134; }
+
+.clrFont { color: #E0E2E4; }
+.blrFont { background-color: #E0E2E4; }
+
+.clrFontDark { color: #557799; }
+.blrFontDark { background-color: #557799; }
+
+.clrNavi { color: #34495e; }
+.blrNavi { background-color: #34495e; }
+
+.clrTabs { color: #293134; }
+.blrTabs { background-color: #293134; }
+
+/*-------small-------*/
+.hr { border-bottom: 1px solid #E0E2E4; }
+
+.whf { width: 100%; height: 100%; }
+
+.wf { width: 100%; }
+
+.hf { height: 100%; }
+.h81p { height: 81%; }
+
+.w2 { width: 32% }
+.w3 { width: 27% }
+.w4 { width: 16% }
+
+.m3 { margin: 3px; }
+.p10 { padding: 10px; }
+
+.tc { text-align: center; }
+
+.mw { min-height: 0px; }
+
+.hide { display: none; }
+
+.fsb { font-weight: bold; }
+.fs11 { font-size: 11px; }
+.fs20 { font-size: 20px; }
+.fs24 { font-size: 24px; }
+
+.cud { cursor: default; }
+
+.sel {
+	user-select: text;
+	-moz-user-select: text;
+	-webkit-user-select: text;
+	cursor: text;
+}
+
+.curp { cursor: pointer; }
+.cura { cursor: auto; }
+.curt { cursor: text; }
