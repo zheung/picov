@@ -1,6 +1,6 @@
 (function() {
 	var isInput =function(tagName) {
-			return tagName != 'input' && tagName != 'textarea';
+			return tagName == 'input' || tagName == 'textarea';
 		},
 		inArr =function(code, arr) {
 			for(var i in arr)
