@@ -73,11 +73,13 @@
 .hide { display: none; }
 
 .fsb { font-weight: bold; }
+.fs10 { font-size: 10px; }
 .fs11 { font-size: 11px; }
+.fs12 { font-size: 12px; }
+.fs13 { font-size: 13px; }
+.fs14 { font-size: 14px; }
 .fs20 { font-size: 20px; }
 .fs24 { font-size: 24px; }
-
-.cud { cursor: default; }
 
 .sel {
 	user-select: text;
@@ -86,6 +88,7 @@
 	cursor: text;
 }
 
+.curd { cursor: default; }
 .curp { cursor: pointer; }
 .cura { cursor: auto; }
 .curt { cursor: text; }
