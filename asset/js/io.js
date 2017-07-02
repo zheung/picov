@@ -9,6 +9,15 @@
 		app.tags = list;
 	});
 
+	app.io.on('save', function(iid, down, ding) {
+		app.records.map(function(r) {
+			if(r.iid == iid) {
+				Vue.set(r, 'down', down);
+				Vue.set(r, 'ding', ding);
+			}
+		});
+	});
+
 	app.io.on('log', function(text, id, color) {
 		var log = { text: text, color: color || '#557799' }, logOld = app.logDict[id];
 
@@ -18,6 +27,9 @@
 		}
 		else {
 			if(id) app.logDict[id] = log;
+
+			if(app.logs.length>50)
+				app.clear();
 
 			app.logs.unshift(log);
 		}

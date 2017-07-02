@@ -89,6 +89,12 @@ a:visited {
 .recoBox>.reco:hover {
 	border: 2px solid #E0E2E4;
 }
+.recoBox>.reco.ding {
+	border: 2px solid red;
+}
+.recoBox>.reco.down {
+	border: 2px solid yellow;
+}
 .recoBox>.reco>.detail {
 	border: 2px solid transparent;
 

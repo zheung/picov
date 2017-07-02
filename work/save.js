@@ -1,4 +1,4 @@
-let dictProc = {}, countProc = 0;
+let countProc = 0;
 
 let down = async(url, iid, proc, ext, ts, sog) => {
 	try {
@@ -52,38 +52,27 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 };
 
 module.exports = async(iid, time, sog) => {
-	if(dictProc[iid]) {
-		sog.l('拒绝', iid, '正在下载');
+	let tsMeta = `${new Date().getTime()}${iid}`;
 
-		return;
-	}
-	else {
-		dictProc[iid] = true;
+	sog.r(tsMeta, '下载', iid, '抓取元信息');
 
-		let tsMeta = `${new Date().getTime()}${iid}`;
+	let info = JSON.parse(await func.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3)),
+		urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext;
 
-		sog.r(tsMeta, '下载', iid, '抓取元信息');
+	sog.rl(tsMeta, '下载', iid, `共${count}张`, info.body[iid].illust_title);
 
-		let info = JSON.parse(await func.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3)),
-			urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext;
+	while(pid < count)
+		urls.push([`http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
 
-		sog.rl(tsMeta, '下载', iid, `共${count}张`, info.body[iid].illust_title);
+	await Promise.map(urls, async(url, now) => {
+		let tid = 0, proc = `(${now+1}/${pid})`, retry = ~~conf.retry, tsProc = `${new Date().getTime()}${url[1]}`;
 
-		while(pid < count)
-			urls.push([`http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
+		sog.rc(tsProc, 'white', '下载', iid, proc);
 
-		await Promise.map(urls, async(url, now) => {
-			let tid = 0, proc = `(${now+1}/${pid})`, retry = ~~conf.retry, tsProc = `${new Date().getTime()}${url[1]}`;
+		while(!await down(url, iid, proc, ext, tsProc, sog) && tid++ <= retry) {
+			sog.r('CountProc', '下载中的作品：', --countProc);
 
-			sog.rc(tsProc, 'white', '下载', iid, proc);
-
-			while(!await down(url, iid, proc, ext, tsProc, sog) && tid++ <= retry) {
-				sog.r('CountProc', '下载中的作品：', --countProc);
-
-				sog.ll('下载', iid, proc, '失败', `第(${tid}/${retry})次重试`);
-			}
-		});
-
-		dictProc[iid] = false;
-	}
+			sog.ll('下载', iid, proc, '失败', `第(${tid}/${retry})次重试`);
+		}
+	});
 };

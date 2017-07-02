@@ -11,7 +11,7 @@
 		<div id="app" class="drr wpn jcs aic wpn">
 			<div id="mainBox" class="blrBack drc jcc aic wpn">
 				<div class="recoBox drr jca aic aca wpw">
-					<div class="reco drc jcs ais ace wpn" v-for="reco in records" @click="save(reco)">
+					<div class="reco drc jcs ais ace wpn" :class="{ down: reco.down, ding: reco.ding }" v-for="reco in records" @click="save(reco)">
 						<div class="detail thumb drr jcc aic acc">
 							<img
 								class="thumb curp"
