@@ -45,19 +45,20 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 
 		return true;
 	} catch (err) {
-		log(err);
+		L(err);
 
 		return false;
 	}
 };
 
-module.exports = async(iid, time, sog) => {
+module.exports = async(iid, sog) => {
 	let tsMeta = `${new Date().getTime()}${iid}`;
 
 	sog.r(tsMeta, '下载', iid, '抓取元信息');
 
 	let info = JSON.parse(await func.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3)),
-		urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext;
+		urls = [], pid = 0, count = ~~info.body[iid].illust_page_count, ext = info.body[iid].illust_ext,
+		time = info.body[iid].url.big.match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0];
 
 	sog.rl(tsMeta, '下载', iid, `共${count}张`, info.body[iid].illust_title);
 

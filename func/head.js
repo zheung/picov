@@ -16,7 +16,7 @@ module.exports = async (path) => {
 				resolve(200);
 		})
 		.on('error', function(err) {
-			log(err);
+			L(err);
 
 			resolve(err);
 		});

@@ -10,7 +10,7 @@ module.exports = async (path, type, isLog = true) => {
 		};
 
 		if(type == 1) {
-			if(isLog) log('请求', path);
+			if(isLog) L('请求', path);
 
 			request(option, function (error, response, buffer) {
 				if(error)
@@ -20,12 +20,12 @@ module.exports = async (path, type, isLog = true) => {
 			});
 		}
 		else if(type == 2) {
-			if(isLog) log('代理', path);
+			if(isLog) L('代理', path);
 
 			resolve(request(option));
 		}
 		else if(type == 3) {
-			if(isLog) log('请求', path);
+			if(isLog) L('请求', path);
 
 			request(option, function (error, response, buffer) {
 				if(error)

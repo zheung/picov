@@ -1,5 +1,6 @@
 (function() {
 	app.io.on('list', function(result) {
+		app.psub = 1;
 		app.records = result.records;
 		app.pageNow = result.now;
 		app.pageMean = result.mean;

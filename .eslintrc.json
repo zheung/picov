@@ -15,7 +15,7 @@
 		"no-console": [ 1 ]
 	},
 	"globals": {
-		"log": true,
+		"L": true,
 		"soger": true,
 
 		"_dr": true,

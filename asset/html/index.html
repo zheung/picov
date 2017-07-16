@@ -11,7 +11,7 @@
 		<div id="app" class="drr wpn jcs aic wpn">
 			<div id="mainBox" class="blrBack drc jcc aic wpn">
 				<div class="recoBox drr jca aic aca wpw">
-					<div class="reco drc jcs ais ace wpn" :class="{ down: reco.down, ding: reco.ding }" v-for="reco in records" @click="save(reco)">
+					<div class="reco drc jcs ais ace wpn" :class="{ down: reco.down, ding: reco.ding }" v-for="(reco, i) of records" v-show="psub == parseInt(i/20)+1" @click="save(reco)">
 						<div class="detail thumb drr jcc aic acc">
 							<img
 								class="thumb curp"
@@ -38,11 +38,12 @@
 				</div>
 
 				<div class="pageBox jcb aic">
-					<a class="prev jcc aic" @click="turn(pageNow-1)">上一页</a>
+					<a class="prev jcc aic" @click="turn(pageNow, -1)">上一页</a>
 					<div class="count jcc aic">
 						第<input type="text" ref="pager" v-model="pageNow" @keyup.enter="pageTurn"></input>页
+						&nbsp;/&nbsp;{{psub}}&nbsp;子页
 					</div>
-					<a class="next jcc aic" @click="turn(pageNow+1)">下一页</a>
+					<a class="next jcc aic" @click="turn(pageNow, 1)">下一页</a>
 				</div>
 			</div>
 			<div id="naviBox" class="blrNavi">
