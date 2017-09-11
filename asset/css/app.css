@@ -260,7 +260,7 @@ a:visited {
 
 	cursor: pointer;
 }
-.tagBox>.tag {
+.tagBox>.tags>.tag {
 	border: 2px solid;
 	border-radius: 2px;
 

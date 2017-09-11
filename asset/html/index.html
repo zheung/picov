@@ -74,11 +74,11 @@
 						<div class="NaviColumn jcb aic wpn">
 							<span class="curp aic" @click="pageFollow"><i class="fa fa-tag"></i>关注的作品</span>
 						</div>
-						<div class="NaviColumn jcb aic wpn">
-							<span class="aic"><i class="fa fa-tag"></i>喜爱的标签</span>
-						</div>
-						<div class="tagBox NaviColumn clrFontDark curp drr flex jcs ais wpw">
-							<span class="tag" @click="search(tag[1])" :title="tag[1]" v-for="tag in tags">{{tag[0]}}</span>
+						<div class="tagBox NaviColumn drc flex jcs ais wpw" v-for="(arr, key) of tags">
+							<div class="title aic"><i class="fa fa-tag"></i>{{key}}</div>
+							<div div class="tags NaviColumn clrFontDark curp drr flex jcs ais wpw">
+								<span class="tag" @click="search(tag[1])" :title="tag[1]" v-for="tag of arr">{{tag[0]}}</span>
+							</div>
 						</div>
 					</div>
 					<div class="item drr jcc aic wpn" v-if="tabDash==3">
