@@ -61,12 +61,16 @@
 						</div>
 						<div class="NaviColumn jcb aic wpn">
 							<span class="sMean">当前列表：{{pageMean}}</span>
-							<i class="curp Clear fa fa-refresh" @click="clear" title="清空记录"></i>
+							<div>
+								<i class="curp leftHeadButton fa fa-refresh" @click="clear" title="清空记录"></i>
+								<i class="curp leftHeadButton fa fa-download" @click="downloadAll" title="全部下载" style="margin-top: 1px;"></i>
+								<i class="curp leftHeadButton fa" :class="{'fa-minus-square': logHide, 'fa-plus-square': !logHide}" @click="closeLog" title="隐藏日志" style="margin-top: 1px;"></i>
+							</div>
 						</div>
 						<div class="logBox NaviColumn fs11 clrFontDark drc flex jcs ais wpn">
 							<div class="logs fs11 clrFontDark drc flex jcs ais wpn">
 								<span :style="{ color: logDict.CountProc.color }">{{logDict.CountProc.text}}</span>
-								<span v-for="log in logs" :style="{ color: log.color }">{{log.text}}</span>
+								<span class="log" v-for="log in logs" :style="{ color: log.color }" v-if="logHide">{{log.text}}</span>
 							</div>
 						</div>
 					</div>

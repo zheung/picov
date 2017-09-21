@@ -18,7 +18,8 @@ window.app = new Vue({
 		tags: [],
 
 		logs: [],
-		logDict: { CountProc: { text: '下载中的作品： 0', color: '#557799' } }
+		logDict: { CountProc: { text: '下载中的作品： 0', color: '#557799' } },
+		logHide: false
 	},
 	methods: {
 		turn: function (page, offset) {
@@ -78,6 +79,17 @@ window.app = new Vue({
 		clear: function() {
 			this.logs = [];
 			this.logDict = { CountProc: this.logDict.CountProc };
+		},
+		downloadAll: function() {
+			var self = this;
+
+			this.records.map(function(reco) {
+				self.save(reco);
+			});
+		},
+		closeLog: function() {
+			this.logHide = !this.logHide;
+			this.io.emit('downLog', this.logHide);
 		}
 	},
 	mounted: function() {

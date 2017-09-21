@@ -4,7 +4,7 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 	try {
 		let getStream = await func.get(url[0], 2, false);
 
-		sog.r('CountProc', '下载中的作品：', ++countProc);
+		sog.rf('CountProc', '下载中的作品：', ++countProc);
 
 		await new Promise((resolve, reject) => {
 			let total, passed = 0, fileName = `${iid}_p${url[1]}.${ext}` , tempPath = path.join(conf.path.cache, 'large', fileName),
@@ -17,7 +17,7 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 
 					fs.moveSync(tempPath, path.join(conf.path.large, fileName), { overwrite: true });
 
-					sog.r('CountProc', '下载中的作品：', --countProc);
+					sog.rf('CountProc', '下载中的作品：', --countProc);
 
 					resolve();
 				});
@@ -71,7 +71,7 @@ module.exports = async(iid, sog) => {
 		sog.rc(tsProc, 'white', '下载', iid, proc);
 
 		while(!await down(url, iid, proc, ext, tsProc, sog) && tid++ <= retry) {
-			sog.r('CountProc', '下载中的作品：', --countProc);
+			sog.rf('CountProc', '下载中的作品：', --countProc);
 
 			sog.ll('下载', iid, proc, '失败', `第(${tid}/${retry})次重试`);
 		}

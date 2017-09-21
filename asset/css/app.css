@@ -286,3 +286,7 @@ a:visited {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
+
+.leftHeadButton {
+	border: 3px solid transparent;
+}
