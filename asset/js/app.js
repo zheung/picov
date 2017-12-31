@@ -33,7 +33,12 @@ window.app = new Vue({
 		search: function(word) {
 			this.wordNow = typeof word == 'string' ? word : this.wordNow;
 
-			this.meanNow = 'listSearch';
+			if(/^AI/.test(this.wordNow)) {
+				this.meanNow = 'listAuthor';
+			}
+			else {
+				this.meanNow = 'listSearch';
+			}
 
 			this.turn(0, 1);
 		},
@@ -54,6 +59,11 @@ window.app = new Vue({
 
 			if(mean == 'listFollow')
 				return {
+					p: (~~page > 0 ? ~~page : 1)
+				};
+			else if(mean == 'listAuthor')
+				return {
+					i: this.wordNow,
 					p: (~~page > 0 ? ~~page : 1)
 				};
 			else if(mean == 'listSearch')
