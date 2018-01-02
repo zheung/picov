@@ -41,7 +41,7 @@ module.exports = async (id, page) => {
 				}
 
 			result.name = $('a.user-name').html();
-			result.count = $('span.count-badge').html();
+			result.count = $('span.count-badge').html().replace(/\D/g, '');
 
 			resolve(result);
 		};

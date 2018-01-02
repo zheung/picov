@@ -62,6 +62,7 @@
 						<div class="NaviColumn jcb aic wpn">
 							<span class="sMean">当前列表：{{pageMean}}</span>
 							<div>
+								<i class="curp leftHeadButton fa fa-refresh" @click="listAuthorAll" title="清空记录"></i>
 								<i class="curp leftHeadButton fa fa-refresh" @click="clear" title="清空记录"></i>
 								<i class="curp leftHeadButton fa fa-download" @click="downloadAll" title="全部下载" style="margin-top: 1px;"></i>
 								<i class="curp leftHeadButton fa" :class="{'fa-minus-square': logHide, 'fa-plus-square': !logHide}" @click="closeLog" title="隐藏日志" style="margin-top: 1px;"></i>

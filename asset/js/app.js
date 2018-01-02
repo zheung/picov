@@ -100,6 +100,9 @@ window.app = new Vue({
 		closeLog: function() {
 			this.logHide = !this.logHide;
 			this.io.emit('downLog', this.logHide);
+		},
+		listAuthorAll: function() {
+			this.io.emit('listAuthorAll', this.wordNow);
 		}
 	},
 	mounted: function() {
