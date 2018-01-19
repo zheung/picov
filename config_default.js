@@ -11,9 +11,16 @@ module.exports = {
 		cache: 'Your Cache Path'
 	},
 
-	tags: [
-		'Tag You Like Name 1', 'Tag 1',
-		'Tag You Like Name 2', 'Tag 2',
-		'Tag You Like Name 3', 'Tag 3'
-	]
+	tags: {
+		'Tags Collection Name 1': [
+			['Tag You Like Name 1', 'Tag 1' ],
+			['Tag You Like Name 2', 'Tag 2' ],
+			['Tag You Like Name 3', 'Tag 3' ]
+		],
+		'Tags Collection Name 2': [
+			['Tag You Like Name 4', 'Tag 4' ],
+			['Tag You Like Name 5', 'Tag 5' ],
+			['Tag You Like Name 6', 'Tag 6' ]
+		]
+	}
 };

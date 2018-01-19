@@ -11,6 +11,7 @@ config.js
 cache
 save
 
-dictDown.json
-dictDing.json
+#Auth
+.auth.json
+
 last.json
