@@ -33,7 +33,7 @@ window.app = new Vue({
 		search: function(word) {
 			this.wordNow = typeof word == 'string' ? word : this.wordNow;
 
-			if(/^AI/.test(this.wordNow)) {
+			if(~~this.wordNow > 0) {
 				this.meanNow = 'listAuthor';
 			}
 			else {

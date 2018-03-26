@@ -7,8 +7,14 @@ let down = async(url, iid, proc, ext, ts, sog) => {
 		sog.rf('CountProc', '下载中的作品：', ++countProc);
 
 		await new Promise((resolve, reject) => {
-			let total, passed = 0, fileName = `${iid}_p${url[1]}.${ext}` , tempPath = path.join(conf.path.cache, 'large', fileName),
-				writeStream = fs.createWriteStream(tempPath)
+			let total;
+			let passed = 0;
+			let fileName = `${iid}_p${url[1]}.${ext}`;
+			let tempPath = path.join(conf.path.cache, 'large', fileName);
+
+			fs.removeSync(tempPath);
+
+			let writeStream = fs.createWriteStream(tempPath)
 				.on('drain', () => {
 					getStream.resume();
 				})
