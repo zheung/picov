@@ -20,7 +20,7 @@ module.exports = async (id, page) => {
 					title: $$.find('h1.title').attr('title'),
 					uid: img.data('userId'),
 					user: $$.find('a.user').data('user_name'),
-					tags: img.data('tags').split(' '),
+					tags: img.data('tags').toString().split(' '),
 					time: img.data('src').match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0],
 					type: img.data('type'),
 					multi: $$.find('a._work').hasClass('multiple') ? 1 : 0,
@@ -45,11 +45,13 @@ module.exports = async (id, page) => {
 					});
 				}
 
-			result.name = $('a.user-name').html();
-			result.count = $('span.count-badge').html().replace(/\D/g, '');
+			result2 = result2.concat(result);
+			result2.name = $('a.user-name').html();
+			result2.count = ($('span.count-badge').html() || '').replace(/\D/g, '');
 
+			result2.name = `${result2.name} (${result2.count}/${Math.round(result2.count/20)})`
 
-			resolve(result2.concat(result));
+			resolve(result2);
 		};
 
 		jsdom.env(str, ['./asset/js/jquery.js'], take);

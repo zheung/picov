@@ -69,7 +69,7 @@ module.exports = async(iid, sog) => {
 	sog.rl(tsMeta, '下载', iid, `共${count}张`, info.body[iid].illust_title);
 
 	while(pid < count)
-		urls.push([`http://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
+		urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pid}.${ext}`, pid++]);
 
 	await Promise.map(urls, async(url, now) => {
 		let tid = 0, proc = `(${now+1}/${pid})`, retry = ~~conf.retry, tsProc = `${new Date().getTime()}${url[1]}`;

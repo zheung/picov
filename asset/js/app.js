@@ -36,6 +36,10 @@ window.app = new Vue({
 			if(~~this.wordNow > 0) {
 				this.meanNow = 'listAuthor';
 			}
+			else if(/member\.php/.test(this.wordNow)) {
+				this.wordNow = this.wordNow.match(/id=(\d+)/)[1];
+				this.meanNow = 'listAuthor';
+			}
 			else {
 				this.meanNow = 'listSearch';
 			}

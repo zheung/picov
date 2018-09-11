@@ -1,6 +1,6 @@
 module.exports = async (page) => {
 	return new Promise(async resolve => {
-		let buf = await func.get(`http://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1),
+		let buf = await func.get(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1),
 			str = buf.toString();
 
 		let take = (err, window) => {
