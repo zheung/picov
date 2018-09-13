@@ -1,0 +1,42 @@
+{
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": 8,
+		"sourceType": "script"
+	},
+	"rules": {
+		"indent": [ 0, "tab", { "ignoreComments": true } ],
+		"linebreak-style": [ 2, "windows" ],
+		"quotes": [ 0, "single" ],
+		"semi": [ 2, "always" ],
+		"no-unused-vars": [ 2, { "vars": "all", "args": "after-used" } ],
+		"no-console": [ 2 ],
+		"no-var": [ 2 ]
+	},
+	"globals": {
+		"_fs": true,
+		"_pa": true,
+		"_qs": true,
+		"_ul": true,
+		"_os": true,
+
+		"Promise": true,
+		"Axios": true,
+		"Moment": true,
+
+		"D": true,
+		"L": true,
+		"LE": true,
+		"J": true,
+		"C": true,
+		"T": true,
+
+		"DB": true,
+
+		"JD": true
+	}
+}

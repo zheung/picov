@@ -1,0 +1,129 @@
+html {
+	height: 100%;
+
+	margin: 0px;
+	padding: 0px;
+
+	overflow: hidden;
+	overflow-y: auto;
+
+	background: #eeeeee;
+	color: #495051;
+}
+body, #home {
+	margin: 0px;
+	padding: 0px;
+}
+
+#home *:not(.pop) {
+	text-shadow: 0em 0em 0.0001em !important;
+	font-family: plusicon, "Font Awesome 5 Free", "Microsoft YaHei", sans-serif !important;
+}
+
+ul, li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.transAll, .transAll *, .trans {
+	transition-property: all;
+	transition-duration: 0.4s;
+
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+}
+.transAll.d02, .transAll.d02 *, .trans.d02 {
+	transition-duration: 0.2s;
+}
+.transAll.d7, .transAll.d7 *, .trans.d7 {
+	transition-duration: 2s;
+}
+
+.nosel {
+	user-select: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+.sel {
+	user-select: text !important;
+	-moz-user-select: text !important;
+	-webkit-user-select: text !important;
+	cursor: text !important;
+}
+
+.inline {
+	display: inline-block;
+	vertical-align: top;
+}
+
+hr {
+	border: 0.5px solid #495051;
+}
+
+.frameBox {
+	position: fixed;
+
+	top: 90px;
+	left: 10px;
+	right: 0px;
+	bottom: 0px;
+
+	overflow: auto;
+}
+.frameBox.mini {
+	left: 283px;
+}
+.frameBox>div {
+	position: absolute;
+
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+
+	min-width: 1200px;
+	min-height: 720px;
+
+	z-index: 99999;
+}
+
+.pop {
+	display: block;
+
+	position: fixed;
+
+	width: auto;
+	height: 20px;
+
+	top: 0px;
+	left: 0px;
+
+	background: #148474;
+	border-radius: 5px;
+
+	font-size: 12px;
+	line-height: 20px;
+
+	padding: 5px;
+
+	z-index: 9999;
+
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.elli {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.anchorBL{
+	display: none;
+}

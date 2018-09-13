@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<title>Picov</title>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Language" content="zh-CN">
+		<meta charset="utf-8">
+		<meta name="keywords" content="Picov,pixiv">
+		<meta name="description" content="Picov">
+		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+	</head>
+	<body>
+		<div id="home">
+			<div ref="pop" class="pop" :style="popa"></div>
+			<div :class="frameBoxClass">
+				<keep-alive>
+					<component :is="B.viewNow"></component>
+				</keep-alive>
+			</div>
+			<component is="homeTop"></component>
+			<component is="homeLeft"></component>
+			<component is="homeNavi"></component>
+
+			<component is="masker"></component>
+			<component is="winer"></component>
+			<component is="alert"></component>
+
+			<component is="comboBoxer"></component>
+			<component is="timerBoxer"></component>
+
+			<component is="menus"></component>
+		</div>
+	</body>
+</html>
