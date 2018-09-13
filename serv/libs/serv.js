@@ -131,14 +131,14 @@ module.exports = async function(servType, servConf) {
 			koa: koa,
 		};
 	// 选择性加载数据库
-		if(confSub.db.type && confSub.db.type.profile) {
+		if(confSub.db.type && confSub.db.profile) {
 
 			try {
 				let dbLib = require(JD('libs', 'db', confSub.db.type));
 
 				let auth = require(JD('subs', pathSub, '.auth'));
 
-				$.db = await dbLib(auth);
+				$.db = await dbLib(auth[confSub.db.profile]);
 			} catch (e) { true; }
 		}
 	// 正式加载子应用

@@ -115,20 +115,20 @@ module.exports = async function($) {
 				return option;
 			}
 
-			let conn;
+			let conn = {};
 			let result;
 
 			try {
-				conn = await $.db.pick();
+				// conn = await $.db.pick();
 
-				result = await func.m(option, conn, conn.query, conn.format, $.db);
+				result = await func.m(option, $.db);
 
 				if(!result) {
 					throw 'model return null';
 				}
 			}
 			finally {
-				conn.close();
+				// conn.close();
 			}
 
 			return result;

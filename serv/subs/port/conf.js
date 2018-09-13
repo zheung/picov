@@ -16,5 +16,10 @@ module.exports = {
 	db: {
 		type: 'mongo',
 		profile: 'picov'
-	}
+	},
+
+	cookie: conf.cookie || '',
+	retry: conf.retry || 5,
+	path: conf.path || {},
+	tags: conf.tags || {},
 };

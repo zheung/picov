@@ -2,6 +2,8 @@ module.exports = async function($, router) {
 	await $.st(await $.pa('dist'), { defer: true });
 	// await $.st(J($.conf.pathArch, 'Image'), { defer: false }, '/reso');
 
+	await $.rq('../../../initWork');
+
 	$.app.use(async function(ctx, next) {
 		let raw = ctx.raw || {};
 

@@ -1,6 +1,4 @@
-module.exports = async() => {
-	let dbinfo = require('../.auth.json');
-
+module.exports = async(dbinfo) => {
 	let connect;
 
 	if(!connect) {

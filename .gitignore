@@ -2,7 +2,7 @@
 node_modules
 
 #No Real Config
-config.js
+conf.js
 
 #No Picture Folder
 cache

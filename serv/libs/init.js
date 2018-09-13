@@ -1,6 +1,6 @@
 module.exports = async function() {
 // Node模块 下划线 + 2~3个小写字母
-	global._fs = require('fs');
+	global._fs = require('fs-extra');
 	global._pa = require('path');
 	global._qs = require('querystring');
 	global._ul = require('url');
@@ -10,6 +10,8 @@ module.exports = async function() {
 // 第三方组件 大写开头的英文单词
 	global.Axios = require('axios');
 	global.Moment = require('moment');
+	global.jsdom = require('jsdom');
+
 // 常用功能简写 1~2个大写字母
 	global.J = global._pa.join;
 	global.D = J(__dirname, '..');

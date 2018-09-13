@@ -113,7 +113,7 @@
 	export default {
 		data: function() {
 			return {
-				io: io(),
+				// io: io(),
 
 				tabDash: 1,
 
@@ -226,91 +226,96 @@
 				this.io.emit('listAuthorAll', this.wordNow);
 			}
 		},
-		mounted: function() {
-			(function() {
-				app.io.on('list', function(result) {
-					app.psub = 1;
-					app.records = result.records;
-					app.pageNow = result.now;
-					app.pageMean = result.mean;
-				});
+		mounted: async function() {
+			A.reg('list', 'uapi/list');
 
-				app.io.on('listTag', function(list) {
-					app.tags = list;
-				});
+			let result = await A.conn('list');
 
-				app.io.on('save', function(iid, down, ding) {
-					app.records.map(function(r) {
-						if(r.iid == iid) {
-							Vue.set(r, 'down', down);
-							Vue.set(r, 'ding', ding);
-						}
-					});
-				});
+			this.psub = 1;
+			this.records = result.records;
+			this.pageNow = result.now;
+			this.pageMean = result.mean;
 
-				app.io.on('log', function(text, id, color) {
-					let log = { text: text, color: color || '#557799' }, logOld = app.logDict[id];
+			// (function() {
+			// 	this.io.on('list', function(result) {
+			// 	});
 
-					if(logOld) {
-						logOld.text = text;
-						logOld.color = color || '#557799';
-					}
-					else {
-						if(id) app.logDict[id] = log;
+			// 	this.io.on('listTag', function(list) {
+			// 		this.tags = list;
+			// 	});
 
-						if(app.logs.length>50)
-							app.clear();
+			// 	this.io.on('save', function(iid, down, ding) {
+			// 		this.records.map(function(r) {
+			// 			if(r.iid == iid) {
+			// 				Vue.set(r, 'down', down);
+			// 				Vue.set(r, 'ding', ding);
+			// 			}
+			// 		});
+			// 	});
 
-						app.logs.unshift(log);
-					}
-				});
-			})();
-			(function() {
-				let isInput =function(tagName) {
-						return tagName == 'input' || tagName == 'textarea';
-					},
-					inArr =function(code, arr) {
-						for(let i in arr)
-							if(arr[i] == code)
-								return true;
+			// 	this.io.on('log', function(text, id, color) {
+			// 		let log = { text: text, color: color || '#557799' }, logOld = this.logDict[id];
 
-						return false;
-					};
+			// 		if(logOld) {
+			// 			logOld.text = text;
+			// 			logOld.color = color || '#557799';
+			// 		}
+			// 		else {
+			// 			if(id) this.logDict[id] = log;
 
-				window.keyInit = function() {
-					document.addEventListener('keyup', function(e) {
-						let ae = document.activeElement, tagName = ae.tagName.toLowerCase();
+			// 			if(this.logs.length>50)
+			// 				this.clear();
 
-						if(!isInput(tagName)) {
-							if(inArr(e.keyCode, [65,33,74])) { app.turn(app.pageNow, -1); return false; } //a, pup, j
-							else if(inArr(e.keyCode, [68,34,75])) { app.turn(app.pageNow, 1); return false; } //d, pdn, k
-							else if(e.keyCode == 67 && e.shiftKey) { //c
-								app.clear();
+			// 			this.logs.unshift(log);
+			// 		}
+			// 	});
+			// })();
+			// (function() {
+			// 	let isInput =function(tagName) {
+			// 			return tagName == 'input' || tagName == 'textarea';
+			// 		},
+			// 		inArr =function(code, arr) {
+			// 			for(let i in arr)
+			// 				if(arr[i] == code)
+			// 					return true;
 
-								return false;
-							}
-							else if(e.keyCode == 71 && e.shiftKey) { //g
-								app.$refs.pager.focus();
+			// 			return false;
+			// 		};
 
-								return false;
-							}
-							else if(e.keyCode == 83 && e.shiftKey) { //s
-								app.$refs.worder.focus();
+			// 	window.keyInit = function() {
+			// 		document.addEventListener('keyup', function(e) {
+			// 			let ae = document.activeElement, tagName = ae.tagName.toLowerCase();
 
-								return false;
-							}
-							else if(e.keyCode == 69) { //e
-								app.downloadAll();
+			// 			if(!isInput(tagName)) {
+			// 				if(inArr(e.keyCode, [65,33,74])) { this.turn(this.pageNow, -1); return false; } //a, pup, j
+			// 				else if(inArr(e.keyCode, [68,34,75])) { this.turn(this.pageNow, 1); return false; } //d, pdn, k
+			// 				else if(e.keyCode == 67 && e.shiftKey) { //c
+			// 					this.clear();
 
-								return false;
-							}
-						}
-					});
-				};
-			})();
+			// 					return false;
+			// 				}
+			// 				else if(e.keyCode == 71 && e.shiftKey) { //g
+			// 					this.$refs.pager.focus();
 
-			app.turn(0, 1);
-			app.io.emit('listTag');
+			// 					return false;
+			// 				}
+			// 				else if(e.keyCode == 83 && e.shiftKey) { //s
+			// 					this.$refs.worder.focus();
+
+			// 					return false;
+			// 				}
+			// 				else if(e.keyCode == 69) { //e
+			// 					this.downloadAll();
+
+			// 					return false;
+			// 				}
+			// 			}
+			// 		});
+			// 	};
+			// })();
+
+			// this.turn(0, 1);
+			// this.io.emit('listTag');
 		}
 	};
 </script>

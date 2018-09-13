@@ -1,5 +1,5 @@
 let raw = [
-	[ 'get', '1', 'abc', 'bus.dict' ],
+	[ 'get', '1', 'list', 'list' ],
 ];
 
 let routes = [];
