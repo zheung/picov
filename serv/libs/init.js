@@ -8,9 +8,9 @@ module.exports = async function() {
 	global._http = require('http');
 	global._cr = require('crypto');
 // 第三方组件 大写开头的英文单词
-	global.Axios = require('axios');
+	global.Request = require('request');
 	global.Moment = require('moment');
-	global.jsdom = require('jsdom');
+	global.Jsdom = require('jsdom');
 
 // 常用功能简写 1~2个大写字母
 	global.J = global._pa.join;
@@ -24,6 +24,7 @@ module.exports = async function() {
 		return global.J(D, ...paths);
 	};
 // 必要全局变量 1~2个大写字母
-	global.C = require(JD('conf'));
 	global.T = require(JD('tool'));
+
+	global.C = require(JD('conf'));
 };

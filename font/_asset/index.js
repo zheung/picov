@@ -20,6 +20,11 @@ let main = async function() {
 			'name': '图片中心',
 			'show': true,
 			'list': [{
+				'type': 'listFollow',
+				'name': '关注图片',
+				'only': true,
+				'show': true
+			}, {
 				'type': 'center',
 				'name': '图片中心',
 				'only': true,
@@ -32,7 +37,7 @@ let main = async function() {
 			}]
 		}];
 
-		BUS.homeType = 'center';
+		BUS.homeType = 'listFollow';
 	}
 	catch (error) { true; }
 

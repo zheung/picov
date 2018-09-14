@@ -1,16 +1,19 @@
-
 module.exports = {
 	m: async function(raw, db) {
-		let result;
+		let result, records;
 
 		let coll = db.coll('illust');
 
 		try {
+			raw.i = raw.i.replace(/^AI/, '');
+
+			records = await W.listAuthor(raw.i, raw.p);
+
 			result = {
 				s: true,
 				now: ~~raw.p,
-				mean: '关注的作品',
-				records: await work.listFollow(raw.p)
+				mean: `作者：${records.name}`,
+				records: records
 			};
 
 			let stats = await coll.getStat(result.records);
@@ -29,5 +32,10 @@ module.exports = {
 
 			result = { s: false };
 		}
-	},
+
+		return {
+			success: true,
+			data: result
+		};
+	}
 };

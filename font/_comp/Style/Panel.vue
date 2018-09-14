@@ -24,13 +24,8 @@
 
 		border: 1px solid #dedede;
 
-		background: snow;
-
 		border-radius: 4px;
-		box-shadow: 2px 2px 7px -2px rgba(128, 128, 128, 0.7);
-
-		font-size: 13px;
-		color: #495051;
+		box-shadow: 2px 2px 7px -2px rgba(128, 128, 128, 0.4);
 
 		overflow: hidden;
 	}

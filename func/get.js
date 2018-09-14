@@ -1,43 +1,41 @@
 module.exports = async (path, type, isLog = true) => {
-	let option = {
-		url: path,
-		headers: {
-			'Cookie': `PHPSESSID=${C.cookie}`,
-			'Referer': 'http://www.pixiv.net/'
-		},
-		encoding: null
-	};
-
-	if(type == 1) {
-		if(isLog) L('请求', path);
-
-		await Axios.get(path, { params: raw }, {
+	return new Promise((resolve, reject) => {
+		let option = {
+			url: path,
 			headers: {
-				'Cookie': `PHPSESSID=${C.cookie}`,
-				'Referer': 'http://www.pixiv.net/'
+				'Cookie': `PHPSESSID=${C.C.cookie}`,
+				'Referer': 'http://www.pixiv.net/',
+				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
 			},
-		});
+			encoding: null,
 
-		request(option, function (error, response, buffer) {
-			if(error)
-				throw (error);
-			else
-				return buffer;
-		});
-	}
-	else if(type == 2) {
-		if(isLog) L('代理', path);
+			proxy: 'http://127.0.0.1:1080'
+		};
 
-		resolve(request(option));
-	}
-	else if(type == 3) {
-		if(isLog) L('请求', path);
+		if(type == 1) {
+			if(isLog) L('请求', path);
 
-		request(option, function (error, response, buffer) {
-			if(error)
-				reject(error);
-			else
-				resolve(buffer.toString());
-		});
-	}
+			Request(option, function (error, response, buffer) {
+				if(error)
+					reject(error);
+				else
+					resolve(buffer);
+			});
+		}
+		else if(type == 2) {
+			if(isLog) L('代理', path);
+
+			resolve(Request(option));
+		}
+		else if(type == 3) {
+			if(isLog) L('请求', path);
+
+			Request(option, function (error, response, buffer) {
+				if(error)
+					reject(error);
+				else
+					resolve(buffer.toString());
+			});
+		}
+	});
 };

@@ -26,15 +26,19 @@
 		"_cr": true,
 
 		"Promise": true,
-		"Axios": true,
+		"Request": true,
 		"Moment": true,
+		"Jsdom": true,
 
 		"D": true,
 		"L": true,
 		"LE": true,
 		"J": true,
+
 		"C": true,
 		"T": true,
+		"F": true,
+		"W": true,
 
 		"DB": true,
 

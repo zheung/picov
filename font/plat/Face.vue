@@ -1,9 +1,10 @@
 <template>
-	<div>
+	<div class="compProcmProduct">
 		<!-- 顶栏 -->
 		<div class="topbar" @mouseover="onOver" @mouseout="onOut">
-			<Combo v-model="query.method" label="方法" :list="methodList" width="160" @input="onQuery"></Combo>
-			<Texter v-model="query.path" label="路由" width="200" @keyup.enter.native="onQuery"></Texter>
+			<Combo v-model="query.sup_id" label="厂商" :list="B.data.procmSupplier" width="200" @input="onQuery" filter></Combo>
+			<Texter v-model="query.name" label="名称" width="200" @keyup.enter.native="onQuery"></Texter>
+			<Texter v-model="query.tag" label="标签" width="200" @keyup.enter.native="onQuery"></Texter>
 
 			<div class="button nosel trans" @click="onQuery">查询</div>
 
@@ -30,18 +31,21 @@
 	export default {
 		data: function() {
 			return {
+				perm: X.modl('procmproduct').perm,
+
 				nowCol: null,
 
 				zIndex: -1,
 
 				// 表格头
 				title: [
-					{ text: 'ID', index: 'face_id', width: 45, align: 'center' },
-					{ text: '数据类型', index: 'type_text', width: 80, align: 'center' },
-					{ text: '方法', index: 'method', width: 40, align: 'center', },
-					{ text: '路由', index: 'path', width: 160 },
-					{ text: '流程', index: 'entry_name', width: 160 },
-					{ text: '备注', index: 'row_mark', width: 160 }
+					{ text: 'ID', index: 'id', width: 45, align: 'center' },
+					{ text: '名称', index: 'name', width: 160, align: 'center' },
+					{ text: '标签', index: 'type_tag', width: 200 },
+					{ text: '厂商', index: 'sup_name', width: 160, align: 'center' },
+					{ text: '主要参数', index: 'main_param', width: 200 },
+					{ text: '其他参数', index: 'sub_param', width: 200 },
+					{ text: '备注', index: 'row_mark', width: 200 }
 				],
 
 				data: [],
@@ -52,9 +56,9 @@
 					page: 1,
 					limit: 40,
 
-					name: '',
+					sup_id: 0,
 
-					project: 0
+					tag: '',
 				},
 
 				// 一般不变的默认值
@@ -74,18 +78,19 @@
 					{ name: '下载接口', code: 4 },
 				],
 
-				today: moment()
+				today: moment(),
+
+				B: BUS
 			};
 		},
 
 		created: function() {
 		// 注册接口
-			A.reg('platFaceList', 'uapi/platFaceList');
-			A.reg('platFaceAdd', 'uapi/platFaceAdd');
-			A.reg('platFaceMod', 'uapi/platFaceMod');
-			A.reg('platFaceDel', 'uapi/platFaceDel');
+			A.reg('procmProductList', 'uapi/procmProductList');
+			A.reg('procmProductAdd', 'uapi/procmProductAdd');
+			A.reg('procmProductMod', 'uapi/procmProductMod');
+			A.reg('procmProductDel', 'uapi/procmProductDel');
 
-			A.reg('platRoleCmb', 'uapi/platRoleCmb');
 		},
 		mounted: async function() {
 		// 加载Combo、表格等
@@ -101,7 +106,7 @@
 					this.query.page = 1;
 				}
 			// 查询接口
-				let result = await A.conn('platFaceList', this.query);
+				let result = await A.conn('procmProductList', this.query);
 
 				this.$set(this, 'data', result.infos || []);
 				this.$set(this, 'total', result.total || 0);
@@ -117,12 +122,12 @@
 
 			openEditor: async function(title, data) {
 			// 定义编辑器
-				let cid = 'faceEditor';
+				let cid = 'procmProductEditor';
 
-				if(!X.wins.init(cid)) {
-				// 编辑器路径，注意必须写死，不然Webpack不能识别
-					X.wins.init(cid, (await System.import('./FaceEditor')).default);
-				}
+				// if(!X.wins.init(cid)) {
+				// // 编辑器路径，注意必须写死，不然Webpack不能识别
+				// 	X.wins.init(cid, (await System.import('./Editor')).default);
+				// }
 
 				X.wins.show(cid, title, data);
 			},
@@ -133,7 +138,7 @@
 
 					onQuery: this.onQuery,
 				// 添加接口
-					action: 'platFaceAdd',
+					action: 'procmProductAdd',
 					actionName: '添加',
 					actionType: 'Add',
 
@@ -144,8 +149,12 @@
 						type: 1,
 						method: 'get',
 
-						path: '',
-						entry: '',
+						sup_id: 0,
+						name: '',
+
+						main_param: '',
+						sub_param: '',
+						type_tag: '',
 
 						row_mark: ''
 					}
@@ -159,29 +168,29 @@
 					X.alert('请选择记录');
 				}
 				else {
-					let test = {
-						face_id: now.face_id,
-
-						type: now.type,
-						method: now.method,
-						path: now.path,
-						entry: now.entry,
-
-						row_mark: now.row_mark
-					};
-					window.t1 = test;
-
 					this.openEditor('修改记录', {
 						mask: 3,
 					// 修改接口
-						action: 'platFaceMod',
+						action: 'procmProductMod',
 						actionName: '修改',
 						actionType: 'Mod',
 
 						typeList: this.typeList,
 						methodList: this.methodList2,
 					// 注意query要复制，不能直接用now，不然表格跟着变
-						query: test,
+						query: {
+							id: now.id,
+
+							sup_id: now.sup_id,
+							name: now.name,
+
+							main_param: now.main_param,
+							sub_param: now.sub_param,
+
+							type_tag: now.type_tag,
+
+							row_mark: now.row_mark
+						},
 
 						onQuery: this.onQuery
 					});
@@ -199,7 +208,7 @@
 					if(sure) {
 						try {
 						// 删除接口
-							let result = await A.post('platFaceDel', { face_id: now.face_id });
+							let result = await A.post('procmProductDel', { id: now.id });
 
 							if(result) {
 								await X.alert('删除成功');
@@ -219,10 +228,11 @@
 
 <style scoped>
 	.topbar {
-		position: absolute;
+		position: relative;
 
-		left: 0px;
-		right: 0px;
+		margin: 10px;
+
+		width: calc(100% - 30px);
 
 		display: block;
 		border-radius: 4px;
@@ -242,12 +252,12 @@
 	}
 
 	.grid {
-		position: absolute;
+		position: relative;
 
-		top: 50px;
-		left: 0px;
-		right: 0px;
-		bottom: 10px;
+		margin: 10px 0px 0px 10px;
+
+		width: calc(100% - 30px);
+		height: calc(100% - 80px);
 	}
 
 	.button {

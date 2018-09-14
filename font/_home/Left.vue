@@ -32,11 +32,11 @@
 				</li>
 			</Scroll>
 
-			<div class="findBox trans" :style="{ left: (C.listShow=='device'? 0: 270)+'px'}">
+			<!-- <div class="findBox trans" :style="{ left: (C.listShow=='device'? 0: 270)+'px'}">
 				<Texter v-model="keyword" place="" width="250" @focus="onKeywordFocus" @blur="onKeywordBlur"></Texter>
-			</div>
+			</div> -->
 
-			<Scroll class="naviList device trans" :style="{ left: (C.listShow=='device'? 10: 280)+'px'}">
+			<!-- <Scroll class="naviList device trans" :style="{ left: (C.listShow=='device'? 10: 280)+'px'}">
 				<li class="listItem" :class="{ opened: C.expandTop.device == project.id }"
 					v-for="project of projList" :key="'naviSub-device-'+project.id" v-if="project.show"
 				>
@@ -61,7 +61,7 @@
 						<Fas icon="desktop" /> {{device.name}}
 					</div>
 				</li>
-			</Scroll>
+			</Scroll> -->
 		</div>
 
 		<div :class="{ homeLeftSide: true, work: expand, trans:true }" @click="ctrlExpand()"
@@ -81,7 +81,7 @@
 
 		data: function() {
 			let expandTop = {
-				module: 1,
+				module: 0,
 				device: 1
 			};
 

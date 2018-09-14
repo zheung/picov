@@ -115,12 +115,9 @@ module.exports = async function($) {
 				return option;
 			}
 
-			let conn = {};
 			let result;
 
 			try {
-				// conn = await $.db.pick();
-
 				result = await func.m(option, $.db);
 
 				if(!result) {

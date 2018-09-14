@@ -8,7 +8,7 @@
 					<div class="detail thumb drr jcc aic acc">
 						<img
 							class="thumb curp"
-							:src="'/proxy/thumb?iid='+reco.iid+'&time='+reco.time+'&ugoira='+reco.ugoira"
+							:src="'uapi/thumb?iid='+reco.iid+'&time='+reco.time+'&ugoira='+reco.ugoira"
 							:title="reco.iid"
 							@error="imgError"
 						/>
@@ -139,13 +139,23 @@
 			A.reg('docFileList', 'uapi/docFileListEms');
 		},
 		methods: {
-			turn: function (page, offset) {
-				if(this.psub == 1 && this.records.length > 20 && offset == 1)
+			turn: async function(page, offset) {
+				if(this.psub == 1 && this.records.length > 20 && offset == 1) {
 					this.psub = 2;
-				else if(this.psub == 2 && offset == -1)
+				}
+				else if(this.psub == 2 && offset == -1) {
 					this.psub = 1;
-				else if(page+offset > 0)
+				}
+				else if(page+offset > 0) {
 					this.io.emit(this.meanNow, this.params(page+offset, this.meanNow));
+
+					let result = await A.conn(this.meanNow, this.params(page+offset, this.meanNow));
+
+					this.psub = 1;
+					this.records = result.records;
+					this.pageNow = result.now;
+					this.pageMean = result.mean;
+				}
 			},
 			search: function(word) {
 				this.wordNow = typeof word == 'string' ? word : this.wordNow;
@@ -177,7 +187,6 @@
 				}, this);
 			},
 			params: function(page, mean) {
-
 				if(mean == 'listFollow')
 					return {
 						p: (~~page > 0 ? ~~page : 1)
@@ -227,14 +236,7 @@
 			}
 		},
 		mounted: async function() {
-			A.reg('list', 'uapi/list');
-
-			let result = await A.conn('list');
-
-			this.psub = 1;
-			this.records = result.records;
-			this.pageNow = result.now;
-			this.pageMean = result.mean;
+			A.reg('listFollow', 'uapi/listFollow');
 
 			// (function() {
 			// 	this.io.on('list', function(result) {

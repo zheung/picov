@@ -29,6 +29,7 @@ import TxArea from '../../_comp/TxArea';
 import Winer from '../../_comp/Winer';
 
 import sPanel from '../../_comp/Style/Panel';
+import sButton from '../../_comp/Style/Button';
 
 export default function() {
 	Vue.component('empty', Empty);
@@ -57,4 +58,5 @@ export default function() {
 	Vue.component('TxArea', TxArea);
 
 	Vue.component('sPanel', sPanel);
+	Vue.component('sButton', sButton);
 }

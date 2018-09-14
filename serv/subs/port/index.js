@@ -58,14 +58,16 @@ module.exports = async function($, router) {
 					ctx.type = 'json';
 				}
 
-				ctx.body = result.data;
+				ctx.body = result;
 			}
 			else {
+				let mime = !!result.data.mime;
+
 				if(result.data && result.data.data && result.data.data.length) {
 					for(let url of result.data.data) {
 						if(url.startsWith('http')) {
 							try {
-								ctx.body = (await Axios.get({
+								ctx.body = (await Request.get({
 									url: url,
 									responseType:'stream'
 								})).data;
@@ -84,7 +86,13 @@ module.exports = async function($, router) {
 
 								ctx.lastModified = new Date(stat.mtime);
 
-								ctx.attachment(_pa.parse(url).base);
+								if(mime) {
+									ctx.type = _pa.parse(url).ext;
+								}
+								else {
+									ctx.attachment(_pa.parse(url).base);
+								}
+
 								ctx.body = _fs.createReadStream(url);
 
 								break;

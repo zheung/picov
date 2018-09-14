@@ -1,5 +1,7 @@
 let raw = [
-	[ 'get', '1', 'list', 'list' ],
+	[ 'get', '1', 'listFollow' ],
+	[ 'get', '1', 'listAuthor' ],
+	[ 'get', '4', 'thumb' ],
 ];
 
 let routes = [];
@@ -9,7 +11,7 @@ for(let route of raw) {
 		method: route[0],
 		type: route[1],
 		path: route[2],
-		entry: route[3]
+		entry: route[3] || route[2]
 	});
 }
 

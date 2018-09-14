@@ -1,9 +1,9 @@
-module.exports = async (page) => {
-	return new Promise(async resolve => {
-		let buf = await func.get(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1),
+module.exports = async function(page) {
+	return new Promise(async function(resolve) {
+		let buf = await F.get(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1),
 			str = buf.toString();
 
-		let take = (err, window) => {
+		let take = function(err, window) {
 			let $ = window.$, result = [];
 
 			let items = $('li.image-item');
@@ -48,6 +48,6 @@ module.exports = async (page) => {
 			resolve(result);
 		};
 
-		jsdom.env(str, ['./asset/js/jquery.js'], take);
+		Jsdom.env(str, ['./lib/jquery.js'], take);
 	});
 };
