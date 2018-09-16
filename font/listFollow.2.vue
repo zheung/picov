@@ -10,12 +10,17 @@
 			<!-- <sButton class="onRight inline" text="新增" @click="onAdd"></sButton> -->
 		</sPanel>
 		<!-- 表格 -->
-		<!-- <sPanel class="thumbBox" title="图片列表"> -->
-		<sPanel class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`"
-			:title="illust.title"
-		>
-			<div class="img" :style="{ backgroundImage: 'url(uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
-			></div>
+		<sPanel class="thumbBox" title="图片列表">
+			<div class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`">
+				<div class="img" :style="{ backgroundImage: 'url(uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
+				></div>
+				<!-- <img
+					:src="'uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira"
+					:title="illust.iid"
+					@error="imgError"
+				/> -->
+				<div class="text">{{illust.title}}</div>
+			</div>
 		</sPanel>
 	</div>
 </template>
@@ -139,20 +144,18 @@
 	}
 
 	.thumb {
-		box-sizing: border-box;
-
-		width: calc(20% - 11px);
+		width: 20%;
 		height: 200px;
 
-		margin: 5px;
+		box-sizing: border-box;
+		border: 1px solid #dedede;
 
-		background: snow;
-
+		overflow: hidden;
 	}
 
 	.thumb>.img {
 		width: calc(100% - 20px);
-		height: calc(100% - 30px);
+		height: 150px;
 
 		margin: 10px;
 

@@ -27,9 +27,15 @@ module.exports = {
 			let thumbStream = await F.get(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
 			let cacheStream = _fs.createWriteStream(path);
 
-			cacheStream.on('finish', function() { set(iid, true); });
+			await new Promise(function(resolve, reject) {
+				cacheStream.on('finish', function() {
+					set(iid, true);
 
-			thumbStream.pipe(cacheStream);
+					resolve();
+				});
+
+				thumbStream.pipe(cacheStream);
+			})
 		}
 
 		return {

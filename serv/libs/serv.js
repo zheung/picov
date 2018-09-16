@@ -139,7 +139,7 @@ module.exports = async function(servType, servConf) {
 				let auth = require(JD('subs', pathSub, '.auth'));
 
 				$.db = await dbLib(auth[confSub.db.profile]);
-			} catch (e) { true; }
+			} catch (e) { LE(e.stack || e) }
 		}
 	// 正式加载子应用
 		await require(JD('subs', pathSub))($, router);

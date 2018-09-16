@@ -1,7 +1,7 @@
 module.exports = async function($) {
-	_fs.ensureDirSync(JD('..', $.conf.path.large));
-	_fs.ensureDirSync(JD('..', $.conf.path.cache, 'large'));
-	_fs.ensureDirSync(JD('..', $.conf.path.cache, 'thumb'));
+	_fs.ensureDirSync(JD(_pa.relative(D, $.conf.path.large)));
+	_fs.ensureDirSync(JD(_pa.relative(D, $.conf.path.cache), 'large'));
+	_fs.ensureDirSync(JD(_pa.relative(D, $.conf.path.cache), 'thumb'));
 
 	global.F = {
 		get: require('./func/get'),

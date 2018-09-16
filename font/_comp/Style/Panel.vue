@@ -45,6 +45,10 @@
 		font-size: 14px;
 		font-weight: bold;
 		line-height: 10px;
+
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 
 </style>
