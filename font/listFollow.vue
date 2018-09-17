@@ -11,12 +11,14 @@
 		</sPanel>
 		<!-- 表格 -->
 		<!-- <sPanel class="thumbBox" title="图片列表"> -->
-		<sPanel class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`"
-			:title="illust.title"
-		>
-			<div class="img" :style="{ backgroundImage: 'url(uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
-			></div>
-		</sPanel>
+		<div class="thumbBox">
+			<sPanel class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`"
+				:title="illust.title"
+			>
+				<div class="img" :style="{ backgroundImage: 'url(uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
+				></div>
+			</sPanel>
+		</div>
 	</div>
 </template>
 
@@ -128,23 +130,21 @@
 	.thumbBox {
 		position: relative;
 
-		margin: 10px 0px 0px 10px;
-
-		width: calc(100% - 20px);
-		height: calc(100% - 70px);
+		width: 100%;
+		height: calc(100% - 55px);
 
 		font-size: 0px;
-		color: #495051;
-		background: snow;
+
+		overflow: auto;
 	}
 
 	.thumb {
 		box-sizing: border-box;
 
-		width: calc(20% - 11px);
+		width: calc(20% - 20px);
 		height: 200px;
 
-		margin: 5px;
+		margin: 10px;
 
 		background: snow;
 
