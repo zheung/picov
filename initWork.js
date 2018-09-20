@@ -16,5 +16,5 @@ module.exports = async function($) {
 		save: require('./work/save')
 	};
 
-	global.cache = await require('./lib/cache')();
+	// global.cache = await require('./lib/cache')();
 };

@@ -27,9 +27,11 @@ import Scroll from '../../_comp/Scroll';
 import Texter from '../../_comp/Texter';
 import TxArea from '../../_comp/TxArea';
 import Winer from '../../_comp/Winer';
+import Pager from '../../_comp/Pager';
 
 import sPanel from '../../_comp/Style/Panel';
 import sButton from '../../_comp/Style/Button';
+import sTopbar from '../../_comp/Style/Topbar';
 
 export default function() {
 	Vue.component('empty', Empty);
@@ -56,7 +58,9 @@ export default function() {
 	Vue.component('Scroll', Scroll);
 	Vue.component('Texter', Texter);
 	Vue.component('TxArea', TxArea);
+	Vue.component('Pager', Pager);
 
 	Vue.component('sPanel', sPanel);
 	Vue.component('sButton', sButton);
+	Vue.component('sTopbar', sTopbar);
 }

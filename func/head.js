@@ -4,12 +4,12 @@ module.exports = async (path) => {
 			url: path,
 			method: 'HEAD',
 			headers: {
-				'Cookie': `PHPSESSID=${conf.cookie}`,
+				'Cookie': `PHPSESSID=${C.C.cookie}`,
 				'Referer': 'http://www.pixiv.net/'
 			}
 		};
 
-		request(option).on('response', function(response) {
+		Request(option).on('response', function(response) {
 			if(response.statusCode != 200)
 				resolve(response.statusCode);
 			else

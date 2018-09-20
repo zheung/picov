@@ -24,6 +24,7 @@ module.exports = async function($, router) {
 
 	let multer = require('koa-multer')({ dest });
 
+	await require(await $.pa('libs/workCenter'))();
 	let flows = await require(await $.pa('libs/flow'))($);
 
 	for(let flow of flows) {

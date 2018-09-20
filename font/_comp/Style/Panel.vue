@@ -46,11 +46,10 @@
 		color: #0285e6;
 		font-size: 14px;
 		font-weight: bold;
-		line-height: 10px;
+		line-height: 20px;
 
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-
 </style>

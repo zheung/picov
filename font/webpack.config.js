@@ -29,6 +29,9 @@ module.exports = {
 			options: {
 				loaders: {
 					js: 'babel-loader'
+				},
+				preLoaders: {
+					css: 'css-deep-loader'
 				}
 			}
 		}, {

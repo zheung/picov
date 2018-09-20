@@ -1,5 +1,5 @@
 <template>
-	<div class="compButton nosel trans">
+	<div class="compButton nosel trans inline" @click="onClick">
 		{{text}}
 	</div>
 </template>
@@ -11,14 +11,20 @@
 		},
 		data: function() {
 			return {};
+		},
+		methods: {
+			onClick: function(e) {
+				this.$emit('click', e);
+			}
 		}
 	};
 </script>
 
 <style scoped>
 	.compButton {
-		width: 40px;
 		height: 20px;
+
+		padding: 0px 10px;
 
 		border: 1px solid transparent;
 

@@ -1,4 +1,4 @@
-let list = _fs.readdirSync('./cache'), dict = {};
+let list = _fs.readdirSync(JD(_pa.relative(D, C.C.path.cache), 'thumb')), dict = {};
 
 list.map((file) => {
 	dict[file.split('.')[0]] = true;
@@ -27,7 +27,7 @@ module.exports = {
 			let thumbStream = await F.get(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
 			let cacheStream = _fs.createWriteStream(path);
 
-			await new Promise(function(resolve, reject) {
+			await new Promise(function(resolve) {
 				cacheStream.on('finish', function() {
 					set(iid, true);
 
@@ -35,7 +35,7 @@ module.exports = {
 				});
 
 				thumbStream.pipe(cacheStream);
-			})
+			});
 		}
 
 		return {
