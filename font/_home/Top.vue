@@ -1,7 +1,7 @@
 <template>
 	<div class="homeTopBox">
 		<div class="title">
-			<div class="big"><i class="pi pi-logo"></i>广州普勒仕运营平台</div>
+			<div class="big"><i class="pi pi-logo"></i>Picov</div>
 		</div>
 	</div>
 </template>

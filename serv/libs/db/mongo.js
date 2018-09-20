@@ -93,6 +93,8 @@ module.exports = async(dbinfo) => {
 						updateOne: async(iilust) => {
 							let result;
 
+							delete iilust._id;
+
 							result = await coll.updateOne({ iid: iilust.iid }, { $set: iilust });
 
 							if(!result.matchedCount)

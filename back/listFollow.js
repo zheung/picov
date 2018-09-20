@@ -14,6 +14,9 @@ module.exports = {
 					illust.down = stats[illust.iid].down;
 					illust.ding = stats[illust.iid].ding;
 				}
+
+				illust.stat1 = '';
+				illust.stat2 = '';
 			}
 
 			return result;

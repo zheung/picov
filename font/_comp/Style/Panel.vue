@@ -1,6 +1,6 @@
 <template>
 	<div class="compPanel" :style="{ padding: padding }">
-		<div class="panelTitle" v-if="title">{{title+''}}</div>
+		<div class="panelTitle" v-if="title" :style="{ color: titlecolor }">{{title+''}}</div>
 		<slot></slot>
 	</div>
 </template>
@@ -9,6 +9,7 @@
 	export default {
 		props: {
 			title: {},
+			titlecolor: { default: '#0285e6' },
 			padding: { default: '10px' },
 		},
 		data: function() {

@@ -4,6 +4,8 @@ WC.add('save-count', counted);
 let down = async function(url, pid, pstat, iid, ext) {
 	try {
 		++counted.ding;
+		pstat.strt = true;
+		pstat.ding = true;
 
 		let getStream = await F.get(url, 2, false);
 
@@ -20,6 +22,7 @@ let down = async function(url, pid, pstat, iid, ext) {
 					getStream.resume();
 				})
 				.on('finish', () => {
+					pstat.ding = false;
 					pstat.down = true;
 
 					_fs.moveSync(tempPath, J(C.C.path.large, fileName), { overwrite: true });
@@ -58,16 +61,33 @@ let down = async function(url, pid, pstat, iid, ext) {
 };
 
 module.exports = {
-	c: async function(raw) {
-		return raw.iid;
-	},
-	m: async function(iid, db) {
+	m: async function(option, db) {
 		try {
+			let iid = option.iid;
+			let force = option.force;
+
+			let coll = db.coll('illust');
+
+			let item = await coll.getStatOne(iid);
+
+			if(force) {
+				item.ding = false;
+				item.down = false;
+			}
+			else {
+				if(item.ding) {
+					return '正在下载';
+				}
+				else if(item.down) {
+					return '已经下载';
+				}
+			}
+
 			let stat = {
 				iid,
 
 				head: false,
-				count: 0,
+				count: -1,
 
 				retry: 0,
 
@@ -82,7 +102,7 @@ module.exports = {
 			let ext = info.body[iid].illust_ext;
 			let time = info.body[iid].url.big.match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0];
 
-			stat.count = count;
+			stat.count = count || 0;
 			stat.ext = ext;
 			stat.time = time;
 			stat.head = true;
@@ -93,7 +113,10 @@ module.exports = {
 				urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
 			}
 
-			urls.map(async function(urlInfo) {
+			item.ding = true;
+			await coll.updateOne(item);
+
+			for(let urlInfo of urls) {
 				let time = 0;
 				let retry = ~~C.C.retry;
 
@@ -103,6 +126,7 @@ module.exports = {
 				let pstat = stat.map[pid] = {
 					pid: urlInfo[1],
 
+					strt: false,
 					ding: false,
 					down: false,
 
@@ -121,9 +145,13 @@ module.exports = {
 				else {
 					++counted.down;
 				}
-			});
+			}
 
-			return 1;
+			item.ding = false;
+			item.down = true;
+			await coll.updateOne(item);
+
+			return '准备下载';
 		}
 		catch(e) {
 			L(e);

@@ -45,7 +45,7 @@ module.exports = async function(servType, servConf) {
 
 	if(C.logResponse) {
 		app.use(async function(ctx, next) {
-			L(`\x1B[32m${ctx.method}\x1B[39m`, ctx.ip, ctx.originalUrl);
+			// L(`\x1B[32m${ctx.method}\x1B[39m`, ctx.ip, ctx.originalUrl);
 
 			await next();
 		});

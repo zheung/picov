@@ -2,15 +2,16 @@
 	<div class="compProcmProduct">
 		<sTopbar class="topbar">
 			<Texter class="onLeft" v-model="query.key" label="搜索" width="200" @keyup.enter.native="onQuery"></Texter>
+			<sButton class="onLeft" text="全部下载" @click="onSaveAll"></sButton>
+			<sButton class="onLeft" text="全部强制下载" @click="onSaveAll(true)"></sButton>
 
-			<!-- <sButton class="onRight" text="查询" @click="onQuery">查询</sButton> -->
 			<Pager class="onRight" v-model="query.page"
 				@keyup.enter.native="onQuery(query.page)" :onoffset="onQuery"
 			></Pager>
 		</sTopbar>
 
 		<div class="thumbBox">
-			<Thumb class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`" :illust="illust" @click.native="onSave(illust.iid)"></Thumb>
+			<Thumb class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`" :illust="illust" @click.native="onSave(illust)" @click.ctrl.native="onSave(illust, true)"></Thumb>
 		</div>
 	</div>
 </template>
@@ -55,11 +56,66 @@
 
 				this.$set(this, 'data', result || []);
 			},
-			onSave: function(iid) {
-				WC.add(`save-${iid}`, 'listFollow', function() {
+			onSave: async function(illust, force) {
+				let iid = illust.iid;
 
-				});
-				A.post('save', { iid });
+				if(~~illust.ugoira) {
+					window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illust.iid}`);
+
+					return;
+				}
+
+				let stat1 = await A.post('save', { iid, force });
+
+				if(stat1) {
+					this.$set(illust, 'stat1', stat1);
+
+					if(stat1 != '准备下载') {
+						return;
+					}
+				}
+
+				WC.add(`save-${iid}`, 'listFollow', function(stat) {
+					let map = stat.map;
+					let count = stat.count;
+
+					let done = 0;
+					let percent = 0;
+
+					illust.ding = true;
+
+					for(let pstat of map) {
+						if(pstat.strt) {
+							if(pstat.down) {
+								++done;
+							}
+							else if(!pstat.ding) {
+								++done;
+							}
+						}
+
+						percent += pstat.percent || 0;
+
+						// L('	', pstat.pid, pstat.strt, pstat.ding, pstat.down, pstat.percent);
+					}
+
+					// L(iid, done, percent, Math.round(percent/count));
+
+					this.$set(illust, 'stat1', count < 0 ? '解析中' : `[${done}/${count}]`);
+					this.$set(illust, 'stat2', `${Math.round(percent/count)}%`);
+
+					if(done == count) {
+						WC.del(`save-${iid}`, 'listFollow');
+
+						illust.ding = false;
+						illust.down = true;
+					}
+				}.bind(this));
+			},
+			onSaveAll: function(force = false) {
+				for(let illust of this.data) {
+					this.onSave(illust, force);
+				}
 			}
 		}
 	};
@@ -101,14 +157,14 @@
 
 		cursor: pointer;
 	}
-	.thumb.ding {
-		border: 1px solid red;
-	}
 	.thumb.down {
-		border: 1px solid green;
+		border-color: darkgreen;
+	}
+	.thumb.ding {
+		border-color: orange;
 	}
 	.thumb:hover {
-		border: 1px solid #0185e6;
+		border-color:#0185e6;
 		box-shadow: 2px 2px 7px -2px rgba(128, 128, 128, 1);
 	}
 </style>

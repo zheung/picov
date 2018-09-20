@@ -42,7 +42,7 @@
 				query: {
 					name: '1',
 
-					testTag: '测试;百度;广州普勒仕交通科技有限公司'
+					testTag: '测试;百度'
 				},
 
 				deConf: {

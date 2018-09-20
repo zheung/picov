@@ -2,7 +2,7 @@
 	<div class="homeLogin nosel trans d7" :class="`step${C.step}`">
 		<div class="backBox trans d7" :class="`step${C.step}`"></div>
 		<div class="loginBox trans d7" :class="`step${C.step}`">
-			<div class="title" style="font-family: KaiTi !important;"><i class="pi pi-logo"></i>广州普勒仕运营平台</div>
+			<div class="title" style="font-family: KaiTi !important;"><i class="pi pi-logo"></i>Picov</div>
 			<Fas class="logo1" :icon="['fas', 'user']" />
 			<Fas class="logo1 logo2" :icon="['fas', 'key']" />
 			<input type="text" class="line trans value" v-model="C.name" placeholder="用户名" tabindex="1" @keyup.enter="onLogin" />

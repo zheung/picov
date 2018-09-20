@@ -1,6 +1,8 @@
 let working = {
 };
 
+let dying = {};
+
 let workStat = {};
 
 let loopTime = 0;
@@ -28,8 +30,10 @@ export default function() {
 
 			delete working[key][from];
 
-			if(!Object.keys(working[key].length)) {
+			if(!Object.keys(working[key]).length) {
 				delete working[key];
+
+				dying[key] = true;
 			}
 		},
 		get: function() {
@@ -38,25 +42,41 @@ export default function() {
 		start: function() {
 			interval = setInterval(async function() {
 				let types = Object.keys(working);
+				let dels = Object.keys(dying);
 
-				if(!types.length) {
+				if(!types.length && !dels.length) {
 					return;
 				}
 
 				let curTime = ++loopTime;
 
 				try {
-					let stats = await A.conn('workCenter', { types: types.join(';') });
+					let stats = await A.conn('workCenter', { types: types.join(';'), dels: dels.join(';') });
 
-					L(types.length, loopTime, statTime);
+					for(let del of dels) {
+						delete dying[del];
+					}
 
 					if(stats || curTime > statTime) {
 						statTime = curTime;
 						workStat = stats;
+
+						for(let key in working) {
+							let stat = workStat[key];
+
+							for(let from in working[key]) {
+								try {
+									working[key][from](stat);
+								}
+								catch(error) {
+									LE(error.stack);
+								}
+							}
+						}
 					}
 				}
 				catch (e) { true; }
-			}, 5000);
+			}, 2000);
 		},
 		stop: function() {
 			if(interval) {
