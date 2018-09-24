@@ -130,7 +130,7 @@
 
 		vertical-align: top;
 
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 		width: auto;
 		height: 20px;
 		line-height: 20px;
@@ -143,7 +143,7 @@
 		border: 1px solid gray;
 	}
 	.box.opened:hover {
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 	}
 
 	.rightButton {
@@ -188,8 +188,8 @@
 
 		z-index: 100;
 
-		border: 1px solid lightgray;
-		background: snow;
+		border: 1px solid gray;
+		background: #181e23;
 
 		border-radius: 3px;
 

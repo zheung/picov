@@ -1,20 +1,24 @@
 <template>
-	<div class="compTxArea nosel transAll">
+	<div class="compTexter nosel transAll">
 		<div class="label nosel" v-if="label_"
 			:style="{ width: labelWidth_? labelWidth_+'px' : false, 'text-align': labelAlign_ }"
 		>
 			{{ label_ ? label_+'：' : label_ }}
 		</div>
-		<div class="box" :style="{ width: width_+'px', height: (row*20+(row_-1)*20)+'px', borderColor: readonly_ ? 'transparent' : 'lightgray' }">
-			<textarea type="text" class="value" :readonly="readonly_"
-				@input="onInput" v-bind:value="value" :placeholder="place_"
-			>
-			</textarea>
-			<Fas class="rightButton" v-if="!readonly_"
-				:icon="value ? ['fas', 'times-circle'] : ['fas', 'pencil-alt']"
-				@click="onClear"
-			/>
+		<div class="box" :style="{ width: width_+'px', height: (row_*20+(row_-1)*20)+'px' }" @click="onFilect" :class="{ inva: invalid }">
+			<div class="value">
+				<div style="display: inline-block; padding-right:10px" v-for="file of files" :key="'files'+file.name">
+					<Fas icon="file" /> {{file.name}}
+				</div>
+			</div>
+
+			<input ref="filect" class="file" type="file" :accept="accept_" :multiple="multiple_" @change="onChange"/>
 		</div>
+		<div class="rightButton count" v-show="files.length && row_ > 1">
+			{{files.length}}
+			<Fas :style="{ fontSize: '13px', cursor: 'pointer' }" icon="times-circle" @click="onClear" />
+		</div>
+		<div class="rightButton" @click="onFilect"><Fas icon="file-upload" /> 选择文件</div>
 	</div>
 </template>
 
@@ -31,11 +35,11 @@
 			width: {},
 			row: {},
 
-			value: {},
+			place: {},
 
-			readonly: {},
-
-			place: {}
+			notnull: {},
+			multiple: {},
+			accept: '',
 		},
 		data: function() {
 			let label_ = this.label || this.conf.label || '';
@@ -43,17 +47,20 @@
 			let labelAlign_ = this['label-align'] || this.conf.labelAlign || 'left';
 
 			let multi_ = this.multi || this.conf.multi || 1;
-			let width_ = this.width || this.conf.width || 100;
-			let place_ = this.place || this.conf.place || '';
-
-			width_ = width_ * multi_ + (multi_ - 1) * (labelWidth_+4) - 30;
-
 			let row_ = (this.row || this.conf.row || 1);
 
-			let readonly_ = false;
-			if(this.readonly != undefined) {
-				readonly_ = true;
-			}
+			let width_ = this.width || this.conf.width || 100;
+			width_ = width_ * multi_ + (multi_ - 1) * (labelWidth_+4) - 70;
+
+			let place_ = this.place || this.conf.place || '';
+
+			let multiple_ = false;
+			if(this.multiple != undefined && (this.multiple != 'false' || this.multiple !== false)) { multiple_ = true; }
+
+			let notnull_ = false;
+			if(this.notnull != undefined && (this.notnull != 'false' || this.notnull !== false)) { notnull_ = true; }
+
+			let accept_ = this.accept||'image/png,image/gif,image/jpeg';
 
 			return {
 				label_,
@@ -61,47 +68,60 @@
 				labelAlign_,
 
 				width_,
-				row_,
 
 				place_,
 
+				names: '',
+				count: 0,
+
+				files: [],
+
+				multiple_,
+				notnull_,
+				row_,
+
 				minWidth: this.conf.minWidth || width_+29,
 
-				readonly_,
-
 				showSection: false,
+
+				invalid: false,
+
+				accept_: accept_
 			};
 		},
 		methods: {
-			onBlur: function() {
-				this.showSection = false;
+			onChange: function(event) {
+				this.$emit('input', this.files = event.target.files);
+
+				this.invalid = this.files.length == 0 && this.notnull_;
 			},
-			onInput: function(event) {
-				this.$emit('input', event.target.value);
+			onFilect: function() {
+				this.$refs.filect.click();
+
 			},
 			onClear: function() {
-				this.$emit('input', '');
-			}
+				this.$emit('input', this.files = []);
+
+				this.invalid = this.notnull_;
+			},
 		},
 
-		components: {
-		},
-
-		mounted: function() {
-		},
 	};
 </script>
 
 <style scoped>
-	.compTxArea {
+	.compTexter {
 		display: inline-block;
 		vertical-align: top;
 
-		cursor: pointer;
-
 		font-size: 0;
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
+
+		overflow: hidden;
 	}
-	.compTxArea>* {
+	.compTexter>* {
 		font-size: 12px;
 	}
 	.label {
@@ -120,39 +140,48 @@
 
 		vertical-align: top;
 
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 		width: auto;
-
-		height: 20px;
 		line-height: 20px;
 		border-radius: 4px;
 
 		padding-left: 10px;
-		padding-right: 20px;
+		padding-right: 60px;
 
-		overflow: hidden;
+		cursor: pointer;
 	}
 	.box:hover {
 		border: 1px solid gray;
 	}
-	.box.opened:hover {
-		border: 1px solid lightgray;
+	.box.inva {
+		border-color: orangered;
 	}
 
 	.rightButton {
 		position: absolute;
 
-		bottom: 0px;
+		bottom: 1px;
 		right: 0px;
 
+		width: 70px;
 		height: 20px;
+
+		padding: 0px 4px;
+
 		color: gray;
-		padding-right: 4px;
-		padding-left: 4px;
+
+		line-height: 20px;
+		text-align: right;
+
 		cursor: pointer;
 	}
 	.rightButton:hover, .rightButton.hover {
 		color: inherit;
+	}
+	.rightButton.count {
+		bottom: 20px;
+
+		cursor: inherit;
 	}
 
 	.value {
@@ -163,16 +192,21 @@
 		border: 0;
 		outline: none;
 
-		background: snow;
+		background: transparent;
 
 		font-size: 12px;
-		color: #495051;
 
 		height: inherit;
 		line-height: inherit;
 		padding: 0px;
 
-		resize: none;
+		white-space: normal ;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.file {
+		display: none;
 	}
 
 	.section {
@@ -180,8 +214,8 @@
 		top: 20px;
 		left: -1px;
 		z-index: 100;
-		border: 1px solid lightgray;
-		background: snow;
+		border: 1px solid gray;
+		background: #181e23;
 		max-height: 200px;
 		overflow-x: hidden;
 		overflow-y: auto;

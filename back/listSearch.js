@@ -3,7 +3,7 @@ module.exports = {
 		try {
 			let coll = db.coll('illust');
 
-			let result = await W.listFollow(raw.page);
+			let result = await W.listSearch(raw.page);
 
 			let stats = await coll.getStat(result);
 
@@ -22,7 +22,7 @@ module.exports = {
 			return result;
 		}
 		catch(e) {
-			L(e.stack);
+			L(e);
 
 			return { _stat: 3 };
 		}

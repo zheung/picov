@@ -1,5 +1,6 @@
 let raw = [
 	[ 'get', '1', 'listFollow' ],
+	[ 'get', '1', 'listSearch' ],
 	[ 'get', '1', 'listAuthor' ],
 	[ 'get', '4', 'thumb' ],
 	[ 'post', '1', 'save' ],

@@ -1,12 +1,19 @@
 <template>
-	<div class="compTexter nosel transAll">
+	<div class="compTxArea nosel transAll">
 		<div class="label nosel" v-if="label_"
 			:style="{ width: labelWidth_? labelWidth_+'px' : false, 'text-align': labelAlign_ }"
 		>
 			{{ label_ ? label_+'：' : label_ }}
 		</div>
-		<div class="box" :style="{ width: width_+'px'}">
-			<div class="value" v-html="value || place_ " :title="value"></div>
+		<div class="box" :style="{ width: width_+'px', height: (row*20+(row_-1)*20)+'px', borderColor: readonly_ ? 'transparent' : 'lightgray' }">
+			<textarea type="text" class="value" :readonly="readonly_"
+				@input="onInput" v-bind:value="value" :placeholder="place_"
+			>
+			</textarea>
+			<Fas class="rightButton" v-if="!readonly_"
+				:icon="value ? ['fas', 'times-circle'] : ['fas', 'pencil-alt']"
+				@click="onClear"
+			/>
 		</div>
 	</div>
 </template>
@@ -22,11 +29,13 @@
 
 			multi: {},
 			width: {},
+			row: {},
 
 			value: {},
-			place: {},
 
-			regexp: {}
+			readonly: {},
+
+			place: {}
 		},
 		data: function() {
 			let label_ = this.label || this.conf.label || '';
@@ -39,38 +48,60 @@
 
 			width_ = width_ * multi_ + (multi_ - 1) * (labelWidth_+4) - 30;
 
+			let row_ = (this.row || this.conf.row || 1);
+
+			let readonly_ = false;
+			if(this.readonly != undefined) {
+				readonly_ = true;
+			}
+
 			return {
 				label_,
 				labelWidth_,
 				labelAlign_,
 
 				width_,
+				row_,
 
 				place_,
 
 				minWidth: this.conf.minWidth || width_+29,
 
-				showSection: false,
+				readonly_,
 
-				invalid: false
+				showSection: false,
 			};
-		}
+		},
+		methods: {
+			onBlur: function() {
+				this.showSection = false;
+			},
+			onInput: function(event) {
+				this.$emit('input', event.target.value);
+			},
+			onClear: function() {
+				this.$emit('input', '');
+			}
+		},
+
+		components: {
+		},
+
+		mounted: function() {
+		},
 	};
 </script>
 
 <style scoped>
-	.compTexter {
+	.compTxArea {
 		display: inline-block;
 		vertical-align: top;
 
+		cursor: pointer;
+
 		font-size: 0;
-
-		white-space: nowrap;
-		text-overflow: ellipsis;
-
-		overflow: hidden;
 	}
-	.compTexter>* {
+	.compTxArea>* {
 		font-size: 12px;
 	}
 	.label {
@@ -89,14 +120,23 @@
 
 		vertical-align: top;
 
-		border: 1px solid transparent;
+		border: 1px solid gray;
 		width: auto;
+
 		height: 20px;
 		line-height: 20px;
 		border-radius: 4px;
 
 		padding-left: 10px;
-		padding-right: 10px;
+		padding-right: 20px;
+
+		overflow: hidden;
+	}
+	.box:hover {
+		border: 1px solid gray;
+	}
+	.box.opened:hover {
+		border: 1px solid gray;
 	}
 
 	.rightButton {
@@ -109,6 +149,7 @@
 		color: gray;
 		padding-right: 4px;
 		padding-left: 4px;
+		cursor: pointer;
 	}
 	.rightButton:hover, .rightButton.hover {
 		color: inherit;
@@ -122,18 +163,15 @@
 		border: 0;
 		outline: none;
 
-		background: transparent;
+		background: #181e23;
 
 		font-size: 12px;
-		color: #495051;
 
 		height: inherit;
 		line-height: inherit;
 		padding: 0px;
 
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		resize: none;
 	}
 
 	.section {
@@ -141,8 +179,8 @@
 		top: 20px;
 		left: -1px;
 		z-index: 100;
-		border: 1px solid lightgray;
-		background: snow;
+		border: 1px solid gray;
+		background: #181e23;
 		max-height: 200px;
 		overflow-x: hidden;
 		overflow-y: auto;

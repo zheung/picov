@@ -25,14 +25,23 @@ let main = async function() {
 				'only': true,
 				'show': true
 			}, {
-				'type': 'center',
-				'name': '图片中心',
+				'type': 'listSearch',
+				'name': '搜索图片',
+				'only': false,
+				'show': true
+			}]
+		},{
+			'name': '图片中心',
+			'show': true,
+			'list': [{
+				'type': 'listFollow',
+				'name': '关注图片',
 				'only': true,
 				'show': true
 			}, {
-				'type': 'old',
-				'name': '旧版',
-				'only': true,
+				'type': 'listSearch',
+				'name': '搜索图片',
+				'only': false,
 				'show': true
 			}]
 		}];
@@ -185,16 +194,16 @@ let main = async function() {
 				}
 			},
 
-			changeDevice: async function(device) {
-				let modl = this.findTab('devicedash');
+			changeSearch: async function(query) {
+				let modl = this.findTab('listSearch');
 
 				let views = X.comp('homeNavi').views;
 
 				if(modl.time) {
-					let dict = X.comp('devicedash').dict;
+					let dict = X.comp('listSearch').dict;
 
 					for(let view of views) {
-						if(view.base == 'devicedash' && dict[view.time] && dict[view.time].id == device.id) {
+						if(view.base == 'listSearch' && dict[view.time] && dict[view.time].id == query.id) {
 							this.changeTab(view);
 
 							return;
@@ -204,17 +213,17 @@ let main = async function() {
 
 				let tab = await this.changeTab(modl);
 
-				tab.name = '设备：' + device.name;
+				tab.name = '搜索：' + query.key;
 
-				X.comp('devicedash').dict[tab.time] = device;
+				X.comp('listSearch').dict[tab.time] = query;
 
-				X.stat(`devicedash_${tab.time}`).data = device;
+				X.stat(`listSearch_${tab.time}`).data = query;
 			}
 		},
 		mounted: async function() {
 			this.B.findTab = this.findTab;
 			this.B.changeTab = this.changeTab;
-			this.B.changeDevice = this.changeDevice;
+			this.B.changeSearch = this.changeSearch;
 			this.B.closeTab = this.closeTab;
 		}
 	});

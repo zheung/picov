@@ -9,29 +9,31 @@ import HomeLeft from '../../_home/Left';
 import HomeNavi from '../../_home/Navi';
 
 // 普通组件
-import Combo from '../../_comp/Combo';
-import ComboBoxer from '../../_comp/Combo/ComboBoxer';
-import Timer from '../../_comp/Timer';
-import TimerBoxer from '../../_comp/Timer/TimerBoxer';
+import Combo from '../../_comp/Frame/Combo';
+import ComboBoxer from '../../_comp/Frame/Combo/ComboBoxer';
+import Timer from '../../_comp/Frame/Timer';
+import TimerBoxer from '../../_comp/Frame/Timer/TimerBoxer';
 
-import Menus from '../../_comp/Menus';
+import Menus from '../../_comp/Frame/Menus';
 
-import Alert from '../../_comp/Alert';
-import Checker from '../../_comp/Checker';
-import Empty from '../../_comp/Empty';
-import Filect from '../../_comp/Filect';
-import Grid from '../../_comp/Grid';
-import Labler from '../../_comp/Labler';
-import Masker from '../../_comp/Masker';
-import Scroll from '../../_comp/Scroll';
-import Texter from '../../_comp/Texter';
-import TxArea from '../../_comp/TxArea';
-import Winer from '../../_comp/Winer';
-import Pager from '../../_comp/Pager';
+import Alert from '../../_comp/Frame/Alert';
+import Checker from '../../_comp/Frame/Checker';
+import Empty from '../../_comp/Frame/Empty';
+import Filect from '../../_comp/Frame/Filect';
+import Grid from '../../_comp/Frame/Grid';
+import Labler from '../../_comp/Frame/Labler';
+import Masker from '../../_comp/Frame/Masker';
+import Scroll from '../../_comp/Frame/Scroll';
+import Texter from '../../_comp/Frame/Texter';
+import TxArea from '../../_comp/Frame/TxArea';
+import Winer from '../../_comp/Frame/Winer';
 
 import sPanel from '../../_comp/Style/Panel';
 import sButton from '../../_comp/Style/Button';
 import sTopbar from '../../_comp/Style/Topbar';
+
+import pPager from '../../_comp/Picov/Pager';
+import pThumb from '../../_comp/Picov/Thumb';
 
 export default function() {
 	Vue.component('empty', Empty);
@@ -58,9 +60,11 @@ export default function() {
 	Vue.component('Scroll', Scroll);
 	Vue.component('Texter', Texter);
 	Vue.component('TxArea', TxArea);
-	Vue.component('Pager', Pager);
 
 	Vue.component('sPanel', sPanel);
 	Vue.component('sButton', sButton);
 	Vue.component('sTopbar', sTopbar);
+
+	Vue.component('pPager', pPager);
+	Vue.component('pThumb', pThumb);
 }

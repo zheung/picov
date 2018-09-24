@@ -125,8 +125,6 @@
 
 		outline: 0;
 
-		color: #495051;
-
 		z-index: 5;
 	}
 	.head {
@@ -136,7 +134,7 @@
 
 		background: transparent;
 
-		color: snow;
+		color: gray;
 	}
 	.head>* {
 		display: inline-block;
@@ -169,7 +167,7 @@
 
 		padding: 0px 10px 0px 10px;
 
-		color: snow
+		color: gray;
 	}
 
 	.line {
@@ -191,7 +189,7 @@
 
 		background: #1faaf1;
 
-		color: snow;
+		color: gray;
 		width: 60px;
 		height: 24px;
 
@@ -203,7 +201,7 @@
 		font-size: 12px;
 	}
 	.button.white {
-		background: snow;
+		background: #181e23;
 
 		color: #1faaf1;
 	}

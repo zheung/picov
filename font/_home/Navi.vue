@@ -91,9 +91,7 @@
 
 		height: 39px;
 
-		color: #495051;
-
-		box-shadow: 0 -2px 4px #777777;
+		box-shadow: 0 -1px 4px #414141;
 
 		z-index: 1;
 	}
@@ -132,14 +130,14 @@
 		cursor: pointer;
 	}
 	.tab.hover {
-		color: #0185e6;
+		color: lightgray;
 	}
 	.tab:hover {
 		height: 37px;
 
-		border-bottom: 2px solid #0185e6;
+		border-bottom: 2px solid lightgray;
 
-		color: #0185e6;
+		color: lightgray;
 	}
 	.tab::after {
 		content: ' ';
@@ -151,7 +149,7 @@
 
 		height: 20px;
 
-		border-left: 1px solid #cecece;
+		border-left: 1px solid gray;
 	}
 	.tab:first-child::before {
 		content: ' ';
@@ -163,7 +161,7 @@
 
 		height: 20px;
 
-		border-left: 1px solid #cecece;
+		border-left: 1px solid gray;
 	}
 	.tab>.icon {
 		position: absolute;
@@ -194,9 +192,9 @@
 		cursor: pointer;
 	}
 	.naviButton:hover {
-		border-bottom: 2px solid #0185e6;
+		border-bottom: 2px solid lightgray;
 
-		color: #0185e6;
+		color: lightgray;
 	}
 	.naviButton.one {
 		right: 30px;

@@ -21,7 +21,7 @@ module.exports = {
 		let path = JD('..', C.C.path.cache, 'thumb', `${iid}.png`);
 
 		if(cached && !fr) {
-			L('缓存', '小图', iid);
+			// L('缓存', '小图', iid);
 		}
 		else {
 			let thumbStream = await F.get(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);

@@ -42,7 +42,7 @@
 
 		font-size: 0;
 
-		background: snow;
+		background: #181e23;
 
 		z-index: 999;
 

@@ -10,45 +10,52 @@ let down = async function(url, pid, pstat, iid, ext) {
 		let getStream = await F.get(url, 2, false);
 
 		await new Promise(function(resolve, reject) {
-			let total;
-			let passed = 0;
-			let fileName = `${iid}_p${pid}.${ext}`;
-			let tempPath = J(C.C.path.cache, 'large', fileName);
+			try {
+				let total;
+				let passed = 0;
+				let fileName = `${iid}_p${pid}.${ext}`;
+				let tempPath = J(C.C.path.cache, 'large', fileName);
 
-			_fs.removeSync(tempPath);
+				_fs.removeSync(tempPath);
 
-			let writeStream = _fs.createWriteStream(tempPath)
-				.on('drain', () => {
-					getStream.resume();
-				})
-				.on('finish', () => {
-					pstat.ding = false;
-					pstat.down = true;
+				let writeStream = _fs.createWriteStream(tempPath)
+					.on('drain', function() {
+						getStream.resume();
+					})
+					.on('finish', function() {
+						pstat.ding = false;
+						pstat.down = true;
 
-					_fs.moveSync(tempPath, J(C.C.path.large, fileName), { overwrite: true });
+						_fs.moveSync(tempPath, J(C.C.path.large, fileName), { overwrite: true });
 
-					resolve();
-				});
+						resolve();
+					})
+					.on('error', function(error) {
+						reject(error);
+					});
 
-			if(getStream && getStream.pipe) {
-				getStream
-				.on('error', (err) => {
-					reject(err);
-				})
-				.on('response', (res) => {
-					total = ~~res.headers['content-length'];
-				})
-				.on('data', (chunk) => {
-					passed += chunk.length;
+				if(getStream && getStream.pipe) {
+					getStream
+					.on('error', (err) => {
+						reject(err);
+					})
+					.on('response', (res) => {
+						total = ~~res.headers['content-length'];
+					})
+					.on('data', (chunk) => {
+						passed += chunk.length;
 
-					if(writeStream.write(chunk) == false)
-						getStream.pause();
+						if(writeStream.write(chunk) == false)
+							getStream.pause();
 
-					pstat.percent = Math.round(passed * 100 / total);
-				})
-				.on('end', () => {
-					writeStream.end();
-				});
+						pstat.percent = Math.round(passed * 100 / total);
+					})
+					.on('end', () => {
+						writeStream.end();
+					});
+				}
+			} catch (error) {
+				LE(error);
 			}
 		});
 

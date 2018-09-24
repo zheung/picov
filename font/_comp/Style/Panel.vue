@@ -10,7 +10,7 @@
 		props: {
 			title: {},
 			titlecolor: { default: '#0285e6' },
-			padding: { default: '10px' },
+			padding: { default: '0px 10px 10px 10px' },
 		},
 		data: function() {
 			return {
@@ -23,12 +23,9 @@
 	.compPanel {
 		box-sizing: border-box;
 
-		border: 1px solid #dedede;
-
-		background: snow;
+		border: 1px solid #2e3235;
 
 		border-radius: 4px;
-		box-shadow: 2px 2px 7px -2px rgba(128, 128, 128, 0.4);
 
 		overflow: hidden;
 	}
@@ -37,17 +34,16 @@
 		position: relative;
 
 		padding: 0px;
-		margin-bottom: 5px;
 
-		border-bottom: 1px solid #0285e6;
+		border-bottom: 1px solid #2e3235;
 
 		width: 100%;
-		height: 20px;
+		height: 30px;
 
-		color: #0285e6;
+		color: gray;
 		font-size: 14px;
 		font-weight: bold;
-		line-height: 20px;
+		line-height: 30px;
 
 		overflow: hidden;
 		white-space: nowrap;

@@ -110,7 +110,7 @@
 		cursor: pointer;
 	}
 	.side:hover {
-		border: 1px solid lightgray;
+		border: 1px solid #2e3235;
 	}
 
 	.value {
@@ -129,6 +129,6 @@
 		text-align: center;
 	}
 	.value:focus {
-		border-bottom: 1px solid #0185e6;
+		border-bottom: 1px solid gray;
 	}
 </style>

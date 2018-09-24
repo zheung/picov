@@ -27,41 +27,10 @@
 						v-if="sub2.show"
 						@click="B.changeTab(sub2)"
 					>
-						● {{sub2.name}}
+						<span :style="{ color: C.expandTop.module == listIndex ? 'lightgray' : 'gray' }">● </span>{{sub2.name}}
 					</div>
 				</li>
 			</Scroll>
-
-			<!-- <div class="findBox trans" :style="{ left: (C.listShow=='device'? 0: 270)+'px'}">
-				<Texter v-model="keyword" place="" width="250" @focus="onKeywordFocus" @blur="onKeywordBlur"></Texter>
-			</div> -->
-
-			<!-- <Scroll class="naviList device trans" :style="{ left: (C.listShow=='device'? 10: 280)+'px'}">
-				<li class="listItem" :class="{ opened: C.expandTop.device == project.id }"
-					v-for="project of projList" :key="'naviSub-device-'+project.id" v-if="project.show"
-				>
-					<div class="top1 trans" :class="{ opened: C.expandTop.device == project.id }"
-						:title="project.name" @click="expandSub('device', project.id)"
-						:projid="project.id"
-					>
-						<div class="top1Name">
-							{{project.name}}
-						</div>
-						<Fas :icon="C.expandTop.device == project.id ? 'caret-up' : 'caret-down'" class="expand" />
-					</div>
-					<div v-for="device of project.list" :key="'naviSub-device-'+device.id"
-						:title="`${device.name} [${device.id}]`"
-						:devid="device.id"
-						class="top2 trans"
-						:class="{ show: C.expandTop.device == project.id, hightlight: keynow == device.id }"
-						v-if="device.show"
-						@click="B.changeDevice(device)"
-						@contextmenu.prevent="onContext(device, project, $event)"
-					>
-						<Fas icon="desktop" /> {{device.name}}
-					</div>
-				</li>
-			</Scroll> -->
 		</div>
 
 		<div :class="{ homeLeftSide: true, work: expand, trans:true }" @click="ctrlExpand()"
@@ -73,12 +42,9 @@
 </template>
 
 <script>
-	import Expand from './Expand';
 	import { debounce } from 'lodash';
 
 	export default {
-		components: { Expand },
-
 		data: function() {
 			let expandTop = {
 				module: 0,
@@ -298,9 +264,7 @@
 
 		width: 280px;
 
-		color: #495051;
-
-		box-shadow: -1px 0px 4px #0185e6;
+		box-shadow: -1px 0px 4px gray;
 
 		z-index: 2;
 	}
@@ -319,7 +283,7 @@
 		width: 270px;
 		height: 100%;
 
-		background: snow;
+		background: #181e23;
 
 		overflow: hidden;
 	}
@@ -329,7 +293,7 @@
 
 		position: absolute;
 
-		background: snow;
+		background: #181e23;
 
 		top: 0px;
 		bottom: 0px;
@@ -338,13 +302,14 @@
 		width: 10px;
 
 		font-size: 11px;
+		text-align: center;
 
 		cursor: pointer;
 
 		z-index: -1;
 	}
 	.homeLeftSide:hover {
-		background: #e9f4ff;
+		background: #2e3235;
 	}
 
 	.topButton {
@@ -359,11 +324,10 @@
 		border: 2px solid transparent;
 	}
 	.topButton:hover {
-		color: #0185e6;
-		background: #e9f4ff;
+		color: lightgray;
 	}
 	.topButton.hover {
-		color: #0185e6;
+		color: lightgray;
 	}
 
 	.hrline {
@@ -382,7 +346,7 @@
 		left: 10px;
 		right: 10px;
 
-		border-bottom: 1px solid #0185e6;
+		border-bottom: 1px solid #2e3235;
 	}
 	.hrline.bottom {
 		top: unset;
@@ -397,7 +361,7 @@
 		bottom: 0px;
 		left: 0px;
 
-		font-size: 14px;
+		font-size: 16px;
 
 		line-height: 30px;
 	}
@@ -408,7 +372,7 @@
 		bottom: 0px;
 		left: 125px;
 
-		font-size: 14px;
+		font-size: 16px;
 
 		line-height: 30px;
 	}
@@ -437,18 +401,13 @@
 
 		text-align: left;
 
-		background: snow;
-
-		box-shadow: 0px 0px 9px 0px #777777;
+		background: #181e23;
 	}
 	.menuInfo:hover {
-		color: #0185e6;
+		color: lightgray;
 	}
 	.topButton.menu>div {
 		padding-left: 10px;
-	}
-	.topButton.menu>div:hover {
-		background-image: linear-gradient(-173deg, #e2e2e2 8%, #eaeaea 85%);
 	}
 
 	.topButton.func {
@@ -471,7 +430,7 @@
 	}
 
 	.naviList {
-		font-size: 13px;
+		font-size: 14px;
 
 		height: calc(100% - 90px);
 		overflow-x: hidden;
@@ -495,26 +454,11 @@
 		cursor: pointer;
 	}
 	.top1.opened {
-		/* background-image: linear-gradient(-173deg, #e2e2e2 8%, #eaeaea 85%); */
-		background: #0185e6;
-		color: snow;
+		color: lightgray;
 	}
 	.top1:not(.opened):hover {
 		color: #0185e6;
 	}
-	/* .top1:hover::before, .top1.opened::before {
-		content: ' ';
-
-		position: absolute;
-
-		top: 0px;
-		left: 0px;
-
-		width: 4px;
-		height: 100%;
-
-		background: #0185e6;
-	} */
 
 	.top2 {
 		padding-left: 35px;
@@ -528,7 +472,7 @@
 		cursor: pointer;
 	}
 	.top2:hover {
-		background-image: linear-gradient(-90deg, #84d5ff 30%, #e4f6ff 85%);
+		color: lightgray;
 	}
 	.top2.show {
 		height: 30px;
@@ -567,24 +511,17 @@
 
 		padding: 10px 10px 0px 10px;
 	}
-	.hightlight {
-		color: #0185e6;
-	}
 
 	.iconOpen {
 		height: 100%;
 
 		font-size: 14px;
-		color: #0185e6;
+	}
+	.iconOpen:hover {
+		color: lightgray;
 	}
 
 	.listItem {
 		overflow: hidden;
-
-		border-top: 1px solid #eaeaea;
-	}
-	.listItem.opened {
-		border: 1px solid #0185e6;
-		border-radius: 3px;
 	}
 </style>

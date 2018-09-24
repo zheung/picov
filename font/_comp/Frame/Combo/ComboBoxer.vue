@@ -216,11 +216,10 @@
 
 		z-index: 100;
 
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 		border-radius: 3px;
-		box-shadow: 2px 2px 7px -2px rgba(128, 128, 128, 0.7);
 
-		background: snow;
+		background: #181e23;
 
 		overflow: hidden;
 
@@ -267,7 +266,7 @@
 		color: #1faaf1;
 	}
 	.compComboBoxer .item:hover {
-		background: #f1f1f1;
-		color: #1faaf1;
+		background: #202224;
+		color: lightgray;
 	}
 </style>

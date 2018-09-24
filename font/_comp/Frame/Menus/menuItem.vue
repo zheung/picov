@@ -135,7 +135,7 @@
 		width: 100%;
 		height: 10px;
 
-		background: snow;
+		background: #181e23;
 
 		font-size: 12px;
 		line-height: 10px;

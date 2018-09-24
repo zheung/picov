@@ -26,12 +26,11 @@
 
 		padding: 0px 10px;
 
-		border: 1px solid transparent;
+		border: 1px solid #202224;
 
 		border-radius: 4px;
 
-		color: snow;
-		background: #1faaf1;
+		background: #202224;
 
 		line-height: 20px;
 
@@ -41,8 +40,6 @@
 		cursor: pointer;
 	}
 	.compButton:hover {
-		box-shadow: 1px 1px 4px -1px #3d94d4;
-
-		border: 1px solid #3d94d4;
+		color: lightgray;
 	}
 </style>

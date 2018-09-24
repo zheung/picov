@@ -199,13 +199,13 @@
 		color: inherit;
 	}
 	.nodeBox.outRange, .nodeBox.outRange:hover {
-		color: snow;
+		color: gray;
 		cursor: auto;
 	}
 
 	.nodeBox.selected {
 		background: #1faaf1;
-		color: snow;
+		color: gray;
 	}
 	.nodeBox:not(.selected):not(.head):not(.outRange):hover, .naviBox>.navi:hover {
 		background: #f1f1f1;
@@ -232,7 +232,6 @@
 	.timerBox {
 		line-height: 24px;
 		cursor: default;
-		color: #495051;
 	}
 
 	.timer {
@@ -247,8 +246,7 @@
 		padding: 0px;
 		position: relative;
 		top: -1px;
-		background: snow;
-		color: #495051;
+		background: #181e23;
 		outline: none;
 	}
 </style>

@@ -16,10 +16,6 @@
 </script>
 
 <style scoped>
-	.compStyleTopbar {
-		border-left: 5px solid #1faaf1 !important;
-	}
-
 	dxxp>* {
 		font-size: 12px;
 	}

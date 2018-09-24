@@ -241,8 +241,7 @@
 
 		font-size: 12px;
 
-		color: #495051;
-		background: snow;
+		background: #181e23;
 
 		padding-left: 10px;
 	}
@@ -266,7 +265,7 @@
 		border-radius: 4px;
 
 		background: #1faaf1;
-		color: snow;
+		color: gray;
 		width: 40px;
 		height: 20px;
 		overflow: hidden;

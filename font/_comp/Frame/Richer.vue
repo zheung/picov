@@ -1,16 +1,17 @@
 <template>
-	<div class="compTexter nosel transAll">
+	<div class="compTxArea nosel transAll">
 		<div class="label nosel" v-if="label_"
 			:style="{ width: labelWidth_? labelWidth_+'px' : false, 'text-align': labelAlign_ }"
 		>
 			{{ label_ ? label_+'：' : label_ }}
 		</div>
-		<div class="box" :style="{ width: width_+'px' }" :class="{ inva: invalid }">
-			<input :type="type_" class="value"
-				@input="onInput" v-bind:value="value" :placeholder="place_"
-				@focus="onFocus" @blur="onBlur"
-			/>
-			<Fas class="rightButton"
+		<div class="box" :style="{ width: width_+'px', height: (row*20+(row_-1)*20)+'px', borderColor: readonly_ ? 'transparent' : 'lightgray' }">
+			<quill-editor type="text" class="value" :readonly="readonly_" :style="{ height: (row*20+(row_-1)*20)+'px' }"
+				@change="onInput" :content="value" :placeholder="place_"
+				:options="quillOption"
+			>
+			</quill-editor>
+			<Fas class="rightButton" v-if="!readonly_"
 				:icon="value ? ['fas', 'times-circle'] : ['fas', 'pencil-alt']"
 				@click="onClear"
 			/>
@@ -29,12 +30,15 @@
 
 			multi: {},
 			width: {},
+			row: {},
 
 			value: {},
-			place: {},
-			type: {},
 
-			regexp: {}
+			readonly: {},
+
+			place: {},
+
+			option: {}
 		},
 		data: function() {
 			let label_ = this.label || this.conf.label || '';
@@ -45,16 +49,46 @@
 			let width_ = this.width || this.conf.width || 100;
 			let place_ = this.place || this.conf.place || '';
 
-			let type_ = this.type || this.conf.type || '';
-
 			width_ = width_ * multi_ + (multi_ - 1) * (labelWidth_+4) - 30;
 
-			if(type_ == 'pass') {
-				type_ = 'password';
+			let row_ = (this.row || this.conf.row || 1);
+
+			let readonly_ = false;
+			if(this.readonly != undefined) {
+				readonly_ = true;
 			}
-			else if(type_ != 'text') {
-				type_ = 'text';
-			}
+
+			let quillOption = {
+				modules: {
+					toolbar: {
+						container: [
+							[{ 'size': ['small', false, 'large', 'huge'] }],
+							['bold', 'italic', 'underline', 'strike'],
+							[{ 'color': [] }, { 'background': [] }],
+							[{ 'align': [] }, 'blockquote'],
+							[{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+							['link', 'image'],
+
+							['clean']
+						],
+						handlers: {
+							'image': function() {
+								Quill.QuillWatch.emit(this.quill.id);
+							}
+						}
+					},
+					ImageExtend: {
+						loading: true,
+						name: 'file',
+						action: 'uapi/platUpload',
+						response: (res) => {
+							return res.data[0];
+						}
+					},
+				},
+				placeholder: '',
+				theme: 'snow'
+			};
 
 			return {
 				label_,
@@ -62,27 +96,20 @@
 				labelAlign_,
 
 				width_,
+				row_,
 
 				place_,
 
-				type_,
-
 				minWidth: this.conf.minWidth || width_+29,
 
-				showSection: false,
+				readonly_,
 
-				invalid: false
+				quillOption,
 			};
 		},
 		methods: {
-			onFocus: function() {
-				this.$emit('focus', '');
-			},
-			onBlur: function() {
-				this.$emit('blur', '');
-			},
 			onInput: function(event) {
-				this.$emit('input', event.target.value);
+				this.$emit('input', event.html);
 			},
 			onClear: function() {
 				this.$emit('input', '');
@@ -90,30 +117,27 @@
 		},
 
 		watch: {
-			value: function(now) {
-				if(this.regexp instanceof RegExp) {
-					this.invalid = !this.regexp.test(now);
-				}
+			'value': function(now) {
+				L(now);
 			}
-		}
+		},
+
+		mounted: function() {
+
+		},
 	};
 </script>
 
 <style scoped>
-	.compTexter {
+	.compTxArea {
 		display: inline-block;
 		vertical-align: top;
 
 		cursor: pointer;
 
 		font-size: 0;
-
-		white-space: nowrap;
-		text-overflow: ellipsis;
-
-		overflow: hidden;
 	}
-	.compTexter>* {
+	.compTxArea>* {
 		font-size: 12px;
 	}
 	.label {
@@ -132,23 +156,23 @@
 
 		vertical-align: top;
 
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 		width: auto;
+
 		height: 20px;
 		line-height: 20px;
 		border-radius: 4px;
 
 		padding-left: 10px;
 		padding-right: 20px;
+
+		cursor: auto;
 	}
 	.box:hover {
-		border-color: gray;
+		border: 1px solid gray;
 	}
 	.box.opened:hover {
-		border-color: lightgray;
-	}
-	.box.inva {
-		border-color: orangered;
+		border: 1px solid gray;
 	}
 
 	.rightButton {
@@ -173,53 +197,32 @@
 		width: 100%;
 
 		border: 0;
-		outline: none;
 
-		background: transparent;
+		background: #181e23;
 
 		font-size: 12px;
-		color: #495051;
 
-		height: inherit;
 		line-height: inherit;
 		padding: 0px;
+
+		resize: none;
 	}
-
-	.section {
-		position: absolute;
-		top: 20px;
-		left: -1px;
-		z-index: 100;
-		border: 1px solid lightgray;
-		background: snow;
-		max-height: 200px;
-		overflow-x: hidden;
-		overflow-y: auto;
-		border-radius: 3px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-
-		outline: none;
-
-		box-shadow: 2px 2px 7px -2px rgba(128, 128, 128, 0.7);
+	dxxp .value .ql-formats {
+		margin-right: 0px;
 	}
+	dxxp .value>.ql-toolbar {
+		position: relative;
 
-	.section>div {
-		height: 24px;
-		line-height: 24px;
-		max-width: 280px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+		border: none;
+		border-bottom: 1px solid lightgray;
+		z-index: 2;
+	}
+	dxxp .value>.ql-container {
+		position: relative;
+		border: none;
 
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-	.section>div.selected {
-		color: #1faaf1;
-	}
-	.section>div:hover {
-		background: #f1f1f1;
-		color: #1faaf1;
+		z-index: 1;
+
+		height: calc(100% - 41px);
 	}
 </style>

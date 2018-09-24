@@ -198,8 +198,7 @@
 
 		padding: 6px 5px 5px 5px;
 
-		color: #495051;
-		background: snow;
+		background: #181e23;
 
 		overflow: hidden;
 	}
@@ -252,7 +251,6 @@
 
 		height: 25px;
 
-		color: #495051;
 
 		overflow: hidden;
 		z-index: 2;
@@ -277,7 +275,7 @@
 	}
 
 	.pager>.button {
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 
 		border-radius: 3px;
 
@@ -291,13 +289,13 @@
 		background: #1faaf1;
 		border-color: #1faaf1;
 
-		color: snow;
+		color: gray;
 	}
 	.pager>.button.invalid:hover {
-		background: snow;
+		background: #181e23;
 		border-color: lightgray;
 
-		color: snow;
+		color: gray;
 	}
 	.pager>.button.invalid {
 		cursor: not-allowed;
@@ -334,9 +332,8 @@
 
 		outline: none;
 
-		color: #495051;
 		font-size: 12px;
-		background: snow;
+		background: #181e23;
 	}
 	.pager>.page {
 		width: 30px;
@@ -358,7 +355,7 @@
 
 		font-size: 0px;
 
-		background: snow;
+		background: #181e23;
 
 		white-space: nowrap;
 	}

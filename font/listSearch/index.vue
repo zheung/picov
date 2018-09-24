@@ -1,7 +1,7 @@
 <template>
 	<div class="compProcmProduct">
 		<sTopbar class="topbar">
-			<Texter class="onLeft" v-model="query.key" label="搜索" width="200" @keyup.enter.native="onSearch"></Texter>
+			<Texter class="onLeft" v-model="query.key" label="搜索" width="200" @keyup.enter.native="onQuery"></Texter>
 			<Combo class="onLeft" v-model="query.r18" :list="B.data.r18" width="60"></Combo>
 			<sButton class="onLeft" text="全部下载" @click="onSaveAll"></sButton>
 			<sButton class="onLeft" text="全部强制下载" @click="onSaveAll(true)"></sButton>
@@ -20,10 +20,22 @@
 <script>
 	export default {
 		data: function() {
-			return {
+			return X.init(this.$options._componentTag, {
+				dict: {}
+			}, {
+				data: {},
+			}, {
+				inited: false,
+
+				device: {},
+				deConf: {
+					width: 210,
+					labelWidth: 80,
+					labelAlign: 'right',
+				},
+
 				data: [],
 
-				// 和分页、筛选有关的可变的值
 				query: {
 					page: 1,
 
@@ -31,23 +43,25 @@
 
 					r18: 0
 				},
-
-				B: BUS
-			};
+			});
 		},
 
 		created: function() {
-			A.reg('listFollow', 'uapi/listFollow');
+			A.reg('listSearch', 'uapi/listSearch');
 			A.reg('save', 'uapi/save');
 		},
 		mounted: async function() {
-			this.onQuery();
+		},
+
+		watch: {
+			'S.data': async function(query) {
+				this.query = query;
+
+				this.onQuery();
+			}
 		},
 
 		methods: {
-			onSearch: async function() {
-				BUS.changeSearch(this.query);
-			},
 			onQuery: async function(page) {
 				if(~~page) {
 					this.query.page = ~~page;
@@ -56,7 +70,7 @@
 					this.query.page = 1;
 				}
 
-				let result = await A.conn('listFollow', this.query);
+				let result = await A.conn('listSearch', this.query);
 
 				this.$set(this, 'data', result || []);
 			},
@@ -79,7 +93,7 @@
 					}
 				}
 
-				WC.add(`save-${iid}`, 'listFollow', function(stat) {
+				WC.add(`save-${iid}`, 'listSearch', function(stat) {
 					let map = stat.map;
 					let count = stat.count;
 
@@ -109,7 +123,7 @@
 					this.$set(illust, 'stat2', `${Math.round(percent/count)}%`);
 
 					if(done == count) {
-						WC.del(`save-${iid}`, 'listFollow');
+						WC.del(`save-${iid}`, 'listSearch');
 
 						illust.ding = false;
 						illust.down = true;
@@ -154,7 +168,7 @@
 	.thumb {
 		box-sizing: border-box;
 
-		width: calc(20% - 20px);
+		width: calc(10% - 20px);
 		height: calc(25% - 11px);
 
 		margin: 0px 10px 10px 10px;

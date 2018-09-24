@@ -34,11 +34,9 @@
 
 		height: 50px;
 
-		color: #242424;
+		background: #181e23;
 
-		background-image: linear-gradient(-173deg, #1faaf1 45%, #0185e6 85%);
-
-		box-shadow: 0px 1px 5px 0px rgba(20, 116, 158, 0.5);
+		box-shadow: 0px 1px 5px 0px rgba(65, 65, 65, 0.4);
 
 		z-index: 4;
 	}
@@ -53,7 +51,7 @@
 		top: 5px;
 		left: 15px;
 
-		color: snow;
+		color: gray;
 	}
 	.title>.big {
 		display: inline-block;

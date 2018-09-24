@@ -12,8 +12,10 @@ export default function(bus, x) {
 	bus.data.hyphen0 = [ { code: 0, name: ' - ' }];
 	bus.data.yesnoList = [ { name: '是', code: 1 }, { name: '否', code: 0 }, ];
 
+	bus.data.r18 = [ { name: '全部', code: 0 }, { name: '成人', code: 1 }, { name: '安全', code: 2 }, ];
+
 	bus.changeTab = null;
-	bus.changeDevice = null;
+	bus.changeSearch = null;
 	bus.findTab = null;
 	bus.closeTab = null;
 

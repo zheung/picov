@@ -1,6 +1,6 @@
 module.exports = async (id, page) => {
 	return new Promise(async resolve => {
-		let buf = await func.get(encodeURI(`https://www.pixiv.net/member_illust.php?id=${id}&type=all&p=${page || 1}`), 1),
+		let buf = await F.get(encodeURI(`https://www.pixiv.net/member_illust.php?id=${id}&type=all&p=${page || 1}`), 1),
 			str = buf.toString();
 
 		let take = (err, window) => {
@@ -54,6 +54,6 @@ module.exports = async (id, page) => {
 			resolve(result2);
 		};
 
-		jsdom.env(str, ['./asset/js/jquery.js'], take);
+		Jsdom.env(str, ['./lib/jquery.js'], take);
 	});
 };

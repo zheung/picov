@@ -209,7 +209,7 @@
 
 		vertical-align: top;
 
-		border: 1px solid lightgray;
+		border: 1px solid #2e3235;
 		width: auto;
 		height: 20px;
 		line-height: 20px;
@@ -222,7 +222,7 @@
 		border: 1px solid gray;
 	}
 	.box.opened:hover {
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 	}
 	.box.inva {
 		border-color: orangered;
@@ -263,8 +263,8 @@
 		top: 20px;
 		left: -1px;
 		z-index: 100;
-		border: 1px solid lightgray;
-		background: snow;
+		border: 1px solid gray;
+		background: #181e23;
 		max-height: 200px;
 		overflow-x: hidden;
 		overflow-y: auto;

@@ -1,4 +1,4 @@
-module.exports = async (path, type, isLog = true) => {
+module.exports = async (path, type, isLog = false) => {
 	return new Promise((resolve, reject) => {
 		let option = {
 			url: path,
@@ -16,8 +16,9 @@ module.exports = async (path, type, isLog = true) => {
 			if(isLog) L('请求', path);
 
 			Request(option, function (error, response, buffer) {
-				if(error)
+				if(error) {
 					reject(error);
+				}
 				else
 					resolve(buffer);
 			});

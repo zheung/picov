@@ -98,7 +98,6 @@
 		background: transparent;
 
 		font-size: 12px;
-		color: #495051;
 
 		height: 20px;
 		line-height: 20px;

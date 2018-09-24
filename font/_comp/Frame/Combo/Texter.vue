@@ -107,7 +107,7 @@
 
 		vertical-align: top;
 
-		border: 1px solid lightgray;
+		border: 1px solid gray;
 
 		width: calc(90% - 30px);
 		height: 20px;
@@ -154,7 +154,6 @@
 		background: transparent;
 
 		font-size: 12px;
-		color: #495051;
 
 		height: inherit;
 		line-height: inherit;
@@ -166,8 +165,8 @@
 		top: 20px;
 		left: -1px;
 		z-index: 100;
-		border: 1px solid lightgray;
-		background: snow;
+		border: 1px solid gray;
+		background: #181e23;
 		max-height: 200px;
 		overflow-x: hidden;
 		overflow-y: auto;

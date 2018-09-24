@@ -48,7 +48,7 @@
 		text-align: center;
 		line-height: 20px;
 
-		color: snow;
+		color: gray;
 		font-size: 10px;
 
 		cursor: pointer;

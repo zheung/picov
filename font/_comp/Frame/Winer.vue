@@ -103,7 +103,7 @@
 
 		background: transparent;
 
-		color: snow;
+		color: gray;
 	}
 	.head>* {
 		display: inline-block;

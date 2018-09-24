@@ -7,17 +7,20 @@ html {
 	overflow: hidden;
 	overflow-y: auto;
 
-	background: #eeeeee;
-	color: #495051;
+	background: #181e23;
+	color: gray;
 }
 body, #home {
 	margin: 0px;
 	padding: 0px;
 }
+input {
+	color: gray;
+}
 
 #home *:not(.pop) {
 	text-shadow: 0em 0em 0.0001em !important;
-	font-family: plusicon, "Font Awesome 5 Free", "Microsoft YaHei", sans-serif !important;
+	font-family: "Font Awesome 5 Free", "Microsoft YaHei", sans-serif !important;
 }
 
 ul, li {
@@ -62,7 +65,7 @@ ul, li {
 }
 
 hr {
-	border: 0.5px solid #495051;
+	border: 0.5px solid gray;
 }
 
 .frameBox {

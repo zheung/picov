@@ -1,10 +1,11 @@
 <template>
 	<sPanel class="compThumb" :title="illust.title" :class="{ down: illust.down, ding: illust.ding }"
-		:titlecolor="(illust.multi ? 'darkgreen' : (illust.ugoira ? 'blueviolet' : '#0285e6'))"
+		:titlecolor="(illust.multi ? 'darkgreen' : (illust.ugoira ? 'blueviolet' : 'gray'))"
 	>
 		<div
 			class="img"
 			:style="{ backgroundImage: 'url(uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
+			:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('；')}`"
 		>
 		</div>
 		<div class="stat left">
@@ -33,15 +34,13 @@
 <style scoped>
 	.compThumb {
 		position: relative;
-
-		border-width: 4px;
 	}
 
 	.compThumb>.img {
-		width: calc(100% - 20px);
-		height: calc(100% - 30px);
+		width: 100%;
+		height: calc(100% - 40px);
 
-		margin: 10px;
+		margin-top: 10px;
 
 		box-sizing: border-box;
 
@@ -57,7 +56,7 @@
 
 		height: 22px;
 
-		color: #0185e6;
+		color: lightgray;
 		font-size: 12px;
 	}
 	.compThumb>.stat.left {

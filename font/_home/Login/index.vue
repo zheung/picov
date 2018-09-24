@@ -141,10 +141,9 @@
 		border: 1px solid #1faaf1;
 		outline: none;
 
-		background: snow;
+		background: #181e23;
 
 		font-size: 12px;
-		color: #495051;
 
 		padding: 0px;
 		padding-left: 30px;
@@ -165,7 +164,7 @@
 
 		background: #1faaf1;
 
-		color: snow;
+		color: gray;
 
 		overflow: hidden;
 		text-align: center;
@@ -174,7 +173,7 @@
 		font-size: 12px;
 	}
 	.button.white {
-		background: snow;
+		background: #181e23;
 
 		color: #1faaf1;
 	}
@@ -193,7 +192,7 @@
 		font-size: 34px;
 		font-weight: bold;
 
-		color: snow;
+		color: gray;
 
 		text-align: center;
 	}
@@ -203,7 +202,6 @@
 		top: 49px;
 		left: 34px;
 
-		color: #495051;
 		font-size: 14px;
 
 		z-index: 1;

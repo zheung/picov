@@ -65,7 +65,7 @@
 	}
 
 	.homeBop>span {
-		color: snow;
+		color: gray;
 		background: #57b7d8;
 	}
 
@@ -78,7 +78,7 @@
 
 		padding: 0px 5px 0px 5px;
 
-		color: snow;
+		color: gray;
 		background: #1faaf1;
 
 		font-size: 14px;

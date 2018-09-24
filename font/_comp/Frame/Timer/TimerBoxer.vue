@@ -136,8 +136,8 @@
 
 		z-index: 100;
 
-		border: 1px solid lightgray;
-		background: snow;
+		border: 1px solid gray;
+		background: #181e23;
 
 		border-radius: 3px;
 
