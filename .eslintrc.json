@@ -29,6 +29,7 @@
 		"Request": true,
 		"Moment": true,
 		"Jsdom": true,
+		"Bluebird": true,
 
 		"D": true,
 		"L": true,

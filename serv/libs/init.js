@@ -11,6 +11,7 @@ module.exports = async function() {
 	global.Request = require('request');
 	global.Moment = require('moment');
 	global.Jsdom = require('jsdom');
+	global.Bluebird = require('bluebird');
 
 // 常用功能简写 1~2个大写字母
 	global.J = global._pa.join;

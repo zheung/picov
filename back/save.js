@@ -36,13 +36,13 @@ let down = async function(url, pid, pstat, iid, ext) {
 
 				if(getStream && getStream.pipe) {
 					getStream
-					.on('error', (err) => {
+					.on('error', function(err) {
 						reject(err);
 					})
-					.on('response', (res) => {
+					.on('response', function(res) {
 						total = ~~res.headers['content-length'];
 					})
-					.on('data', (chunk) => {
+					.on('data', function(chunk) {
 						passed += chunk.length;
 
 						if(writeStream.write(chunk) == false)
@@ -50,7 +50,7 @@ let down = async function(url, pid, pstat, iid, ext) {
 
 						pstat.percent = Math.round(passed * 100 / total);
 					})
-					.on('end', () => {
+					.on('end', function() {
 						writeStream.end();
 					});
 				}
@@ -65,6 +65,46 @@ let down = async function(url, pid, pstat, iid, ext) {
 
 		return false;
 	}
+};
+
+let downMap = async function(urls, stat, iid, ext, item, coll) {
+	item.ding = true;
+	await coll.updateOne(item);
+
+	await Bluebird.map(urls, async function(info) {
+		let time = 0;
+		let retry = ~~C.C.retry;
+
+		let url = info[0];
+		let pid = info[1];
+
+		let pstat = stat.map[pid] = {
+			pid: info[1],
+
+			strt: false,
+			ding: false,
+			down: false,
+
+			percent: 0
+		};
+
+		while(!await down(url, pid, pstat, iid, ext) && time++ <= retry) {
+			--counted.ding;
+
+			stat.retry = time;
+		}
+
+		if(time > retry) {
+			++counted.fail;
+		}
+		else {
+			++counted.down;
+		}
+	});
+
+	item.ding = false;
+	item.down = true;
+	await coll.updateOne(item);
 };
 
 module.exports = {
@@ -120,43 +160,7 @@ module.exports = {
 				urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
 			}
 
-			item.ding = true;
-			await coll.updateOne(item);
-
-			for(let urlInfo of urls) {
-				let time = 0;
-				let retry = ~~C.C.retry;
-
-				let url = urlInfo[0];
-				let pid = urlInfo[1];
-
-				let pstat = stat.map[pid] = {
-					pid: urlInfo[1],
-
-					strt: false,
-					ding: false,
-					down: false,
-
-					percent: 0
-				};
-
-				while(!await down(url, pid, pstat, iid, ext) && time++ <= retry) {
-					--counted.ding;
-
-					stat.retry = time;
-				}
-
-				if(time > retry) {
-					++counted.fail;
-				}
-				else {
-					++counted.down;
-				}
-			}
-
-			item.ding = false;
-			item.down = true;
-			await coll.updateOne(item);
+			downMap(urls, stat, iid, ext, item, coll);
 
 			return '准备下载';
 		}
