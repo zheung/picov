@@ -63,7 +63,7 @@ module.exports = async function(servType, servConf) {
 		paths = _fs.readdirSync(JD('subs'));
 
 		// 从配置加载 不在subs文件夹 的 子应用路径
-		for(let p of C.extraModules) {
+		for(let p of C.extraSubs) {
 			paths.push(J('..', p));
 		}
 	}
