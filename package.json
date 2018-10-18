@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "Pixiv Crawler Local Server",
 	"main": "app.js",
 	"scripts": {
@@ -19,15 +19,6 @@
 		"css-deep-loader": "^1.0.0",
 		"fs-extra": "^2.1.2",
 		"jsdom": "^9.12.0",
-		"koa": "^2.5.0",
-		"koa-bodyparser": "^4.2.0",
-		"koa-compress": "^2.0.0",
-		"koa-favicon": "^2.0.1",
-		"koa-helmet": "^3.3.0",
-		"koa-mount": "^3.0.0",
-		"koa-multer": "^1.0.2",
-		"koa-router": "^7.4.0",
-		"koa-static": "^3.0.0",
 		"moment": "^2.22.1",
 		"mongodb": "^3.1.6"
 	},

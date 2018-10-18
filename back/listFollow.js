@@ -3,7 +3,7 @@ module.exports = {
 		try {
 			let coll = db.coll('illust');
 
-			let result = await W.listFollow(raw.page);
+			let result = await E.picov.W.listFollow(raw.page);
 
 			let stats = await coll.getStat(result);
 

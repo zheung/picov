@@ -40,5 +40,5 @@ module.exports = function() {
 		_list: list
 	};
 
-	global.WC = WC;
+	E.picov.WC = WC;
 };

@@ -1,4 +1,4 @@
-let U = T('util');
+let U = E.T('util');
 
 module.exports = {
 	c: async function(raw) {

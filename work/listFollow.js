@@ -1,7 +1,7 @@
 module.exports = async function(page) {
 	return new Promise(async function(resolve, reject) {
 		try {
-			let buf = await F.get(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1);
+			let buf = await E.picov.F.get(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1);
 			let str = buf.toString();
 
 			let take = function(err, window) {
@@ -49,7 +49,7 @@ module.exports = async function(page) {
 				resolve(result);
 			};
 
-			Jsdom.env(str, ['./lib/jquery.js'], take);
+			E.JsDom.env(str, ['./libs/jquery.js'], take);
 		} catch (error) {
 			reject(error);
 		}

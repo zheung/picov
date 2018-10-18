@@ -7,7 +7,7 @@ module.exports = {
 		try {
 			raw.i = raw.i.replace(/^AI/, '');
 
-			records = await W.listAuthor(raw.i, raw.p);
+			records = await E.picov.W.listAuthor(raw.i, raw.p);
 
 			result = {
 				s: true,

@@ -9,9 +9,9 @@
 		"sourceType": "script"
 	},
 	"rules": {
-		"indent": [ 0, "tab", { "ignoreComments": true } ],
+		"indent": [ 2, "tab", { "ignoreComments": true, "SwitchCase": 1 } ],
 		"linebreak-style": [ 2, "windows" ],
-		"quotes": [ 0, "single" ],
+		"quotes": [ 2, "single" ],
 		"semi": [ 2, "always" ],
 		"no-unused-vars": [ 2, { "vars": "all", "args": "after-used" } ],
 		"no-console": [ 2 ],
@@ -23,20 +23,18 @@
 		"_qs": true,
 		"_ul": true,
 		"_os": true,
+		"_cr": true,
 
-		"Promise": true,
-		"Axios": true,
-		"Moment": true,
+		"G": true,
 
-		"D": true,
+		"J": true,
+		"JC": true,
+		"JD": true,
+
 		"L": true,
 		"LE": true,
-		"J": true,
-		"C": true,
-		"T": true,
 
-		"DB": true,
-
-		"JD": true
+		"E": true,
+		"P": true
 	}
 }

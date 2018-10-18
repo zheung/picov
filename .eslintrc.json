@@ -25,25 +25,16 @@
 		"_os": true,
 		"_cr": true,
 
-		"Promise": true,
-		"Request": true,
-		"Moment": true,
-		"Jsdom": true,
-		"Bluebird": true,
+		"G": true,
 
-		"D": true,
+		"J": true,
+		"JC": true,
+		"JD": true,
+
 		"L": true,
 		"LE": true,
-		"J": true,
 
-		"C": true,
-		"T": true,
-		"F": true,
-		"W": true,
-
-		"DB": true,
-
-		"JD": true,
-		"WC": true
+		"E": true,
+		"P": true
 	}
 }

@@ -7,11 +7,12 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "单例port",
-			"program": "${workspaceFolder}\\serv\\app.js",
+			"name": "后端back",
+			"console": "integratedTerminal",
 			"runtimeExecutable": "node.exe",
+			"program": "D:/Proj/serv/index.js",
 			"args": [
-				"port"
+				"${workspaceFolder}"
 			]
 		},
 	]

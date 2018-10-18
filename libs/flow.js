@@ -72,14 +72,13 @@ let runFlow = async function(flow, raw, stages = [ 'c', 'm', 'r' ]) {
 	};
 };
 
-
 module.exports = async function($) {
 	let flowDict = {};
-	let flows = require(await $.pa('route'));
+	let flows = require('./route');
 
 // 流程化
 	for(let flow of flows) {
-		let funcPath = await $.pa(J($.conf.pathCode, ...flow.entry.split('.')));
+		let funcPath = await $.J('./back', ...flow.entry.split('.'));
 
 		let func;
 		try {
@@ -101,7 +100,7 @@ module.exports = async function($) {
 				return raw;
 			}
 
-			let result = await func.c(raw, flowDict, $.conf);
+			let result = await func.c(raw, flowDict, $.C);
 
 			// 如果返回为无效值，则视raw为返回值
 			if(!result) {
@@ -155,6 +154,86 @@ module.exports = async function($) {
 				objNow[path] = flow.flower;
 			}
 		}
+	}
+
+	for(let flow of flows) {
+		$.router[flow.method]('uapi/'+flow.path, async function(ctx, next) {
+			await next();
+
+			let raw = ctx.raw;
+
+			let files = ctx.req.files;
+
+			if(ctx.req.body) {
+				for(let key in ctx.req.body) {
+					raw[key] = ctx.req.body[key];
+				}
+			}
+
+			if(files) {
+				raw._files = files;
+			}
+
+			let result = await flow.flower(ctx.raw);
+
+			if(flow.type != 4) {
+				if(result.type) {
+					ctx.type = result.type;
+				}
+				else {
+					ctx.type = 'json';
+				}
+
+				ctx.body = result;
+			}
+			else {
+				let mime = !!result.data.mime;
+
+				if(result.data && result.data.data && result.data.data.length) {
+					for(let url of result.data.data) {
+						if(url.startsWith('http')) {
+							try {
+								ctx.body = (await E.Request.get({
+									url: url,
+									responseType:'stream'
+								})).data;
+
+								ctx.attachment(_pa.parse(url).base);
+
+								break;
+							}
+							catch(e) {
+								continue;
+							}
+						}
+						else {
+							try {
+								let stat = _fs.statSync(url);
+
+								ctx.lastModified = new Date(stat.mtime);
+
+								if(mime) {
+									ctx.type = _pa.parse(url).ext;
+								}
+								else {
+									ctx.attachment(_pa.parse(url).base);
+								}
+
+								ctx.body = _fs.createReadStream(url);
+
+								break;
+							}
+							catch(e) {
+								continue;
+							}
+						}
+					}
+				}
+				else {
+					ctx.status = 404;
+				}
+			}
+		});
 	}
 
 	return flows;

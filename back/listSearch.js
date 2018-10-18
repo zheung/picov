@@ -3,7 +3,7 @@ module.exports = {
 		try {
 			let coll = db.coll('illust');
 
-			let result = await W.listSearch(raw.page);
+			let result = await E.picov.W.listSearch(raw.page);
 
 			let stats = await coll.getStat(result);
 

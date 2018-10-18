@@ -1,6 +1,6 @@
 module.exports = async (word, page, r18) => {
 	return new Promise(async resolve => {
-		let buf = await F.get(encodeURI(`https://www.pixiv.net/search.php?s_mode=s_tag&word=${word}&p=${page || 1}&mode=${r18? 'r18': 'safe' }`), 1),
+		let buf = await E.picov.F.get(encodeURI(`https://www.pixiv.net/search.php?s_mode=s_tag&word=${word}&p=${page || 1}&mode=${r18? 'r18': 'safe' }`), 1),
 			str = buf.toString();
 
 		let take = (err, window) => {
@@ -43,6 +43,6 @@ module.exports = async (word, page, r18) => {
 			resolve(result);
 		};
 
-		Jsdom.env(str, ['./lib/jquery.js'], take);
+		E.JsDom.env(str, ['./libs/jquery.js'], take);
 	});
 };

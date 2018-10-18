@@ -2,7 +2,8 @@
 node_modules
 
 #No Real Config
-conf.js
+config.js
+config.json
 
 #No Picture Folder
 cache
@@ -12,5 +13,4 @@ save
 .auth.js
 
 #Dist
-build
-serv/subs/port/dist
+dist

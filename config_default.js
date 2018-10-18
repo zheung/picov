@@ -1,10 +1,17 @@
 module.exports = {
-	cookie: 'Your PHPSESSID',
+	name: 'picov',
 
 	serv: {
 		host: '0.0.0.0',
-		port: 910
+		port: 910,
+		http2: false,
+		pems: {
+			key: 'Your Key Path',
+			cert: 'Your Cert Path'
+		}
 	},
+
+	cookie: 'Your PHPSESSID',
 
 	retry: 5,
 

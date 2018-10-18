@@ -1,6 +1,6 @@
 module.exports = async (id, page) => {
 	return new Promise(async resolve => {
-		let buf = await F.get(encodeURI(`https://www.pixiv.net/member_illust.php?id=${id}&type=all&p=${page || 1}`), 1),
+		let buf = await E.picov.F.get(encodeURI(`https://www.pixiv.net/member_illust.php?id=${id}&type=all&p=${page || 1}`), 1),
 			str = buf.toString();
 
 		let take = (err, window) => {
@@ -54,6 +54,6 @@ module.exports = async (id, page) => {
 			resolve(result2);
 		};
 
-		Jsdom.env(str, ['./lib/jquery.js'], take);
+		E.JsDom.env(str, ['./libs/jquery.js'], take);
 	});
 };

@@ -5,12 +5,12 @@ module.exports = {
 
 		if(dels && typeof dels == 'string') {
 			for(let key of dels.split(';')) {
-				WC.del(key);
+				E.picov.WC.del(key);
 			}
 		}
 
 		if(type && typeof type == 'string') {
-			return WC.lst(raw.types.split(';'));
+			return E.picov.WC.lst(raw.types.split(';'));
 		}
 
 		return 5214;

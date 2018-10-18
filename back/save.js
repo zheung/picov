@@ -1,5 +1,5 @@
 let counted = { ding: 0, down: 0, fail: 0 };
-WC.add('save-count', counted);
+E.picov.WC.add('save-count', counted);
 
 let down = async function(url, pid, pstat, iid, ext) {
 	try {
@@ -7,14 +7,14 @@ let down = async function(url, pid, pstat, iid, ext) {
 		pstat.strt = true;
 		pstat.ding = true;
 
-		let getStream = await F.get(url, 2, false);
+		let getStream = await E.picov.F.get(url, 2, false);
 
 		await new Promise(function(resolve, reject) {
 			try {
 				let total;
 				let passed = 0;
 				let fileName = `${iid}_p${pid}.${ext}`;
-				let tempPath = J(C.C.path.cache, 'large', fileName);
+				let tempPath = J(E.picov.C.path.cache, 'large', fileName);
 
 				_fs.removeSync(tempPath);
 
@@ -26,7 +26,7 @@ let down = async function(url, pid, pstat, iid, ext) {
 						pstat.ding = false;
 						pstat.down = true;
 
-						_fs.moveSync(tempPath, J(C.C.path.large, fileName), { overwrite: true });
+						_fs.moveSync(tempPath, J(E.picov.C.path.large, fileName), { overwrite: true });
 
 						resolve();
 					})
@@ -36,23 +36,23 @@ let down = async function(url, pid, pstat, iid, ext) {
 
 				if(getStream && getStream.pipe) {
 					getStream
-					.on('error', function(err) {
-						reject(err);
-					})
-					.on('response', function(res) {
-						total = ~~res.headers['content-length'];
-					})
-					.on('data', function(chunk) {
-						passed += chunk.length;
+						.on('error', function(err) {
+							reject(err);
+						})
+						.on('response', function(res) {
+							total = ~~res.headers['content-length'];
+						})
+						.on('data', function(chunk) {
+							passed += chunk.length;
 
-						if(writeStream.write(chunk) == false)
-							getStream.pause();
+							if(writeStream.write(chunk) == false)
+								getStream.pause();
 
-						pstat.percent = Math.round(passed * 100 / total);
-					})
-					.on('end', function() {
-						writeStream.end();
-					});
+							pstat.percent = Math.round(passed * 100 / total);
+						})
+						.on('end', function() {
+							writeStream.end();
+						});
 				}
 			} catch (error) {
 				LE(error);
@@ -71,9 +71,9 @@ let downMap = async function(urls, stat, iid, ext, item, coll) {
 	item.ding = true;
 	await coll.updateOne(item);
 
-	await Bluebird.map(urls, async function(info) {
+	await E.Bluebird.map(urls, async function(info) {
 		let time = 0;
-		let retry = ~~C.C.retry;
+		let retry = ~~E.picov.C.retry;
 
 		let url = info[0];
 		let pid = info[1];
@@ -141,9 +141,9 @@ module.exports = {
 				map: []
 			};
 
-			WC.add(`save-${iid}`, stat);
+			E.picov.WC.add(`save-${iid}`, stat);
 
-			let info = JSON.parse(await F.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
+			let info = JSON.parse(await E.picov.F.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
 
 			let count = ~~info.body[iid].illust_page_count;
 			let ext = info.body[iid].illust_ext;

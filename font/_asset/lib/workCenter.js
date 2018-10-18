@@ -86,5 +86,5 @@ export default function() {
 		working
 	};
 
-	WC.start();
+	window.WC.start();
 }

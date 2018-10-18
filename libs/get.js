@@ -3,7 +3,7 @@ module.exports = async (path, type, isLog = false) => {
 		let option = {
 			url: path,
 			headers: {
-				'Cookie': `PHPSESSID=${C.C.cookie}`,
+				'Cookie': `PHPSESSID=${E.picov.C.cookie}`,
 				'Referer': 'http://www.pixiv.net/',
 				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
 			},
@@ -15,7 +15,7 @@ module.exports = async (path, type, isLog = false) => {
 		if(type == 1) {
 			if(isLog) L('请求', path);
 
-			Request(option, function (error, response, buffer) {
+			E.Request(option, function (error, response, buffer) {
 				if(error) {
 					reject(error);
 				}
@@ -26,12 +26,12 @@ module.exports = async (path, type, isLog = false) => {
 		else if(type == 2) {
 			if(isLog) L('代理', path);
 
-			resolve(Request(option));
+			resolve(E.Request(option));
 		}
 		else if(type == 3) {
 			if(isLog) L('请求', path);
 
-			Request(option, function (error, response, buffer) {
+			E.Request(option, function (error, response, buffer) {
 				if(error)
 					reject(error);
 				else
