@@ -1,5 +1,5 @@
 module.exports = async function($) {
-	$.T = require('./tooltool');
+	$.T = require('./tool');
 
 	E.T = $.T;
 

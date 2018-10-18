@@ -18,7 +18,7 @@ module.exports = {
 		let fr = raw.fr;
 		let cached = await has(iid);
 
-		let path = JD('..', E.picov.C.path.cache, 'thumb', `${iid}.png`);
+		let path = E.picov.J(E.picov.C.path.cache, 'thumb', `${iid}.png`);
 
 		if(cached && !fr) {
 			// L('缓存', '小图', iid);

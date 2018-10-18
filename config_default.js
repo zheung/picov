@@ -4,6 +4,7 @@ module.exports = {
 	serv: {
 		host: '0.0.0.0',
 		port: 910,
+		path: '/',
 		http2: false,
 		pems: {
 			key: 'Your Key Path',
