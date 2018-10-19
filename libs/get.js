@@ -9,7 +9,7 @@ module.exports = async (path, type, isLog = false) => {
 			},
 			encoding: null,
 
-			proxy: E.C.proxy
+			proxy: E.picov.C.proxy
 		};
 
 		if(type == 1) {
