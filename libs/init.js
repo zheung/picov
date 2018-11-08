@@ -31,4 +31,6 @@ module.exports = async function($) {
 	let auth = require('../.auth');
 	let db = require('./mongo');
 	$.db = await db(auth.picov);
+
+	$.ws = await require('./ws')($);
 };
