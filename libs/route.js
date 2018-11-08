@@ -3,8 +3,7 @@ let raw = [
 	[ 'get', '1', 'listSearch' ],
 	[ 'get', '1', 'listAuthor' ],
 	[ 'get', '4', 'thumb' ],
-	[ 'post', '1', 'save' ],
-	[ 'get', '1', 'workCenter' ],
+	[ 'post', '1', 'save' ]
 ];
 
 let routes = [];

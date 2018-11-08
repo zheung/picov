@@ -42,7 +42,7 @@ module.exports = async(dbinfo) => {
 								await coll.drop();
 							}
 							catch(e) {
-								if(e.code != 26) LE(e);
+								if(e.code != 26) G.error(e);
 							}
 
 							return await coll.insertMany(arr);

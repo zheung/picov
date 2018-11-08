@@ -25,7 +25,7 @@ let runFlow = async function(flow, raw, stages = [ 'c', 'm', 'r' ]) {
 				throw '结果返回异常';
 			}
 		} catch(error) {
-			LE(error.stack || error );
+			G.error(error.stack || error );
 			result = { _stat: 3, _text: error.message || error };
 		}
 
@@ -82,10 +82,10 @@ module.exports = async function($) {
 
 		let func;
 		try {
-			func = require(funcPath);
+			func = require(funcPath)(E.picov);
 		}
 		catch(error) {
-			LE(error.message);
+			G.error(error.message);
 			continue;
 		}
 

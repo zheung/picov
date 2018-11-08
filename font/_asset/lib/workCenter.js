@@ -69,7 +69,7 @@ export default function() {
 									working[key][from](stat);
 								}
 								catch(error) {
-									LE(error.stack);
+									G.error(error.stack);
 								}
 							}
 						}

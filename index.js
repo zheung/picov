@@ -4,9 +4,6 @@ module.exports = async function($) {
 
 	await $.st($.J('dist'), { defer: true });
 
-	$.G.info('加载 [工作中心]');
-	await require('./libs/workCenter')();
-
 	$.G.info('加载 [路由]');
 	await require('./libs/flow')($);
 };

@@ -1,30 +1,34 @@
-module.exports = {
-	m: async function(raw, db) {
-		try {
-			let coll = db.coll('illust');
+module.exports = function($) {
+	let { W } = $;
 
-			let result = await E.picov.W.listFollow(raw.page);
+	return {
+		m: async function(raw, db) {
+			try {
+				let coll = db.coll('illust');
 
-			let stats = await coll.getStat(result);
+				let result = await W.listFollow(raw.page);
 
-			for(let illust of result) {
-				let stat = stats[illust.iid];
+				let stats = await coll.getStat(result);
 
-				if(stat) {
-					illust.down = stats[illust.iid].down;
-					illust.ding = stats[illust.iid].ding;
+				for(let illust of result) {
+					let stat = stats[illust.iid];
+
+					if(stat) {
+						illust.down = stats[illust.iid].down;
+						illust.ding = stats[illust.iid].ding;
+					}
+
+					illust.stat1 = '';
+					illust.stat2 = '';
 				}
 
-				illust.stat1 = '';
-				illust.stat2 = '';
+				return result;
 			}
+			catch(e) {
+				L(e.stack);
 
-			return result;
+				return { _stat: 3 };
+			}
 		}
-		catch(e) {
-			L(e.stack);
-
-			return { _stat: 3 };
-		}
-	}
+	};
 };

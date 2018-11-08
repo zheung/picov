@@ -13,6 +13,7 @@ module.exports = async function($) {
 	E.FsExtra.ensureDirSync($.J($.C.path.cache, 'thumb'));
 
 	E.picov = {
+		G: $.G,
 		J: $.J,
 		C: $.C,
 		F: {
@@ -25,12 +26,12 @@ module.exports = async function($) {
 			listAuthor: require('../work/listAuthor'),
 			thumb: require('../work/thumb'),
 			save: require('../work/save')
-		}
+		},
+		S: await require('./wock')($),
+		B: {}
 	};
 
 	let auth = require('../.auth');
 	let db = require('./mongo');
 	$.db = await db(auth.picov);
-
-	$.ws = await require('./ws')($);
 };

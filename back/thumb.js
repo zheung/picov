@@ -1,47 +1,51 @@
-let list = _fs.readdirSync(E.picov.J(E.picov.C.path.cache, 'thumb')), dict = {};
+module.exports = function($) {
+	let { J, C, F } = $;
 
-list.map((file) => {
-	dict[file.split('.')[0]] = true;
-});
+	let list = _fs.readdirSync(J(C.path.cache, 'thumb')), dict = {};
 
-let has = async function(iid) {
-	return dict[iid];
-};
+	list.map((file) => {
+		dict[file.split('.')[0]] = true;
+	});
 
-let set = async function(iid, type = true) {
-	dict[iid] = type;
-};
+	let has = async function(iid) {
+		return dict[iid];
+	};
 
-module.exports = {
-	c: async function(raw) {
-		let iid = raw.iid;
-		let fr = raw.fr;
-		let cached = await has(iid);
+	let set = async function(iid, type = true) {
+		dict[iid] = type;
+	};
 
-		let path = E.picov.J(E.picov.C.path.cache, 'thumb', `${iid}.png`);
+	return {
+		c: async function(raw) {
+			let iid = raw.iid;
+			let fr = raw.fr;
+			let cached = await has(iid);
 
-		if(cached && !fr) {
-			// L('缓存', '小图', iid);
-		}
-		else {
-			let thumbStream = await E.picov.F.get(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
-			let cacheStream = _fs.createWriteStream(path);
+			let path = J(C.path.cache, 'thumb', `${iid}.png`);
 
-			await new Promise(function(resolve) {
-				cacheStream.on('finish', function() {
-					set(iid, true);
+			if(cached && !fr) {
+				// L('缓存', '小图', iid);
+			}
+			else {
+				let thumbStream = await F.get(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
+				let cacheStream = _fs.createWriteStream(path);
 
-					resolve();
+				await new Promise(function(resolve) {
+					cacheStream.on('finish', function() {
+						set(iid, true);
+
+						resolve();
+					});
+
+					thumbStream.pipe(cacheStream);
 				});
+			}
 
-				thumbStream.pipe(cacheStream);
-			});
+			return {
+				success: true,
+				mime: true,
+				data: [ path ]
+			};
 		}
-
-		return {
-			success: true,
-			mime: true,
-			data: [ path ]
-		};
-	}
+	};
 };
