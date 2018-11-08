@@ -40,5 +40,5 @@ module.exports = function() {
 		_list: list
 	};
 
-	E.picov.WC = WC;
+	E.picov.BUS = WC;
 };

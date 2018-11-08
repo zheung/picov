@@ -2,7 +2,6 @@ let WebSocket = require('ws');
 
 module.exports = async function($) {
 	let wss = new WebSocket.Server({
-		// port: 8080,
 		noServer: true,
 		perMessageDeflate: {
 			zlibDeflateOptions: {
@@ -34,7 +33,7 @@ module.exports = async function($) {
 	$.httpServ.on('upgrade', function upgrade(request, socket, head) {
 		let pathname = _ul.parse(request.url).pathname;
 
-		if(pathname === '/foo') {
+		if(pathname === '/wock') {
 			wss.handleUpgrade(request, socket, head, function done(ws) {
 				wss.emit('connection', ws, request);
 			});
