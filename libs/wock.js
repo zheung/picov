@@ -1,8 +1,9 @@
-let WebSocket = require('ws');
-
 module.exports = async function($) {
-	let wss = new WebSocket.Server({
+	let WebSocket = require('ws');
+
+	let wockServ = new WebSocket.Server({
 		noServer: true,
+		// port: 911,
 		perMessageDeflate: {
 			zlibDeflateOptions: {
 				chunkSize: 1024,
@@ -20,23 +21,13 @@ module.exports = async function($) {
 		}
 	});
 
-	wss.on('connection', function connection(ws) {
-		ws.on('message', function incoming(message) {
-			L('received: %s', message);
-			ws.send(`something${message}`);
-		});
-
-		ws.send('something');
-	});
-
-
-	$.httpServ.on('upgrade', function upgrade(request, socket, head) {
-		let pathname = _ul.parse(request.url).pathname;
-
-		if(pathname === '/wock') {
-			wss.handleUpgrade(request, socket, head, function done(ws) {
-				wss.emit('connection', ws, request);
+	$.httpServ.on('upgrade', function(request, socket, head) {
+		if(_ul.parse(request.url).pathname == '/wock') {
+			wockServ.handleUpgrade(request, socket, head, function(ws) {
+				wockServ.emit('connection', ws, request);
 			});
 		}
 	});
+
+	return wockServ;
 };

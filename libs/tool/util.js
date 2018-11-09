@@ -100,4 +100,6 @@ let util = {
 	}
 };
 
-module.exports = util;
+module.exports = function() {
+	return util;
+};

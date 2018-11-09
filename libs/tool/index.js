@@ -1,3 +1,5 @@
-module.exports = function(nameTool) {
-	return require('./'+nameTool);
+module.exports = function($) {
+	return function(nameTool) {
+		return require('./'+nameTool)($);
+	};
 };

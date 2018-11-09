@@ -9,7 +9,7 @@
 		"sourceType": "script"
 	},
 	"rules": {
-		"indent": [ 2, "tab", { "ignoreComments": true, "SwitchCase": 1 } ],
+		"indent": [ 2, "tab", { "ignoreComments": true, "SwitchCase": 1, "MemberExpression": 0 } ],
 		"linebreak-style": [ 2, "windows" ],
 		"quotes": [ 2, "single" ],
 		"semi": [ 2, "always" ],

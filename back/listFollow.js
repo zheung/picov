@@ -1,12 +1,12 @@
 module.exports = function($) {
-	let { W } = $;
+	let { A } = $;
 
 	return {
 		m: async function(raw, db) {
 			try {
 				let coll = db.coll('illust');
 
-				let result = await W.listFollow(raw.page);
+				let result = await A.listFollow(raw.page);
 
 				let stats = await coll.getStat(result);
 

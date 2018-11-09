@@ -1,5 +1,5 @@
 module.exports = function($) {
-	let { W } = $;
+	let { A } = $;
 
 	return {
 		m: async function(raw, db) {
@@ -10,7 +10,7 @@ module.exports = function($) {
 			try {
 				raw.i = raw.i.replace(/^AI/, '');
 
-				records = await W.listAuthor(raw.i, raw.p);
+				records = await A.listAuthor(raw.i, raw.p);
 
 				result = {
 					s: true,

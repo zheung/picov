@@ -82,7 +82,7 @@ module.exports = async function($) {
 
 		let func;
 		try {
-			func = require(funcPath)(E.picov);
+			func = require(funcPath)($);
 		}
 		catch(error) {
 			G.error(error.message);
@@ -193,7 +193,7 @@ module.exports = async function($) {
 					for(let url of result.data.data) {
 						if(url.startsWith('http')) {
 							try {
-								ctx.body = (await E.Request.get({
+								ctx.body = (await $.Request.get({
 									url: url,
 									responseType:'stream'
 								})).data;

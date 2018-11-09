@@ -7,7 +7,7 @@ import Loader from './loader';
 
 import initConnect from './connect';
 
-import initWorkCenter from './workCenter';
+import initWock from './wock';
 
 export default function() {
 	window.L = (0 || console).log;
@@ -15,7 +15,7 @@ export default function() {
 	initBus();
 	initComp();
 	initConnect();
-	initWorkCenter();
+	initWock();
 
 	return {
 		Loader
