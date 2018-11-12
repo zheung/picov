@@ -3,7 +3,7 @@ module.exports = function($) {
 
 	return async function(id, page) {
 		return new Promise(async function(resolve) {
-			let buf = await T.get(encodeURI(`https://www.pixiv.net/member_illust.php?id=${id}&type=all&p=${page || 1}`, $), 1);
+			let buf = await T('get')(encodeURI(`https://www.pixiv.net/member_illust.php?id=${id}&type=all&p=${page || 1}`, $), 1);
 			let str = buf.toString();
 
 			let take = function(err, window) {
@@ -52,7 +52,7 @@ module.exports = function($) {
 				result2.name = $('a.user-name').html();
 				result2.count = ($('span.count-badge').html() || '').replace(/\D/g, '');
 
-				result2.name = `${result2.name} (${result2.count}/${Math.round(result2.count/20)})`
+				result2.name = `${result2.name} (${result2.count}/${Math.round(result2.count/20)})`;
 
 				resolve(result2);
 			};

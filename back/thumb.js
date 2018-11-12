@@ -15,7 +15,7 @@ module.exports = function($) {
 			let path = J(C.path.cache, 'thumb', `${iid}.png`);
 
 			if(!dict[iid] || fr) {
-				let thumbStream = await T.get(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
+				let thumbStream = await T('get')(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
 				let cacheStream = _fs.createWriteStream(path);
 
 				await new Promise(function(resolve) {

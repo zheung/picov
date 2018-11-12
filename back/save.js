@@ -9,7 +9,7 @@ module.exports = function($) {
 			pstat.strt = true;
 			pstat.ding = true;
 
-			let getStream = await T.get(url, 2, false);
+			let getStream = await T('get')(url, 2, false);
 
 			await new Promise(function(resolve, reject) {
 				try {
@@ -143,7 +143,7 @@ module.exports = function($) {
 					map: []
 				};
 
-				let info = JSON.parse(await T.get(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
+				let info = JSON.parse(await T('get')(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
 
 				let count = ~~info.body[iid].illust_page_count;
 				let ext = info.body[iid].illust_ext;
