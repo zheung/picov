@@ -4,7 +4,7 @@
 	>
 		<div
 			class="img"
-			:style="{ backgroundImage: 'url(uapi/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
+			:style="{ backgroundImage: 'url(api/thumb?iid='+illust.iid+'&time='+illust.time+'&ugoira='+illust.ugoira+')' }"
 			:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('；')}`"
 		>
 		</div>

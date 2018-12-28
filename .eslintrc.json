@@ -9,7 +9,7 @@
 		"sourceType": "script"
 	},
 	"rules": {
-		"indent": [ 2, "tab", { "ignoreComments": true, "SwitchCase": 1, "MemberExpression": 0 } ],
+		"indent": [ 2, "tab", { "ignoreComments": true, "SwitchCase": 1 } ],
 		"linebreak-style": [ 2, "windows" ],
 		"quotes": [ 2, "single" ],
 		"semi": [ 2, "always" ],
@@ -25,16 +25,17 @@
 		"_os": true,
 		"_cr": true,
 
-		"G": true,
+		"P": true,
 
-		"J": true,
-		"JC": true,
-		"JD": true,
+		"E": true,
 
 		"L": true,
 		"LE": true,
 
-		"E": true,
-		"P": true
+		"R": true,
+		"RC": true,
+		"RD": true,
+
+		"GG": true
 	}
 }

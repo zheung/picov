@@ -1,4 +1,6 @@
 module.exports = async function($) {
+	let { G, C } = $;
+
 	$.T = require('./tool')($);
 
 	$.FsExtra = require('fs-extra');
@@ -6,17 +8,17 @@ module.exports = async function($) {
 	$.Bluebird = require('bluebird');
 	$.JsDom = require('jsdom');
 
-	$.FsExtra.ensureDirSync($.J($.C.path.large));
-	$.FsExtra.ensureDirSync($.J($.C.path.cache, 'large'));
-	$.FsExtra.ensureDirSync($.J($.C.path.cache, 'thumb'));
-
-	$.wockServ = await require('./wock')($);
+	$.FsExtra.ensureDirSync(R($.C.path.large));
+	$.FsExtra.ensureDirSync(R($.C.path.cache, 'large'));
+	$.FsExtra.ensureDirSync(R($.C.path.cache, 'thumb'));
 
 	$.B = {};
-	$.A = await require('../anlz')($);
-	$.W = await require('../center')($);
+
+	$.A = await require('./funcMap')($, C.path.anlz);
+	G.info('加载 [解析]');
 
 	let auth = require('../.auth');
-	let db = require('./mongo');
-	$.db = await db(auth.picov);
+	$.DB = await require('./mongo')(auth.picov);
+
+	G.info('加载 [环境]');
 };

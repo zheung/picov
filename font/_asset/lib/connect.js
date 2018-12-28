@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 let actions = {
-	init: 'uapi/init'
+	init: 'api/init'
 };
 
 let prefix = './';

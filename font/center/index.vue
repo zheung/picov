@@ -54,7 +54,7 @@
 		},
 
 		created: function() {
-			A.reg('docFileList', 'uapi/docFileListEms');
+			A.reg('docFileList', 'api/docFileListEms');
 		},
 		mounted: async function() {
 		},

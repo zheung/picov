@@ -23,7 +23,7 @@
 				this.$refs.popAbout.style.opacity = 0;
 			},
 			onLogout: async function() {
-				A.reg('logout', 'uapi/logout');
+				A.reg('logout', 'api/logout');
 				await A.post('logout');
 
 				location.reload();

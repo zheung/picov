@@ -47,8 +47,8 @@
 		},
 
 		created: function() {
-			A.reg('listSearch', 'uapi/listSearch');
-			A.reg('save', 'uapi/save');
+			A.reg('listSearch', 'api/listSearch');
+			A.reg('save', 'api/save');
 		},
 		mounted: async function() {
 		},

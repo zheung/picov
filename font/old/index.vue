@@ -8,7 +8,7 @@
 					<div class="detail thumb drr jcc aic acc">
 						<img
 							class="thumb curp"
-							:src="'uapi/thumb?iid='+reco.iid+'&time='+reco.time+'&ugoira='+reco.ugoira"
+							:src="'api/thumb?iid='+reco.iid+'&time='+reco.time+'&ugoira='+reco.ugoira"
 							:title="reco.iid"
 							@error="imgError"
 						/>
@@ -136,7 +136,7 @@
 		},
 
 		created: function() {
-			A.reg('docFileList', 'uapi/docFileListEms');
+			A.reg('docFileList', 'api/docFileListEms');
 		},
 		methods: {
 			turn: async function(page, offset) {
@@ -236,7 +236,7 @@
 			}
 		},
 		mounted: async function() {
-			A.reg('listFollow', 'uapi/listFollow');
+			A.reg('listFollow', 'api/listFollow');
 
 			// (function() {
 			// 	this.io.on('list', function(result) {

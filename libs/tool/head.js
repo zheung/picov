@@ -16,17 +16,17 @@ module.exports = function($) {
 			};
 
 			Request(option)
-			.on('response', function(response) {
-				if(response.statusCode != 200)
-					resolve(response.statusCode);
-				else
-					resolve(200);
-			})
-			.on('error', function(err) {
-				L(err);
+				.on('response', function(response) {
+					if(response.statusCode != 200)
+						resolve(response.statusCode);
+					else
+						resolve(200);
+				})
+				.on('error', function(err) {
+					L(err);
 
-				resolve(err);
-			});
+					resolve(err);
+				});
 		});
 	};
 };

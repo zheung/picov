@@ -37,8 +37,8 @@
 		},
 
 		created: function() {
-			A.reg('listFollow', 'uapi/listFollow');
-			A.reg('save', 'uapi/save');
+			A.reg('listFollow', 'api/listFollow');
+			A.reg('save', 'api/save');
 		},
 		mounted: async function() {
 			this.onQuery();

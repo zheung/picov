@@ -1,45 +1,43 @@
 module.exports = function($) {
-	let { A } = $;
+	let { A, DB } = $;
 
-	return {
-		m: async function(raw, db) {
-			let result, records;
+	return async function(raw) {
+		let result, records;
 
-			let coll = db.coll('illust');
+		let coll = DB.coll('illust');
 
-			try {
-				raw.i = raw.i.replace(/^AI/, '');
+		try {
+			raw.i = raw.i.replace(/^AI/, '');
 
-				records = await A.listAuthor(raw.i, raw.p);
+			records = await A.listAuthor(raw.i, raw.p);
 
-				result = {
-					s: true,
-					now: ~~raw.p,
-					mean: `作者：${records.name}`,
-					records: records
-				};
-
-				let stats = await coll.getStat(result.records);
-
-				result.records.map((r) => {
-					let stat = stats[r.iid];
-
-					if(stat) {
-						r.down = stats[r.iid].down;
-						r.ding = stats[r.iid].ding;
-					}
-				});
-			}
-			catch(e) {
-				L(e);
-
-				result = { s: false };
-			}
-
-			return {
-				success: true,
-				data: result
+			result = {
+				s: true,
+				now: ~~raw.p,
+				mean: `作者：${records.name}`,
+				records: records
 			};
+
+			let stats = await coll.getStat(result.records);
+
+			result.records.map((r) => {
+				let stat = stats[r.iid];
+
+				if(stat) {
+					r.down = stats[r.iid].down;
+					r.ding = stats[r.iid].ding;
+				}
+			});
 		}
+		catch(e) {
+			L(e);
+
+			result = { s: false };
+		}
+
+		return {
+			success: true,
+			data: result
+		};
 	};
 };

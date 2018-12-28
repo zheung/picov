@@ -80,7 +80,7 @@
 					ImageExtend: {
 						loading: true,
 						name: 'file',
-						action: 'uapi/platUpload',
+						action: 'api/platUpload',
 						response: (res) => {
 							return res.data[0];
 						}

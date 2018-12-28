@@ -1,34 +1,32 @@
 module.exports = function($) {
-	let { A } = $;
+	let { A, DB } = $;
 
-	return {
-		m: async function(raw, db) {
-			try {
-				let coll = db.coll('illust');
+	return async function(raw) {
+		try {
+			let coll = DB.coll('illust');
 
-				let result = await A.listSearch(raw.page);
+			let result = await A.listSearch(raw.page);
 
-				let stats = await coll.getStat(result);
+			let stats = await coll.getStat(result);
 
-				for(let illust of result) {
-					let stat = stats[illust.iid];
+			for(let illust of result) {
+				let stat = stats[illust.iid];
 
-					if(stat) {
-						illust.down = stats[illust.iid].down;
-						illust.ding = stats[illust.iid].ding;
-					}
-
-					illust.stat1 = '';
-					illust.stat2 = '';
+				if(stat) {
+					illust.down = stats[illust.iid].down;
+					illust.ding = stats[illust.iid].ding;
 				}
 
-				return result;
+				illust.stat1 = '';
+				illust.stat2 = '';
 			}
-			catch(e) {
-				L(e);
 
-				return { _stat: 3 };
-			}
+			return result;
+		}
+		catch(e) {
+			L(e);
+
+			return { _stat: 3 };
 		}
 	};
 };

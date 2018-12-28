@@ -1,5 +1,5 @@
 module.exports = function($) {
-	let { C, T, G, Bluebird } = $;
+	let { C, T, G, Bluebird, DB } = $;
 
 	let counted = { ding: 0, down: 0, fail: 0 };
 
@@ -109,66 +109,64 @@ module.exports = function($) {
 		await coll.updateOne(item);
 	};
 
-	return {
-		m: async function(option, db) {
-			try {
-				let iid = option.iid;
-				let force = option.force;
+	return async function(option) {
+		try {
+			let iid = option.iid;
+			let force = option.force;
 
-				let coll = db.coll('illust');
+			let coll = DB.coll('illust');
 
-				let item = await coll.getStatOne(iid);
+			let item = await coll.getStatOne(iid);
 
-				if(force) {
-					item.ding = false;
-					item.down = false;
-				}
-				else {
-					if(item.ding) {
-						return '正在下载';
-					}
-					else if(item.down) {
-						return '已经下载';
-					}
-				}
-
-				let stat = {
-					iid,
-
-					head: false,
-					count: -1,
-
-					retry: 0,
-
-					map: []
-				};
-
-				let info = JSON.parse(await T('get')(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
-
-				let count = ~~info.body[iid].illust_page_count;
-				let ext = info.body[iid].illust_ext;
-				let time = info.body[iid].url.big.match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0];
-
-				stat.count = count || 0;
-				stat.ext = ext;
-				stat.time = time;
-				stat.head = true;
-
-				let urls = [];
-				let pcount = 0;
-				while(pcount < count) {
-					urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
-				}
-
-				downMap(urls, stat, iid, ext, item, coll);
-
-				return '准备下载';
+			if(force) {
+				item.ding = false;
+				item.down = false;
 			}
-			catch(e) {
-				L(e);
-
-				return { _stat: 3 };
+			else {
+				if(item.ding) {
+					return '正在下载';
+				}
+				else if(item.down) {
+					return '已经下载';
+				}
 			}
+
+			let stat = {
+				iid,
+
+				head: false,
+				count: -1,
+
+				retry: 0,
+
+				map: []
+			};
+
+			let info = JSON.parse(await T('get')(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
+
+			let count = ~~info.body[iid].illust_page_count;
+			let ext = info.body[iid].illust_ext;
+			let time = info.body[iid].url.big.match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0];
+
+			stat.count = count || 0;
+			stat.ext = ext;
+			stat.time = time;
+			stat.head = true;
+
+			let urls = [];
+			let pcount = 0;
+			while(pcount < count) {
+				urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
+			}
+
+			downMap(urls, stat, iid, ext, item, coll);
+
+			return '准备下载';
+		}
+		catch(e) {
+			L(e);
+
+			return { _stat: 3 };
 		}
 	};
 };

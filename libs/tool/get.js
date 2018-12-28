@@ -1,6 +1,5 @@
-module.exports = function({ C, Request }) {
+module.exports = function({ G, C, Request }) {
 	return async function(path, type, isLog = false) {
-
 		return new Promise(function(resolve, reject) {
 			let option = {
 				url: path,
@@ -15,7 +14,7 @@ module.exports = function({ C, Request }) {
 			};
 
 			if(type == 1) {
-				if(isLog) L('请求', path);
+				if(isLog) { G.trace('请求', path); }
 
 				Request(option, function (error, response, buffer) {
 					if(error) {
@@ -26,18 +25,20 @@ module.exports = function({ C, Request }) {
 				});
 			}
 			else if(type == 2) {
-				if(isLog) L('代理', path);
+				if(isLog) { G.trace('代理', path); }
 
 				resolve(Request(option));
 			}
 			else if(type == 3) {
-				if(isLog) L('请求', path);
+				if(isLog) { G.trace('请求', path); }
 
 				Request(option, function (error, response, buffer) {
-					if(error)
+					if(error) {
 						reject(error);
-					else
+					}
+					else {
 						resolve(buffer.toString());
+					}
 				});
 			}
 		});

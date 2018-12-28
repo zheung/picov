@@ -66,7 +66,7 @@
 		},
 
 		mounted: async function() {
-			A.reg('login', 'uapi/login');
+			A.reg('login', 'api/login');
 		}
 	};
 </script>

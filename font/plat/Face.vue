@@ -86,10 +86,10 @@
 
 		created: function() {
 		// 注册接口
-			A.reg('procmProductList', 'uapi/procmProductList');
-			A.reg('procmProductAdd', 'uapi/procmProductAdd');
-			A.reg('procmProductMod', 'uapi/procmProductMod');
-			A.reg('procmProductDel', 'uapi/procmProductDel');
+			A.reg('procmProductList', 'api/procmProductList');
+			A.reg('procmProductAdd', 'api/procmProductAdd');
+			A.reg('procmProductMod', 'api/procmProductMod');
+			A.reg('procmProductDel', 'api/procmProductDel');
 
 		},
 		mounted: async function() {

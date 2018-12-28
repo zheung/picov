@@ -17,3 +17,6 @@ dist
 
 #.vscode
 .vscode
+
+#log
+logs

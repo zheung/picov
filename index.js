@@ -1,9 +1,16 @@
 module.exports = async function($) {
-	$.G.info('加载 [环境]');
+	// 应用环境
 	await require('./libs/init')($);
 
-	await $.st($.J('dist'), { defer: true });
+	$.RoutMap = {
+		before: [
+			require('./libs/middle/parseRaw'),
+		],
+		routs: [],
+	};
 
-	$.G.info('加载 [路由]');
-	await require('./libs/flow')($);
+	// 路由
+	await require('./libs/rout')($, $.RoutMap.routs);
+
+	await $.Harb($.RoutMap);
 };

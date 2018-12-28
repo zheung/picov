@@ -189,7 +189,7 @@
 				C.expandFocus = val != undefined ? val : !C.expandFocus;
 			},
 			onLogout: async function() {
-				A.reg('logout', 'uapi/logout');
+				A.reg('logout', 'api/logout');
 				await A.post('logout');
 
 				location.reload();
@@ -232,8 +232,8 @@
 		},
 
 		created: async function() {
-			A.reg('docPicoutList', 'uapi/docPicoutList');
-			A.reg('docPicoutMake', 'uapi/docPicoutMake');
+			A.reg('docPicoutList', 'api/docPicoutList');
+			A.reg('docPicoutMake', 'api/docPicoutMake');
 		},
 
 		mounted: async function() {
