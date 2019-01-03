@@ -7,6 +7,8 @@ window.Vue = Vue;
 import pubInit from './pub';
 import libInit from './lib';
 
+import cenInit from './center';
+
 import './css/index.css';
 import './css/extend.css';
 
@@ -15,22 +17,10 @@ let main = async function() {
 
 	let { Loader } = libInit();
 
+	cenInit();
+
 	try {
 		BUS.module = [{
-			'name': '图片中心',
-			'show': true,
-			'list': [{
-				'type': 'listFollow',
-				'name': '关注图片',
-				'only': true,
-				'show': true
-			}, {
-				'type': 'listSearch',
-				'name': '搜索图片',
-				'only': false,
-				'show': true
-			}]
-		},{
 			'name': '图片中心',
 			'show': true,
 			'list': [{

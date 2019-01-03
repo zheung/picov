@@ -14,9 +14,6 @@ module.exports = async function() {
 			}
 		}
 
-		raw.token = ctx.cookies.get('token', { signed: true }) || raw.token;
-		raw._ip = ctx.ip;
-
 		ctx.raw = raw;
 
 		ctx.access = true;

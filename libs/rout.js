@@ -11,7 +11,7 @@ module.exports = async function($ , routArr) {
 		{ id: 5, type: 1, method: 'get', entry: 'save', path: 'api/save', _stat: {} },
 	];
 
-	$.F = await require('../funcMap')($, C.path.back);
+	$.F = await require('./funcMap')($, C.path.back);
 	G.info('加载 [流程]');
 
 	for(let rout of routRaws) {
