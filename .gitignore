@@ -4,6 +4,8 @@ node_modules
 #No Real Config
 config.js
 config.json
+mark.js
+mark.json
 
 #No Picture Folder
 cache
