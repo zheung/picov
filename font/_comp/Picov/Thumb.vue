@@ -1,25 +1,70 @@
 <template>
-	<sPanel class="compThumb" :title="title" :class="border"
-		:titlecolor="titleColor"
-	>
-		<div
-			class="img"
-			:style="{ backgroundImage: 'url(api/thumb?iid='+illust.iid+'&time='+illust.time+'&type='+illust.type+')' }"
-			:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('；')}`"
+	<div class="compThumb" :class="border">
+		<sPanel class="spanel inline" :title="title" :titlecolor="titleColor"
+			@click.left.native="onSave()"
+			@click.right.prevent.native="onMenu"
 		>
+			<div
+				class="img"
+				:style="{ backgroundImage: 'url(api/thumb?iid='+illust.iid+'&time='+illust.time+'&type='+illust.type+')' }"
+				:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('; ')}`"
+			>
+			</div>
+			<div class="stat left" v-html="illust.statL"></div>
+			<div class="stat right" v-html="illust.statR"></div>
+		</sPanel>
+		<div class="menu inline" ref="menu" :class="{ left: !((index+1) % wrap) }" v-show="over" tabindex="45" @blur="over = false">
+			<div class="button" @click="onAuthor">作者</div>
+			<div class="button" @click="onSave()" >下载</div>
+			<div class="button" @click="onRid">排除</div>
 		</div>
-		<div class="stat left" v-html="illust.statL"></div>
-		<div class="stat right" v-html="illust.statR"></div>
-	</sPanel>
+	</div>
 </template>
 
 <script>
 	export default {
 		props: {
-			illust: { default: {} }
+			illust: { default: {} },
+			index: { default: {} },
+			wrap: { default: 5 }
 		},
 		data: function() {
-			return {};
+			return {
+				over: false
+			};
+		},
+
+		methods: {
+			onSave: function(event = {}, force = false) {
+				let { iid, count, type, time } = this.illust;
+
+				if(this.illust.type == 2) {
+					window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);
+				}
+				else if(event.altKey) {
+					this.onRid();
+				}
+				else {
+					W.cast('api/save', { iid, count, type, time, force: event.ctrlKey || force });
+				}
+			},
+			onMenu: function() {
+				this.over = true;
+
+				this.$nextTick(function() {
+					this.$refs.menu.focus();
+				}.bind(this));
+			},
+			onRid: function() {
+				this.$set(this.illust, 'rid', !this.illust.rid);
+			},
+			onAuthor: async function() {
+				BUS.changeAuthor(this.illust.uid, this.illust.user);
+			},
+		},
+
+		created: function() {
+			this.illust.onSave = this.onSave;
 		},
 
 		computed: {
@@ -66,9 +111,23 @@
 <style scoped>
 	.compThumb {
 		position: relative;
+
+		border: 2px solid #2e3235;
+		border-radius: 4px;
+
+		white-space: nowrap;
 	}
 
-	.compThumb>.img {
+	.spanel {
+		position: relative;
+
+		width: 100%;
+		height: 100%;
+
+		border-width: 0px;
+	}
+
+	.spanel>.img {
 		width: 100%;
 		height: calc(100% - 62px);
 
@@ -81,7 +140,7 @@
 		background-position: center center;
 	}
 
-	.compThumb>.stat {
+	.spanel>.stat {
 		position: absolute;
 
 		bottom: 5px;
@@ -89,10 +148,47 @@
 		color: lightgray;
 		font-size: 12px;
 	}
-	.compThumb>.stat.left {
+	.spanel>.stat.left {
 		left: 10px;
 	}
-	.compThumb>.stat.right {
+	.spanel>.stat.right {
 		right: 10px;
+	}
+
+	.menu {
+		position: absolute;
+		top: -2px;
+
+		width: 30px;
+		height: 100%;
+
+		border-radius: 0px 4px 4px 0px;
+		border: 2px solid #0185e6;
+
+		background: #0185e6;
+
+		outline: none;
+		z-index: 1;
+	}
+	.menu.left {
+		left: -30px;
+
+		border-radius: 4px 0px 0px 4px;
+	}
+
+	.menu>.button {
+		width: 100%;
+		height: 20px;
+
+		margin-bottom: 4px;
+
+		line-height: 20px;
+
+		color: snow;
+		font-size: 12px;
+		text-align: center;
+	}
+	.menu>.button:hover {
+		background: #0165af;
 	}
 </style>

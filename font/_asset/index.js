@@ -33,6 +33,11 @@ let main = async function() {
 				'name': '搜索图片',
 				'only': false,
 				'show': true
+			}, {
+				'type': 'listAuthor',
+				'name': '作者',
+				'only': false,
+				'show': false
 			}]
 		}];
 
@@ -169,13 +174,23 @@ let main = async function() {
 			changeSearch: async function(query) {
 				let modl = this.findTab('listSearch');
 
+				let tab = await this.changeTab(modl);
+
+				tab.name = '搜索: ' + query.word;
+
+				X.stat(`listSearch_${tab.time}`).data = query;
+				X.stat(`listSearch_${tab.time}`).tab = tab;
+			},
+			changeAuthor: async function(uid, user) {
+				let modl = this.findTab('listAuthor');
+
 				let views = X.comp('homeNavi').views;
 
 				if(modl.time) {
-					let dict = X.comp('listSearch').dict;
+					let dict = X.comp('listAuthor').dict;
 
 					for(let view of views) {
-						if(view.base == 'listSearch' && dict[view.time] && dict[view.time].id == query.id) {
+						if(view.base == 'listAuthor' && dict[view.time] == uid) {
 							this.changeTab(view);
 
 							return;
@@ -185,19 +200,24 @@ let main = async function() {
 
 				let tab = await this.changeTab(modl);
 
-				tab.name = '搜索: ' + query.word;
+				X.comp('listAuthor').dict[tab.time] = uid;
+				X.stat(`listAuthor_${tab.time}`).tab = tab;
 
-				// X.comp('listSearch').dict[tab.time] = query;
+				tab.name = '作者: ' + user;
 
-				X.stat(`listSearch_${tab.time}`).data = query;
-				X.stat(`listSearch_${tab.time}`).tab = tab;
+
+				X.stat(`listAuthor_${tab.time}`).uid = uid;
+				X.stat(`listAuthor_${tab.time}`).user = user;
+
 			}
 		},
 		mounted: async function() {
 			this.B.findTab = this.findTab;
 			this.B.changeTab = this.changeTab;
-			this.B.changeSearch = this.changeSearch;
 			this.B.closeTab = this.closeTab;
+
+			this.B.changeSearch = this.changeSearch;
+			this.B.changeAuthor = this.changeAuthor;
 		}
 	});
 };

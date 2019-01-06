@@ -2,42 +2,24 @@ module.exports = function($) {
 	let { A, DB } = $;
 
 	return async function(raw) {
-		let result, records;
-
 		let coll = DB.coll('illust');
 
-		try {
-			raw.i = raw.i.replace(/^AI/, '');
+		let result = await A.touch.listAuthor(raw);
 
-			records = await A.listAuthor(raw.i, raw.p);
+		let stats = await coll.getStat(result);
 
-			result = {
-				s: true,
-				now: ~~raw.p,
-				mean: `作者：${records.name}`,
-				records: records
-			};
+		for(let illust of result) {
+			let stat = stats[illust.iid];
 
-			let stats = await coll.getStat(result.records);
+			if(stat) {
+				illust.down = stats[illust.iid].down;
+				illust.ding = stats[illust.iid].ding;
+			}
 
-			result.records.map((r) => {
-				let stat = stats[r.iid];
-
-				if(stat) {
-					r.down = stats[r.iid].down;
-					r.ding = stats[r.iid].ding;
-				}
-			});
-		}
-		catch(e) {
-			L(e);
-
-			result = { s: false };
+			illust.stat1 = '';
+			illust.stat2 = '';
 		}
 
-		return {
-			success: true,
-			data: result
-		};
+		return result;
 	};
 };

@@ -4,7 +4,7 @@ module.exports = function($) {
 	return async function(raw) {
 		let coll = DB.coll('illust');
 
-		let result = await A.face.listSearch(raw);
+		let result = await A.touch.listSearch(raw);
 
 		let stats = await coll.getStat(result);
 

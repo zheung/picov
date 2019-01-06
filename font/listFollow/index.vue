@@ -15,10 +15,7 @@
 		</sTopbar>
 
 		<div class="thumbBox">
-			<pThumb class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`"
-				:illust="illust"
-				@click.native="onSave(illust, $event)"
-			></pThumb>
+			<pThumb class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`" :illust="illust" :index="illustIndex"></pThumb>
 		</div>
 	</div>
 </template>
@@ -40,8 +37,6 @@
 					mode: 'all',
 					smode: 's_tag_tc'
 				},
-
-				rids: new Set(),
 
 				B: BUS
 			};
@@ -70,8 +65,6 @@
 
 				this.$set(this, 'data', result);
 
-				this.rids.clear();
-
 				BUS.dictFollow = {};
 
 				let total = 0;
@@ -87,32 +80,10 @@
 				this.total = total;
 				this.undown = undown;
 			},
-			onSave: async function(illust, event, force) {
-				let { iid, count, type, time } = illust;
-
-				if(illust.type == 2) {
-					window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illust.iid}`);
-				}
-				else if(event.altKey) {
-					let rids = this.rids;
-
-					if(rids.has(illust)) {
-						rids.delete(illust);
-						this.$set(illust, 'rid', false);
-					}
-					else {
-						rids.add(illust);
-						this.$set(illust, 'rid', true);
-					}
-				}
-				else {
-					W.cast('api/save', { iid, count, type, time, force: event.ctrlKey || force });
-				}
-			},
-			onSaveAll: function(force = false) {
+			onSaveAll: function(force = false) {debugger
 				for(let illust of this.data) {
-					if(!this.rids.has(illust)) {
-						this.onSave(illust, {}, force);
+					if(!illust.rid && illust.onSave) {
+						illust.onSave({}, force);
 					}
 				}
 			}
