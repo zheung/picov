@@ -1,10 +1,13 @@
 <template>
 	<div class="compProcmProduct">
 		<sTopbar class="topbar">
-			<Texter class="onLeft" v-model="query.key" label="搜索" width="200" @keyup.enter.native="onQuery"></Texter>
-			<Combo class="onLeft" v-model="query.r18" :list="B.data.r18" width="60"></Combo>
-			<sButton class="onLeft" text="全部下载" @click="onSaveAll"></sButton>
+			<Texter class="onLeft" v-model="query.word" label="搜索" width="200" @keyup.enter.native="onQuery(1)"></Texter>
+			<Combo class="onLeft" v-model="query.mode" :list="B.data.mode" @input="onQuery(1)" width="60"></Combo>
+			<Combo class="onLeft" v-model="query.type" :list="B.data.itype" @input="onQuery(1)" width="60"></Combo>
+			<Combo class="onLeft" v-model="query.smode" :list="B.data.smode" @input="onQuery(1)" width="120"></Combo>
+			<sButton class="onLeft" text="全部下载" @click="onSaveAll(false)"></sButton>
 			<sButton class="onLeft" text="全部强制下载" @click="onSaveAll(true)"></sButton>
+			<div class="textBox inline onLeft">共 {{total}} ({{undown}}) 张</div>
 
 			<pPager class="onRight" v-model="query.page"
 				@keyup.enter.native="onQuery(query.page)" :onoffset="onQuery"
@@ -12,7 +15,10 @@
 		</sTopbar>
 
 		<div class="thumbBox">
-			<pThumb class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`" :illust="illust" @click.native="onSave(illust)" @click.ctrl.native="onSave(illust, true)"></pThumb>
+			<pThumb class="thumb inline" v-for="(illust, illustIndex) of data" :key="`thumb-${illustIndex}`"
+				:illust="illust"
+				@click.native="onSave(illust, $event)"
+			></pThumb>
 		</div>
 	</div>
 </template>
@@ -24,33 +30,31 @@
 				dict: {}
 			}, {
 				data: {},
+				tab: {},
 			}, {
-				inited: false,
-
-				device: {},
-				deConf: {
-					width: 210,
-					labelWidth: 80,
-					labelAlign: 'right',
-				},
-
 				data: [],
 
+				total: 0,
+				undown: 0,
+				// 和分页、筛选有关的可变的值
 				query: {
 					page: 1,
 
-					key: '',
-
-					r18: 0
+					word: '',
+					type: 'all',
+					mode: 'all',
+					smode: 's_tag_tc'
 				},
+
+				rids: new Set(),
 			});
 		},
 
 		created: function() {
 			A.reg('listSearch', 'api/listSearch');
-			A.reg('save', 'api/save');
 		},
 		mounted: async function() {
+			this.onQuery();
 		},
 
 		watch: {
@@ -72,67 +76,54 @@
 
 				let result = await A.conn('listSearch', this.query);
 
-				this.$set(this, 'data', result || []);
+				this.$set(this, 'data', result);
+
+				this.S.tab.name = '搜索: ' + this.query.word;
+
+				this.rids.clear();
+
+				BUS.dictSearch = {};
+
+				let total = 0;
+				let undown = 0;
+				for(let item of result) {
+					BUS.dictSearch[item.iid] = item;
+
+					total += item.count;
+
+					undown += item.down ? 0 : item.count;
+				}
+
+				this.total = total;
+				this.undown = undown;
 			},
-			onSave: async function(illust, force) {
-				let iid = illust.iid;
+			onSave: async function(illust, event, force) {
+				let { iid, count, type, time } = illust;
 
-				if(~~illust.ugoira) {
+				if(illust.type == 2) {
 					window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illust.iid}`);
-
-					return;
 				}
+				else if(event.altKey) {
+					let rids = this.rids;
 
-				let stat1 = await A.post('save', { iid, force });
-
-				if(stat1) {
-					this.$set(illust, 'stat1', stat1);
-
-					if(stat1 != '准备下载') {
-						return;
+					if(rids.has(illust)) {
+						rids.delete(illust);
+						this.$set(illust, 'rid', false);
+					}
+					else {
+						rids.add(illust);
+						this.$set(illust, 'rid', true);
 					}
 				}
-
-				WC.add(`save-${iid}`, 'listSearch', function(stat) {
-					let map = stat.map;
-					let count = stat.count;
-
-					let done = 0;
-					let percent = 0;
-
-					illust.ding = true;
-
-					for(let pstat of map) {
-						if(pstat.strt) {
-							if(pstat.down) {
-								++done;
-							}
-							else if(!pstat.ding) {
-								++done;
-							}
-						}
-
-						percent += pstat.percent || 0;
-
-						// L('	', pstat.pid, pstat.strt, pstat.ding, pstat.down, pstat.percent);
-					}
-
-					// L(iid, done, percent, Math.round(percent/count));
-
-					this.$set(illust, 'stat1', count < 0 ? '解析中' : `[${done}/${count}]`);
-					this.$set(illust, 'stat2', `${Math.round(percent/count)}%`);
-
-					if(done == count) {
-						WC.del(`save-${iid}`, 'listSearch');
-
-						illust.ding = false;
-						illust.down = true;
-					}
-				}.bind(this));
+				else {
+					W.cast('api/save', { iid, count, type, time, force: event.ctrlKey || force });
+				}
 			},
 			onSaveAll: function(force = false) {
 				for(let illust of this.data) {
-					this.onSave(illust, force);
+					if(!this.rids.has(illust)) {
+						this.onSave(illust, {}, force);
+					}
 				}
 			}
 		}
@@ -168,12 +159,15 @@
 	.thumb {
 		box-sizing: border-box;
 
-		width: calc(10% - 20px);
-		height: calc(25% - 11px);
+		width: calc(20% - 20px);
+		height: calc(33% - 11px);
 
 		margin: 0px 10px 10px 10px;
 
 		cursor: pointer;
+	}
+	.thumb.rid {
+		border-color: darkred;
 	}
 	.thumb.down {
 		border-color: darkgreen;
@@ -183,5 +177,11 @@
 	}
 	.thumb:hover {
 		border-color:#0185e6;
+	}
+
+	.textBox {
+		height: 22px;
+		padding: 0px 10px;
+		line-height: 22px;
 	}
 </style>

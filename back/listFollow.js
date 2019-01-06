@@ -4,7 +4,7 @@ module.exports = function($) {
 	return async function(raw) {
 		let coll = DB.coll('illust');
 
-		let result = await A.listFollow(raw.page);
+		let result = await A.face.listFollow(raw);
 
 		let stats = await coll.getStat(result);
 

@@ -46,27 +46,9 @@ let main = async function() {
 			B: window.BUS,
 
 			views: [],
-
-			isHover: false,
-			eve: {},
-
-			popa: {
-				opacity: 0,
-				top: 0,
-				left: 0
-			}
 		},
-		watch: {
-			isHover: function(now) {
-				if(now) {
-					this.popa.opacity = 0.8;
-					this.popa.top = (this.eve.clientY+5) + 'px';
-					this.popa.left = (this.eve.clientX+5) + 'px';
-				}
-				else {
-					this.popa.opacity = 0;
-				}
-			}
+		created: function() {
+			BUS.app = this;
 		},
 		computed: {
 			frameBoxClass: function() {
@@ -203,11 +185,12 @@ let main = async function() {
 
 				let tab = await this.changeTab(modl);
 
-				tab.name = '搜索：' + query.key;
+				tab.name = '搜索: ' + query.word;
 
-				X.comp('listSearch').dict[tab.time] = query;
+				// X.comp('listSearch').dict[tab.time] = query;
 
 				X.stat(`listSearch_${tab.time}`).data = query;
+				X.stat(`listSearch_${tab.time}`).tab = tab;
 			}
 		},
 		mounted: async function() {

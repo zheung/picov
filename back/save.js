@@ -1,34 +1,45 @@
 module.exports = function($) {
-	let { C, T, G, Bluebird, DB } = $;
+	let { G, C, T, Bluebird, DB } = $;
+
+	let { EventEmitter } = require('ws');
+
+	let fse = require('fs-extra');
 
 	let counted = { ding: 0, down: 0, fail: 0 };
 
-	let down = async function(url, pid, pstat, iid, ext) {
+	let down = async function(url, pid, pstat, iid, ext, wock) {
 		try {
 			++counted.ding;
-			pstat.strt = true;
-			pstat.ding = true;
 
-			let getStream = await T('get')(url, 2, false);
+			let getStream = (await T('get')(url, 2))
+				.on('response', function(res) {
+					pstat.total[pid] = ~~res.headers['content-length'];
+				})
+				.on('data', function(chunk) {
+					if(!pstat.passed[pid]) { pstat.passed[pid] = 0; }
+					pstat.passed[pid] += chunk.length;
+
+					pstat.calc(wock);
+				})
+				.on('error', function(error) {
+					throw error;
+				});
 
 			await new Promise(function(resolve, reject) {
 				try {
-					let total;
-					let passed = 0;
 					let fileName = `${iid}_p${pid}.${ext}`;
-					let tempPath = J(C.path.cache, 'large', fileName);
+					let tempPath = R(C.path.cache, 'large', fileName);
 
-					_fs.removeSync(tempPath);
+					fse.removeSync(tempPath);
 
-					let writeStream = _fs.createWriteStream(tempPath)
-						.on('drain', function() {
-							getStream.resume();
-						})
-						.on('finish', function() {
-							pstat.ding = false;
-							pstat.down = true;
-
-							_fs.moveSync(tempPath, J(C.path.large, fileName), { overwrite: true });
+					let saveStream = _fs.createWriteStream(tempPath)
+						.on('close', function() {
+							try {
+								fse.moveSync(tempPath, R(C.path.large, fileName), { overwrite: true });
+							}
+							catch(error) {
+								reject(error);
+							}
 
 							resolve();
 						})
@@ -36,26 +47,7 @@ module.exports = function($) {
 							reject(error);
 						});
 
-					if(getStream && getStream.pipe) {
-						getStream
-							.on('error', function(err) {
-								reject(err);
-							})
-							.on('response', function(res) {
-								total = ~~res.headers['content-length'];
-							})
-							.on('data', function(chunk) {
-								passed += chunk.length;
-
-								if(writeStream.write(chunk) == false)
-									getStream.pause();
-
-								pstat.percent = Math.round(passed * 100 / total);
-							})
-							.on('end', function() {
-								writeStream.end();
-							});
-					}
+					getStream.pipe(saveStream);
 				} catch (error) {
 					G.error(error);
 				}
@@ -63,40 +55,60 @@ module.exports = function($) {
 
 			return true;
 		} catch (err) {
-			G.error(err);
+			G.error(err.message);
 
 			return false;
 		}
 	};
 
-	let downMap = async function(urls, stat, iid, ext, item, coll) {
-		item.ding = true;
-		await coll.updateOne(item);
+	let downMap = async function(urls, iid, ext, item, coll, wock) {
+		let pstat = {
+			count: urls.length,
+
+			sizePost: false,
+
+			total: {},
+			passed: {},
+
+			calc: function(wock) {
+				let percent = 0;
+				let ready = 0;
+
+				for(let pid in pstat.passed) {
+					if(pstat.total[pid] > 0){
+						percent += (pstat.passed[pid] / pstat.total[pid]);
+						ready++;
+					}
+				}
+
+				if(ready++ && !pstat.sizePost) {
+					pstat.sizePost = true;
+
+					let size = 0;
+
+					for(let pid in pstat.total) {
+						size += pstat.total[pid];
+					}
+
+					wock.cast('stat', iid, 'statL', `下载 ${pstat.count}张 `+T('util').formatSize(size));
+				}
+
+				wock.cast('stat', iid, 'statR', Math.round(percent * 100 / pstat.count) +' %');
+			}
+		};
 
 		await Bluebird.map(urls, async function(info) {
-			let time = 0;
-			let retry = ~~C.retry;
+			let times = 0;
+			let retryMax = ~~C.retry;
 
 			let url = info[0];
 			let pid = info[1];
 
-			let pstat = stat.map[pid] = {
-				pid: info[1],
-
-				strt: false,
-				ding: false,
-				down: false,
-
-				percent: 0
-			};
-
-			while(!await down(url, pid, pstat, iid, ext) && time++ <= retry) {
+			while(!await down(url, pid, pstat, iid, ext, wock) && times++ <= retryMax) {
 				--counted.ding;
-
-				stat.retry = time;
 			}
 
-			if(time > retry) {
+			if(times > retryMax) {
 				++counted.fail;
 			}
 			else {
@@ -107,11 +119,17 @@ module.exports = function($) {
 		item.ding = false;
 		item.down = true;
 		await coll.updateOne(item);
+		wock.cast('stat', iid, 'ding', false);
+		wock.cast('stat', iid, 'down', true);
 	};
 
-	return async function(option) {
+	return async function(option, wock) {
+		if(!(wock instanceof EventEmitter) && wock) {
+			wock.cast = function() { };
+		}
+
 		try {
-			let iid = option.iid;
+			let {iid, count, time } = option;
 			let force = option.force;
 
 			let coll = DB.coll('illust');
@@ -124,34 +142,24 @@ module.exports = function($) {
 			}
 			else {
 				if(item.ding) {
-					return '正在下载';
+					return wock.cast('stat', iid, 'statL', '在下') || '在下';
 				}
 				else if(item.down) {
-					return '已经下载';
+					return wock.cast('stat', iid, 'statL', '已下') || '已下';
 				}
 			}
 
-			let stat = {
-				iid,
+			wock.cast('stat', iid, 'statL', '解析');
 
-				head: false,
-				count: -1,
+			let info = await T('get')(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 4);
 
-				retry: 0,
-
-				map: []
-			};
-
-			let info = JSON.parse(await T('get')(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 3));
-
-			let count = ~~info.body[iid].illust_page_count;
 			let ext = info.body[iid].illust_ext;
-			let time = info.body[iid].url.big.match(/(\d{4}\/)(\d{2}\/){4}(\d{2})/g)[0];
 
-			stat.count = count || 0;
-			stat.ext = ext;
-			stat.time = time;
-			stat.head = true;
+			item.ding = true;
+			await coll.updateOne(item);
+
+			wock.cast('stat', iid, 'ding', true);
+			wock.cast('stat', iid, 'statL', `下载 ${count}张`);
 
 			let urls = [];
 			let pcount = 0;
@@ -159,14 +167,12 @@ module.exports = function($) {
 				urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
 			}
 
-			downMap(urls, stat, iid, ext, item, coll);
+			await downMap(urls, iid, ext, item, coll, wock);
 
-			return '准备下载';
+			return wock.cast('stat', iid, 'statL', '完成') || '完成';
 		}
 		catch(e) {
-			L(e);
-
-			return { _stat: 3 };
+			G.error(`下载 [原图]: 错误, ${e.message}`);
 		}
 	};
 };

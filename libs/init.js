@@ -14,6 +14,8 @@ module.exports = async function($) {
 
 	$.B = {};
 
+	$.Moment = E.Moment;
+
 	$.A = await require('./funcMap')($, C.path.anlz);
 	G.info('加载 [解析]');
 

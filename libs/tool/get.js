@@ -41,6 +41,22 @@ module.exports = function({ G, C, Request }) {
 					}
 				});
 			}
+			else if(type == 4) {
+				if(isLog) { G.trace('请求', path); }
+
+				Request(option, function (error, response, buffer) {
+					if(error) {
+						reject(error);
+					}
+					else {
+						try {
+							resolve(JSON.parse(buffer.toString()));
+						} catch (error) {
+							G.error(`请求: 错误, 无法解析JSON. 路径: ${path}`);
+						}
+					}
+				});
+			}
 		});
 	};
 };

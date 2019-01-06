@@ -1,5 +1,5 @@
 module.exports = function($) {
-	let { R, C, T } = $;
+	let { G, C, R, T } = $;
 
 	let list = _fs.readdirSync(R(C.path.cache, 'thumb'));
 	let dict = {};
@@ -9,29 +9,30 @@ module.exports = function($) {
 	});
 
 	return async function(raw) {
-		let { iid, fr } = raw;
+		let { iid, type, force } = raw;
 
 		let path = R(C.path.cache, 'thumb', `${iid}.png`);
 
-		if(!dict[iid] || fr) {
-			let thumbStream = await T('get')(`https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~raw.ugoira ? '' : '_p0'}_master1200.jpg`, 2);
-			let cacheStream = _fs.createWriteStream(path);
+		if(!dict[iid] || force) {
+			let url = `https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~type == 2 ? '' : '_p0'}_master1200.jpg`;
+			let thumbStream = await T('get')(url, 2);
+
+			let saveStream = _fs.createWriteStream(path);
 
 			await new Promise(function(resolve) {
-				cacheStream.on('finish', function() {
+				saveStream.on('finish', function() {
 					dict[iid] = true;
-
 					resolve();
 				});
 
-				thumbStream.pipe(cacheStream);
+				thumbStream.pipe(saveStream);
 			});
 		}
 
 		return {
-			success: true,
-			mime: true,
-			data: [ path ]
+			_stat: 1,
+			_type: 'jpg',
+			_data: _fs.createReadStream(path)
 		};
 	};
 };

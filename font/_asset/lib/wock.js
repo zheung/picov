@@ -1,6 +1,28 @@
 
 export default function() {
-	let wock;
+	window.W = {
+		cast: function(type, ...data) {
+			W.wock.cast(type, ...data);
+		},
+
+		add: function(name, func) {
+			if(!name && !(func instanceof Function)) { return false; }
+
+			handDict[name] = func;
+		},
+		del: function(name) {
+			if(!name) { return false; }
+
+			delete handDict[name];
+		},
+		get: function(name) {
+			return handDict[name];
+		},
+		run: function(name, ...data) {
+			handDict[name](...data);
+		}
+	};
+
 
 	let ping = false;
 	let opening = false;
@@ -17,7 +39,7 @@ export default function() {
 		L('wock open by '+reason);
 
 		try {
-			wock = new WebSocket(`ws://${window.location.host}/wock`);
+			W.wock = new WebSocket(`ws://${window.location.host}/wock`);
 		}
 		catch (error) {
 			setTimeout(function() { open(`错误，${error.message}`); }, 4000);
@@ -44,15 +66,15 @@ export default function() {
 			setTimeout(function() { open('重连'); }, 4000);
 		};
 
-		wock.addEventListener('error', function() { closeHandle('错误'); });
-		wock.addEventListener('close', function() { closeHandle('关闭连接'); });
+		W.wock.addEventListener('error', function() { closeHandle('错误'); });
+		W.wock.addEventListener('close', function() { closeHandle('关闭连接'); });
 
-		wock.addEventListener('open', function() {
+		W.wock.addEventListener('open', function() {
 			opening = false;
 
-			wock.cast = function(type, ...data) {
+			W.wock.cast = function(type, ...data) {
 				try {
-					wock.send(JSON.stringify({ type, data }));
+					W.wock.send(JSON.stringify({ type, data }));
 				}
 				catch(error) {
 					if(error.message.indexOf('CLOSED') == -1) {
@@ -70,13 +92,13 @@ export default function() {
 				}
 
 				pingOut = setTimeout(function() {
-					wock.cast('ping');
+					W.wock.cast('ping');
 
 					timeOut = setTimeout(function() {
 						outCount++;
 
 						if(outCount >= 4) {
-							wock.close();
+							W.wock.close();
 						}
 						else {
 							check(false);
@@ -85,7 +107,7 @@ export default function() {
 				}, 10000);
 			};
 
-			wock.addEventListener('message', function(raw) {
+			W.wock.addEventListener('message', function(raw) {
 				if(ping) { check(); }
 
 				let event = {};
@@ -96,10 +118,10 @@ export default function() {
 
 				if(event.type && handDict[event.type]) {
 					if(event.data instanceof Array) {
-						handDict[event.type](wock, ...event.data);
+						handDict[event.type](W.wock, ...event.data);
 					}
 					else {
-						handDict[event.type](wock, event.data);
+						handDict[event.type](W.wock, event.data);
 					}
 				}
 			});
@@ -109,24 +131,4 @@ export default function() {
 	};
 
 	open('init');
-
-	window.W = {
-		wock,
-		add: function(name, func) {
-			if(!name && !(func instanceof Function)) { return false; }
-
-			handDict[name] = func;
-		},
-		del: function(name) {
-			if(!name) { return false; }
-
-			delete handDict[name];
-		},
-		get: function(name) {
-			return handDict[name];
-		},
-		run: function(name, ...data) {
-			handDict[name](...data);
-		}
-	};
 }
