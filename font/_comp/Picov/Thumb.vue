@@ -66,6 +66,11 @@
 		created: function() {
 			this.illust.onSave = this.onSave;
 		},
+		watch: {
+			illust: function(illust) {
+				illust.onSave = this.onSave;
+			}
+		},
 
 		computed: {
 			title: function() {

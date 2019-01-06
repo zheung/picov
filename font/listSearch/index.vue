@@ -96,7 +96,7 @@
 			},
 			onSaveAll: function(force = false) {
 				for(let illust of this.data) {
-					if(!illust.rid && illust.onSave) {
+					if(!illust.rid && !illust.ding && illust.onSave) {
 						illust.onSave({}, force);
 					}
 				}

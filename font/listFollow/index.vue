@@ -80,9 +80,9 @@
 				this.total = total;
 				this.undown = undown;
 			},
-			onSaveAll: function(force = false) {debugger
+			onSaveAll: function(force = false) {
 				for(let illust of this.data) {
-					if(!illust.rid && illust.onSave) {
+					if(!illust.rid && !illust.ding && illust.onSave) {
 						illust.onSave({}, force);
 					}
 				}
