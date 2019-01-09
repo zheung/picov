@@ -52,7 +52,7 @@ let main = async function() {
 
 			views: [],
 		},
-		created: function() {
+		created: async function() {
 			BUS.app = this;
 		},
 		computed: {
@@ -176,7 +176,7 @@ let main = async function() {
 
 				let tab = await this.changeTab(modl);
 
-				tab.name = '搜索: ' + query.word;
+				tab.name = '搜索: ' + (query.title || query.word);
 
 				X.stat(`listSearch_${tab.time}`).data = query;
 				X.stat(`listSearch_${tab.time}`).tab = tab;

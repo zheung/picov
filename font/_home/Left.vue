@@ -4,13 +4,13 @@
 			<div class="topButton trans func" :class="{ hover: C.listShow=='module' }" @click="C.listShow='module'">
 				<Fas icon="home" /> 功能
 			</div>
-			<div class="topButton trans station" :class="{ hover: C.listShow=='device' }" @click="C.listShow='device'">
+			<div class="topButton trans station" :class="{ hover: C.listShow=='mark' }" @click="C.listShow='mark'">
 				<Fas icon="map-marker-alt" /> 收藏
 			</div>
 			<div class="hrline"></div>
 			<Scroll class="naviList trans" :style="{ left: (C.listShow=='module'? 10: -270)+'px'}">
 				<li class="listItem" :class="{ opened: C.expandTop.module == listIndex }"
-					v-for="(sub1, listIndex) of B.module" :key="'naviSub-module-'+listIndex" v-if="sub1.show"
+					v-for="(sub1, listIndex) of B.module" :key="'naviSub-module-'+listIndex"
 				>
 					<div class="top1 trans" :class="{ opened: C.expandTop.module == listIndex }"
 						:title="sub1.name" @click="expandSub('module', listIndex)"
@@ -24,10 +24,31 @@
 						:title="sub2.name"
 						class="top2 trans"
 						:class="{ show: C.expandTop.module == listIndex }"
-						v-if="sub2.show"
 						@click="B.changeTab(sub2)"
 					>
 						<span :style="{ color: C.expandTop.module == listIndex ? 'lightgray' : 'gray' }">● </span>{{sub2.name}}
+					</div>
+				</li>
+			</Scroll>
+			<Scroll class="naviList trans" :style="{ left: (C.listShow=='mark'? 10: -270)+'px'}">
+				<li class="listItem" :class="{ opened: true }"
+					v-for="(sub1, listIndex) of B.mark" :key="'naviSub-mark-'+listIndex"
+				>
+					<div class="top1 trans" :class="{ opened: true }"
+						:title="listIndex" @click="expandSub('mark', listIndex)"
+					>
+						<div class="top1Name">
+							 {{listIndex}}
+						</div>
+						<Fas :icon="true ? 'caret-up' : 'caret-down'" class="expand" />
+					</div>
+					<div v-for="(sub2, listIndex2) of sub1" :key="'naviSub-mark2-'+listIndex2"
+						:title="sub2[0]"
+						class="top2 trans"
+						:class="{ show: true }"
+						@click="B.changeSearch({ title: sub2[0], word: sub2[1], page: 1 })"
+					>
+						<span :style="{ color: true ? 'lightgray' : 'gray' }">● </span>{{sub2[0]}}
 					</div>
 				</li>
 			</Scroll>
@@ -42,20 +63,12 @@
 </template>
 
 <script>
-	import { debounce } from 'lodash';
-
 	export default {
 		data: function() {
 			let expandTop = {
 				module: 0,
-				device: 1
+				mark: 1
 			};
-
-			let proj = BUS.device[0];
-
-			if(proj) {
-				expandTop.device = proj.id;
-			}
 
 			return X.init(this.$options._componentTag,
 				{
@@ -78,7 +91,7 @@
 					keyword: '',
 					keynow: -1,
 
-					projList: BUS.device,
+					projList: BUS.mark,
 
 					debcKeyword: {
 						dirty: false,
@@ -124,58 +137,7 @@
 			onKeywordBlur: function() {
 				this.C.keywordFocus = false;
 			},
-			onContext: function(device, project, event) {
-				let output = [];
-				for(let tmpl of this.tmplList) {
-					output.push({
-						name: tmpl.title,
-						align: 'left',
 
-						list: [{
-							name: '一键导出',
-
-							data: {
-								tmplID: tmpl.id,
-								project: project,
-								device: device,
-							},
-							handler: this.onPicMake
-						}, {
-							name: '修改内容',
-
-							data: {
-								tmplID: tmpl.id,
-								project: project,
-								device: device,
-							},
-							handler: this.onPicModify
-						}]
-					});
-				}
-
-				X.menu([{
-					name: '图片导出',
-					list: output
-				}], event);
-			},
-			onPicMake: async function(data) {
-				A.jump('docPicoutMake', {
-					tmpl: data.tmplID,
-					project: data.project.id,
-					device: data.device.id
-				});
-			},
-			onPicModify: async function(data) {
-				await this.B.changeTab(this.B.findTab('docpicout'));
-
-				this.$nextTick(function() {
-					let comp = X.comp('docPicout');
-
-					comp.tmplID = data.tmplID;
-					comp.project = data.project;
-					comp.device = data.device;
-				});
-			},
 
 			expandSub: function(listKey, listIndex) {
 				this.$set(this.C.expandTop, listKey, listIndex);
@@ -188,52 +150,13 @@
 
 				C.expandFocus = val != undefined ? val : !C.expandFocus;
 			},
-			onLogout: async function() {
-				A.reg('logout', 'api/logout');
-				await A.post('logout');
 
-				location.reload();
-			},
 
-			debcKeywordFunc: debounce(function () {
-				this.debcKeyword.calc = true;
-
-				let projDict = {};
-
-				// let projs = [];
-				// let devs = [];
-
-				for(let proj of this.B.device) {
-					for(let dev of proj.list) {
-						if(dev.name.indexOf(this.keyword)+1 || (/^\d+$/.test(this.keyword) && dev.id == ~~this.keyword )) {
-							let projNew = projDict[proj.id] || (projDict[proj.id] = {
-								id: proj.id,
-								name: proj.name,
-								show: proj.show,
-								status: proj.status,
-								list: []
-							});
-
-							projNew.list.push(dev);
-						}
-					}
-				}
-
-				this.projList = Object.values(projDict);
-
-				if(this.projList.length) {
-					this.C.expandTop.device = this.projList[0].id;
-				}
-
-				this.debcKeyword.calc = false;
-				this.debcKeyword.dirty = false;
-
-			}, 500)
 		},
 
 		created: async function() {
-			A.reg('docPicoutList', 'api/docPicoutList');
-			A.reg('docPicoutMake', 'api/docPicoutMake');
+			A.reg('mark', 'api/mark');
+			BUS.mark = await A.conn('mark');
 		},
 
 		mounted: async function() {
@@ -246,7 +169,7 @@
 
 				await B.changeTab(B.findTab(homeType));
 
-				if(hash && hash != homeType && hash != 'docpicout') {
+				if(hash && hash != homeType) {
 					await B.changeTab(B.findTab(hash));
 				}
 			});
@@ -499,7 +422,7 @@
 		cursor: pointer;
 	}
 
-	.naviList.device {
+	.naviList.mark {
 		top: 80px;
 		height: calc(100% - 120px);
 

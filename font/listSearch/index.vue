@@ -75,7 +75,7 @@
 
 				this.$set(this, 'data', result);
 
-				this.S.tab.name = '搜索: ' + this.query.word;
+				this.S.tab.name = '搜索: ' + (this.query.title || this.query.word);
 
 				this.rids.clear();
 
