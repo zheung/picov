@@ -18,6 +18,10 @@ module.exports = function({ T }) {
 		let result = [];
 
 		for(let item of odd.body.illusts) {
+			if(item.is_ad_container) {
+				continue;
+			}
+
 			result.push(formatItem(item));
 		}
 
