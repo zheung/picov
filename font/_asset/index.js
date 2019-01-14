@@ -38,6 +38,11 @@ let main = async function() {
 				'name': '作者',
 				'only': false,
 				'show': false
+			}, {
+				'type': 'player',
+				'name': '播放测试',
+				'only': true,
+				'show': true
 			}]
 		}];
 
