@@ -70,6 +70,8 @@ module.exports = function($) {
 			total: {},
 			passed: {},
 
+			totalSum: '',
+
 			calc: function(wock) {
 				let percent = 0;
 				let ready = 0;
@@ -81,7 +83,7 @@ module.exports = function($) {
 					}
 				}
 
-				if(ready++ && !pstat.sizePost) {
+				if(ready == pstat.count && !pstat.sizePost) {
 					pstat.sizePost = true;
 
 					let size = 0;
@@ -90,7 +92,9 @@ module.exports = function($) {
 						size += pstat.total[pid];
 					}
 
-					wock.cast('stat', iid, 'statL', `下载 ${pstat.count}张 `+T('util').formatSize(size));
+					pstat.totalSum = T('util').formatSize(size);
+
+					wock.cast('stat', iid, 'statL', `下载 ${pstat.count}张[${pstat.totalSum}]`);
 				}
 
 				wock.cast('stat', iid, 'statR', Math.round(percent * 100 / pstat.count) +' %');
@@ -121,6 +125,8 @@ module.exports = function($) {
 		await coll.updateOne(item);
 		wock.cast('stat', iid, 'ding', false);
 		wock.cast('stat', iid, 'down', true);
+
+		return pstat;
 	};
 
 	return async function(option, wock) {
@@ -167,9 +173,9 @@ module.exports = function($) {
 				urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
 			}
 
-			await downMap(urls, iid, ext, item, coll, wock);
+			let pstat = await downMap(urls, iid, ext, item, coll, wock);
 
-			return wock.cast('stat', iid, 'statL', '完成') || '完成';
+			return wock.cast('stat', iid, 'statL', `完成[${pstat.totalSum}]`) || '完成';
 		}
 		catch(e) {
 			G.error(`下载 [原图]: 错误, ${e.message}`);
