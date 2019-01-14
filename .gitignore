@@ -1,24 +1,24 @@
 #Node Modules Folder
-node_modules
+/node_modules
 
 #No Real Config
-config.js
-config.json
-mark.js
-mark.json
+/config.js
+/config.json
+/mark.js
+/mark.json
 
 #No Picture Folder
-cache
-save
+/cache
+/save
 
 #Auth
-.auth.js
+/.auth.js
 
 #Dist
-dist
+/dist
 
 #.vscode
-.vscode
+/.vscode
 
 #log
-logs
+/logs
