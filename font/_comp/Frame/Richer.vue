@@ -81,7 +81,7 @@
 						loading: true,
 						name: 'file',
 						action: 'api/platUpload',
-						response: (res) => {
+						response: function(res) {
 							return res.data[0];
 						}
 					},

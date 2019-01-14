@@ -3,7 +3,7 @@
 - 根据作者的习惯制作
 ##
 - 本质是一个服务器程序，可运行在本地或远程服务器上
-- 因为HTML容易制作UI界面，所以选择了B/S模式，使用Vue+Flex布局搭建
+- 因为HTML容易制作UI界面，所以选择了B/S模式，使用Vue搭建界面
 ##
 - 如果我的习惯成为了你的习惯，是我的荣幸
 - 如果我的习惯就是你的习惯，是你我的缘分
@@ -23,7 +23,7 @@ $ cd 代码目录
 ```
 $ npm i
 ```
-4. 复制`config_default.js`为`config.js`，填写你的配置（注意格式，和保证图片目录已创建）
+4. 复制`config_default.js`为`config.js`，填写你的配置（注意格式）
 ```javascript
 module.exports = {
 	cookie: 'Your PHPSESSID',

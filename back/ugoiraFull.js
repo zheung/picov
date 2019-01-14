@@ -1,20 +1,21 @@
 module.exports = function($) {
 	let { C, R, T } = $;
 
-	let list = _fs.readdirSync(R(C.path.cache, 'thumb'));
+	let list = _fs.readdirSync(R(C.path.cache, 'ugoira'));
 	let dict = {};
 
 	list.map(function(file) {
-		dict[file.split('.')[0]] = true;
+		dict[file.split('_')[0]] = true;
 	});
 
-	return async function(raw) {
-		let { iid, type, force } = raw;
+	return async function(raw, ctx) {
+		let { iid, time, force } = raw;
 
-		let path = R(C.path.cache, 'thumb', `${iid}.png`);
+		let path = R(C.path.cache, 'ugoira', `${iid}_ugoira1920x1080.zip`);
 
 		if(!dict[iid] || force) {
-			let url = `https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~type == 2 ? '' : '_p0'}_master1200.jpg`;
+			let url = `https://i.pximg.net/img-zip-ugoira/img/${time}/${iid}_ugoira1920x1080.zip`;
+			L(url);
 			let thumbStream = await T('get')(url, 2);
 
 			let saveStream = _fs.createWriteStream(path);
@@ -29,9 +30,11 @@ module.exports = function($) {
 			});
 		}
 
+		ctx.attachment(`${iid}_ugoira1920x1080.zip`);
+
 		return {
 			_stat: 1,
-			_type: 'jpg',
+			_type: 'zip',
 			_data: _fs.createReadStream(path)
 		};
 	};

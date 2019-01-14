@@ -1,4 +1,4 @@
-module.exports = async(dbinfo) => {
+module.exports = async function(dbinfo, G) {
 	let connect;
 
 	if(!connect) {
@@ -28,16 +28,16 @@ module.exports = async(dbinfo) => {
 				return funcDict[collName] = (function(coll) {
 					return {
 						coll,
-						find: async(query) => {
+						find: async function(query) {
 							return coll.find(query);
 						},
-						drop: async() => {
+						drop: async function() {
 							return await coll.drop();
 						},
-						insert: async(arr) => {
+						insert: async function(arr) {
 							return await coll.insertMany(arr);
 						},
-						renew: async(arr) => {
+						renew: async function(arr) {
 							try {
 								await coll.drop();
 							}
@@ -48,7 +48,7 @@ module.exports = async(dbinfo) => {
 							return await coll.insertMany(arr);
 						},
 					// Only for Project Picov
-						getStat: async(recos) => {
+						getStat: async function(recos) {
 							let arr = [];
 
 							for(let reco of recos) {
@@ -67,7 +67,7 @@ module.exports = async(dbinfo) => {
 
 							return result;
 						},
-						getStatByIds: async(ids) => {
+						getStatByIds: async function(ids) {
 							let raw = await coll.find(
 								{ iid: { $in: ids } },
 								{ projection: { iid: 1, down: 1, ding: 1 } }
@@ -81,7 +81,7 @@ module.exports = async(dbinfo) => {
 
 							return result;
 						},
-						getStatOne: async(iid) => {
+						getStatOne: async function(iid) {
 							let result = await coll.find(
 								{ iid: ~~iid },
 								{ projection: { iid: 1, down: 1, ding: 1 } }
@@ -90,7 +90,7 @@ module.exports = async(dbinfo) => {
 
 							return result[0] || { iid: ~~iid };
 						},
-						updateOne: async(iilust) => {
+						updateOne: async function(iilust) {
 							let result;
 
 							delete iilust._id;

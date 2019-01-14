@@ -11,6 +11,7 @@ module.exports = async function($) {
 	$.FsExtra.ensureDirSync(R($.C.path.large));
 	$.FsExtra.ensureDirSync(R($.C.path.cache, 'large'));
 	$.FsExtra.ensureDirSync(R($.C.path.cache, 'thumb'));
+	$.FsExtra.ensureDirSync(R($.C.path.cache, 'ugoira'));
 
 	$.B = {};
 
@@ -20,7 +21,7 @@ module.exports = async function($) {
 	G.info('加载 [解析]');
 
 	let auth = require('../.auth');
-	$.DB = await require('./mongo')(auth.picov);
+	$.DB = await require('./mongo')(auth.picov, G);
 
 	G.info('加载 [环境]');
 };
