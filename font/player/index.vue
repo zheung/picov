@@ -1,6 +1,6 @@
 <template>
 	<div class="pic">
-		<canvas class="piccan" ref= "can"></canvas>
+		<canvas class="piccan" @click="pp" ref= "can"></canvas>
 	</div>
 </template>
 
@@ -10,6 +10,7 @@
 			return {
 				current: 0,
 				timeout: 0,
+				loaded: 0,
 				frames: [
 					{ file: '000000.jpg', delay: 50 }, { file: '000001.jpg', delay : 50 },
 					{ file: '000002.jpg', delay: 50 }, { file: '000003.jpg', delay : 50 },
@@ -42,43 +43,63 @@
 		},
 
 		methods: {
-			nextFrame: function() {
+			pp: function() {
+				if(this.timeout) {
+					clearTimeout(this.timeout);
 
+					this.timeout = 0;
+				}
+				else {
+					this.playFrame(this.current);
+				}
+			},
+			nextFrame: function(frame) {
+				this.current = frame.index;
+
+				if(frame.pic) {
+					this.loadPic(frame.pic);
+				}
+
+				this.timeout = setTimeout(frame.loaded, frame.delay);
 			},
 			playFrame: function(nowPos = 0) {
-				let nxtPos = nowPos+1;
-
 				if(nowPos >= this.frames.length) {
 					nowPos = 0;
-					nxtPos = 1;
-				}
-				else if(nxtPos >= this.frames.length) {
-					nxtPos = 0;
 				}
 
 				let now = this.frames[nowPos];
-				let nxt = this.frames[nxtPos];
 
-				this.loadPic(now.pic);
+				if(this.loaded >= this.frames.length) {
+					clearTimeout(this.timeout);
 
-				this.timeout = setTimeout(function() {
-					if(now.loaded) {
-						this.playFrame(nowPos+1);
-					}
-					else {
-						let wait = setInterval(function() {
-							if(nxt.loaded) {
-								clearInterval(wait);
+					this.nextFrame(now);
+				}
+				else {
+					this.current = nowPos;
 
-								this.playFrame(nxtPos);
-							}
-						}.bind(this), 10);
+					this.loadPic(now.pic);
 
-					}
-				}.bind(this), now.delay);
+					this.timeout = setTimeout(function() {
+						if(now.loaded) {
+							this.playFrame(nowPos+1);
+						}
+						else {
+							let wait = setInterval(function() {
+								if(now.next.loaded) {
+									clearInterval(wait);
+
+									this.playFrame(now.next.index);
+								}
+							}.bind(this), 10);
+						}
+					}.bind(this), now.delay);
+				}
+
+
 			},
 			loadPic: function(pic) {
 				let ctx = this.$refs.can.getContext('2d');
+
 				ctx.canvas.width = pic.width;
 				ctx.canvas.height = pic.height;
 
@@ -86,20 +107,33 @@
 				ctx.drawImage(pic, 0, 0);
 			},
 			initPlayer: function() {
-				for(let frame of this.frames) {
+				let frames = this.frames;
+				let prev = frames[frames.length - 1];
+				let index = 0;
+
+				for(let frame of frames) {
+					prev.next = frame;
+					prev = frame;
+
+					frame.index = index++;
+
 					let pic = frame.pic = new Image();
 
 					pic.src = `tset/${frame.file}`;
 
-					pic.onload = function() {
-						frame.loaded = true;
-					};
+					pic.addEventListener('load', function() {
+						this.loaded++;
 
-					if(this.frames[0] === frame) {
-						pic.onload = function() {
-							L('initPlay');
-							this.playFrame();
+						frame.loaded = function() {
+							this.nextFrame(frame.next);
 						}.bind(this);
+					}.bind(this));
+
+					if(frames[0] === frame) {
+						pic.addEventListener('load', function() {
+							L('first');
+							this.playFrame();
+						}.bind(this));
 					}
 				}
 			}
@@ -109,6 +143,10 @@
 
 <style scoped>
 	.piccan {
-		max-width: 200px;
+		position: relative;
+
+		top: 20px;
+
+		max-width: 400px;
 	}
 </style>
