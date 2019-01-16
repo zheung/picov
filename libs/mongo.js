@@ -56,8 +56,7 @@ module.exports = async function(dbinfo, G) {
 							}
 
 							let raw = await coll.find(
-								{ iid: { $in: arr } },
-								{ projection: { iid: 1, down: 1, ding: 1 } }
+								{ iid: { $in: arr } }
 							).toArray();
 
 							let result = {};
@@ -69,8 +68,7 @@ module.exports = async function(dbinfo, G) {
 						},
 						getStatByIds: async function(ids) {
 							let raw = await coll.find(
-								{ iid: { $in: ids } },
-								{ projection: { iid: 1, down: 1, ding: 1 } }
+								{ iid: { $in: ids } }
 							)
 								.toArray();
 
@@ -83,8 +81,7 @@ module.exports = async function(dbinfo, G) {
 						},
 						getStatOne: async function(iid) {
 							let result = await coll.find(
-								{ iid: ~~iid },
-								{ projection: { iid: 1, down: 1, ding: 1 } }
+								{ iid: ~~iid }
 							)
 								.toArray();
 

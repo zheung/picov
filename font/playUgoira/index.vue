@@ -1,45 +1,40 @@
 <template>
 	<div class="pic">
-		<canvas class="piccan" @click="pp" ref= "can"></canvas>
+		<canvas class="piccan" @click="pp" ref= "can" :style="{ left: `calc(50% - ${width/2}px)`, top: `calc(50% - ${height/2}px)` }"></canvas>
 	</div>
 </template>
 
 <script>
 	export default {
 		data: function() {
-			return {
+			return X.init(this.$options._componentTag, {
+				dict: {}
+			}, {
+				tab: {},
+
+				illust: {}
+			}, {
+				width: 0,
+				height: 0,
+
 				current: 0,
+
 				timeout: 0,
+				interval: 0,
+
 				loaded: 0,
-				frames: [
-					{ file: '000000.jpg', delay: 50 }, { file: '000001.jpg', delay : 50 },
-					{ file: '000002.jpg', delay: 50 }, { file: '000003.jpg', delay : 50 },
-					{ file: '000004.jpg', delay: 50 }, { file: '000005.jpg', delay : 50 },
-					{ file: '000006.jpg', delay: 50 }, { file: '000007.jpg', delay : 50 },
-					{ file: '000008.jpg', delay: 50 }, { file: '000009.jpg', delay : 50 },
-					{ file: '000010.jpg', delay: 50 }, { file: '000011.jpg', delay : 50 },
-					{ file: '000012.jpg', delay: 50 }, { file: '000013.jpg', delay : 50 },
-					{ file: '000014.jpg', delay: 50 }, { file: '000015.jpg', delay : 50 },
-					{ file: '000016.jpg', delay: 50 }, { file: '000017.jpg', delay : 50 },
-					{ file: '000018.jpg', delay: 50 }, { file: '000019.jpg', delay : 50 },
-					{ file: '000020.jpg', delay: 50 }, { file: '000021.jpg', delay : 50 },
-					{ file: '000022.jpg', delay: 50 }, { file: '000023.jpg', delay : 50 },
-					{ file: '000024.jpg', delay: 50 }, { file: '000025.jpg', delay : 50 },
-					{ file: '000026.jpg', delay: 50 }, { file: '000027.jpg', delay : 50 },
-					{ file: '000028.jpg', delay: 50 }, { file: '000029.jpg', delay : 50 },
-					{ file: '000030.jpg', delay: 50 }, { file: '000031.jpg', delay : 50 },
-					{ file: '000032.jpg', delay: 50 }, { file: '000033.jpg', delay : 50 },
-					{ file: '000034.jpg', delay: 50 }, { file: '000035.jpg', delay : 50 },
-					{ file: '000036.jpg', delay: 50 }, { file: '000037.jpg', delay : 50 },
-					{ file: '000038.jpg', delay: 50 }, { file: '000039.jpg', delay : 50 }
-				]
-			};
+				frames: []
+			});
 		},
 
 		created: function() {
+			A.reg('api/infoUgoira', 'api/infoUgoira');
 		},
-		mounted: async function() {
-			this.initPlayer();
+
+		watch: {
+			'S.illust': async function(now) {
+				this.initPlayer(now);
+			}
 		},
 
 		methods: {
@@ -84,9 +79,9 @@
 							this.playFrame(nowPos+1);
 						}
 						else {
-							let wait = setInterval(function() {
+							this.interval = setInterval(function() {
 								if(now.next.loaded) {
-									clearInterval(wait);
+									clearInterval(this.interval);
 
 									this.playFrame(now.next.index);
 								}
@@ -94,20 +89,25 @@
 						}
 					}.bind(this), now.delay);
 				}
-
-
 			},
 			loadPic: function(pic) {
 				let ctx = this.$refs.can.getContext('2d');
 
-				ctx.canvas.width = pic.width;
-				ctx.canvas.height = pic.height;
+				this.width = ctx.canvas.width = pic.width;
+				this.height = ctx.canvas.height = pic.height;
 
 				ctx.clearRect(0, 0, pic.width, pic.height);
 				ctx.drawImage(pic, 0, 0);
 			},
-			initPlayer: function() {
-				let frames = this.frames;
+			initPlayer: function(illust) {
+				clearInterval(this.timeout);
+				clearInterval(this.interval);
+				this.loader = 0;
+				this.current = 0;
+				let frames = this.frames = illust.frames;
+
+				let iid = illust.iid;
+
 				let prev = frames[frames.length - 1];
 				let index = 0;
 
@@ -119,7 +119,7 @@
 
 					let pic = frame.pic = new Image();
 
-					pic.src = `tset/${frame.file}`;
+					pic.src = `large/${iid}/${frame.file}`;
 
 					pic.addEventListener('load', function() {
 						this.loaded++;
@@ -145,8 +145,7 @@
 	.piccan {
 		position: relative;
 
-		top: 20px;
-
-		max-width: 400px;
+		max-width: 100%;
+		max-height: 100%;
 	}
 </style>

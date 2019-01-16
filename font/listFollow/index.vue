@@ -32,7 +32,7 @@
 				query: {
 					page: 1,
 
-					word: '',
+					word: 'ugoira',
 					type: 'all',
 					mode: 'all',
 					smode: 's_tag_tc'
@@ -65,12 +65,31 @@
 
 				this.$set(this, 'data', result);
 
-				BUS.dictFollow = {};
-
 				let total = 0;
 				let undown = 0;
+
 				for(let item of result) {
-					BUS.dictFollow[item.iid] = item;
+					let stat = BUS.dictIllust[item.iid];
+
+					if(!stat) {
+						this.$set(BUS.dictIllust,item.iid, stat = {
+							statL: '',
+							statR: '',
+
+							rid: false,
+
+							ding: false,
+							down: false,
+
+							frames: []
+						});
+					}
+
+					item.stat = stat;
+
+					stat.ding = item.ding;
+					stat.down = item.down;
+					stat.frames = item.frames || [];
 
 					total += item.count;
 
@@ -82,7 +101,7 @@
 			},
 			onSaveAll: function(force = false) {
 				for(let illust of this.data) {
-					if(!illust.rid && !illust.ding && illust.onSave) {
+					if(!illust.stat.rid && !illust.stat.ding && illust.onSave) {
 						illust.onSave({}, force);
 					}
 				}

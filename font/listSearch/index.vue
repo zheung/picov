@@ -42,16 +42,11 @@
 					mode: 'all',
 					smode: 's_tag_tc'
 				},
-
-				rids: new Set(),
 			});
 		},
 
 		created: function() {
 			A.reg('listSearch', 'api/listSearch');
-		},
-		mounted: async function() {
-			this.onQuery();
 		},
 
 		watch: {
@@ -77,14 +72,31 @@
 
 				this.S.tab.name = '搜索: ' + (this.query.title || this.query.word);
 
-				this.rids.clear();
-
-				BUS.dictSearch = {};
-
 				let total = 0;
 				let undown = 0;
+
 				for(let item of result) {
-					BUS.dictSearch[item.iid] = item;
+					let stat = BUS.dictIllust[item.iid];
+
+					if(!stat) {
+						this.$set(BUS.dictIllust,item.iid, stat = {
+							statL: '',
+							statR: '',
+
+							rid: false,
+
+							ding: false,
+							down: false,
+
+							frames: []
+						});
+					}
+
+					item.stat = stat;
+
+					stat.ding = item.ding;
+					stat.down = item.down;
+					stat.frames = item.frames || [];
 
 					total += item.count;
 
@@ -96,7 +108,7 @@
 			},
 			onSaveAll: function(force = false) {
 				for(let illust of this.data) {
-					if(!illust.rid && !illust.ding && illust.onSave) {
+					if(!illust.stat.rid && !illust.stat.ding && illust.onSave) {
 						illust.onSave({}, force);
 					}
 				}

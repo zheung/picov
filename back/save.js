@@ -4,10 +4,11 @@ module.exports = function($) {
 	let { EventEmitter } = require('ws');
 
 	let fse = require('fs-extra');
+	let unzip = require('unzip');
 
 	let counted = { ding: 0, down: 0, fail: 0 };
 
-	let down = async function(url, pid, pstat, iid, ext, wock) {
+	let down = async function(url, pid, pstat, wock) {
 		try {
 			++counted.ding;
 
@@ -27,7 +28,7 @@ module.exports = function($) {
 
 			await new Promise(function(resolve, reject) {
 				try {
-					let fileName = `${iid}_p${pid}.${ext}`;
+					let fileName = _pa.parse(url).base;
 					let tempPath = R(C.path.cache, 'large', fileName);
 
 					fse.removeSync(tempPath);
@@ -61,7 +62,7 @@ module.exports = function($) {
 		}
 	};
 
-	let downMap = async function(urls, iid, ext, item, coll, wock) {
+	let downMap = async function(urls, iid, item, coll, wock) {
 		let pstat = {
 			count: urls.length,
 
@@ -101,14 +102,11 @@ module.exports = function($) {
 			}
 		};
 
-		await Bluebird.map(urls, async function(info) {
+		await Bluebird.map(urls, async function(url, pid) {
 			let times = 0;
 			let retryMax = ~~C.retry;
 
-			let url = info[0];
-			let pid = info[1];
-
-			while(!await down(url, pid, pstat, iid, ext, wock) && times++ <= retryMax) {
+			while(!await down(url, pid, pstat, wock) && times++ <= retryMax) {
 				--counted.ding;
 			}
 
@@ -130,14 +128,17 @@ module.exports = function($) {
 	};
 
 	return async function(option, wock) {
+		let { iid, count, type, force } = option;
+
+		// if(type == 2) {
+		// 	return await $.F.saveUgoira(option, wock);
+		// }
+
 		if(!(wock instanceof EventEmitter) && wock) {
 			wock.cast = function() { };
 		}
 
 		try {
-			let {iid, count, time } = option;
-			let force = option.force;
-
 			let coll = DB.coll('illust');
 
 			let item = await coll.getStatOne(iid);
@@ -157,9 +158,7 @@ module.exports = function($) {
 
 			wock.cast('stat', iid, 'statL', '解析');
 
-			let info = await T('get')(`https://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iid}`, 4);
-
-			let ext = info.body[iid].illust_ext;
+			let info = await T('get')(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4);
 
 			item.ding = true;
 			await coll.updateOne(item);
@@ -168,17 +167,46 @@ module.exports = function($) {
 			wock.cast('stat', iid, 'statL', `下载 ${count}张`);
 
 			let urls = [];
-			let pcount = 0;
-			while(pcount < count) {
-				urls.push([`https://i.pximg.net/img-original/img/${time}/${iid}_p${pcount}.${ext}`, pcount++]);
+
+			if(type == 2) {
+				let meta = await T('get')(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, 4);
+
+				urls.push(meta.body.originalSrc);
+
+				item.frames = meta.body.frames;
+
+				wock.cast('stat', iid, 'frames', item.frames) || '完成';
+			}
+			else if(info.illust_details.manga_a) {
+				for(let manga of info.illust_details.manga_a) {
+					urls.push(manga.url_big);
+				}
+			}
+			else {
+				urls.push(info.illust_details.url_big);
 			}
 
-			let pstat = await downMap(urls, iid, ext, item, coll, wock);
+			let pstat = await downMap(urls, iid, item, coll, wock);
+
+			if(type == 2) {
+				try {
+					let zipPath = R(C.path.large, _pa.parse(urls[0]).base);
+
+					_fs.createReadStream(zipPath)
+						.pipe(unzip.Extract({ path: R(C.path.large, String(iid)) }))
+						.on('finish', function() {
+							fse.removeSync(zipPath);
+						});
+				}
+				catch(e) {
+					G.error(`解压 [动图]: 错误, ${iid}, ${e.message}`);
+				}
+			}
 
 			return wock.cast('stat', iid, 'statL', `完成[${pstat.totalSum}]`) || '完成';
 		}
 		catch(e) {
-			G.error(`下载 [原图]: 错误, ${e.message}`);
+			G.error(`下载 [原图]: 错误, ${iid}, ${e.message}`);
 		}
 	};
 };

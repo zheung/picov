@@ -12,12 +12,10 @@ module.exports = function($) {
 			let stat = stats[illust.iid];
 
 			if(stat) {
-				illust.down = stats[illust.iid].down;
-				illust.ding = stats[illust.iid].ding;
+				illust.down = stat.down;
+				illust.ding = stat.ding;
+				illust.frames = stat.frames;
 			}
-
-			illust.stat1 = '';
-			illust.stat2 = '';
 		}
 
 		return result;

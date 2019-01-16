@@ -1,7 +1,7 @@
 <template>
 	<div class="compThumb" :class="border">
 		<sPanel class="spanel inline" :title="title" :titlecolor="titleColor"
-			@click.left.native="onSave()"
+			@click.left.native="onSave"
 			@click.right.prevent.native="onMenu"
 		>
 			<div
@@ -10,13 +10,14 @@
 				:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('; ')}`"
 			>
 			</div>
-			<div class="stat left" v-html="illust.statL"></div>
-			<div class="stat right" v-html="illust.statR"></div>
+			<div class="stat left" v-html="B.dictIllust[illust.iid].statL"></div>
+			<div class="stat right" v-html="B.dictIllust[illust.iid].statR"></div>
 		</sPanel>
 		<div class="menu inline" ref="menu" :class="{ left: !((index+1) % wrap) }" v-show="over" tabindex="45" @blur="over = false">
 			<div class="button" @click="onAuthor">作者</div>
-			<div class="button" @click="onSave()" >下载</div>
+			<div class="button" @click="onSave" >下载</div>
 			<div class="button" @click="onRid">排除</div>
+			<div class="button" @click="onUgoira" v-if="illust.type == 2">动图</div>
 		</div>
 	</div>
 </template>
@@ -30,22 +31,28 @@
 		},
 		data: function() {
 			return {
+				B: BUS,
 				over: false
 			};
 		},
 
 		methods: {
-			onSave: function(event = {}, force = false) {
-				let { iid, count, type, time } = this.illust;
+			onSave: function(event = {}, force = event.ctrlKey || false) {
+				let { iid, count, type, time, stat } = this.illust;
 
-				if(this.illust.type == 2) {
-					window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);
-				}
-				else if(event.altKey) {
+				window.iii = this.illust;
+
+				if(event.altKey) {
 					this.onRid();
 				}
 				else {
-					W.cast('api/save', { iid, count, type, time, force: event.ctrlKey || force });
+					if(type == 2) {
+						window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);
+					}
+
+					if(!(stat.down || stat.ding) || force) {
+						W.cast('api/save', { iid, count, type, time, force: force });
+					}
 				}
 			},
 			onMenu: function() {
@@ -56,10 +63,13 @@
 				}.bind(this));
 			},
 			onRid: function() {
-				this.$set(this.illust, 'rid', !this.illust.rid);
+				this.$set(this.illust.stat, 'rid', !this.illust.stat.rid);
 			},
 			onAuthor: async function() {
 				BUS.changeAuthor(this.illust.uid, this.illust.user);
+			},
+			onUgoira: async function() {
+				BUS.changeUgoira(this.illust);
 			},
 		},
 
@@ -97,15 +107,15 @@
 				}
 			},
 			border: function() {
-				let illust = this.illust;
+				let stat = this.illust.stat;
 
-				if(illust.ding) {
+				if(stat.ding) {
 					return 'ding';
 				}
-				else if(illust.rid) {
+				else if(stat.rid) {
 					return 'rid';
 				}
-				else if(illust.down) {
+				else if(stat.down) {
 					return 'down';
 				}
 			}

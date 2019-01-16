@@ -40,8 +40,6 @@
 					uid: 0,
 					type: 'all',
 				},
-
-				rids: new Set(),
 			});
 		},
 
@@ -72,14 +70,31 @@
 
 				this.S.tab.name = '作者: ' + this.S.user;
 
-				this.rids.clear();
-
-				BUS.dictAuthor = {};
-
 				let total = 0;
 				let undown = 0;
+
 				for(let item of result) {
-					BUS.dictAuthor[item.iid] = item;
+					let stat = BUS.dictIllust[item.iid];
+
+					if(!stat) {
+						this.$set(BUS.dictIllust,item.iid, stat = {
+							statL: '',
+							statR: '',
+
+							rid: false,
+
+							ding: false,
+							down: false,
+
+							frames: []
+						});
+					}
+
+					item.stat = stat;
+
+					stat.ding = item.ding;
+					stat.down = item.down;
+					stat.frames = item.frames || [];
 
 					total += item.count;
 
@@ -91,7 +106,7 @@
 			},
 			onSaveAll: function(force = false) {
 				for(let illust of this.data) {
-					if(!illust.rid && !illust.ding && illust.onSave) {
+					if(!illust.stat.rid && !illust.stat.ding && illust.onSave) {
 						illust.onSave({}, force);
 					}
 				}
