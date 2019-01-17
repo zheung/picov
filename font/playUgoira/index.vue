@@ -104,7 +104,7 @@
 				clearInterval(this.interval);
 				this.loader = 0;
 				this.current = 0;
-				let frames = this.frames = illust.frames;
+				let frames = this.frames = illust.frames || illust.stat.frames;
 
 				let iid = illust.iid;
 
