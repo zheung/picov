@@ -38,12 +38,7 @@ export default function() {
 
 		L('wock open by '+reason);
 
-		try {
-			W.wock = new WebSocket(`ws://${window.location.host}/wock`);
-		}
-		catch (error) {
-			setTimeout(function() { open(`错误，${error.message}`); }, 4000);
-		}
+		W.wock = new WebSocket(`ws://${window.location.host}/wock`);
 
 		let pingOut;
 		let timeOut;

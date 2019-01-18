@@ -15,9 +15,9 @@
 		</sPanel>
 		<div class="menu inline" ref="menu" :class="{ left: !((index+1) % wrap) }" v-show="over" tabindex="45" @blur="over = false">
 			<div class="button" @click="onAuthor">作者</div>
-			<div class="button" @click="onSave" >下载</div>
-			<div class="button" @click="onRid">排除</div>
 			<div class="button" @click="onUgoira" v-if="illust.type == 2">动图</div>
+			<div class="button" @click="onRid">排除</div>
+			<div class="button" @click="onSave" >下载</div>
 		</div>
 	</div>
 </template>
