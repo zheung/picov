@@ -1,6 +1,6 @@
 <template>
-	<div class="pic">
-		<canvas class="piccan" @click="pp" ref= "can" :style="{ left: `calc(50% - ${width/2}px)`, top: `calc(50% - ${height/2}px)` }"></canvas>
+	<div class="picBox" ref="box">
+		<canvas class="picCan" @click="pp" ref= "can" :style="{ left: `calc(50% - ${width/2}px)`, top: `calc(50% - ${height/2}px)` }"></canvas>
 	</div>
 </template>
 
@@ -92,12 +92,38 @@
 			},
 			loadPic: function(pic) {
 				let ctx = this.$refs.can.getContext('2d');
+				let box = this.$refs.box;
 
-				this.width = ctx.canvas.width = pic.width;
-				this.height = ctx.canvas.height = pic.height;
+				let boxW = box.offsetWidth;
+				let boxH = box.offsetHeight;
 
-				ctx.clearRect(0, 0, pic.width, pic.height);
-				ctx.drawImage(pic, 0, 0);
+				let picW = pic.width;
+				let picH = pic.height;
+
+				let finW = picW;
+				let finH = picH;
+
+
+				if(finW > boxW) {
+					let diff = 1 - ((finW - boxW) / finW);
+
+					finW = ~~(diff*finW);
+					finH = ~~(diff*finH);
+				}
+
+				if(finH > boxH) {
+					let diff = 1 - ((finH - boxH) / finH);
+
+					finW = ~~(diff*finW);
+					finH = ~~(diff*finH);
+				}
+
+				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+				this.width = ctx.canvas.width = finW;
+				this.height = ctx.canvas.height = finH;
+
+				ctx.drawImage(pic, 0, 0, finW, finH);
 			},
 			initPlayer: function(illust) {
 				clearInterval(this.timeout);
@@ -142,7 +168,11 @@
 </script>
 
 <style scoped>
-	.piccan {
+	.picBox {
+		overflow: hidden;
+	}
+
+	.picCan {
 		position: relative;
 
 		max-width: 100%;

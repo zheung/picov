@@ -13,14 +13,18 @@ module.exports = function({ T }) {
 	};
 
 	return async function({ uid, page=1, type='all' }) {
-		let odd = await T('get')(`https://www.pixiv.net/touch/ajax/user/illusts?p=${page}&id=${uid}&type=${type}`, 4);
+		try {
+			let odd = await T('get')(`https://www.pixiv.net/touch/ajax/user/illusts?p=${page}&id=${uid}&type=${type}`, 4);
 
-		let result = [];
+			let result = [];
 
-		for(let item of odd.illusts) {
-			result.push(formatItem(item));
+			for(let item of odd.illusts) {
+				result.push(formatItem(item));
+			}
+
+			return result;
+		} catch (error) {
+			return [];
 		}
-
-		return result;
 	};
 };

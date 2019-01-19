@@ -8,24 +8,25 @@
 			"isBackground": true,
 			"type": "shell",
 			"options": {
-				"cwd": "font",
+				"cwd": "font"
 			},
 			"command": "webpack",
 			"args": [
 				"-w"
 			],
+			"problemMatcher": []
 		},
 		{
 			"label": "build",
 			"isBackground": true,
 			"type": "shell",
 			"options": {
-				"cwd": "font",
+				"cwd": "font"
 			},
 			"command": "webpack",
 			"args": [
 				"-p"
-			],
-		},
+			]
+		}
 	]
 }

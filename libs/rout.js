@@ -9,12 +9,16 @@ module.exports = async function($ , routArr) {
 		{ id: 1, type: 1, method: 'get', entry: 'listFollow', path: 'api/listFollow', _stat: {} },
 		{ id: 2, type: 1, method: 'get', entry: 'listSearch', path: 'api/listSearch', _stat: {} },
 		{ id: 3, type: 1, method: 'get', entry: 'listAuthor', path: 'api/listAuthor', _stat: {} },
+		{ id: 5, type: 1, method: 'get', entry: 'listNumber', path: 'api/listNumber', wockType: 1, _stat: {} },
+
 		{ id: 4, type: 1, method: 'get', entry: 'thumb', path: 'api/thumb', _stat: {} },
 		{ id: 5, type: 1, method: 'post', entry: 'save', path: 'api/save', wockType: 1, _stat: {} },
 		{ id: 5, type: 1, method: 'get', entry: 'mark', path: 'api/mark', wockType: 1, _stat: {} },
 
 		{ id: 5, type: 1, method: 'get', entry: 'downUgoira', path: 'api/downUgoira', wockType: 1, _stat: {} },
 		{ id: 5, type: 1, method: 'get', entry: 'infoUgoira', path: 'api/infoUgoira', wockType: 1, _stat: {} },
+
+		{ id: 5, type: 1, method: 'get', entry: 'statAuthor', path: 'api/statAuthor', wockType: 1, _stat: {} },
 	];
 
 	$.F = await require('./funcMap')($, C.path.back);

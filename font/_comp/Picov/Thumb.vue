@@ -17,7 +17,8 @@
 			<div class="button" @click="onAuthor">作者</div>
 			<div class="button" @click="onUgoira" v-if="illust.type == 2">动图</div>
 			<div class="button" @click="onRid">排除</div>
-			<div class="button" @click="onSave" >下载</div>
+			<div class="button" @click="onOpen" >原链</div>
+			<div class="button" @click="onOpenAuthor" >作链</div>
 		</div>
 	</div>
 </template>
@@ -46,9 +47,9 @@
 					this.onRid();
 				}
 				else {
-					if(type == 2) {
-						window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);
-					}
+					// if(type == 2) {
+					// 	window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);
+					// }
 
 					if(!(stat.down || stat.ding) || force) {
 						W.cast('api/save', { iid, count, type, time, force: force });
@@ -71,6 +72,12 @@
 			onUgoira: async function() {
 				BUS.changeUgoira(this.illust);
 			},
+			onOpen: async function() {
+				window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);
+			},
+			onOpenAuthor: async function() {
+				window.open(`https://www.pixiv.net/member_illust.php?id=${this.illust.uid}&type=illust`);
+			}
 		},
 
 		created: function() {

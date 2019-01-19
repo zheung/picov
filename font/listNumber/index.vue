@@ -1,7 +1,7 @@
 <template>
 	<div class="compProcmProduct">
 		<sTopbar class="topbar">
-			<Texter class="onLeft" v-model="query.word" label="搜索" width="200" @keyup.enter.native="onQuery(1)"></Texter>
+			<Texter class="onLeft" v-model="query.uid" label="搜索" width="200" @keydown.native="onInput" @keyup.enter.native="onQuery(1)"></Texter>
 			<Combo class="onLeft" v-model="query.type" :list="B.data.itype" @input="onQuery(1)" width="60"></Combo>
 			<sButton class="onLeft" text="全部下载" @click="onSaveAll"></sButton>
 			<div class="textBox inline onLeft">共 {{total}} ({{undown}}) 张</div>
@@ -27,8 +27,7 @@
 			}, {
 				tab: {},
 
-				uid: 0,
-				user: '',
+				id: 0,
 			}, {
 				data: [],
 
@@ -40,24 +39,24 @@
 
 					follow: false,
 
-					uid: 0,
+					id: 0,
 					type: 'all',
 				},
 			});
 		},
 
 		created: function() {
-			A.reg('listAuthor', 'api/listAuthor');
+			A.reg('listNumber', 'api/listNumber');
 			A.reg('statAuthor', 'api/statAuthor');
 		},
 
 		watch: {
-			'S.uid': async function(uid) {
-				this.query.uid = uid;
+			'S.id': async function(id) {
+				this.query.uid = id;
 
 				this.onQuery();
 
-				let stat = await A.conn('statAuthor', { uid });
+				let stat = await A.conn('statAuthor', { uid: id });
 
 				this.follow = stat.follow;
 			}
@@ -72,11 +71,11 @@
 					this.query.page = 1;
 				}
 
-				let result = await A.conn('listAuthor', this.query);
+				let result = await A.conn('listNumber', this.query);
 
 				this.$set(this, 'data', result);
 
-				this.S.tab.name = '作者: ' + this.S.user;
+				this.S.tab.name = '数字: ' + this.query.uid;
 
 				let total = 0;
 				let undown = 0;
@@ -120,7 +119,12 @@
 				}
 			},
 			onOpenAuthor: async function() {
-				window.open(`https://www.pixiv.net/member_illust.php?id=${this.S.uid}&type=illust`);
+				window.open(`https://www.pixiv.net/member_illust.php?id=${this.S.id}&type=illust`);
+			},
+			onInput: function(e) {
+				if(/^\D$/.test(e.key)) {
+					e.preventDefault();
+				}
 			}
 		}
 	};

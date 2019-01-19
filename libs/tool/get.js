@@ -53,6 +53,8 @@ module.exports = function({ G, C, Request }) {
 							resolve(JSON.parse(buffer.toString()));
 						} catch (error) {
 							G.error(`请求: 错误, 无法解析JSON. 路径: ${path}`);
+
+							reject(error);
 						}
 					}
 				});

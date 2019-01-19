@@ -5,8 +5,7 @@
 			<Combo class="onLeft" v-model="query.mode" :list="B.data.mode" @input="onQuery(1)" width="60"></Combo>
 			<Combo class="onLeft" v-model="query.type" :list="B.data.itype" @input="onQuery(1)" width="60"></Combo>
 			<Combo class="onLeft" v-model="query.smode" :list="B.data.smode" @input="onQuery(1)" width="120"></Combo>
-			<sButton class="onLeft" text="全部下载" @click="onSaveAll(false)"></sButton>
-			<sButton class="onLeft" text="全部强制下载" @click="onSaveAll(true)"></sButton>
+			<sButton class="onLeft" text="全部下载" @click="onSaveAll"></sButton>
 			<div class="textBox inline onLeft">共 {{total}} ({{undown}}) 张</div>
 
 			<pPager class="onRight" v-model="query.page"
@@ -106,9 +105,9 @@
 				this.total = total;
 				this.undown = undown;
 			},
-			onSaveAll: function(force = false) {
+			onSaveAll: function(event = {}, force = event.ctrlKey || false) {
 				for(let illust of this.data) {
-					if(!illust.stat.rid && !illust.stat.ding && illust.onSave) {
+					if(!illust.stat.rid && illust.onSave) {
 						illust.onSave({}, force);
 					}
 				}

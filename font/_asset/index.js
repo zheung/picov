@@ -39,6 +39,11 @@ let main = async function() {
 				'only': false,
 				'show': false
 			}, {
+				'type': 'listNumber',
+				'name': '数字',
+				'only': false,
+				'show': false
+			}, {
 				'type': 'playUgoira',
 				'name': '动图播放',
 				'only': false,
@@ -212,6 +217,31 @@ let main = async function() {
 				X.stat(`listAuthor_${tab.time}`).uid = uid;
 				X.stat(`listAuthor_${tab.time}`).user = user;
 			},
+			changeNumber: async function(id) {
+				let modl = this.findTab('listNumber');
+
+				if(modl.time) {
+					let views = X.comp('homeNavi').views;
+					let dict = X.comp('listNumber').dict;
+
+					for(let view of views) {
+						if(view.base == 'listNumber' && dict[view.time] == id) {
+							this.changeTab(view);
+
+							return;
+						}
+					}
+				}
+
+				let tab = await this.changeTab(modl);
+				tab.name = '数字: ' + id;
+
+				X.comp('listNumber').dict[tab.time] = id;
+
+				X.stat(`listNumber_${tab.time}`).tab = tab;
+
+				X.stat(`listNumber_${tab.time}`).id = id;
+			},
 			changeUgoira: async function(illust) {
 				let modl = this.findTab('playUgoira');
 
@@ -246,6 +276,7 @@ let main = async function() {
 			this.B.changeSearch = this.changeSearch;
 			this.B.changeAuthor = this.changeAuthor;
 			this.B.changeUgoira = this.changeUgoira;
+			this.B.changeNumber = this.changeNumber;
 		}
 	});
 };
