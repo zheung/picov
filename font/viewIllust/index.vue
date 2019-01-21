@@ -34,8 +34,12 @@
 				mDown: false,
 				mMove: false,
 
+				page: 0,
+
 				loaded: 0,
-				frames: []
+
+				frames: [],
+				urls: []
 			});
 		},
 
@@ -48,19 +52,34 @@
 
 		watch: {
 			'S.illust': async function(now) {
+				this.page = 0;
+
 				this.initPlayer(now);
 			}
 		},
 
 		methods: {
 			onPause: function() {
-				if(this.timeout) {
-					clearTimeout(this.timeout);
+				let illust = this.S.illust;
 
-					this.timeout = 0;
+				if(illust != 2) {
+					this.page++;
+
+					if(this.page >= illust.count) {
+						this.page = 0;
+					}
+
+					this.initPlayer(illust);
 				}
 				else {
-					this.playFrame(this.idxNow);
+					if(this.timeout) {
+						clearTimeout(this.timeout);
+
+						this.timeout = 0;
+					}
+					else {
+						this.playFrame(this.idxNow);
+					}
 				}
 			},
 			onKeyDown: function(e) {
@@ -95,11 +114,11 @@
 				}
 			},
 			onWheel: function(e) {
-				if(e.deltaY > 0) {
-					this.zoom = this.zoom + 10;
-				}
-				else if(this.zoom - 10 > 0) {
+				if(e.deltaY > 0 && this.zoom - 10 > 0) {
 					this.zoom = this.zoom - 10;
+				}
+				else {
+					this.zoom = this.zoom + 10;
 				}
 
 				this.reloadFrame();
@@ -127,7 +146,7 @@
 			},
 
 			reloadFrame: function() {
-				this.loadPic(this.frames[this.idxNow].pic);
+				this.loadPic(this.picNow);
 			},
 			nextFrame: function(frame) {
 				this.idxNow = frame.index;
@@ -253,8 +272,10 @@
 					}
 				}
 				else {
+					let urls = this.urls = illust.urls || illust.stat.urls;
+
 					let pic = new Image();
-					pic.src = `api/picture?iid=${iid}&page=${0}&file=${illust.urls[0]}`;
+					pic.src = `api/picture?iid=${iid}&page=${this.page}&file=${urls[0]}`;
 
 					pic.addEventListener('load', function() {
 						this.loadPic(pic);

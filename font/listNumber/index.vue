@@ -119,7 +119,7 @@
 				}
 			},
 			onOpenAuthor: async function() {
-				window.open(`https://www.pixiv.net/member_illust.php?id=${this.S.id}&type=illust`);
+				window.open(`https://www.pixiv.net/member_illust.php?id=${this.query.uid}&type=illust`);
 			},
 			onInput: function(e) {
 				if(/^\D$/.test(e.key)) {

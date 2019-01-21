@@ -175,7 +175,7 @@ module.exports = function($) {
 
 				item.frames = meta.body.frames;
 
-				wock.cast('stat', iid, 'frames', item.frames) || '完成';
+				wock.cast('stat', iid, 'frames', item.frames);
 			}
 			else if(info.illust_details.manga_a) {
 				for(let manga of info.illust_details.manga_a) {
@@ -183,11 +183,15 @@ module.exports = function($) {
 				}
 
 				item.urls = urls;
+
+				wock.cast('stat', iid, 'urls', item.urls);
 			}
 			else {
 				urls.push(info.illust_details.url_big);
 
 				item.urls = urls;
+
+				wock.cast('stat', iid, 'urls', item.urls);
 			}
 
 			let pstat = await downMap(urls, iid, item, coll, wock);
