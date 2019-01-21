@@ -15,7 +15,7 @@
 		</sPanel>
 		<div class="menu inline" ref="menu" :class="{ left: !((index+1) % wrap) }" v-show="over" tabindex="45" @blur="over = false">
 			<div class="button" @click="onAuthor">作者</div>
-			<div class="button" @click="onUgoira" v-if="illust.type == 2">动图</div>
+			<div class="button" @click="onViewer" >{{illust.type == 2 ? '动图' : '原图'}}</div>
 			<div class="button" @click="onRid">排除</div>
 			<div class="button" @click="onOpen" >原链</div>
 			<div class="button" @click="onOpenAuthor" >作链</div>
@@ -69,8 +69,8 @@
 			onAuthor: async function() {
 				BUS.changeAuthor(this.illust.uid, this.illust.user);
 			},
-			onUgoira: async function() {
-				BUS.changeUgoira(this.illust);
+			onViewer: async function() {
+				BUS.changeViewer(this.illust);
 			},
 			onOpen: async function() {
 				window.open(`https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${this.illust.iid}`);

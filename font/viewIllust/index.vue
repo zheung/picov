@@ -218,36 +218,47 @@
 
 				this.loader = 0;
 				this.idxNow = 0;
-				let frames = this.frames = illust.frames || illust.stat.frames;
 
 				let iid = illust.iid;
 
-				let prev = frames[frames.length - 1];
-				let index = 0;
+				if(illust.type == 2) {
+					let frames = this.frames = illust.frames || illust.stat.frames;
 
-				for(let frame of frames) {
-					prev.next = frame;
-					prev = frame;
+					let prev = frames[frames.length - 1];
+					let index = 0;
 
-					frame.index = index++;
+					for(let frame of frames) {
+						prev.next = frame;
+						prev = frame;
 
-					let pic = frame.pic = new Image();
+						frame.index = index++;
 
-					pic.src = `large/${iid}/${frame.file}`;
+						let pic = frame.pic = new Image();
+
+						pic.src = `api/picture?iid=${iid}&file=${frame.file}&type=2`;
+
+						pic.addEventListener('load', function() {
+							this.loaded++;
+
+							frame.loaded = function() {
+								this.nextFrame(frame.next);
+							}.bind(this);
+						}.bind(this));
+
+						if(frames[0] === frame) {
+							pic.addEventListener('load', function() {
+								this.playFrame();
+							}.bind(this));
+						}
+					}
+				}
+				else {
+					let pic = new Image();
+					pic.src = `api/picture?iid=${iid}&page=${0}&file=${illust.urls[0]}`;
 
 					pic.addEventListener('load', function() {
-						this.loaded++;
-
-						frame.loaded = function() {
-							this.nextFrame(frame.next);
-						}.bind(this);
+						this.loadPic(pic);
 					}.bind(this));
-
-					if(frames[0] === frame) {
-						pic.addEventListener('load', function() {
-							this.playFrame();
-						}.bind(this));
-					}
 				}
 			}
 		}

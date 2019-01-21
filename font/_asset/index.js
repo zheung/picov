@@ -44,7 +44,7 @@ let main = async function() {
 				'only': false,
 				'show': false
 			}, {
-				'type': 'playUgoira',
+				'type': 'viewIllust',
 				'name': '动图播放',
 				'only': false,
 				'show': false
@@ -242,15 +242,15 @@ let main = async function() {
 
 				X.stat(`listNumber_${tab.time}`).id = id;
 			},
-			changeUgoira: async function(illust) {
-				let modl = this.findTab('playUgoira');
+			changeViewer: async function(illust) {
+				let modl = this.findTab('viewIllust');
 
 				if(modl.time) {
 					let views = X.comp('homeNavi').views;
-					let dict = X.comp('playUgoira').dict;
+					let dict = X.comp('viewIllust').dict;
 
 					for(let view of views) {
-						if(view.base == 'playUgoira' && dict[view.time] == illust.iid) {
+						if(view.base == 'viewIllust' && dict[view.time] == illust.iid) {
 							this.changeTab(view);
 
 							return;
@@ -261,11 +261,11 @@ let main = async function() {
 				let tab = await this.changeTab(modl);
 				tab.name = '动图: ' + (illust.title || illust.iid);
 
-				X.comp('playUgoira').dict[tab.time] = illust.iid;
+				X.comp('viewIllust').dict[tab.time] = illust.iid;
 
-				X.stat(`playUgoira_${tab.time}`).tab = tab;
+				X.stat(`viewIllust_${tab.time}`).tab = tab;
 
-				X.stat(`playUgoira_${tab.time}`).illust = illust;
+				X.stat(`viewIllust_${tab.time}`).illust = illust;
 			}
 		},
 		mounted: async function() {
@@ -275,7 +275,7 @@ let main = async function() {
 
 			this.B.changeSearch = this.changeSearch;
 			this.B.changeAuthor = this.changeAuthor;
-			this.B.changeUgoira = this.changeUgoira;
+			this.B.changeViewer = this.changeViewer;
 			this.B.changeNumber = this.changeNumber;
 		}
 	});

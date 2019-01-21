@@ -181,9 +181,13 @@ module.exports = function($) {
 				for(let manga of info.illust_details.manga_a) {
 					urls.push(manga.url_big);
 				}
+
+				item.urls = urls;
 			}
 			else {
 				urls.push(info.illust_details.url_big);
+
+				item.urls = urls;
 			}
 
 			let pstat = await downMap(urls, iid, item, coll, wock);

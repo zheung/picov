@@ -5,7 +5,7 @@ export default async function(type, time = 0) {
 			case 'listSearch': Vue.component(`${type}_${time}`, (await System.import('../../listSearch')).default); break;
 			case 'listAuthor': Vue.component(`${type}_${time}`, (await System.import('../../listAuthor')).default); break;
 			case 'listNumber': Vue.component(`${type}_${time}`, (await System.import('../../listNumber')).default); break;
-			case 'playUgoira': Vue.component(`${type}_${time}`, (await System.import('../../playUgoira')).default); break;
+			case 'viewIllust': Vue.component(`${type}_${time}`, (await System.import('../../viewIllust')).default); break;
 		}
 	}
 }

@@ -15,6 +15,7 @@ module.exports = function($) {
 				illust.down = stat.down;
 				illust.ding = stat.ding;
 				illust.frames = stat.frames;
+				illust.urls = stat.urls;
 			}
 		}
 

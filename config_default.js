@@ -18,6 +18,7 @@ module.exports = {
 
 	path: {
 		large: 'Your Large Picture Path',
+		filed: 'Your Filed Picture Path',
 		cache: 'Your Cache Path'
 	},
 };
