@@ -126,7 +126,7 @@
 
 				// if(!X.wins.init(cid)) {
 				// // 编辑器路径，注意必须写死，不然Webpack不能识别
-				// 	X.wins.init(cid, (await System.import('./Editor')).default);
+				// 	X.wins.init(cid, (await import('./Editor')).default);
 				// }
 
 				X.wins.show(cid, title, data);
