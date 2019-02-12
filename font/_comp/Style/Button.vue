@@ -1,13 +1,16 @@
 <template>
 	<div class="compButton nosel trans inline" @click="onClick">
-		{{text}}
+		{{ text}}
 	</div>
 </template>
 
 <script>
 	export default {
 		props: {
-			text: {},
+			text: {
+				type: [ String, Number ],
+				default: ''
+			},
 		},
 		data: function() {
 			return {};

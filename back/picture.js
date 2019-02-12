@@ -23,15 +23,17 @@ module.exports = function($) {
 		if(type == 2) {
 			path = testFile([
 				R(C.path.large, String(iid), file),
-				R(C.path.filed, String(iid), file),
+				...C.path.filed.map(function(path) {
+					return R(path, String(iid), file);
+				}),
 			]);
 		}
 		else {
 			path = testFile([
 				R(C.path.large, `${iid}_p${page}${ext}`),
-				R(C.path.filed, `${iid}_p${page}${ext}`),
-				R(C.path.large, `${iid}_p${page}${ext}`),
-				R(C.path.filed, `${iid}_p${page}${ext}`),
+				...C.path.filed.map(function(path) {
+					return R(path, String(iid), file);
+				}),
 			]);
 		}
 

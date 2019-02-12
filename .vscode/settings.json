@@ -9,5 +9,6 @@
 		"plugins": ["html", "vue"]
 	},
 	"javascript.suggestionActions.enabled": false,
-	"typescript.suggestionActions.enabled": false
+	"typescript.suggestionActions.enabled": false,
+	"vetur.validation.template": false
 }

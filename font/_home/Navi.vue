@@ -85,7 +85,7 @@
 	.naviBox {
 		position: fixed;
 
-		top: 50px;
+		top: 0px;
 		left: 0px;
 		right: 0px;
 

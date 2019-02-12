@@ -3,7 +3,10 @@
 		"browser": true,
 		"es6": true
 	},
-	"extends": "eslint:recommended",
+	"extends": [
+		"eslint:recommended",
+		"plugin:vue/recommended"
+	],
 	"parserOptions": {
 		"ecmaVersion": 8,
 		"sourceType": "module"
@@ -15,8 +18,20 @@
 		"semi": [ 2, "always" ],
 		"no-unused-vars": [ 2, { "vars": "all", "args": "after-used" } ],
 		"no-console": [ 2 ],
-		"no-var": [ 2 ]
+		"no-var": [ 2 ],
+		"vue/html-indent": [ 2, "tab" ],
+		"vue/script-indent": [ 2, "tab", { "baseIndent": 1 } ],
+		"vue/max-attributes-per-line": [ 0 ],
+		"vue/mustache-interpolation-spacing": [ 0 ]
 	},
+	"overrides": [
+		{
+			"files": ["*.vue"],
+			"rules": {
+				"indent": [ 0 ]
+			}
+		}
+	],
 	"globals": {
 		"Vue": true,
 		"io": true,

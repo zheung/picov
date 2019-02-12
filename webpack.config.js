@@ -30,17 +30,18 @@ module.exports = {
 		rules: [ {
 			test: /\.css$/,
 			use: [
-				'style-loader',
+				'vue-style-loader',
 				{
 					loader: 'css-loader',
 					options: {
-						modules: true,
+						// modules: true,
 					}
 				}
 			]
 		}, {
 			test: /\.vue$/,
 			use: [
+				'css-deep-loader',
 				'vue-loader'
 			],
 		}, {

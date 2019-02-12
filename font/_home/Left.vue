@@ -181,7 +181,7 @@
 	.homeLeft {
 		position: fixed;
 
-		top: 50px;
+		top: 0px;
 		left: 0px;
 		bottom: 0px;
 

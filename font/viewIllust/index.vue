@@ -1,12 +1,12 @@
 <template>
-	<div class="picBox" ref="box">
-		<canvas ref= "can" tabindex="1" class="picCan" :class="{ mdown: mDown }"
+	<div ref="box" class="picBox">
+		<canvas ref="can" tabindex="1" class="picCan" :class="{ mdown: mDown }"
 			@keydown="onKeyDown"
 			@wheel="onWheel"
 			@mousedown="onMouseDown"
 			@mouseup="onMouseUp"
 			@mousemove="onMouseMove"
-		></canvas>
+		/>
 	</div>
 </template>
 
@@ -29,7 +29,7 @@
 				offW: 0,
 				offH: 0,
 
-				zoom: 50,
+				zoom: 100,
 
 				mDown: false,
 				mMove: false,
@@ -43,19 +43,19 @@
 			});
 		},
 
-		created: function() {
-			A.reg('api/infoUgoira', 'api/infoUgoira');
-		},
-		mounted: function() {
-			this.$refs.can.focus();
-		},
-
 		watch: {
 			'S.illust': async function(now) {
 				this.page = 0;
 
 				this.initPlayer(now);
 			}
+		},
+
+		created: function() {
+			A.reg('api/infoUgoira', 'api/infoUgoira');
+		},
+		mounted: function() {
+			this.$refs.can.focus();
 		},
 
 		methods: {
@@ -163,8 +163,8 @@
 				let ctx = this.$refs.can.getContext('2d');
 				let box = this.$refs.box;
 
-				let boxW = box.offsetWidth;
-				let boxH = box.offsetHeight;
+				let boxW = box.offsetWidth - 1;
+				let boxH = box.offsetHeight - 1;
 
 				let picW = pic.width;
 				let picH = pic.height;
@@ -176,6 +176,20 @@
 
 				ctx.canvas.width = boxW;
 				ctx.canvas.height = boxH;
+
+				if(finW < boxW) {
+					let diff = 1 - ((finW - boxW) / finW);
+
+					finW = ~~(diff*finW);
+					finH = ~~(diff*finH);
+				}
+
+				if(finH < boxH) {
+					let diff = 1 - ((finH - boxH) / finH);
+
+					finW = ~~(diff*finW);
+					finH = ~~(diff*finH);
+				}
 
 				if(finW > boxW) {
 					let diff = 1 - ((finW - boxW) / finW);
