@@ -16,6 +16,10 @@ module.exports = function($) {
 				illust.ding = stat.ding;
 				illust.frames = stat.frames;
 				illust.urls = stat.urls;
+				illust.downCount = stat.down ? illust.count : 0 ;
+			}
+			else {
+				illust.downCount = 0;
 			}
 		}
 

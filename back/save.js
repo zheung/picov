@@ -43,6 +43,8 @@ module.exports = function($) {
 							}
 
 							resolve();
+
+							pstat.done();
 						})
 						.on('error', function(error) {
 							reject(error);
@@ -99,6 +101,10 @@ module.exports = function($) {
 				}
 
 				wock.cast('stat', iid, 'statR', Math.round(percent * 100 / pstat.count) +' %');
+			},
+			done: function() {
+				wock.cast('statDone', iid);
+
 			}
 		};
 
@@ -129,10 +135,6 @@ module.exports = function($) {
 
 	return async function(option, wock) {
 		let { iid, count, type, force } = option;
-
-		// if(type == 2) {
-		// 	return await $.F.saveUgoira(option, wock);
-		// }
 
 		if(!(wock instanceof EventEmitter) && wock) {
 			wock.cast = function() { };

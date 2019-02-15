@@ -3,9 +3,17 @@ export default function() {
 	BUS.dictIllust = {};
 
 	W.add('stat', function(wock, iid, index, text) {
-		if(BUS.dictIllust && BUS.dictIllust[iid]) {
-			BUS.app.$set(BUS.dictIllust[iid], index, text);
-			// BUS.aap.$forceUpdate();
+		let statIllust = BUS.dictIllust[iid];
+
+		if(statIllust) {
+			BUS.app.$set(statIllust, index, text);
+		}
+	});
+	W.add('statDone', function(wock, iid) {
+		let statIllust = BUS.dictIllust[iid];
+
+		if(statIllust) {
+			BUS.app.$set(statIllust, 'downCount', statIllust.downCount+1);
 		}
 	});
 }
