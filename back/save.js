@@ -122,7 +122,7 @@ module.exports = function($) {
 			else {
 				++counted.down;
 			}
-		});
+		}, {concurrency: 77 });
 
 		item.ding = false;
 		item.down = true;
