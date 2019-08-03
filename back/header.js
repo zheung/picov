@@ -1,7 +1,7 @@
 module.exports = function($) {
 	let { C, R, T } = $;
 
-	let list = _fs.readdirSync(R(C.path.cache, 'thumb'));
+	let list = _fs.readdirSync(R(C.path.cache, 'header'));
 	let dict = {};
 
 	list.map(function(file) {
@@ -9,19 +9,19 @@ module.exports = function($) {
 	});
 
 	return async function(raw) {
-		let { iid, type, force } = raw;
+		let { uid, file, force } = raw;
 
-		let path = R(C.path.cache, 'thumb', `${iid}.png`);
+		let path = R(C.path.cache, 'header', `${uid}.png`);
 
-		if(!dict[iid] || force) {
-			let url = `https://i.pximg.net/c/150x150/img-master/img/${raw.time}/${raw.iid}${~~type == 2 ? '' : '_p0'}_master1200.jpg`;
+		if(!dict[uid] || force) {
+			let url = `https://i.pximg.net/user-profile/img/${file}`;
 			let thumbStream = await T.get(url, 2, false);
 
 			let saveStream = _fs.createWriteStream(path);
 
 			await new Promise(function(resolve) {
 				saveStream.on('finish', function() {
-					dict[iid] = true;
+					dict[uid] = true;
 					resolve();
 				});
 

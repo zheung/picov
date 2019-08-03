@@ -1,5 +1,5 @@
 module.exports = function({ G, C, Request }) {
-	return async function(path, type, isLog = false) {
+	return async function(path, type, useProxy = true) {
 		return new Promise(function(resolve, reject) {
 			let option = {
 				url: path,
@@ -10,13 +10,13 @@ module.exports = function({ G, C, Request }) {
 				},
 				encoding: null,
 
-				proxy: C.proxy
+				proxy: useProxy ? C.proxy : null
 			};
 
 			if(type == 1) {
-				if(isLog) { G.trace('请求', path); }
+				G.trace('请求', path);
 
-				Request(option, function (error, response, buffer) {
+				Request(option, function(error, response, buffer) {
 					if(error) {
 						reject(error);
 					}
@@ -25,14 +25,14 @@ module.exports = function({ G, C, Request }) {
 				});
 			}
 			else if(type == 2) {
-				if(isLog) { G.trace('代理', path); }
+				G.trace('代理', path);
 
 				resolve(Request(option));
 			}
 			else if(type == 3) {
-				if(isLog) { G.trace('请求', path); }
+				G.trace('请求', path);
 
-				Request(option, function (error, response, buffer) {
+				Request(option, function(error, response, buffer) {
 					if(error) {
 						reject(error);
 					}
@@ -42,16 +42,16 @@ module.exports = function({ G, C, Request }) {
 				});
 			}
 			else if(type == 4) {
-				if(isLog) { G.trace('请求', path); }
+				G.trace('请求', path);
 
-				Request(option, function (error, response, buffer) {
+				Request(option, function(error, response, buffer) {
 					if(error) {
 						reject(error);
 					}
 					else {
 						try {
 							resolve(JSON.parse(buffer.toString()));
-						} catch (error) {
+						} catch(error) {
 							G.error(`请求: 错误, 无法解析JSON. 路径: ${path}`);
 
 							reject(error);

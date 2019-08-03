@@ -15,7 +15,7 @@ module.exports = function($) {
 
 		if(!dict[iid] || force) {
 			let url = `https://i.pximg.net/img-zip-ugoira/img/${time}/${iid}_ugoira1920x1080.zip`;
-			let thumbStream = await T('get')(url, 2);
+			let thumbStream = await T.get(url, 2, false);
 
 			let saveStream = _fs.createWriteStream(path);
 

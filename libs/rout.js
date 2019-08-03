@@ -3,8 +3,6 @@ module.exports = async function($ , routArr) {
 
 	let routRaws = [
 		{ type: 3, path: C.path.dist, prefix: '/', option: { defer: true } },
-		// { type: 3, path: R(C.path.cache, 'thumb'), prefix: '/thumb', option: { defer: false } },
-		// { type: 3, path: R(C.path.large), prefix: '/large', option: { defer: false } },
 
 		{ id: 1, type: 1, method: 'get', entry: 'listFollow', path: 'api/listFollow', _stat: {} },
 		{ id: 2, type: 1, method: 'get', entry: 'listSearch', path: 'api/listSearch', _stat: {} },
@@ -12,6 +10,7 @@ module.exports = async function($ , routArr) {
 		{ id: 5, type: 1, method: 'get', entry: 'listNumber', path: 'api/listNumber', wockType: 1, _stat: {} },
 
 		{ id: 4, type: 1, method: 'get', entry: 'thumb', path: 'api/thumb', _stat: {} },
+		{ id: 4, type: 1, method: 'get', entry: 'header', path: 'api/header', _stat: {} },
 		{ id: 4, type: 1, method: 'get', entry: 'picture', path: 'api/picture', _stat: {} },
 
 
@@ -23,6 +22,8 @@ module.exports = async function($ , routArr) {
 		{ id: 5, type: 1, method: 'get', entry: 'infoUgoira', path: 'api/infoUgoira', wockType: 1, _stat: {} },
 
 		{ id: 5, type: 1, method: 'get', entry: 'statAuthor', path: 'api/statAuthor', wockType: 1, _stat: {} },
+
+		{ id: 5, type: 1, method: 'get', entry: 'authorListFollow', path: 'api/authorListFollow', wockType: 1, _stat: {} },
 	];
 
 	$.F = await require('./funcMap')($, C.path.back);

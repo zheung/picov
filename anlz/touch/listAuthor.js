@@ -14,7 +14,7 @@ module.exports = function({ T }) {
 
 	return async function({ uid, page=1, type='all' }) {
 		try {
-			let odd = await T('get')(`https://www.pixiv.net/touch/ajax/user/illusts?p=${page}&id=${uid}&type=${type}`, 4);
+			let odd = await T.get(`https://www.pixiv.net/touch/ajax/user/illusts?p=${page}&id=${uid}&type=${type}`, 4);
 
 			let result = [];
 

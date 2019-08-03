@@ -3,7 +3,7 @@ module.exports = function($) {
 
 	return async function(word, page, r18) {
 		return new Promise(async function(resolve) {
-			let buf = await T('get')(encodeURI(`https://www.pixiv.net/search.php?s_mode=s_tag&word=${word}&p=${page || 1}&mode=${r18? 'r18': 'safe' }`), 1);
+			let buf = await T.get(encodeURI(`https://www.pixiv.net/search.php?s_mode=s_tag&word=${word}&p=${page || 1}&mode=${r18? 'r18': 'safe' }`), 1);
 			let str = buf.toString();
 
 			let take = function(err, window) {

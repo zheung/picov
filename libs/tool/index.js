@@ -1,5 +1,6 @@
 module.exports = function($) {
-	return function(nameTool) {
-		return require('./'+nameTool)($);
+	return {
+		get: require('./get')($),
+		util: require('./util')($)
 	};
 };

@@ -12,7 +12,7 @@ module.exports = function($) {
 		try {
 			++counted.ding;
 
-			let getStream = (await T('get')(url, 2))
+			let getStream = (await T.get(url, 2, false))
 				.on('response', function(res) {
 					pstat.total[pid] = ~~res.headers['content-length'];
 				})
@@ -51,13 +51,13 @@ module.exports = function($) {
 						});
 
 					getStream.pipe(saveStream);
-				} catch (error) {
+				} catch(error) {
 					G.error(error);
 				}
 			});
 
 			return true;
-		} catch (err) {
+		} catch(err) {
 			G.error(err.message);
 
 			return false;
@@ -80,7 +80,7 @@ module.exports = function($) {
 				let ready = 0;
 
 				for(let pid in pstat.passed) {
-					if(pstat.total[pid] > 0){
+					if(pstat.total[pid] > 0) {
 						percent += (pstat.passed[pid] / pstat.total[pid]);
 						ready++;
 					}
@@ -95,12 +95,12 @@ module.exports = function($) {
 						size += pstat.total[pid];
 					}
 
-					pstat.totalSum = T('util').formatSize(size);
+					pstat.totalSum = T.util.formatSize(size);
 
 					wock.cast('stat', iid, 'statL', `下载 ${pstat.count}张[${pstat.totalSum}]`);
 				}
 
-				wock.cast('stat', iid, 'statR', Math.round(percent * 100 / pstat.count) +' %');
+				wock.cast('stat', iid, 'statR', Math.round(percent * 100 / pstat.count) + ' %');
 			},
 			done: function() {
 				wock.cast('statDone', iid);
@@ -122,7 +122,7 @@ module.exports = function($) {
 			else {
 				++counted.down;
 			}
-		}, {concurrency: 77 });
+		}, { concurrency: 77 });
 
 		item.ding = false;
 		item.down = true;
@@ -160,7 +160,7 @@ module.exports = function($) {
 
 			wock.cast('stat', iid, 'statL', '解析');
 
-			let info = await T('get')(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4);
+			let info = (await T.get(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4)).body;
 
 			item.ding = true;
 			await coll.updateOne(item);
@@ -171,7 +171,7 @@ module.exports = function($) {
 			let urls = [];
 
 			if(type == 2) {
-				let meta = await T('get')(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, 4);
+				let meta = await T.get(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, 4);
 
 				urls.push(meta.body.originalSrc);
 

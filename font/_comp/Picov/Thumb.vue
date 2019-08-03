@@ -2,7 +2,8 @@
 	<div class="compThumb" :class="border">
 		<sPanel class="spanel inline" :title="title" :titlecolor="titleColor"
 			@click.left.native="onSave"
-			@click.right.prevent.native="onMenu"
+			@mouseenter.prevent.native="onMenu"
+			@mouseleave.prevent.native="over = false"
 		>
 			<div
 				class="img"

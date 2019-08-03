@@ -4,8 +4,8 @@
 #No Real Config
 /config.js
 /config.json
-/mark.js
-/mark.json
+/custom.js
+/custom.json
 
 #No Picture Folder
 /cache

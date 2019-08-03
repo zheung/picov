@@ -13,7 +13,7 @@ module.exports = function({ T }) {
 	};
 
 	return async function({ page=1 }) {
-		let odd = await T('get')(`https://www.pixiv.net/touch/ajax/follow/latest?type=illusts&p=${page}`, 4);
+		let odd = await T.get(`https://www.pixiv.net/touch/ajax/follow/latest?type=illusts&p=${page}`, 4);
 
 		let result = [];
 

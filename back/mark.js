@@ -1,7 +1,5 @@
-module.exports = function() {
-	let mark = require('../mark.json');
-
+module.exports = function({ CC }) {
 	return async function() {
-		return mark;
+		return CC.mark;
 	};
 };

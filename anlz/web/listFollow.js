@@ -4,7 +4,7 @@ module.exports = function($) {
 	return async function(page) {
 		return new Promise(async function(resolve, reject) {
 			try {
-				let buf = await T('get')(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1);
+				let buf = await T.get(`https://www.pixiv.net/bookmark_new_illust.php?p=${page || 1}`, 1);
 				let str = buf.toString();
 
 				let take = function(err, window) {

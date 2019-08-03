@@ -1,6 +1,4 @@
-module.exports = function($) {
-	let { A, DB } = $;
-
+module.exports = function({ A, DB, CC }) {
 	return async function(raw) {
 		let coll = DB.coll('illust');
 
@@ -18,6 +16,6 @@ module.exports = function($) {
 			}
 		}
 
-		return result;
+		return result.filter(illust => CC.block.user.indexOf(illust.uid) == -1);
 	};
 };

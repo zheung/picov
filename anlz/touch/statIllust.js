@@ -1,7 +1,7 @@
 module.exports = function({ T }) {
 	return async function(iid) {
 		try {
-			let item = (await T('get')(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4)).illust_details;
+			let item = (await T.get(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4)).body.illust_details;
 
 			return {
 				iid: ~~item.id,
