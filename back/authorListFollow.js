@@ -1,7 +1,7 @@
-module.exports = function($) {
-	let { A } = $;
-
-	return async function(raw) {
-		return A.touch.authorListFollow(raw);
+module.exports = function({ A }) {
+	return {
+		c(raw) {
+			return A.touch.authorListFollow(raw);
+		}
 	};
 };

@@ -1,21 +1,30 @@
 import axios from 'axios';
 
-let actions = {
-	init: 'api/init'
+let actionList = {
 };
 
 let prefix = './';
 
+let prefixDict = {
+	api: './api/'
+};
+
 export default function() {
 	window.A = {
 		conn: async function(action, params, conf = {}) {
+			let actUrl = A.r(action);
+
 			if(params) {
 				conf.params = params;
 			}
 
-			let result = (await axios.get(prefix + actions[action], conf)).data;
+			let result = (await axios.get(prefix + actUrl, conf)).data;
 
 			if(result.success) {
+				if(result.data && result.data.alert) {
+					await X.alert(result.data.alert);
+				}
+
 				return result.data;
 			}
 			else {
@@ -23,14 +32,18 @@ export default function() {
 			}
 		},
 		connRaw: async function(action, params, conf = {}) {
+			let actUrl = A.r(action);
+
 			if(params) {
 				conf.params = params;
 			}
 
-			return (await axios.get(prefix + actions[action], conf)).data;
+			return (await axios.get(prefix + actUrl, conf)).data;
 		},
 
 		post: async function(action, params, conf = {}) {
+			let actUrl = A.r(action);
+
 			if(typeof params == 'object' && params instanceof FormData) {
 				if(typeof conf.headers == 'object' && conf.headers) {
 					conf.headers['Content-Type'] = 'multipart/form-data';
@@ -40,9 +53,13 @@ export default function() {
 				}
 			}
 
-			let result = (await axios.post(prefix + actions[action], params, conf)).data;
+			let result = (await axios.post(prefix + actUrl, params, conf)).data;
 
 			if(result.success) {
+				if(result.data && result.data.alert) {
+					await X.alert(result.data.alert);
+				}
+
 				return result.data;
 			}
 			else {
@@ -50,10 +67,13 @@ export default function() {
 			}
 		},
 		postRaw: async function(action, params, conf = {}) {
-			return (await axios.post(prefix + actions[action], params, conf)).data;
+			let actUrl = A.r(action);
+
+			return (await axios.post(prefix + actUrl, params, conf)).data;
 		},
 
 		jump: function(action, params) {
+			let actUrl = A.r(action);
 			let query = '';
 
 			for(let key in params) {
@@ -69,12 +89,21 @@ export default function() {
 
 			query = query.replace(/^&/, '');
 
-			window.location.href = `${prefix}${actions[action]}?${query}`;
+			window.location.href = `${prefix}${actUrl}?${query}`;
 		},
 
 		reg: function(action, path, force) {
-			if(force || !actions[action]) {
-				actions[action] = path;
+			if(force || !actionList[action]) {
+				actionList[action] = path;
+			}
+		},
+
+		r: function(action, prefix = 'api', forceReg = false) {
+			if(forceReg || !actionList[action]) {
+				return actionList[action] = prefixDict[prefix]+action;
+			}
+			else {
+				return actionList[action];
 			}
 		}
 	};

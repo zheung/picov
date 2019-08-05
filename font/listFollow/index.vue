@@ -31,8 +31,10 @@
 				data: [],
 
 				total: 0,
-				// 和分页、筛选有关的可变的值
+
 				query: {
+					listMode: 'follow',
+
 					page: 1,
 
 					word: '',
@@ -59,9 +61,6 @@
 			}
 		},
 
-		created: function() {
-			A.reg('listFollow', 'api/listFollow');
-		},
 		mounted: async function() {
 			this.onQuery();
 		},
@@ -83,7 +82,7 @@
 					this.query.page = 1;
 				}
 
-				let result = await A.conn('listFollow', this.query);
+				let result = await A.conn('list', this.query);
 
 				this.$set(this, 'data', result);
 
@@ -93,7 +92,7 @@
 					let stat = BUS.dictIllust[item.iid];
 
 					if(!stat) {
-						this.$set(BUS.dictIllust,item.iid, stat = {
+						this.$set(BUS.dictIllust, item.iid, stat = {
 							statL: '',
 							statR: '',
 
@@ -102,7 +101,7 @@
 							ding: false,
 							down: false,
 
-							frames: [],
+							files: [],
 
 							downCount: 0
 						});
@@ -116,7 +115,7 @@
 					stat.ding = item.ding;
 					stat.down = item.down;
 					stat.downCount = item.downCount;
-					stat.frames = item.frames || [];
+					stat.files = item.files || [];
 
 					total += item.count;
 				}

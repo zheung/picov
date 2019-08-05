@@ -1,12 +1,80 @@
 module.exports = function($) {
-	let { G, C, T, Bluebird, DB } = $;
+	let { G, C, T, Bluebird, DB, BM } = $;
 
 	let { EventEmitter } = require('ws');
 
 	let fse = require('fs-extra');
 	let unzip = require('unzip');
 
+	let eFunc = function() { };
+
 	let counted = { ding: 0, down: 0, fail: 0 };
+
+	let ensureIllust = async function(conn, id) {
+		let illust = await conn.queryOne('SELECT stat FROM pixiv.illust WHERE id=$', [id]);
+
+		if(!illust) {
+			await conn.queryOne('INSERT INTO pixiv.illust(id) VALUES ($)', [id]);
+
+			illust = {
+				_stat: {
+					ding: 0,
+					down: 0,
+				}
+			};
+		}
+		else {
+			T.util.toBet(illust, BM.illust);
+		}
+
+		return illust;
+	};
+
+	let updateStat = async function(conn, id, ding, down) {
+		let stat = 0;
+
+		if(down) { stat |= 1; }
+		if(ding) { stat |= 2; }
+
+		await conn.query('UPDATE pixiv.illust SET stat=$ WHERE id=$', [stat, id]);
+	};
+
+	let saveFrames = async function(conn, id, frames) {
+		let count = 0;
+
+		for(let frame of frames) {
+			try {
+				await conn.queryOne('INSERT INTO pixiv.file$i', [{
+					illust: id,
+					index: count++,
+					name: frame.file,
+					delay: frame.delay
+				}]);
+			} catch(error) {
+				if(~~error.code != 23505) {
+					throw error;
+				}
+			}
+		}
+	};
+
+	let saveUrls = async function(conn, id, urls) {
+		let count = 0;
+
+		for(let url of urls) {
+			try {
+				await conn.queryOne('INSERT INTO pixiv.file$i', [{
+					illust: id,
+					index: count++,
+					name: _pa.parse(url).base
+				}]);
+			} catch(error) {
+				if(~~error.code != 23505) {
+					throw error;
+				}
+			}
+		}
+	};
 
 	let down = async function(url, pid, pstat, wock) {
 		try {
@@ -64,7 +132,7 @@ module.exports = function($) {
 		}
 	};
 
-	let downMap = async function(urls, iid, item, coll, wock) {
+	let downMap = async function(urls, iid, conn, wock) {
 		let pstat = {
 			count: urls.length,
 
@@ -124,99 +192,99 @@ module.exports = function($) {
 			}
 		}, { concurrency: 77 });
 
-		item.ding = false;
-		item.down = true;
-		await coll.updateOne(item);
+		await updateStat(conn, iid, false, true);
+
 		wock.cast('stat', iid, 'ding', false);
 		wock.cast('stat', iid, 'down', true);
 
 		return pstat;
 	};
 
-	return async function(option, wock) {
-		let { iid, count, type, force } = option;
+	return {
+		async c(raw, wock) {
+			return [raw, wock];
+		},
+		async m([option, wock], conn) {
+			let { iid, count, type, force } = option;
 
-		if(!(wock instanceof EventEmitter) && wock) {
-			wock.cast = function() { };
-		}
-
-		try {
-			let coll = DB.coll('illust');
-
-			let item = await coll.getStatOne(iid);
-
-			if(force) {
-				item.ding = false;
-				item.down = false;
+			if(!(wock instanceof EventEmitter) && wock) {
+				wock.cast = eFunc;
 			}
-			else {
-				if(item.ding) {
+
+			try {
+				let { _stat: { ding, down } } = await ensureIllust(conn, iid);
+
+				if(force) {
+					ding = 0;
+					down = 0;
+				}
+
+				if(ding) {
 					return wock.cast('stat', iid, 'statL', '在下') || '在下';
 				}
-				else if(item.down) {
+				if(down) {
 					return wock.cast('stat', iid, 'statL', '已下') || '已下';
 				}
-			}
 
-			wock.cast('stat', iid, 'statL', '解析');
+				wock.cast('stat', iid, 'statL', '解析');
 
-			let info = (await T.get(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4)).body;
+				let info = (await T.get(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4)).body;
 
-			item.ding = true;
-			await coll.updateOne(item);
+				await updateStat(conn, iid, 1, down);
 
-			wock.cast('stat', iid, 'ding', true);
-			wock.cast('stat', iid, 'statL', `下载 ${count}张`);
+				wock.cast('stat', iid, 'ding', true);
+				wock.cast('stat', iid, 'statL', `下载 ${count}张`);
 
-			let urls = [];
+				let urls = [];
 
-			if(type == 2) {
-				let meta = await T.get(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, 4);
+				if(type == 2) {
+					let meta = await T.get(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, 4);
 
-				urls.push(meta.body.originalSrc);
+					urls.push(meta.body.originalSrc);
 
-				item.frames = meta.body.frames;
+					await saveFrames(conn, iid, meta.body.frames);
 
-				wock.cast('stat', iid, 'frames', item.frames);
-			}
-			else if(info.illust_details.manga_a) {
-				for(let manga of info.illust_details.manga_a) {
-					urls.push(manga.url_big);
+					wock.cast('stat', iid, 'files', meta.body.frames);
+				}
+				else if(info.illust_details.manga_a) {
+					for(let manga of info.illust_details.manga_a) {
+						urls.push(manga.url_big);
+					}
+
+					await saveUrls(conn, iid, urls);
+
+					wock.cast('stat', iid, 'files', urls);
+				}
+				else {
+					urls.push(info.illust_details.url_big);
+
+					await saveUrls(conn, iid, urls);
+
+					wock.cast('stat', iid, 'files', urls);
 				}
 
-				item.urls = urls;
+				let pstat = await downMap(urls, iid, conn, wock);
 
-				wock.cast('stat', iid, 'urls', item.urls);
-			}
-			else {
-				urls.push(info.illust_details.url_big);
+				if(type == 2) {
+					try {
+						let zipPath = R(C.path.large, _pa.parse(urls[0]).base);
 
-				item.urls = urls;
-
-				wock.cast('stat', iid, 'urls', item.urls);
-			}
-
-			let pstat = await downMap(urls, iid, item, coll, wock);
-
-			if(type == 2) {
-				try {
-					let zipPath = R(C.path.large, _pa.parse(urls[0]).base);
-
-					_fs.createReadStream(zipPath)
-						.pipe(unzip.Extract({ path: R(C.path.large, String(iid)) }))
-						.on('finish', function() {
-							fse.removeSync(zipPath);
-						});
+						_fs.createReadStream(zipPath)
+							.pipe(unzip.Extract({ path: R(C.path.large, String(iid)) }))
+							.on('finish', function() {
+								fse.removeSync(zipPath);
+							});
+					}
+					catch(e) {
+						G.error(`解压 [动图]: 错误, ${iid}, ${e.message}`);
+					}
 				}
-				catch(e) {
-					G.error(`解压 [动图]: 错误, ${iid}, ${e.message}`);
-				}
-			}
 
-			return wock.cast('stat', iid, 'statL', `完成[${pstat.totalSum}]`) || '完成';
-		}
-		catch(e) {
-			G.error(`下载 [原图]: 错误, ${iid}, ${e.message}`);
+				return wock.cast('stat', iid, 'statL', `完成[${pstat.totalSum}]`) || '完成';
+			}
+			catch(e) {
+				G.error(`下载 [原图]: 错误, ${iid}, ${e.message}`);
+			}
 		}
 	};
 };

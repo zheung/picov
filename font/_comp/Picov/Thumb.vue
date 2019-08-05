@@ -3,23 +3,22 @@
 		<sPanel class="spanel inline" :title="title" :titlecolor="titleColor"
 			@click.left.native="onSave"
 			@mouseenter.prevent.native="onMenu"
-			@mouseleave.prevent.native="over = false"
 		>
+			<!-- @mouseleave.prevent.native="over = false" -->
 			<div
 				class="img"
 				:style="{ backgroundImage: 'url(api/thumb?iid='+illust.iid+'&time='+illust.time+'&type='+illust.type+')' }"
 				:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('; ')}`"
-			>
-			</div>
-			<div class="stat left" v-html="B.dictIllust[illust.iid].statL"></div>
-			<div class="stat right" v-html="B.dictIllust[illust.iid].statR"></div>
+			/>
+			<div class="stat left" v-html="B.dictIllust[illust.iid].statL" />
+			<div class="stat right" v-html="B.dictIllust[illust.iid].statR" />
 		</sPanel>
-		<div class="menu inline" ref="menu" :class="{ left: !((index+1) % wrap) }" v-show="over" tabindex="45" @blur="over = false">
+		<div v-show="over" ref="menu" class="menu inline" :class="{ left: !((index+1) % wrap) }" tabindex="45" @blur="over = false">
 			<div class="button" @click="onAuthor">作者</div>
 			<div class="button" @click="onViewer" >{{illust.type == 2 ? '动图' : '原图'}}</div>
 			<div class="button" @click="onRid">排除</div>
-			<div class="button" @click="onOpen" >原链</div>
-			<div class="button" @click="onOpenAuthor" >作链</div>
+			<div class="button" @click="onOpen">原链</div>
+			<div class="button" @click="onOpenAuthor">作链</div>
 		</div>
 	</div>
 </template>
@@ -126,6 +125,8 @@
 				else if(stat.down) {
 					return 'down';
 				}
+
+				return false;
 			}
 		}
 	};

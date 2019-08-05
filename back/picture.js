@@ -14,43 +14,45 @@ module.exports = function($) {
 		}
 	};
 
-	return async function(raw, ctx) {
-		let { iid, type, file, page } = raw;
+	return {
+		async c(raw, ctx) {
+			let { iid, type, file, page } = raw;
 
-		let path;
-		let ext = _pa.parse(file).ext;
+			let path;
+			let ext = _pa.parse(file).ext;
 
-		if(type == 2) {
-			path = testFile([
-				R(C.path.large, String(iid), file),
-				...C.path.filed.map(function(path) {
-					return R(path, String(iid), file);
-				}),
-			]);
-		}
-		else {
-			path = testFile([
-				R(C.path.large, `${iid}_p${page}${ext}`),
-				...C.path.filed.map(function(path) {
-					return R(path, String(iid), file);
-				}),
-			]);
-		}
+			if(type == 2) {
+				path = testFile([
+					R(C.path.large, String(iid), file),
+					...C.path.filed.map(function(path) {
+						return R(path, String(iid), file);
+					}),
+				]);
+			}
+			else {
+				path = testFile([
+					R(C.path.large, `${iid}_p${page}${ext}`),
+					...C.path.filed.map(function(path) {
+						return R(path, String(iid), file);
+					}),
+				]);
+			}
 
-		if(path) {
-			return {
-				_stat: 1,
-				_type: ext,
-				_data: _fs.createReadStream(path)
-			};
-		}
-		else {
-			ctx.status = 404;
+			if(path) {
+				return {
+					_stat: 4,
+					_type: ext,
+					_data: _fs.createReadStream(path)
+				};
+			}
+			else {
+				ctx.status = 404;
 
-			return {
-				_stat: 2,
-				_text: '文件不存在'
-			};
+				return {
+					_stat: 2,
+					_text: '文件不存在'
+				};
+			}
 		}
 	};
 };

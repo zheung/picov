@@ -4,7 +4,6 @@ module.exports = async function($) {
 
 	$.RoutMap = {
 		before: [
-			require('./libs/middle/parseResult'),
 			require('./libs/middle/parseRaw'),
 		],
 		after: [

@@ -38,8 +38,7 @@
 
 				loaded: 0,
 
-				frames: [],
-				urls: []
+				files: [],
 			});
 		},
 
@@ -51,9 +50,6 @@
 			}
 		},
 
-		created: function() {
-			A.reg('api/infoUgoira', 'api/infoUgoira');
-		},
 		mounted: function() {
 			this.$refs.can.focus();
 		},
@@ -213,13 +209,13 @@
 				ctx.drawImage(pic, this.lastLeft, this.lastTop, this.lastFinW, this.lastFinH);
 			},
 			playFrame: function(nowPos = 0) {
-				if(nowPos >= this.frames.length) {
+				if(nowPos >= this.files.length) {
 					nowPos = 0;
 				}
 
-				let now = this.frames[nowPos];
+				let now = this.files[nowPos];
 
-				if(this.loaded >= this.frames.length) {
+				if(this.loaded >= this.files.length) {
 					clearTimeout(this.timeout);
 
 					this.nextFrame(now);
@@ -255,12 +251,12 @@
 				let iid = illust.iid;
 
 				if(illust.type == 2) {
-					let frames = this.frames = illust.frames || illust.stat.frames;
+					let files = this.files = illust.files || illust.stat.files;
 
-					let prev = frames[frames.length - 1];
+					let prev = files[files.length - 1];
 					let index = 0;
 
-					for(let frame of frames) {
+					for(let frame of files) {
 						prev.next = frame;
 						prev = frame;
 
@@ -278,7 +274,7 @@
 							}.bind(this);
 						}.bind(this));
 
-						if(frames[0] === frame) {
+						if(files[0] === frame) {
 							pic.addEventListener('load', function() {
 								this.playFrame();
 							}.bind(this));
@@ -286,10 +282,10 @@
 					}
 				}
 				else {
-					let urls = this.urls = illust.urls || illust.stat.urls;
+					let files = this.files = illust.files || illust.stat.files;
 
 					let pic = new Image();
-					pic.src = `api/picture?iid=${iid}&page=${this.page}&file=${urls[0]}`;
+					pic.src = `api/picture?iid=${iid}&page=${this.page}&file=${files[0].file}`;
 
 					pic.addEventListener('load', function() {
 						this.loadPic(pic);

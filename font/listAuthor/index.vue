@@ -94,7 +94,7 @@
 							ding: false,
 							down: false,
 
-							frames: []
+							files: []
 						});
 					}
 
@@ -102,7 +102,7 @@
 
 					stat.ding = item.ding;
 					stat.down = item.down;
-					stat.frames = item.frames || [];
+					stat.files = item.files || [];
 
 					total += item.count;
 

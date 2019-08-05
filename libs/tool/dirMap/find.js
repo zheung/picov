@@ -1,5 +1,5 @@
 module.exports = function() {
-	return function(path) {
+	return function(path = '') {
 		let pathArr = path.split('.');
 
 		let now = this;

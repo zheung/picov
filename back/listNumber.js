@@ -1,28 +1,19 @@
 module.exports = function($) {
-	let { A, DB } = $;
+	let { A } = $;
 
-	return async function(raw) {
-		let coll = DB.coll('illust');
+	return {
+		async c(raw) {
+			let list = await A.touch.listAuthor(raw);
+			let illust = await A.touch.statIllust(raw.uid);
 
-		let result = await A.touch.listAuthor(raw);
-		let illust = await A.touch.statIllust(raw.uid);
-
-		if(illust) {
-			result.unshift(illust);
-		}
-
-		let stats = await coll.getStat(result);
-
-		for(let illust of result) {
-			let stat = stats[illust.iid];
-
-			if(stat) {
-				illust.down = stat.down;
-				illust.ding = stat.ding;
-				illust.frames = stat.frames;
+			if(illust) {
+				list.unshift(illust);
 			}
-		}
 
-		return result;
+			return await $.F.list({
+				listMode: 'list',
+				list
+			});
+		}
 	};
 };

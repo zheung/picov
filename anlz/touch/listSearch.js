@@ -12,7 +12,7 @@ module.exports = function({ T }) {
 		};
 	};
 
-	return async function({ word='', page=1, mode='all', smode='s_tag_tc', type='' }) {
+	return async function({ word = '', page = 1, mode = 'all', smode = 's_tag_tc', type = '' }) {
 		let odd = await T.get(`https://www.pixiv.net/touch/ajax/search/illusts?p=${page}&word=${encodeURI(word)}&mode=${mode}&s_mode=${smode}&type=${type}`, 4);
 
 		let result = [];
