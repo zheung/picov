@@ -36,6 +36,8 @@
 				undown: 0,
 				// 和分页、筛选有关的可变的值
 				query: {
+					listMode: 'author',
+
 					page: 1,
 
 					follow: false,
@@ -47,8 +49,6 @@
 		},
 
 		created: function() {
-			A.reg('listAuthor', 'api/listAuthor');
-			A.reg('statAuthor', 'api/statAuthor');
 		},
 
 		watch: {
@@ -72,7 +72,7 @@
 					this.query.page = 1;
 				}
 
-				let result = await A.conn('listAuthor', this.query);
+				let result = await A.conn('list', this.query);
 
 				this.$set(this, 'data', result);
 

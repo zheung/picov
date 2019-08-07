@@ -10,10 +10,10 @@ module.exports = function($) {
 				list.unshift(illust);
 			}
 
-			return await $.F.list({
+			return (await $.F.list({
 				listMode: 'list',
 				list
-			});
+			})).data;
 		}
 	};
 };

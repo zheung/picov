@@ -3,7 +3,7 @@ module.exports = function({ A, T, BM, CC }) {
 
 	return {
 		async c(raw) {
-			if(raw.mode == 'list') {
+			if(raw.listMode == 'list') {
 				return raw.list;
 			}
 			else if(modes.indexOf(raw.listMode) + 1) {

@@ -46,8 +46,6 @@
 		},
 
 		created: function() {
-			A.reg('listNumber', 'api/listNumber');
-			A.reg('statAuthor', 'api/statAuthor');
 		},
 
 		watch: {

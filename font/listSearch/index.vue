@@ -34,6 +34,8 @@
 				undown: 0,
 				// 和分页、筛选有关的可变的值
 				query: {
+					listMode: 'search',
+
 					page: 1,
 
 					word: '',
@@ -45,7 +47,6 @@
 		},
 
 		created: function() {
-			A.reg('listSearch', 'api/listSearch');
 		},
 
 		watch: {
@@ -65,7 +66,7 @@
 					this.query.page = 1;
 				}
 
-				let result = await A.conn('listSearch', this.query);
+				let result = await A.conn('list', Object.assign({}, this.query, { listMode: 'search' }));
 
 				this.$set(this, 'data', result);
 
@@ -78,7 +79,7 @@
 					let stat = BUS.dictIllust[item.iid];
 
 					if(!stat) {
-						this.$set(BUS.dictIllust,item.iid, stat = {
+						this.$set(BUS.dictIllust, item.iid, stat = {
 							statL: '',
 							statR: '',
 
