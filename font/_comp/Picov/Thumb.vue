@@ -15,7 +15,7 @@
 		</sPanel>
 		<div v-show="over" ref="menu" class="menu inline" :class="{ left: !((index+1) % wrap) }" tabindex="45" @blur="over = false">
 			<div class="button" @click="onAuthor">作者</div>
-			<div class="button" @click="onViewer" >{{illust.type == 2 ? '动图' : '原图'}}</div>
+			<div class="button" @click="onViewer">{{illust.type == 2 ? '动图' : '原图'}}</div>
 			<div class="button" @click="onRid">排除</div>
 			<div class="button" @click="onOpen">原链</div>
 			<div class="button" @click="onOpenAuthor">作链</div>

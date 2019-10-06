@@ -15,8 +15,8 @@ module.exports = async function($) {
 	$.FsExtra.ensureDirSync(R($.C.path.large));
 	$.FsExtra.ensureDirSync(R($.C.path.cache, 'large'));
 	$.FsExtra.ensureDirSync(R($.C.path.cache, 'thumb'));
-	$.FsExtra.ensureDirSync(R($.C.path.cache, 'header'));
 	$.FsExtra.ensureDirSync(R($.C.path.cache, 'ugoira'));
+	$.FsExtra.ensureDirSync(R($.C.path.header));
 
 	$.B = {};
 

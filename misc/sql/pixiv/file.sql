@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS pixiv.file (
 	"delay" int2
 );
 
-CREATE UNIQUE INDEX idx_file_illust_name ON pixiv.file("illust", "index");
+CREATE UNIQUE INDEX index_file_illust_name ON pixiv.file("illust", "index");

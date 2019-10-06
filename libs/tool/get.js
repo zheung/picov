@@ -5,7 +5,8 @@ module.exports = function({ G, C, Request }) {
 				url: path,
 				headers: {
 					'Cookie': `PHPSESSID=${C.cookie}`,
-					'Referer': 'http://www.pixiv.net/',
+					'Referer': 'https://www.pixiv.net/',
+					// 'Host': 'www.pixiv.net',
 					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
 				},
 				encoding: null,

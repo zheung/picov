@@ -3,10 +3,8 @@ import axios from 'axios';
 let actionList = {
 };
 
-let prefix = './';
-
 let prefixDict = {
-	api: './api/'
+	api: './api/',
 };
 
 export default function() {
@@ -18,7 +16,7 @@ export default function() {
 				conf.params = params;
 			}
 
-			let result = (await axios.get(prefix + actUrl, conf)).data;
+			let result = (await axios.get(actUrl, conf)).data;
 
 			if(result.success) {
 				if(result.data && result.data.alert) {
@@ -38,7 +36,7 @@ export default function() {
 				conf.params = params;
 			}
 
-			return (await axios.get(prefix + actUrl, conf)).data;
+			return (await axios.get(actUrl, conf)).data;
 		},
 
 		post: async function(action, params, conf = {}) {
@@ -53,7 +51,7 @@ export default function() {
 				}
 			}
 
-			let result = (await axios.post(prefix + actUrl, params, conf)).data;
+			let result = (await axios.post(actUrl, params, conf)).data;
 
 			if(result.success) {
 				if(result.data && result.data.alert) {
@@ -69,7 +67,7 @@ export default function() {
 		postRaw: async function(action, params, conf = {}) {
 			let actUrl = A.r(action);
 
-			return (await axios.post(prefix + actUrl, params, conf)).data;
+			return (await axios.post(actUrl, params, conf)).data;
 		},
 
 		jump: function(action, params) {
@@ -89,7 +87,7 @@ export default function() {
 
 			query = query.replace(/^&/, '');
 
-			window.location.href = `${prefix}${actUrl}?${query}`;
+			window.location.href = `${actUrl}?${query}`;
 		},
 
 		reg: function(action, path, force) {

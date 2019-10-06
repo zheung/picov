@@ -30,7 +30,7 @@ module.exports = function($) {
 				let pars = _pa.parse(one);
 
 				if(stat.isDirectory()) {
-					await enumFlow(basePath, accum, sub);
+					await enumFlow(basePath, accum, sub, initer);
 				}
 				else if(stat.isFile() && pars.ext == '.js') {
 					let result = await require(sub)($);

@@ -98,6 +98,7 @@ let main = async function() {
 				let tab;
 
 				if(base) {
+					X.comp('homeNavi').tabNow = modl;
 					await this.setViewNow(base, time, only);
 				}
 				else {
@@ -113,6 +114,7 @@ let main = async function() {
 						await this.setViewNow(type, time, only);
 
 						views.push(tab = { type: `${type}_${time}`, name, only, base: type, time });
+						X.comp('homeNavi').tabNow = tab;
 					}
 					else if(only) {
 						if(time) {
@@ -128,6 +130,7 @@ let main = async function() {
 
 							if(!onNavi) {
 								views.push(tab = { type: `${type}_${time}`, name, only, base: type, time });
+								X.comp('homeNavi').tabNow = tab;
 							}
 						}
 

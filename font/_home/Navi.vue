@@ -4,7 +4,7 @@
 			<!-- <div class="leftDot" >
 				<Fas icon="ellipsis-v" />
 			</div> -->
-			<div class="tabBox trans" ref="tabBox" :style="{ 'left': C.left+'px' }">
+			<div ref="tabBox" class="tabBox trans" :style="{ 'left': C.left+'px' }">
 				<div v-for="view of C.views" :key="'view'+view.type"
 					:class="{ trans: true, tab: true, hover: B.viewNow==view.type }"
 					@click="B.changeTab(view)"
@@ -16,10 +16,10 @@
 				</div>
 			</div>
 			<div class="tabCtrlBox" :style="{ 'left': '11px' }">
-				<div class="trans naviButton one" @mousedown="scrollKeep(1, 40, true)" @mouseup="scrollKeep(1, 40, false)" >
+				<div class="trans naviButton one" @mousedown="scrollKeep(1, 40, true)" @mouseup="scrollKeep(1, 40, false)">
 					<Fas class="icon" icon="angle-left" />
 				</div>
-				<div class="trans naviButton two" @mousedown="scrollKeep(2, -40, true)" @mouseup="scrollKeep(2, -40, false)" >
+				<div class="trans naviButton two" @mousedown="scrollKeep(2, -40, true)" @mouseup="scrollKeep(2, -40, false)">
 					<Fas class="icon" icon="angle-right" />
 				</div>
 			</div>
@@ -33,13 +33,61 @@
 			return X.init(this.$options._componentTag,
 				{
 					left: 0,
-					views: []
+
+					views: [],
+					tabNow: {}
 				},
 				{},
 				{
 					iid: []
 				}
 			);
+		},
+		mounted() {
+			document.addEventListener('keydown', event => {
+				if(event.keyCode == 112) {
+					event.preventDefault();
+
+					let views = this.C.views;
+
+					if(views.length == 1) { return; }
+
+					let index = views.indexOf(this.C.tabNow);
+
+					if(index == -1) {
+						return;
+					}
+					else if(index == 0) {
+						index = views.length - 1;
+					}
+					else {
+						index--;
+					}
+
+					BUS.changeTab(views[index]);
+				}
+				else if(event.keyCode == 113) {
+					event.preventDefault();
+
+					let views = this.C.views;
+
+					if(views.length == 1) { return; }
+
+					let index = views.indexOf(this.C.tabNow);
+
+					if(index == -1) {
+						return;
+					}
+					else if(index == views.length - 1) {
+						index = 0;
+					}
+					else {
+						index++;
+					}
+
+					BUS.changeTab(views[index]);
+				}
+			}, false);
 		},
 
 		methods: {
@@ -58,10 +106,10 @@
 
 				if(width > widthShow) {
 					if(val > 0) {
-						C.left = left+val > 0 ? 0 : left+val;
+						C.left = left + val > 0 ? 0 : left + val;
 					}
 					else {
-						C.left = left+val < min ? min : left+val;
+						C.left = left + val < min ? min : left + val;
 					}
 				}
 			},
@@ -77,7 +125,9 @@
 					}.bind(this), 100);
 				}
 			}
-		}
+		},
+
+
 	};
 </script>
 

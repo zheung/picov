@@ -14,8 +14,13 @@ module.exports = function({ A, T, BM, CC }) {
 			throw '缺少对应的[模式]';
 		},
 		async m(list, conn, query) {
-			let illusts = await query('SELECT * FROM pixiv.illust WHERE id IN ($r)', [list.map(r => r.iid)]);
-			let files = await query('SELECT * FROM pixiv.file WHERE illust IN ($r)', [list.map(r => r.iid)]);
+			let illusts = [];
+			let files = [];
+
+			if(list.length) {
+				illusts = await query('SELECT * FROM pixiv.illust WHERE id IN ($r)', [list.map(r => r.iid)]);
+				files = await query('SELECT * FROM pixiv.file WHERE illust IN ($r)', [list.map(r => r.iid)]);
+			}
 
 			T.util.toBets(illusts, BM.illust);
 

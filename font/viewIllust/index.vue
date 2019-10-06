@@ -58,7 +58,7 @@
 			onPause: function() {
 				let illust = this.S.illust;
 
-				if(illust != 2) {
+				if(illust.type != 2) {
 					this.page++;
 
 					if(this.page >= illust.count) {
@@ -176,37 +176,43 @@
 				if(finW < boxW) {
 					let diff = 1 - ((finW - boxW) / finW);
 
-					finW = ~~(diff*finW);
-					finH = ~~(diff*finH);
+					finW = ~~(diff * finW);
+					finH = ~~(diff * finH);
 				}
 
 				if(finH < boxH) {
 					let diff = 1 - ((finH - boxH) / finH);
 
-					finW = ~~(diff*finW);
-					finH = ~~(diff*finH);
+					finW = ~~(diff * finW);
+					finH = ~~(diff * finH);
 				}
 
 				if(finW > boxW) {
 					let diff = 1 - ((finW - boxW) / finW);
 
-					finW = ~~(diff*finW);
-					finH = ~~(diff*finH);
+					finW = ~~(diff * finW);
+					finH = ~~(diff * finH);
 				}
 
 				if(finH > boxH) {
 					let diff = 1 - ((finH - boxH) / finH);
 
-					finW = ~~(diff*finW);
-					finH = ~~(diff*finH);
+					finW = ~~(diff * finW);
+					finH = ~~(diff * finH);
 				}
 
-				this.lastLeft = (boxW - finW) / 2 + this.offW - finW * ((this.zoom/100 - 1) / 2);
-				this.lastTop = (boxH - finH) / 2 + this.offH - finH * ((this.zoom/100 - 1) / 2);
-				this.lastFinW = finW * this.zoom/100;
-				this.lastFinH = finH * this.zoom/100;
+				this.lastLeft = (boxW - finW) / 2 + this.offW - finW * ((this.zoom / 100 - 1) / 2);
+				this.lastTop = (boxH - finH) / 2 + this.offH - finH * ((this.zoom / 100 - 1) / 2);
+				this.lastFinW = finW * this.zoom / 100;
+				this.lastFinH = finH * this.zoom / 100;
 
 				ctx.drawImage(pic, this.lastLeft, this.lastTop, this.lastFinW, this.lastFinH);
+
+				ctx.font = '14px bold 微软雅黑';
+				ctx.fillStyle = 'snow';
+				ctx.textAlign = 'center';
+				ctx.textBaseline = 'middle';
+				ctx.fillText(this.files.length - this.idxNow, boxW - 24, boxH - 14);
 			},
 			playFrame: function(nowPos = 0) {
 				if(nowPos >= this.files.length) {
@@ -227,7 +233,7 @@
 
 					this.timeout = setTimeout(function() {
 						if(now.loaded) {
-							this.playFrame(nowPos+1);
+							this.playFrame(nowPos + 1);
 						}
 						else {
 							this.interval = setInterval(function() {

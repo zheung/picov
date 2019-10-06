@@ -4,7 +4,7 @@ const baseFormat = function baseFormat(match, type = typeof match, wild) {
 		return match;
 	}
 	else if(type == 'string') {
-		return `'${match}'`;
+		return `'${match.replace('\'', '\'\'')}'`;
 	}
 	else if(type == 'boolean') {
 		return match.toString().toUpperCase();
@@ -17,7 +17,12 @@ const baseFormat = function baseFormat(match, type = typeof match, wild) {
 
 		// 数据数组格式
 		if(wild != '$r') {
-			return `'{${match}}'`;
+			if(match.length) {
+				return `ARRAY[${match}]`;
+			}
+			else {
+				return '\'{}\'';
+			}
 		}
 
 		return match;
@@ -31,7 +36,7 @@ const baseFormat = function baseFormat(match, type = typeof match, wild) {
 // String with $$ : `a` ==> "a"
 // Boolean        : true ==> TRUE
 // Null           : null ==> NULL
-// Array          : [1, `a`, true] ==> '{1, `a`, TRUE}'
+// Array          : [1, `a`, true] ==> ARRAY[1, `a`, TRUE]
 // Array with $r  : [1, `a`, true] ==> 1, `a`, TRUE
 // Object         : { a: 1, b: `a` } ==> a=1, b=`a`
 // Object with $i : { a: 1, b: `a` } ==> (a, b) VALUES (1, `a`)
@@ -75,7 +80,7 @@ const format = function format(sql, param = []) {
 
 				// 对象
 				resultMatch = entries.map(function(arr) {
-					return `${arr[0]}=${baseFormat(arr[1])}`;
+					return `"${arr[0]}"=${baseFormat(arr[1])}`;
 				}).join(', ');
 
 				// 插入用格式

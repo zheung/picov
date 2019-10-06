@@ -18,7 +18,7 @@ module.exports = function({ T }) {
 
 			let result = [];
 
-			for(let item of odd.illusts) {
+			for(let item of odd.body.illusts) {
 				result.push(formatItem(item));
 			}
 

@@ -1,5 +1,5 @@
 module.exports = function($) {
-	let { G, C, T, Bluebird, DB, BM } = $;
+	let { G, C, T, Bluebird, BM, Moment } = $;
 
 	let { EventEmitter } = require('ws');
 
@@ -30,13 +30,29 @@ module.exports = function($) {
 		return illust;
 	};
 
-	let updateStat = async function(conn, id, ding, down) {
-		let stat = 0;
+	let updateStat = async function(conn, id, type, ding, down) {
+		let stat = (~~type) << 2;
 
 		if(down) { stat |= 1; }
 		if(ding) { stat |= 2; }
 
 		await conn.query('UPDATE pixiv.illust SET stat=$ WHERE id=$', [stat, id]);
+	};
+
+	let updateIllust = async function(conn, id, info, ding, down) {
+		let stat = (~~info.illust_details.type) << 2;
+
+		if(down) { stat |= 1; }
+		if(ding) { stat |= 2; }
+
+		await conn.query('UPDATE pixiv.illust SET $ WHERE id=$', [{
+			title: info.illust_details.title,
+			user: ~~info.author_details.user_id,
+			stat: stat,
+			tags: info.illust_details.tags,
+			comment: info.illust_details.comment_html,
+			timeUpload: Moment(info.illust_details.upload_timestamp, 'X').format()
+		}, id]);
 	};
 
 	let saveFrames = async function(conn, id, frames) {
@@ -132,7 +148,7 @@ module.exports = function($) {
 		}
 	};
 
-	let downMap = async function(urls, iid, conn, wock) {
+	let downMap = async function(urls, iid, type, conn, wock) {
 		let pstat = {
 			count: urls.length,
 
@@ -192,7 +208,7 @@ module.exports = function($) {
 			}
 		}, { concurrency: 77 });
 
-		await updateStat(conn, iid, false, true);
+		await updateStat(conn, iid, type, false, true);
 
 		wock.cast('stat', iid, 'ding', false);
 		wock.cast('stat', iid, 'down', true);
@@ -230,7 +246,7 @@ module.exports = function($) {
 
 				let info = (await T.get(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, 4)).body;
 
-				await updateStat(conn, iid, 1, down);
+				await updateIllust(conn, iid, info, 1, down);
 
 				wock.cast('stat', iid, 'ding', true);
 				wock.cast('stat', iid, 'statL', `下载 ${count}张`);
@@ -263,7 +279,7 @@ module.exports = function($) {
 					wock.cast('stat', iid, 'files', urls);
 				}
 
-				let pstat = await downMap(urls, iid, conn, wock);
+				let pstat = await downMap(urls, iid, ~~info.illust_details.type, conn, wock);
 
 				if(type == 2) {
 					try {
