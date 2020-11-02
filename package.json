@@ -1,0 +1,21 @@
+{
+	"name": "picov",
+	"version": "4.0.0-alpha.0",
+	"description": "Pixive Collector",
+	"main": "index.js",
+	"scripts": {
+		"pack": "cd font & npx webpack",
+		"prod": "rd /s /q dist & cd font & npx webpack -p",
+		"watch": "cd font & npx webpack -w"
+	},
+	"author": "Nuogz",
+	"license": "ISC",
+	"devDependencies": {
+		"eslint": "^7.12.1",
+		"eslint-plugin-html": "^6.1.0",
+		"eslint-plugin-vue": "^7.1.0"
+	},
+	"dependencies": {
+		"desire": "link:D:/Project/desire4"
+	}
+}

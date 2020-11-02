@@ -1,0 +1,30 @@
+{
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"html",
+		"vue"
+	],
+	"eslint.options": {
+		"plugins": [
+			"html",
+			"vue"
+		]
+	},
+	"javascript.suggestionActions.enabled": false,
+	"typescript.suggestionActions.enabled": false,
+	"debug.node.autoAttach": "off",
+	"javascript.preferences.quoteStyle": "single",
+	"vetur.format.scriptInitialIndent": true,
+	"vetur.format.styleInitialIndent": true,
+	"vetur.format.defaultFormatter.js": "vscode-typescript",
+	"javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+	"javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+	"vetur.format.defaultFormatter.html": "none",
+	"vetur.format.defaultFormatter.css": "none",
+	"vetur.format.options.tabSize": 4,
+	"vetur.format.options.useTabs": true,
+	"vetur.format.defaultFormatter.ts": "vscode-typescript",
+	"vetur.experimental.templateInterpolationService": false,
+	"git.ignoreLimitWarning": true
+}

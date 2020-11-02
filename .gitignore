@@ -1,0 +1,22 @@
+#Node Modules Folder
+/node_modules
+
+#No Real Config
+/config.server.js
+/config.profile.js
+
+#No Picture Folder
+/cache
+/save
+
+#Auth
+/.auth.js
+
+#Dist
+/dist
+
+#.vscode
+/.vscode/launch.json
+
+#log
+/logs
