@@ -21,7 +21,9 @@ const rc = {
 		requireAtomicUpdates: [0],
 	},
 	globals: {
-		L: true,
+		G: true,
+		
+		__main: true,
 	}
 };
 

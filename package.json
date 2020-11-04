@@ -11,11 +11,14 @@
 	"author": "Nuogz",
 	"license": "ISC",
 	"devDependencies": {
+		"babel-eslint": "^10.1.0",
 		"eslint": "^7.12.1",
 		"eslint-plugin-html": "^6.1.0",
 		"eslint-plugin-vue": "^7.1.0"
 	},
 	"dependencies": {
-		"desire": "link:D:/Project/desire4"
+		"desire": "link:D:/Project/desire4",
+		"fs-readdir-recursive": "^1.1.0",
+		"pg": "^8.4.2"
 	}
 }
