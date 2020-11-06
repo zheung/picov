@@ -1,6 +1,7 @@
 dependencies:
   desire: 'link:D:/Project/desire4'
   fs-readdir-recursive: 1.1.0
+  moment: 2.29.1
   pg: 8.4.2
 devDependencies:
   babel-eslint: 10.1.0_eslint@7.12.1
@@ -733,6 +734,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
+  /moment/2.29.1:
+    dev: false
+    resolution:
+      integrity: sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
   /ms/2.1.2:
     dev: true
     resolution:
@@ -1137,4 +1142,5 @@ specifiers:
   eslint-plugin-html: ^6.1.0
   eslint-plugin-vue: ^7.1.0
   fs-readdir-recursive: ^1.1.0
+  moment: ^2.29.1
   pg: ^8.4.2

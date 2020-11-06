@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "4.0.0-alpha.0",
+	"version": "4.0.0-alpha.1",
 	"description": "Pixive Collector",
 	"main": "index.js",
 	"scripts": {
@@ -19,6 +19,7 @@
 	"dependencies": {
 		"desire": "link:D:/Project/desire4",
 		"fs-readdir-recursive": "^1.1.0",
+		"moment": "^2.29.1",
 		"pg": "^8.4.2"
 	}
 }

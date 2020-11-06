@@ -43,29 +43,45 @@ const parseConf = function(C) {
 	global.G = Desire.initLogger(C.name, C.log.level, C.log.path);
 
 	// 路由
-	const routs = await require('./libs/rout')();
+	const { folds, faces, prxys } = await require('./libs/rout')();
 
 	// 加载服务器
 	Desire({
 		host: C.serv.host,
 		port: C.serv.port,
 		path: C.serv.path,
-		
+
 		// 路由
-		routs,
-		// 前置中间件
-		before: [
-			require('./libs/middle/parseRaw'),
-		],
-		// 后置中间件
-		after: [],
+		folds,
+		faces,
+		prxys,
+		// 中间件
+		mare: {
+			// 前置
+			before: [
+				require('./libs/mare/parseRaw'),
+			],
+			// 后置
+			after: [],
+		},
+
+		harb: null,
+
+		http2: {
+			enabled: C.serv.http2 ? C.serv.http2.enabled : false,
+			perm: C.serv.http2 ? C.serv.http2.perm : false,
+		},
+
 		// Websocket
 		wock: {
 			enabled: C.serv.wock ? C.serv.wock.enabled : false,
 			prefix: C.serv.wock ? C.serv.wock.prefix : false,
 			after: [
-				require('./libs/middle/wock/wrapResult')
+				require('./libs/mare/wock/wrapResult')
 			]
+		},
+
+		paths: {
 		}
 	});
 }());

@@ -4,6 +4,7 @@ const PA = require('path');
 
 module.exports = async function() {
 	const RMD = function(...paths) { return PA.resolve(__main.dir, ...paths); };
+	const wrapFlow = require('./flow');
 
 	const pathsAonf = readDirRecur(RMD('apps')).filter(p => p.endsWith('app.js'));
 
@@ -24,16 +25,21 @@ module.exports = async function() {
 			{ path: RMD('dist'), prefix: '/', option: { defer: true } },
 		],
 		faces: [],
+		prxys: [],
 	};
 	const faces = routs_type.faces;
 
 	for(const aonf of aonfs) {
-		if(aonf.face instanceof Array) {
+		if(aonf.faces instanceof Array) {
 			const dirApp = PA.parse(aonf.__path).dir;
 
-			for(const face of aonf.face) {
+			for(const face of aonf.faces) {
 				face.__pathApp = dirApp;
-				face.path = ['face', dirApp, ...face.entry.split('.')].join('/');
+				face.path = ['uapi', dirApp, ...face.entry.split('.')].join('/');
+
+				const cmr = require(RMD('apps', dirApp, 'api', ...face.entry.split('.')))();
+				
+				face.handle = wrapFlow(cmr, face.path);
 
 				faces.push(face);
 			}
