@@ -1,5 +1,7 @@
-module.exports = async function() {
+module.exports = async function($) {
 	return async function(ctx, next) {
+		ctx.$ = $;
+		
 		let raw = ctx.raw || {};
 
 		if(ctx.request && ctx.request.body) {

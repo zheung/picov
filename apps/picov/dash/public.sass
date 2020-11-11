@@ -1,0 +1,85 @@
+:root
+	--cLight: #eeeeee
+	--cLightD: #dddddd
+	--cDark: #2c3e50
+	// --cDark: #495051
+	--cDarkD: #161823
+	--cGray: gray
+	--cGrayL: lightgray
+	--cAccent: #48c0a3
+	--cAccentL: #1bd1a5
+	--cAccentSelected: rgba(27, 209, 165, 0.3)
+	--cAccentHover: rgba(27, 209, 165, 0.07)
+	--cStress: #ff9900
+	--cStressBy: #2196f3
+
+html
+	width: 100%
+	height: 100%
+
+	margin: 0
+	padding: 0
+
+	font-size: 16px
+
+	overflow: hidden
+	overflow-y: hidden
+
+	background: var(--cDark)
+
+body
+	box-sizing: border-box
+
+	position: relative
+
+	margin: 0 auto
+	padding: 0
+
+	width: 100%
+	height: 100%
+
+	color: snow
+	font-size: 0
+	text-align: left
+	font-family: "Microsoft Yahei",Helvetica,Tahoma,Simsun,Sans-Serif
+
+	background: #2c3e50
+
+::-webkit-scrollbar
+	width: 7px
+	height: 5px
+
+::-webkit-scrollbar-track
+	border-radius: 10px
+	width: 10px
+
+::-webkit-scrollbar-thumb
+	border-radius: 4px
+	background: rgba(73, 80, 81, 0.7)
+
+::-webkit-scrollbar-thumb:hover
+	background: lighten(rgba(73, 80, 81, 0.7), 4%)
+
+.nosel
+	user-select: none
+	-webkit-user-select: none
+	-moz-user-select: none
+	-ms-user-select: none
+
+.sel
+	user-select: text !important
+	-moz-user-select: text !important
+	-webkit-user-select: text !important
+	cursor: text !important
+
+.inline
+	display: inline-block
+	vertical-align: top
+
+.tac
+	text-align: center
+
+.elli
+	overflow: hidden
+	white-space: nowrap
+	text-overflow: ellipsis

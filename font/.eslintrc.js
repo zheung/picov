@@ -1,12 +1,14 @@
 const rc = {
 	env: {
 		es2020: true,
-		node: true,
+		browser: true,
 	},
 	extends: [
 		'eslint:recommended',
+		'plugin:vue/recommended'
 	],
 	parserOptions: {
+		parser: 'babel-eslint',
 		sourceType: 'module'
 	},
 	rules: {
@@ -19,11 +21,35 @@ const rc = {
 		noVar: [2],
 		quoteProps: [2, 'as-needed'],
 		requireAtomicUpdates: [0],
+		'vue/html-indent': [2, 'tab'],
+		'vue/script-indent': [2, 'tab', { baseIndent: 1 }],
+		'vue/max-attributes-per-line': [0],
+		'vue/mustache-interpolation-spacing': [0],
+		'vue/singleline-html-element-content-newline': [0],
+		'vue/no-v-html': [0],
+		'vue/html-self-closing': [1, {
+			html: {
+				void: 'always'
+			}
+		}],
 	},
+	overrides: [
+		{
+			files: ['*.vue'],
+			rules: {
+				indent: [0]
+			}
+		}
+	],
 	globals: {
-		G: true,
+		Vue: true,
+		App: true,
 
-		__main: true,
+		L: true,
+
+		B: true,
+
+		A: true
 	}
 };
 

@@ -5,6 +5,9 @@
 /config.server.js
 /config.profile.js
 
+#Dymatic Fontend
+/font/index.js
+
 #No Picture Folder
 /cache
 /save

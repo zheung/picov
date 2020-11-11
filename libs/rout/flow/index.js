@@ -72,7 +72,7 @@ module.exports = function(faces, rout, wrapper = {}) {
 			else if(stat == 2) {
 				return {
 					success: false,
-					text: data || '运行错误'
+					message: data || '运行错误'
 				};
 			}
 			// 3, 跳出, 提前结束, 返回结果

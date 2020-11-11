@@ -14,7 +14,7 @@ module.exports = function(model) {
 		try {
 			conn = await DB.pick();
 
-			ctx.flow.result = await model(option, conn, conn.query, conn.format, ctx.flow.raw, ctx);
+			ctx.flow.result = await model.bind(ctx)(option, conn, conn.query, conn.format, ctx.flow.raw);
 		}
 		finally {
 			if(conn) { conn.close(); }

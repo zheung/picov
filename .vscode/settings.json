@@ -13,7 +13,6 @@
 	},
 	"javascript.suggestionActions.enabled": false,
 	"typescript.suggestionActions.enabled": false,
-	"debug.node.autoAttach": "off",
 	"javascript.preferences.quoteStyle": "single",
 	"vetur.format.scriptInitialIndent": true,
 	"vetur.format.styleInitialIndent": true,
@@ -26,5 +25,6 @@
 	"vetur.format.options.useTabs": true,
 	"vetur.format.defaultFormatter.ts": "vscode-typescript",
 	"vetur.experimental.templateInterpolationService": false,
-	"git.ignoreLimitWarning": true
+	"git.ignoreLimitWarning": true,
+	"files.trimTrailingWhitespace": true
 }

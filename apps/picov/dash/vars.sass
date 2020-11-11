@@ -1,0 +1,16 @@
+// 字体大小
+$fs: 16px
+
+@function fs($step:0, $stepSize:2)
+	@return $fs + $step * $stepSize
+
+// 行高
+$lh: 12px
+
+@function lh($times:1)
+	@return $times * $lh
+
+@mixin inline
+	display: inline-block
+	vertical-align: top
+	@content

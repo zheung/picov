@@ -4,6 +4,6 @@ module.exports = function(render) {
 	}
 
 	return async function(ctx) {
-		ctx.flow.result = await render(ctx.flow.result, ctx.flow.option, ctx.flow.raw);
+		ctx.flow.result = await render.bind(ctx)(ctx.flow.result, ctx.flow.option, ctx.flow.raw);
 	};
 };
