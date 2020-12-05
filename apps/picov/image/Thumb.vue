@@ -7,8 +7,8 @@
 			:title="`IID：${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('; ')}`"
 		/>
 		<div class="bar">
-			<Fa class="inline" icon="home" />
-			<Fa class="inline" icon="search" />
+			<Fa class="inline icon" icon="home" />
+			<Fa class="inline icon" icon="search" />
 		</div>
 		<!-- <div v-show="over" ref="menu" class="menu inline" :class="{ left: !((index+1) % wrap) }" tabindex="45" @blur="over = false">
 			<div class="button" @click="onAuthor">作者</div>
@@ -134,6 +134,8 @@
 	box-sizing: border-box
 	overflow: hidden
 
+	margin-top: 20px
+
 	cursor: pointer
 
 	white-space: nowrap
@@ -144,8 +146,8 @@
 
 
 	>.img
-		width: 100%
-		padding: 100% 0 0
+		width: 75%
+		padding: 75% 0px 0px 100%
 
 		box-sizing: border-box
 
@@ -155,11 +157,16 @@
 
 	>.bar
 		box-sizing: border-box
-		padding: 10px
+		padding: 0px 5px
+		margin: 5px 0px
 
 		width: 100%
 		height: 24px
 
 		font-size: 14px
 		line-height: 24px
+
+		>.icon
+			height: 100%
+			margin-right: 5px
 </style>

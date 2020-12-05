@@ -30,5 +30,5 @@
 	align-content: flex-start
 
 .Thumb
-	flex: 0 0 20%
+	flex: 0 0 25%
 </style>
