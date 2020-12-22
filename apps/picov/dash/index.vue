@@ -4,6 +4,8 @@
 			<img class="header" :src="'./uapi/picov/image/header'" />
 			<Fa class="icon" icon="search" />
 			<Fa class="icon" icon="home" />
+			<Fa class="icon _split" icon="minus" />
+			<Fa class="icon" icon="plus" />
 		</div>
 		<keep-alive>
 			<component :is="B.viewNow.slot" class="inline View" />
@@ -16,6 +18,7 @@
 
 	import initFontawesome from './libs/fontawesome';
 	import { A } from './libs/connect';
+	import Wock from './libs/wock.web';
 
 	document.title = 'Picov 2.X';
 
@@ -27,7 +30,8 @@
 
 	B.Vue.set(B, 'viewNow', { slot: '', view: null, name: null, time: 0 });
 	B.Vue.set(B, 'lists', {});
-	B.Vue.set(B, 'typeListNow', '');
+	B.Vue.set(B, 'typeList', '');
+	B.Vue.set(B, 'illusts', {});
 
 	const vomps_name = {};
 	const views_name = {};
@@ -48,6 +52,8 @@
 
 		mounted() {
 			window.app = this;
+
+			this.$set(B, 'W', new Wock(`ws://${location.host}/wock`, { ping: false, logger: true }));
 
 			this.changeView('list');
 		},
@@ -92,7 +98,9 @@
 				// // 更新hash
 				// window.location.hash = `#${viewName}`;
 			},
-
+			updateIllusts(illusts) {
+				const illustsCache = B.illusts;
+			}
 		},
 	};
 </script>
@@ -135,6 +143,9 @@ $widthSide: 40px
 		height: 32px
 		color: var(--cDark)
 		cursor: pointer
+
+		&._split
+			border-top: 1px solid var(--cLight)
 
 .View
 	position: relative

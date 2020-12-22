@@ -5,12 +5,13 @@ dependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.1
   '@fortawesome/vue-fontawesome': 2.0.0_765c58e9cf3f5cae99a1172f3117b02e
   axios: 0.21.0
-  desire: 'link:D:/Project/desire4'
+  desire: 'link:../desire4'
   fs-extra: 9.0.1
   fs-readdir-recursive: 1.1.0
   https-proxy-agent: 5.0.0
   moment: 2.29.1
   pg: 8.4.2
+  ws: 7.4.1
 devDependencies:
   '@babel/core': 7.12.3
   '@babel/plugin-proposal-class-properties': 7.12.1_@babel+core@7.12.3
@@ -6353,6 +6354,20 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-/lg70HAjtkUgWPVZhZcm+T4hkL8Zbtp1nFNOn3lRrxnlv50SRBv7cR7RqR+GMsd3hUXy9hWBo4CHTbFTcOYwig==
+  /ws/7.4.1:
+    dev: false
+    engines:
+      node: '>=8.3.0'
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    resolution:
+      integrity: sha512-pTsP8UAfhy3sk1lSk/O/s4tjD0CRwvMnzvwr4OKGX7ZvqZtUyx4KIJB5JWbkykPoc55tixMGgTNoh3k4FkNGFQ==
   /xml-char-classes/1.0.0:
     dev: true
     engines:
@@ -6458,3 +6473,4 @@ specifiers:
   vue-template-compiler: ^2.6.12
   webpack: ^5.4.0
   webpack-cli: ^4.2.0
+  ws: ^7.4.1

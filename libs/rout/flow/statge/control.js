@@ -3,12 +3,14 @@ module.exports = function(control) {
 		return false;
 	}
 
-	return async function(ctx) {
-		let option = await control.bind(ctx)(ctx.raw);
+	return async function(flow) {
+		const { raw, ctx } = flow;
+
+		let option = await control.bind(ctx)(raw);
 
 		// 如果返回为未定义，则视raw为返回值
-		if(option === undefined) { option = ctx.raw; }
+		if(option === undefined) { option = raw; }
 
-		ctx.flow.result = ctx.flow.option = option;
+		flow.result = flow.option = option;
 	};
 };

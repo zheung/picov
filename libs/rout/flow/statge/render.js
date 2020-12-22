@@ -3,7 +3,9 @@ module.exports = function(render) {
 		return false;
 	}
 
-	return async function(ctx) {
-		ctx.flow.result = await render.bind(ctx)(ctx.flow.result, ctx.flow.option, ctx.flow.raw);
+	return async function(flow) {
+		const { raw, ctx } = flow;
+
+		flow.result = await render.bind(ctx)(flow.result, flow.option, raw);
 	};
 };

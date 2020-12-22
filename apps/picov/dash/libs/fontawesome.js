@@ -3,7 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import {
 	faHome,
-	faSearch
+	faSearch,
+	faAngleLeft,
+	faAngleRight,
+	faPlus,
+	faMinus
 } from '@fortawesome/free-solid-svg-icons';
 
 // import {
@@ -14,7 +18,11 @@ import {
 
 library.add(
 	faHome,
-	faSearch
+	faSearch,
+	faAngleLeft,
+	faAngleRight,
+	faPlus,
+	faMinus
 );
 
 export default function({ Vue }) { Vue.component('Fa', FontAwesomeIcon); }

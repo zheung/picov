@@ -160,7 +160,10 @@ module.exports = function(auth) {
 	delete auth.name;
 
 	pool.query('SHOW CLIENT_ENCODING')
-		.then(r => G.debug('数据', `测试 [数据库连接], 客户端编码{${r.rows[0].client_encoding}}`));
+		.then(r => G.debug('数据', `测试 [数据库连接], 客户端编码{${r.rows[0].client_encoding}}`))
+		.catch(e => {
+			G.fatal('数据', `测试 [数据库连接]`, e);
+		});
 
 	return {
 		async pick() {

@@ -7,6 +7,28 @@ global.__main = {
 	R(...paths) { return PA.resolve(__main.path, ...paths); }
 };
 
+const parseWock = function(raw, mares) {
+	if(
+		raw === null ||
+		raw === undefined ||
+		raw === false ||
+		raw === 'false' ||
+		false
+	) {
+		return false;
+	}
+
+	const wock = {
+		prefix: (typeof raw == 'string' ? raw : raw.prefix).trim(),
+		ping: (typeof raw == 'string' ? true : raw.ping),
+		mares
+	};
+
+	if(!wock.prefix) { return false; }
+
+	return wock;
+};
+
 (async function() {
 	// 服务器配置
 	const C = require('./libs/conf')('server');
@@ -44,13 +66,11 @@ global.__main = {
 		},
 
 		// Websocket
-		wock: {
-			enabled: C.serv.wock ? C.serv.wock.enabled : false,
-			prefix: C.serv.wock ? C.serv.wock.prefix : false,
+		wock: parseWock(C.serv.wock, {
 			after: [
 				require('./libs/mare/wock/wrapResult')
 			]
-		},
+		}),
 
 		paths: {}
 	});

@@ -21,17 +21,16 @@ module.exports = function(faces, rout, wrapper = {}) {
 	return async function(raw, ctx) {
 		ctx.type = 'json';
 
-		const flow = { raw };
-		ctx.flow = flow;
+		const flow = { raw, ctx };
 
 		let statge;
 		try {
 			statge = 'control';
-			typeof warpC == 'function' ? await warpC(ctx) : null;
+			typeof warpC == 'function' ? await warpC(flow) : null;
 			statge = 'model';
-			typeof warpM == 'function' ? await warpM(ctx) : null;
+			typeof warpM == 'function' ? await warpM(flow) : null;
 			statge = 'render';
-			typeof warpR == 'function' ? await warpR(ctx) : null;
+			typeof warpR == 'function' ? await warpR(flow) : null;
 
 			return {
 				success: true,
@@ -89,6 +88,5 @@ module.exports = function(faces, rout, wrapper = {}) {
 				return data;
 			}
 		}
-
 	};
 };

@@ -6,15 +6,17 @@ module.exports = function(model) {
 		return false;
 	}
 
-	return async function(ctx) {
-		const option = ctx.flow.option;
+	return async function(flow) {
+		const { raw, ctx } = flow;
+
+		const option = flow.option;
 
 		let conn;
 
 		try {
 			conn = await DB.pick();
 
-			ctx.flow.result = await model.bind(ctx)(option, conn, conn.query, conn.format, ctx.flow.raw);
+			flow.result = await model.bind(ctx)(option, conn, conn.query, conn.format, raw);
 		}
 		finally {
 			if(conn) { conn.close(); }
