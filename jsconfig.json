@@ -3,6 +3,7 @@
 		"target": "esnext"
 	},
 	"exclude": [
+		"dist",
 		"node_modules",
 		"**/node_modules/*"
 	]
