@@ -11,9 +11,17 @@ const rc = {
 				'eslint:recommended',
 				'plugin:vue/recommended'
 			],
+			parser: '@babel/eslint-parser',
 			parserOptions: {
-				parser: 'babel-eslint',
-				sourceType: 'module'
+				sourceType: 'module',
+				requireConfigFile: false,
+				babelOptions: {
+					plugins: [
+						'@babel/plugin-syntax-dynamic-import',
+						'@babel/plugin-proposal-class-properties',
+						'@babel/plugin-proposal-optional-chaining'
+					]
+				}
 			},
 			rules: {
 				indent: [0],

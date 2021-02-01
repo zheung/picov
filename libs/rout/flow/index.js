@@ -45,7 +45,7 @@ module.exports = function(faces, rout, wrapper = {}) {
 			if(cmd instanceof Error || typeof cmd == 'string') {
 				const user = (raw && raw._userID) ? `用户: {${raw._nick}(${raw._userID})}` : '';
 
-				G.error(`海港`, `运行 [接口], 路由{${rout}}.${statge}`, cmd, user);
+				G.error('服务', `海港`, `运行 [接口], 路由{${rout}}.${statge}`, cmd, user);
 
 				stat = 2;
 				data = cmd.message || cmd;

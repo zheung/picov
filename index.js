@@ -1,6 +1,6 @@
 const PA = require('path');
 
-const Desire = require('desire');
+const Desire = require('@nuogz/desire');
 
 global.__main = {
 	dir: PA.parse(require.main.filename).dir,
@@ -33,14 +33,13 @@ const parseWock = function(raw, mares) {
 	// 服务器配置
 	const C = require('./libs/conf')('server');
 
-	// 日志
-	global.G = Desire.initLogger(C.name, C.log.level, C.log.path);
+	global.G = require('@nuogz/gaia/log')(C.log.prefix, C.log.level, C.log.folderSave);
 
 	// 路由
 	const { folds, faces } = await require('./libs/rout')();
 
 	// 加载服务器
-	Desire({
+	const serv = new Desire({
 		host: C.serv.host,
 		port: C.serv.port,
 		path: C.serv.path,
@@ -58,8 +57,6 @@ const parseWock = function(raw, mares) {
 			after: [],
 		},
 
-		harb: null,
-
 		http2: {
 			enabled: C.serv.http2 ? C.serv.http2.enabled : false,
 			perm: C.serv.http2 ? C.serv.http2.perm : false,
@@ -72,6 +69,8 @@ const parseWock = function(raw, mares) {
 			]
 		}),
 
-		paths: {}
-	});
+		paths: {},
+	}, G);
+
+	serv.start();
 }());

@@ -36,7 +36,7 @@ module.exports = async function() {
 		}
 	}
 
-	G.info('路由', '✔');
+	G.info('服务', '路由', '✔');
 
 	return routs_type;
 };

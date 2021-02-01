@@ -2,6 +2,6 @@
 
 module.exports = {
 	plugins: {
-		'cssnano': {}
+		cssnano: {}
 	}
 };

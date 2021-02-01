@@ -16,7 +16,7 @@ module.exports = function() {
 
 			return aonf;
 		} catch(error) {
-			G.warn('路由', `加载 [应用]入口{${pathAonf}} 失败`, error);
+			G.warn('服务', '路由', `加载 [应用]入口{${pathAonf}} 失败`, error);
 		}
 	}).filter(c => c);
 

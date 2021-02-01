@@ -8,7 +8,6 @@ const rc = {
 		'plugin:vue/recommended'
 	],
 	parserOptions: {
-		parser: 'babel-eslint',
 		sourceType: 'module'
 	},
 	rules: {
