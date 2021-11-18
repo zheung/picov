@@ -2,7 +2,7 @@ const rc = {
 	overrides: [
 		{
 			files: ['*.vue', '*.js'],
-			excludedFiles: ['*.api.js'],
+			excludedFiles: ['*.api.js', 'app.js'],
 			env: {
 				es2020: true,
 				browser: true,
@@ -11,8 +11,9 @@ const rc = {
 				'eslint:recommended',
 				'plugin:vue/recommended'
 			],
-			parser: '@babel/eslint-parser',
+			parser: 'vue-eslint-parser',
 			parserOptions: {
+				parser: '@babel/eslint-parser',
 				sourceType: 'module',
 				requireConfigFile: false,
 				babelOptions: {
