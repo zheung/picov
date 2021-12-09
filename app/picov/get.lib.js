@@ -33,3 +33,13 @@ export const getStream = async (url, cookie, returnData = true) => {
 
 	return returnData ? response.data : response;
 };
+
+
+export const getBuffer = async (url, cookie, returnData = true) => {
+	const response = await Axios.get(url, {
+		responseType: 'arraybuffer', headers: getHeader(cookie),
+		httpsAgent: getProxy(C.proxy.api)
+	});
+
+	return returnData ? response.data : response;
+};

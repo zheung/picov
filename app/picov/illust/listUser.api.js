@@ -23,8 +23,12 @@ const handle = async raw => {
 	const profile = C.profile[raw.who];
 	AS(profile, `未找到~[档案]~{${raw.who}}`);
 
+	const { uid, type, page } = raw;
+
+	AS(uid, `无效~[用户ID]~{${uid}}`);
+
 	const data = await getJSON(
-		`https://www.pixiv.net/touch/ajax/follow/latest?type=illusts&p=${raw.page ?? 1}`,
+		`https://www.pixiv.net/touch/ajax/user/illusts?p=${page ?? 1}&id=${uid}&type=${type ?? 'all'}`,
 		profile.cookie
 	);
 

@@ -2,6 +2,7 @@ const rcBrowser = {
 	files: ['./app/**/*.{js,vue}'],
 	excludedFiles: ['./app/**/*.{api,lib,map}.js', './app/**/*.lib/**/*.js'],
 	env: { node: false, browser: true },
+	parserOptions: { ecmaVersion: 13 },
 	extends: ['plugin:vue/vue3-recommended'],
 	rules: {
 		indent: [0],
@@ -14,7 +15,8 @@ const rcBrowser = {
 		'vue/no-v-html': [0],
 		'vue/require-v-for-key': [0],
 		'vue/html-self-closing': [1, { html: { void: 'always' }, }],
-		'vue/first-attribute-linebreak': [0]
+		'vue/first-attribute-linebreak': [0],
+		'vue/multi-word-component-names': [0],
 	},
 	globals: {
 		defineProps: 'readonly',

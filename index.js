@@ -2,12 +2,12 @@ import { resolve } from 'path';
 
 import Server from '@nuogz/desire';
 
-import { C, G, dirProject } from './lib/global.js';
+import { dirProject } from './lib/global.dir.js';
+import { C, G } from './lib/global.js';
 
 import initRoute from './lib/initRoute.js';
 
 import ResultParser from './lib/mare/ResultParser.js';
-
 
 const { folds, faces } = await initRoute(resolve(dirProject, 'app'));
 
