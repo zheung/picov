@@ -1,7 +1,7 @@
 <template>
 	<!-- 侧边栏 -->
 	<p-sidebar>
-		<p-profile>{{who?.name?.[0] ?? ''}}</p-profile>
+		<p-profile>{{profile?.name?.[0] ?? ''}}</p-profile>
 		<p-button><Fas icon="home" /></p-button>
 	</p-sidebar>
 
@@ -25,11 +25,11 @@
 	document.title = 'Picov';
 
 
-	window.W = inject('Wock');
+	const wock = window.W = inject('$wock');
 
 
-	const who = ref({});
-	provide('who', who);
+	const profile = ref({});
+	provide('profile', profile);
 
 
 	// 设置全局CSS变量
@@ -50,9 +50,9 @@
 	onBeforeMount(async () => {
 		namesProfile.value = await $get('picov/profile/list') ?? [];
 
-		who.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
+		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
 
-		modulePre.value = 'picov-illust-List';
+		wock.at('open', () => modulePre.value = 'picov-illust-List');
 	});
 
 

@@ -2,6 +2,7 @@ import { DB } from '../../../lib/global.js';
 
 class IllustStates {
 	#maps = {};
+	#push = {};
 
 	async pull(iids = [], wock) {
 		const db = await DB.pick();
@@ -10,16 +11,17 @@ class IllustStates {
 
 		const result = [];
 		iids.forEach(iid => {
-			if(!this.#maps[iid]) {
-				result.push(
-					this.#maps[iid] = {
-						state: 0,
-						count: 0,
-						countFetched: 0,
-						files: []
-					}
-				);
-			}
+			result.push(this.#maps[iid] ?? (this.#maps[iid] = {
+				iid,
+				state: 0,
+				count: 0,
+				countFetched: 0,
+				sizeAll: 0,
+				progress: 0,
+				files: []
+			}));
+
+			this.#push[iid] ?? (this.#push[iid] = []).push(wock);
 		});
 
 

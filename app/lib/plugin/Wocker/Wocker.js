@@ -1,8 +1,9 @@
 import Wock from './Wock.js';
 
-
+/** @type {Wock} */
+export let $wock;
 export const install = function(app) {
-	const wock = new Wock(
+	const wock = $wock = new Wock(
 		new URL('wock', location.origin).toString().replace(/^http/, 'ws'),
 		(console || {}).log,
 		(console || {}).error,
@@ -12,5 +13,5 @@ export const install = function(app) {
 	wock.open('初始化');
 
 	app.config.globalProperties.$wock = wock;
-	app.provide('Wock', wock);
+	app.provide('$wock', wock);
 };

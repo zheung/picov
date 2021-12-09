@@ -6,7 +6,8 @@ class Wock {
 		this.opening = false;
 
 		this.handles_type = {
-			ping: [wock => wock.cast('pong')]
+			$open: [],
+			ping: [wock => wock.cast('pong')],
 		};
 		this.keysHandlesOnce = new Set();
 
@@ -60,7 +61,7 @@ class Wock {
 
 		return new Promise(resolve => {
 			this.wock.addEventListener('open', () => {
-				this.opening = false;
+				this.opening = true;
 
 				this.wock.cast = (type, ...data) => {
 					try {
@@ -114,10 +115,10 @@ class Wock {
 
 							try {
 								if(event.data instanceof Array) {
-									await handle(this.wock, ...event.data);
+									await handle(...event.data, this.wock);
 								}
 								else {
-									await handle(this.wock, event.data);
+									await handle(event.data, this.wock);
 								}
 
 								if(this.keysHandlesOnce.has(`${type}:${id + 1}`)) {
@@ -138,6 +139,8 @@ class Wock {
 				});
 
 				if(this.ping) { check(); }
+
+				this.handles_type.$open.forEach(handle => handle(this));
 
 				resolve(this);
 			});
@@ -187,6 +190,14 @@ class Wock {
 		this.cast(type, ...data);
 
 		return id;
+	}
+	at(type, handle) {
+		if(type == 'open' && this.opening) {
+			setTimeout(() => handle(), 0);
+		}
+		else {
+			return this.add(`$${type}`, handle);
+		}
 	}
 
 
