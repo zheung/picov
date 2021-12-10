@@ -1,33 +1,37 @@
 import { computed, ref } from 'vue';
 import { $get } from '../../lib/plugin/Aegis.js';
-import { $wock } from '../../lib/plugin/Wocker/Wocker.js';
 
 
 class Illusts {
 	#type = ref('follow');
-	#map = ref({
-		follow: []
-	});
-	state = ref({});
-	list = computed(() => this.#map.value[this.#type.value]);
+	#map = ref({ follow: [] });
+	#page = ref({ follow: 1 });
 
-	constructor() {
-		$wock.add('statesIllust', (states) => {
+	state = ref({});
+	illusts = computed(() => this.#map.value[this.#type.value]);
+	page = computed(() => this.#page.value[this.#type.value]);
+
+	constructor(wock) {
+		this.wock = wock;
+
+		wock.add('statesIllust', states => {
 			states.forEach(state => this.state.value[state.iid] = state);
 		});
 	}
 
 	set type(type) { this.#type.value = type; }
 
+	next() { this.#page.value[this.#type.value]++; }
+	prev() { if(this.#page.value[this.#type.value] > 1) { this.#page.value[this.#type.value]--; } }
+	jump(page) { this.#page.value[this.#type.value] = ~~page; }
+
 
 	async getFollow(who, page) {
 		const illusts = this.#map.value.follow = await $get('picov/illust/listFollow', { who: who.name, page });
 
-		$wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), who.name);
+		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), who.name);
 	}
 }
 
-const illusts = new Illusts();
-window.IS = illusts;
 
-export default illusts;
+export default Illusts;

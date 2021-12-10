@@ -1,8 +1,16 @@
 <template>
 	<!-- 侧边栏 -->
 	<p-sidebar>
-		<p-profile>{{profile?.name?.[0] ?? ''}}</p-profile>
-		<p-button><Fas icon="home" /></p-button>
+		<p-button v-tip.right="'我的档案'" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
+		<p-button v-tip.right="'我的关注'" tabindex="2" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button>
+		<p-button v-tip.right="'下一页'" tabindex="3" @click="IS.next()" @keydown.enter.space="IS.next()"><Fas icon="angle-double-right" /></p-button>
+		<p-button v-tip.right="'当前页'" expand>
+			<input v-model="pageNew" tabindex="4" type="text" @keydown.enter="IS.jump(pageNew)" />
+		</p-button>
+		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button>
+		<p-button v-tip.right="'搜索栏'" keyword>
+			<input v-model="keyword" tabindex="6" type="text" @keydown.enter="IS.search(pageNew)" />
+		</p-button>
 	</p-sidebar>
 
 	<!-- 主模块 -->
@@ -15,17 +23,28 @@
 
 <script setup>
 	import { ref, watch, onBeforeMount, inject, provide, } from 'vue';
+	import Illusts from './picov/illust/Illusts.js';
+
 
 	const app = inject('app');
 	const CV = inject('CV');
 	const $alert = inject('$alert');
 	const $get = inject('$get');
-
-
-	document.title = 'Picov';
-
-
 	const wock = window.W = inject('$wock');
+
+	const IS = window.IS = new Illusts(wock);
+	provide('IS', IS);
+
+	const page = IS.page;
+
+	const pageNew = ref(page.value);
+	const keyword = ref('');
+
+
+	document.title = 'Picov 5';
+
+
+
 
 
 	const profile = ref({});
@@ -35,7 +54,7 @@
 	// 设置全局CSS变量
 	// theme变量由于postcss处理，依然在<style>中定义
 	CV.setAll({
-		widthSidebar: '3rem',
+		widthSidebar: '3.5rem',
 
 		widthScroll: '0.5rem',
 		heightTopbar: '0rem',
@@ -83,27 +102,45 @@
 
 <style lang="sass" scoped>
 p-sidebar
-	@apply fixed z-20 shadow-mdd overflow-x-hidden overflow-y-auto p-1 bg-gray-100
+	@apply fixed z-20 shadow-mdd p-1 bg-gray-100
 	width: var(--widthSidebar)
 	height: calc(100% - var(--heightTopbar))
 	top: var(--heightTopbar)
 	background-color: var(--colorMain)
 
-	p-profile
-		@apply block rounded-md text-center text-xl font-bold shadow-mdd cursor-pointer
+
+	p-button
+		@apply block rounded-md text-center text-xl shadow-mdd mt-2 cursor-pointer outline-none
 		width: calc( var(--widthSidebar) - 0.55rem)
 		height: calc( var(--widthSidebar) - 0.55rem)
 		line-height: calc( var(--widthSidebar) - 0.55rem)
 		background-color: var(--colorTextMain)
 		color: var(--colorText)
 
-	p-button
-		@apply block rounded-md text-center text-xl shadow-mdd mt-2 cursor-pointer
-		width: calc( var(--widthSidebar) - 0.55rem)
-		height: calc( var(--widthSidebar) - 0.55rem)
-		line-height: calc( var(--widthSidebar) - 0.55rem)
-		background-color: var(--colorTextMain)
-		color: var(--colorText)
+		&:focus
+			@apply ring-4 ring-yellow-600
+
+		&[profile]
+			@apply font-bold mt-0
+
+		&[expand]
+			@apply overflow-hidden
+
+			&:focus-within
+				@apply overflow-visible w-24 ring-4 ring-yellow-600
+
+			input
+				@apply rounded-md w-full text-center outline-none
+
+		&[keyword]
+			@apply overflow-hidden
+
+			&:focus-within
+				@apply overflow-visible w-48 ring-4 ring-yellow-600
+
+			input
+				@apply rounded-md w-full text-center outline-none
+
 
 p-main
 	margin-top: var(--heightTopbar)

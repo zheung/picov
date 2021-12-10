@@ -13,7 +13,7 @@ class IllustStates {
 		iids.forEach(iid => {
 			result.push(this.#maps[iid] ?? (this.#maps[iid] = {
 				iid,
-				state: 0,
+				fetch: 0,
 				count: 0,
 				countFetched: 0,
 				sizeAll: 0,
@@ -33,18 +33,22 @@ class IllustStates {
 			illustsDB.forEach(illustDB => {
 				const illust = this.#maps[illustDB.id];
 
-				illust.state = illustDB.stat & 2 ? 2 : (illustDB.stat & 1 ? 1 : 0);
+				illust.fetch = illustDB.fetch;
 
 				illust.files = illust.files = files
 					.filter(file => file.illust == illustDB.id)
 					.sort((a, b) => a.index - b.index)
-					.map(file => { return { delay: file.delay, file: file.name }; });
+					.map(file => ({ delay: file.delay, file: file.name }));
 			});
 		}
 		finally { db?.close(); }
 
 
 		wock.cast('statesIllust', result);
+	}
+
+	push() {
+
 	}
 }
 
