@@ -3,7 +3,7 @@
 		<p-illusts>
 			<template v-for="(illust, index) of illusts" :key="`illust-${illust.iid}`">
 				<p-illust
-					:title="illust.iid"
+					:title="`${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('、')}`"
 					:style="{
 						backgroundImage: `url(api/picov/illust/thumb?who=${profile.name}&iid=${illust.iid}&time=${illust.time}&type=${illust.type})`,
 						zIndex: illusts.length-index
@@ -14,7 +14,7 @@
 						<progress :max="100" :value="100" />
 					</template>
 					<template v-else>
-						<progress :max="state[illust.iid]?.sizeAll ??0" :value="state[illust.iid]?.progress??0" />
+						<progress :max="state[illust.iid]?.progMax ?? 0" :value="state[illust.iid]?.prog ?? 0" />
 					</template>
 					<p-title
 						:title="illust.title"
@@ -22,6 +22,9 @@
 					>
 						{{illust.count > 1 ? `(${illust.count})` : ''}} {{illust.title}}
 					</p-title>
+
+					<p-state v-if="state[illust.iid]?.L" :title="state[illust.iid]?.L">{{state[illust.iid]?.L}}</p-state>
+					<p-state v-if="state[illust.iid]?.R" right :title="state[illust.iid]?.R">{{state[illust.iid]?.R}}</p-state>
 				</p-illust>
 			</template>
 		</p-illusts>
@@ -44,12 +47,12 @@
 	watch(IS.page, page => IS.getFollow(profile.value, page), { immediate: true });
 
 
-	const atSave = illust => wock.cast('picov/illust/save', illust, profile.value.name);
+	const atSave = illust => wock.cast('picov/illust/save', illust, profile.value.name, true);
 </script>
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
+	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
 
 	max-height: calc(100vh / 3)
 
@@ -72,7 +75,7 @@ p-illust
 			@apply text-black
 
 		&[multi]
-			@apply text-yellow-600
+			@apply text-yellow-500
 		&[ugoira]
 			@apply text-purple-600
 
@@ -83,5 +86,14 @@ p-illust
 			background-color: var(--colorBackground)
 		&::-webkit-progress-value
 			background-color: var(--colorOkay)
+
+	p-state
+		@apply relative inblock float-left text-xs py-1 px-1 elli select-none opacity-70
+		max-width: 50%
+		color: var(--colorText)
+		background-color: var(--colorBackground)
+
+		&[right]
+			@apply float-right
 
 </style>

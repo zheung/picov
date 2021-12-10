@@ -140,7 +140,7 @@ class Wock {
 
 				if(this.ping) { check(); }
 
-				this.handles_type.$open.forEach(handle => handle(this));
+				this.handles_type.$open.forEach(handle => setTimeout(() => handle(this), 0));
 
 				resolve(this);
 			});

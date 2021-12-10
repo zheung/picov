@@ -5,10 +5,12 @@
 		<p-button v-tip.right="'我的关注'" tabindex="2" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button>
 		<p-button v-tip.right="'下一页'" tabindex="3" @click="IS.next()" @keydown.enter.space="IS.next()"><Fas icon="angle-double-right" /></p-button>
 		<p-button v-tip.right="'当前页'" expand>
+			<Fas icon="book-open" />
 			<input v-model="pageNew" tabindex="4" type="text" @keydown.enter="IS.jump(pageNew)" />
 		</p-button>
 		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button>
-		<p-button v-tip.right="'搜索栏'" keyword>
+		<p-button v-tip.right="'搜索栏'" expand keyword>
+			<Fas icon="search" />
 			<input v-model="keyword" tabindex="6" type="text" @keydown.enter="IS.search(pageNew)" />
 		</p-button>
 	</p-sidebar>
@@ -32,7 +34,10 @@
 	const $get = inject('$get');
 	const wock = window.W = inject('$wock');
 
-	const IS = window.IS = new Illusts(wock);
+	const profile = ref({});
+	provide('profile', profile);
+
+	const IS = new Illusts(wock, profile);
 	provide('IS', IS);
 
 	const page = IS.page;
@@ -42,13 +47,6 @@
 
 
 	document.title = 'Picov 5';
-
-
-
-
-
-	const profile = ref({});
-	provide('profile', profile);
 
 
 	// 设置全局CSS变量
@@ -110,7 +108,7 @@ p-sidebar
 
 
 	p-button
-		@apply block rounded-md text-center text-xl shadow-mdd mt-2 cursor-pointer outline-none
+		@apply relative block rounded-md text-center text-xl shadow-mdd mt-2 cursor-pointer outline-none
 		width: calc( var(--widthSidebar) - 0.55rem)
 		height: calc( var(--widthSidebar) - 0.55rem)
 		line-height: calc( var(--widthSidebar) - 0.55rem)
@@ -124,22 +122,20 @@ p-sidebar
 			@apply font-bold mt-0
 
 		&[expand]
-			@apply overflow-hidden
+			@apply overflow-hidden px-1
 
 			&:focus-within
 				@apply overflow-visible w-24 ring-4 ring-yellow-600
 
 			input
-				@apply rounded-md w-full text-center outline-none
+				@apply rounded-md w-full text-center outline-none z-20
+
+			svg
+				@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
 
 		&[keyword]
-			@apply overflow-hidden
-
 			&:focus-within
-				@apply overflow-visible w-48 ring-4 ring-yellow-600
-
-			input
-				@apply rounded-md w-full text-center outline-none
+				@apply w-48
 
 
 p-main

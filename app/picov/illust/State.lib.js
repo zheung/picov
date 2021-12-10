@@ -14,11 +14,12 @@ class IllustStates {
 			result.push(this.#maps[iid] ?? (this.#maps[iid] = {
 				iid,
 				fetch: 0,
-				count: 0,
-				countFetched: 0,
-				sizeAll: 0,
-				progress: 0,
-				files: []
+				fetched: 0,
+				progMax: 0,
+				prog: 0,
+				files: [],
+				L: '',
+				R: '',
 			}));
 
 			this.#push[iid] ?? (this.#push[iid] = []).push(wock);
@@ -26,8 +27,8 @@ class IllustStates {
 
 
 		try {
-			const illustsDB = await db.query('SELECT * FROM pixiv.illust WHERE id IN ($r)', [iids]);
-			const files = await db.query('SELECT * FROM pixiv.file WHERE illust IN ($r)', [iids]);
+			const illustsDB = await db.query('SELECT * FROM pixiv.illust WHERE id IN ($r)', iids);
+			const files = await db.query('SELECT * FROM pixiv.file WHERE illust IN ($r)', iids);
 
 
 			illustsDB.forEach(illustDB => {
@@ -44,11 +45,18 @@ class IllustStates {
 		finally { db?.close(); }
 
 
-		wock.cast('statesIllust', result);
+		wock.cast('updateIllustStates', result);
 	}
 
-	push() {
+	push(iid, info_) {
+		const info = Object.assign({ iid }, info_);
 
+		(this.#push[iid] ?? []).forEach(wock => {
+			try {
+				wock.cast('updateIllustStates', [info]);
+			}
+			catch { void 0; }
+		});
 	}
 }
 
