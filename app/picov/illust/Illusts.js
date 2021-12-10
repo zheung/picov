@@ -4,14 +4,18 @@ import { $get } from '../../lib/plugin/Aegis.js';
 
 class Illusts {
 	#type = ref('follow');
-	#map = ref({ follow: [] });
-	#page = ref({ follow: 1 });
+	#map = ref({ follow: { illusts: [], page: 1 } });
 
 	state = ref({});
-	illusts = computed(() => this.#map.value[this.#type.value]);
-	page = computed(() => this.#page.value[this.#type.value]);
+	illusts = computed(() => this.#map.value[this.#type.value]?.illusts);
+	page = computed(() => this.#map.value[this.#type.value]?.page);
+
+	tabs = computed(() => {
+		return Object.entries(this.#map.value).map(([type, is]) => 1);
+	});
 
 	profile = null;
+	get who() { return this.profile?.value?.name; }
 
 	constructor(wock, profile) {
 		this.wock = wock;
@@ -24,21 +28,38 @@ class Illusts {
 		);
 
 		wock.at('open', () =>
-			this.wock.cast('picov/illust/pull', this.illusts.value.map(illust => illust.iid), this.profile.value.name)
+			this.wock.cast('picov/illust/pull', this.illusts.value.map(illust => illust.iid), this.who)
 		);
 	}
 
 	set type(type) { this.#type.value = type; }
 
-	next() { this.#page.value[this.#type.value]++; }
-	prev() { if(this.#page.value[this.#type.value] > 1) { this.#page.value[this.#type.value]--; } }
-	jump(page) { this.#page.value[this.#type.value] = ~~page; }
+	next() { this.#map.value[this.#type.value].page++; }
+	prev() { if(this.#map.value[this.#type.value].page > 1) { this.#map.value[this.#type.value].page--; } }
+	jump(page) { this.#map.value[this.#type.value].page = ~~page; }
 
 
 	async getFollow(page) {
-		const illusts = this.#map.value.follow = await $get('picov/illust/listFollow', { who: this.profile.value.name, page });
+		const illusts = this.#map.value.follow.illusts = await $get('picov/illust/listFollow', { who: this.who, page });
 
-		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.profile.value.name);
+		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
+	}
+
+	async search(keyword) {
+		if(!keyword || !keyword.trim()) { return; }
+
+		const illusts = await $get('picov/illust/listFollow', { who: this.who, page: 2, keyword });
+
+		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
+
+		const sid = Math.random().toFixed(8).slice(2);
+		this.#map[sid] = {
+			illusts,
+			page: 1,
+			type: 'search',
+		};
+
+		this.type = sid;
 	}
 }
 

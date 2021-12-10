@@ -11,8 +11,11 @@
 		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button>
 		<p-button v-tip.right="'搜索栏'" expand keyword>
 			<Fas icon="search" />
-			<input v-model="keyword" tabindex="6" type="text" @keydown.enter="IS.search(pageNew)" />
+			<input v-model="keyword" tabindex="6" type="text" @keydown.enter="IS.search(keyword)" />
 		</p-button>
+
+		<!-- paint-brush -->
+		<!-- user-edit -->
 	</p-sidebar>
 
 	<!-- 主模块 -->

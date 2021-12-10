@@ -44,7 +44,7 @@
 	const state = IS.state;
 
 
-	watch(IS.page, page => IS.getFollow(profile.value, page), { immediate: true });
+	watch(IS.page, page => IS.getFollow(page), { immediate: true });
 
 
 	const atSave = illust => wock.cast('picov/illust/save', illust, profile.value.name, true);
