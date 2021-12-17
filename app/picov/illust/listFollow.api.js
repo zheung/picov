@@ -17,18 +17,21 @@ const formatItem = item => {
 	};
 };
 
+let cache;
 
 const method = 'get';
 const handle = async raw => {
 	const profile = C.profile[raw.who];
 	AS(profile, `未找到~[档案]~{${raw.who}}`);
 
+	if(cache) { return cache; }
+
 	const data = await getJSON(
 		`https://www.pixiv.net/touch/ajax/follow/latest?type=illusts&p=${raw.page ?? 1}`,
 		profile.cookie
 	);
 
-	return data?.body?.illusts?.map(item => formatItem(item)) ?? [];
+	return (cache = data?.body?.illusts?.map(item => formatItem(item))) ?? [];
 };
 
 

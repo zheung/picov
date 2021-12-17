@@ -2,7 +2,6 @@
 	<!-- 侧边栏 -->
 	<p-sidebar>
 		<p-button v-tip.right="'我的档案'" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
-		<p-button v-tip.right="'我的关注'" tabindex="2" :now="brop(IS.type == 'follow')" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button>
 		<!-- <p-button v-tip.right="'下一页'" tabindex="3" @click="IS.next()" @keydown.enter.space="IS.next()"><Fas icon="angle-double-right" /></p-button>
 		<p-button v-tip.right="'当前页'" expand>
 			<Fas icon="book-open" />
@@ -11,21 +10,20 @@
 		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button> -->
 		<p-button v-tip.right="'搜索栏'" expand keyword>
 			<Fas icon="search" />
-			<input v-model="keyword" tabindex="3" type="text" @keydown.enter="IS.search(keyword)" />
+			<input v-model="keyword" tabindex="2" type="text" @keydown.enter="atSearch(keyword)" />
 		</p-button>
 
-		<!-- paint-brush -->
-		<!-- user-edit -->
-		<template v-for="(tab, index) of tabs" :key="`tab-${tab.type}`">
-			<template v-if="tab.tag == 'search'">
+
+		<!-- <p-button v-tip.right="'我的关注'" tabindex="2" :now="brop(IS.type == 'follow')" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button> -->
+		<template v-for="(tab, index) of tabs" :key="`tab-${tab?.id}`">
+			<template v-if="tab.typeTab == 'icon'">
 				<p-button
 					v-tip.right="tab.title"
-					:now="brop(IS.type == tab.type)"
-					:tabindex="7 + index"
-					@click="IS.type = tab.type"
-					@keydown.enter.space="IS.type = tab.type"
+					:now="brop(tabNow === tab)"
+					:tabindex="3 + index"
+					@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
 				>
-					<Fas icon="search" />
+					<Fas :icon="tab.icon" />
 				</p-button>
 			</template>
 		</template>
@@ -41,7 +39,11 @@
 
 <script setup>
 	import { ref, watch, onBeforeMount, inject, provide, computed, } from 'vue';
-	import Illusts from './picov/illust/Illusts.js';
+	import IllustAdmin from './picov/illust/admin/IllustAdmin.js';
+	import TabAdmin from './picov/illust/admin/TabAdmin.js';
+
+
+	document.title = 'Picov 5';
 
 
 	const app = inject('app');
@@ -50,19 +52,27 @@
 	const $get = inject('$get');
 	const wock = window.W = inject('$wock');
 
+
+	const moduleNow = ref(null);
+	const modulePre = ref('');
+
+
 	const profile = ref({});
 	provide('profile', profile);
 	provide('who', computed(() => profile.value.name));
 
-	const IS = new Illusts(wock, profile);
+
+	const IS = new IllustAdmin(wock, profile);
 	provide('IS', IS);
 
-	const tabs = IS.tabs;
 
-	const keyword = ref('');
+	const TA = new TabAdmin(modulePre, wock, profile);
+	provide('TA', TA);
 
+	const tabs = TA.list;
+	const tabNow = TA.now;
 
-	document.title = 'Picov 5';
+	const keyword = ref('科学');
 
 
 	// 设置全局CSS变量
@@ -75,19 +85,26 @@
 	});
 
 
-	const moduleNow = ref(null);
-	const modulePre = ref('');
+
 
 	const namesProfile = ref([]);
 
-	onBeforeMount(async () => {
+	const atReady = async () => {
 		namesProfile.value = await $get('picov/profile/list') ?? [];
-
 		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
 
-		wock.at('open', () => modulePre.value = 'picov-illust-ListFollow');
-	});
+		TA.addIcon('我的关注', 'home', 'follow', 'picov-illust-ListFollow');
+	};
 
+	const atSearch = keyword => {
+		// paint-brush
+		// user-edit
+		TA.addIcon(`搜索：${keyword}`, 'search', 'search', 'picov-illust-ListSearch', keyword);
+	};
+
+
+
+	onBeforeMount(async () => wock.at('open', atReady));
 
 	watch(modulePre, async slot => {
 		if(app.component(slot)) { return moduleNow.value = slot; }

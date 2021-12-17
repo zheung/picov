@@ -1,8 +1,8 @@
 import { computed, ref, watch } from 'vue';
-import { $get } from '../../lib/plugin/Aegis.js';
+import { $get } from '../../../lib/plugin/Aegis.js';
 
 
-class Illusts {
+class IllustAdmin {
 	#type = ref('follow');
 	map = ref({ follow: { id: 'follow', illusts: [], page: 1, type: 'follow', } });
 
@@ -63,7 +63,9 @@ class Illusts {
 
 		this.type = sid;
 	}
+
+	pull(illusts) { this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who); }
 }
 
 
-export default Illusts;
+export default IllustAdmin;
