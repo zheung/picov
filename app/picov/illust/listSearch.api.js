@@ -23,10 +23,10 @@ const handle = async raw => {
 	const profile = C.profile[raw.who];
 	AS(profile, `未找到~[档案]~{${raw.who}}`);
 
-	const { word = '', page = 1, mode = 'all', smode = 's_tag_tc', type = '' } = raw;
+	const { keyword = '', page = 1, mode = 'all', smode = 's_tag_tc', type = '' } = raw;
 
 	const data = await getJSON(
-		`https://www.pixiv.net/touch/ajax/search/illusts?p=${page}&word=${encodeURI(word)}&mode=${mode}&s_mode=${smode}&type=${type}`,
+		`https://www.pixiv.net/touch/ajax/search/illusts?p=${page}&word=${encodeURI(keyword)}&mode=${mode}&s_mode=${smode}&type=${type}`,
 		profile.cookie
 	);
 

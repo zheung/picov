@@ -2,20 +2,33 @@
 	<!-- 侧边栏 -->
 	<p-sidebar>
 		<p-button v-tip.right="'我的档案'" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
-		<p-button v-tip.right="'我的关注'" tabindex="2" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button>
-		<p-button v-tip.right="'下一页'" tabindex="3" @click="IS.next()" @keydown.enter.space="IS.next()"><Fas icon="angle-double-right" /></p-button>
+		<p-button v-tip.right="'我的关注'" tabindex="2" :now="brop(IS.type == 'follow')" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button>
+		<!-- <p-button v-tip.right="'下一页'" tabindex="3" @click="IS.next()" @keydown.enter.space="IS.next()"><Fas icon="angle-double-right" /></p-button>
 		<p-button v-tip.right="'当前页'" expand>
 			<Fas icon="book-open" />
 			<input v-model="pageNew" tabindex="4" type="text" @keydown.enter="IS.jump(pageNew)" />
 		</p-button>
-		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button>
+		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button> -->
 		<p-button v-tip.right="'搜索栏'" expand keyword>
 			<Fas icon="search" />
-			<input v-model="keyword" tabindex="6" type="text" @keydown.enter="IS.search(keyword)" />
+			<input v-model="keyword" tabindex="3" type="text" @keydown.enter="IS.search(keyword)" />
 		</p-button>
 
 		<!-- paint-brush -->
 		<!-- user-edit -->
+		<template v-for="(tab, index) of tabs" :key="`tab-${tab.type}`">
+			<template v-if="tab.tag == 'search'">
+				<p-button
+					v-tip.right="tab.title"
+					:now="brop(IS.type == tab.type)"
+					:tabindex="7 + index"
+					@click="IS.type = tab.type"
+					@keydown.enter.space="IS.type = tab.type"
+				>
+					<Fas icon="search" />
+				</p-button>
+			</template>
+		</template>
 	</p-sidebar>
 
 	<!-- 主模块 -->
@@ -27,7 +40,7 @@
 </template>
 
 <script setup>
-	import { ref, watch, onBeforeMount, inject, provide, } from 'vue';
+	import { ref, watch, onBeforeMount, inject, provide, computed, } from 'vue';
 	import Illusts from './picov/illust/Illusts.js';
 
 
@@ -39,13 +52,13 @@
 
 	const profile = ref({});
 	provide('profile', profile);
+	provide('who', computed(() => profile.value.name));
 
 	const IS = new Illusts(wock, profile);
 	provide('IS', IS);
 
-	const page = IS.page;
+	const tabs = IS.tabs;
 
-	const pageNew = ref(page.value);
 	const keyword = ref('');
 
 
@@ -72,7 +85,7 @@
 
 		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
 
-		wock.at('open', () => modulePre.value = 'picov-illust-List');
+		wock.at('open', () => modulePre.value = 'picov-illust-ListFollow');
 	});
 
 
@@ -128,17 +141,19 @@ p-sidebar
 			@apply overflow-hidden px-1
 
 			&:focus-within
-				@apply overflow-visible w-24 ring-4 ring-yellow-600
+				@apply overflow-visible w-24 ring-2 ring-yellow-600
 
 			input
-				@apply rounded-md w-full text-center outline-none z-20
+				@apply rounded-md w-full text-center outline-none z-20 bg-transparent
 
 			svg
 				@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
 
-		&[keyword]
-			&:focus-within
-				@apply w-48
+		&[keyword]:focus-within
+			@apply w-48
+
+		&[now]
+			@apply ring-2 ring-pink-400
 
 
 p-main

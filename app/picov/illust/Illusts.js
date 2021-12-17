@@ -1,18 +1,16 @@
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { $get } from '../../lib/plugin/Aegis.js';
 
 
 class Illusts {
 	#type = ref('follow');
-	#map = ref({ follow: { illusts: [], page: 1 } });
+	map = ref({ follow: { id: 'follow', illusts: [], page: 1, type: 'follow', } });
 
 	state = ref({});
-	illusts = computed(() => this.#map.value[this.#type.value]?.illusts);
-	page = computed(() => this.#map.value[this.#type.value]?.page);
+	illusts = computed(() => this.map.value[this.#type.value]?.illusts);
+	page = computed(() => this.map.value[this.#type.value]?.page);
 
-	tabs = computed(() => {
-		return Object.entries(this.#map.value).map(([type, is]) => 1);
-	});
+	tabs = computed(() => Object.values(this.map.value).filter(i => i.type != 'follow'));
 
 	profile = null;
 	get who() { return this.profile?.value?.name; }
@@ -33,14 +31,15 @@ class Illusts {
 	}
 
 	set type(type) { this.#type.value = type; }
+	get type() { return this.#type.value; }
 
-	next() { this.#map.value[this.#type.value].page++; }
-	prev() { if(this.#map.value[this.#type.value].page > 1) { this.#map.value[this.#type.value].page--; } }
-	jump(page) { this.#map.value[this.#type.value].page = ~~page; }
+	next() { this.map.value[this.#type.value].page++; }
+	prev() { if(this.map.value[this.#type.value].page > 1) { this.map.value[this.#type.value].page--; } }
+	jump(page) { this.map.value[this.#type.value].page = ~~page; }
 
 
-	async getFollow(page) {
-		const illusts = this.#map.value.follow.illusts = await $get('picov/illust/listFollow', { who: this.who, page });
+	async getSearch(keyword, page) {
+		const illusts = await $get('picov/illust/listSearch', { who: this.who, page, keyword });
 
 		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
 	}
@@ -48,15 +47,18 @@ class Illusts {
 	async search(keyword) {
 		if(!keyword || !keyword.trim()) { return; }
 
-		const illusts = await $get('picov/illust/listFollow', { who: this.who, page: 2, keyword });
+		const illusts = await $get('picov/illust/listSearch', { who: this.who, page: 2, keyword });
 
 		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
 
 		const sid = Math.random().toFixed(8).slice(2);
-		this.#map[sid] = {
+		this.map.value[sid] = {
 			illusts,
+			type: sid,
 			page: 1,
-			type: 'search',
+			title: `搜索：${keyword}`,
+			tag: 'search',
+			wathHandle: watch(this.map.value[sid].page, page => this.getSearch(page), { immediate: true })
 		};
 
 		this.type = sid;

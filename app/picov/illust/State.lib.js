@@ -1,4 +1,4 @@
-import { DB } from '../../../lib/global.js';
+import { DB, G } from '../../../lib/global.js';
 
 class IllustStates {
 	#maps = {};
@@ -55,7 +55,7 @@ class IllustStates {
 			try {
 				wock.cast('updateIllustStates', [info]);
 			}
-			catch { void 0; }
+			catch(e) { G.error('保存', '通知', e); }
 		});
 	}
 }
