@@ -22,7 +22,14 @@ class IllustStates {
 				R: '',
 			}));
 
-			this.#push[iid] ?? (this.#push[iid] = []).push(wock);
+			const pushs = (this.#push[iid] ?? (this.#push[iid] = []));
+
+			pushs.push(wock);
+			wock.maresClose.push(() => {
+				const index = pushs.indexOf(wock);
+
+				if(index > -1) { pushs.splice(index, 1); }
+			});
 		});
 
 
@@ -32,11 +39,11 @@ class IllustStates {
 
 
 			illustsDB.forEach(illustDB => {
-				const illust = this.#maps[illustDB.id];
+				const state = this.#maps[illustDB.id];
 
-				illust.fetch = illustDB.fetch;
+				state.fetch = illustDB.fetch;
 
-				illust.files = illust.files = files
+				state.files = state.files = files
 					.filter(file => file.illust == illustDB.id)
 					.sort((a, b) => a.index - b.index)
 					.map(file => ({ delay: file.delay, file: file.name }));

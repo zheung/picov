@@ -1,5 +1,4 @@
-import { computed, ref, watch } from 'vue';
-import { $get } from '../../../lib/plugin/Aegis.js';
+import { computed, ref } from 'vue';
 import randomString from '../../../lib/random.js';
 
 
@@ -13,7 +12,7 @@ class Tab {
 		this.icon = icon;
 		this.typeList = typeList;
 		this.module = module;
-		this.info = {};
+		this.info = { illustsNow: [], params: {}, paramsPre: {} };
 	}
 }
 
@@ -21,6 +20,7 @@ class TabAdmin {
 	map = ref({});
 
 	key = ref('');
+	/** @type {import('vue').ComputedRef<Tab>} */
 	now = computed(() => this.map.value[this.key.value]);
 	list = computed(() => Object.values(this.map.value));
 	params = ref([]);
@@ -39,6 +39,16 @@ class TabAdmin {
 		this.change(tabNew, ...params, sFirst);
 
 		return tabNew;
+	}
+
+	del(tab) {
+		const map = this.map.value;
+		const ids = Object.keys(map);
+		const index = ids.indexOf(tab.id);
+
+		delete this.map.value[tab.id];
+
+		this.change(map[ids[index + 1] ?? ids[index - 1]]);
 	}
 
 	/** @param {Tab} tab */

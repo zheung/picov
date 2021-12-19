@@ -15,8 +15,9 @@ const getProxy = url => url ? (proxies[url] ?? (proxies[url] = new HttpsProxyAge
 const getHeader = cookie => Object.assign({ Cookie: `PHPSESSID=${cookie}` }, headers);
 
 
-export const getJSON = async (url, cookie, returnData = true) => {
+export const getJSON = async (url, cookie, params, returnData = true) => {
 	const response = await Axios.get(url, {
+		params,
 		responseType: 'json', headers: getHeader(cookie),
 		httpsAgent: getProxy(C.proxy.api)
 	});

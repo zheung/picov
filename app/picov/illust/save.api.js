@@ -4,7 +4,6 @@ import { parse, resolve } from 'path';
 
 import Bluebird from 'bluebird';
 import FX from 'fs-extra';
-import ExtractZIP from 'extract-zip';
 
 import Moment from '../../lib/Moment.js';
 import { C, DB, G } from '../../../lib/global.js';
@@ -48,8 +47,8 @@ const convertByte = (number, fixed = 2) => {
 };
 
 
-const fetch = async (url, pid, logger, cookie) => {
-	const fileStream = (await getStream(url, cookie))
+const fetch = async (infosFetch, pid, logger, cookie) => {
+	const fileStream = (await getStream(infosFetch.url, cookie))
 		.on('response', res => {
 			logger.total[pid] = ~~res.headers['content-length'];
 		})
@@ -66,7 +65,7 @@ const fetch = async (url, pid, logger, cookie) => {
 		})
 		.on('error', error => { throw error; });
 
-	const nameFile = parse(url).base;
+	const nameFile = infosFetch.name ?? parse(infosFetch.url).base;
 	const tempPath = resolve(dirCacheLarge, nameFile);
 
 	FX.removeSync(tempPath);
@@ -77,14 +76,14 @@ const fetch = async (url, pid, logger, cookie) => {
 			.on('error', error => reject(error)))
 	);
 
-	FX.moveSync(tempPath, resolve(C.path.save, nameFile), { overwrite: true });
+	FX.moveSync(tempPath, resolve(infosFetch.dir, nameFile), { overwrite: true });
 
 	logger.done();
 };
 
-const fetchMap = async (db, urls, iid, cookie) => {
+const fetchMap = async (db, infosFetch, iid, cookie) => {
 	const logger = {
-		count: urls.length,
+		count: infosFetch.length,
 
 		fetched: 0,
 
@@ -119,18 +118,18 @@ const fetchMap = async (db, urls, iid, cookie) => {
 	};
 
 
-	await Bluebird.map(urls, async (url, idFetch) => {
+	await Bluebird.map(infosFetch, async (infoFetch, idFetch) => {
 		let times = 0;
 		const timesMax = 5;
 
 		while(times++ < timesMax) {
 			try {
-				await fetch(url, idFetch, logger, cookie);
+				await fetch(infoFetch, idFetch, logger, cookie);
 
 				break;
 			}
 			catch(error) {
-				G.error('保存', `下载~{${url}}`, `✖`, error);
+				G.error('保存', `下载~{${infoFetch.url}}`, `✖`, error);
 			}
 		}
 	}, { concurrency: 77 });
@@ -148,7 +147,9 @@ const handle = async (illust, who, force) => {
 	AS(profile, `未找到~[档案]~{${who}}`);
 
 	const { iid, count, type } = illust;
-	(console || {}).log(iid, count, type, force);
+
+
+	G.info('保存', `~[动图]~{${iid}}`, `~[类型]~{${type}} ~[数量]~{${count}} ~[强制]~{${force}}`);
 
 
 	const db = await DB.pick();
@@ -161,7 +162,7 @@ const handle = async (illust, who, force) => {
 		// 判断下载状态
 		if(force === true) { state = 0; }
 		if(state == 2) { return statesIllust.push(iid, { L: '在下' }); }
-		if(state == 1) { return statesIllust.push(iid, { L: '已下' }); }
+		if(state == 1) { return statesIllust.push(iid, { L: '✔ 已下' }); }
 
 		// 获取完整信息并更新
 		statesIllust.push(iid, { L: '解析...' });
@@ -180,11 +181,11 @@ const handle = async (illust, who, force) => {
 		statesIllust.push(iid, { fetch: 2, L: `下载${count}张` });
 
 		// 提取需要下载的url，并将保存文件信息
-		const urls = [];
+		const infosFetch = [];
 		if(type == 2) {
 			const meta = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, profile.cookie);
 
-			urls.push(meta.body.originalSrc);
+			infosFetch.push({ url: meta.body.originalSrc, dir: C.path.dirUgoiraSave, name: `ugoira-${iid}.zip` });
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 
@@ -192,38 +193,23 @@ const handle = async (illust, who, force) => {
 		}
 		else if(info.illust_details.manga_a) {
 			for(const manga of info.illust_details.manga_a) {
-				urls.push(manga.url_big);
+				infosFetch.push({ url: manga.url_big, dir: C.path.save });
 			}
 
-			await insertFiles(db, urls.map(url => ({ illust: iid, name: parse(url).base, delay: null })));
+			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 
-			statesIllust.push(iid, { files: urls });
+			statesIllust.push(iid, { files: infosFetch });
 		}
 		else {
-			urls.push(info.illust_details.url_big);
+			infosFetch.push({ url: info.illust_details.url_big, dir: C.path.save });
 
-			await insertFiles(db, urls.map(url => ({ illust: iid, name: parse(url).base, delay: null })));
+			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 
-			statesIllust.push(iid, { files: urls });
+			statesIllust.push(iid, { files: infosFetch });
 		}
 
 		// 下载
-		await fetchMap(db, urls, iid, profile.cookie);
-
-
-		// Ugoira额外解压
-		if(type == 2) {
-			try {
-				const zipPath = resolve(dirCacheLarge, parse(urls[0]).base);
-
-				await ExtractZIP(zipPath, { dir: resolve(dirCacheLarge, String(iid)) });
-
-				FX.removeSync(zipPath);
-			}
-			catch(e) {
-				G.error('保存', `解压~[动图]~{${iid}}`, `✖`, `${e.message}`);
-			}
-		}
+		await fetchMap(db, infosFetch, iid, profile.cookie);
 	}
 	catch(error) {
 		statesIllust.push(iid, { L: '✖', R: error?.message ?? error });

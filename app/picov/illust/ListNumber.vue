@@ -2,19 +2,9 @@
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<p-header>
 			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> </p-part>
-			<p-part v-if="I.illustsNow.length" :title="I.params.uid">{{who}}的关注</p-part>
-			<p-part v-if="I.illustsNow.length">{{counter}}</p-part>
+			<p-part :title="I.params.uid">搜索作品ID（{{I.params.uid}}）</p-part>
 
-			<p-button ref="nextPager" v-tip.bottom="'下一页'" right tabindex="6" @click="nextPage()" @keydown.enter.space="nextPage()">
-				<Fas icon="angle-double-right" />
-			</p-button>
-			<p-button v-tip.bottom="'当前页'" right input>
-				<Fas icon="book-open" />
-				<input v-model="I.paramsPre.page" tabindex="5" type="text" @keydown.enter="atFetch" />
-			</p-button>
-			<p-button v-tip.bottom="'上一页'" right tabindex="4" @click="prevPage()" @keydown.enter.space="prevPage()">
-				<Fas icon="angle-double-left" />
-			</p-button>
+			<p-part v-if="I.illustsNow.length">{{counter}}</p-part>
 		</p-header>
 
 		<p-illusts>
@@ -52,10 +42,9 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
+	import { computed, inject, onBeforeMount, ref, watch } from 'vue';
 
 	import { Tab } from './admin/TabAdmin.js';
-
 
 	const $get = inject('$get');
 
@@ -84,28 +73,17 @@
 		), 0);
 		return `共 ${countAll}（${countAll - countFetched}）张`;
 	});
-
 	const atFetch = async () => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
-		const { page } = info.paramsPre;
+		const { uid } = info.paramsPre;
 
-		info.illustsNow = (await $get('picov/illust/listFollow', { who: who.value, page })) ?? [];
+		info.illustsNow = (await $get('picov/illust/listIllust', { who: who.value, iids: [uid] })) ?? [];
 
 		IS.pull(info.illustsNow);
 
-		info.params.page = page;
-	};
-
-
-	const nextPage = () => {
-		now.value.info.paramsPre.page++;
-		atFetch();
-	};
-	const prevPage = () => {
-		now.value.info.paramsPre.page > 1 ? now.value.info.paramsPre.page-- : void 0;
-		atFetch();
+		tabNow.title = `【数字】（${uid}）${info.illustsNow[0]?.title ?? ''}`;
 	};
 
 
@@ -113,14 +91,13 @@
 		const tab = TA.now.value;
 		const params = TA.params.value;
 
-		if(tab.typeList == 'follow') {
+		if(tab.typeList == 'number') {
 			now.value = tab;
-
-			const [sFirst] = params;
+			const [uid, sFirst] = params;
 
 			if(sFirst === TA.sFirst) {
-				tab.info.params = { page: 1 };
-				tab.info.paramsPre = { page: 1 };
+				tab.info.params = { uid };
+				tab.info.paramsPre = { uid };
 
 				atFetch();
 			}
@@ -129,8 +106,6 @@
 
 	watch(TA.now, atUpdateTab);
 	onBeforeMount(atUpdateTab);
-	const nextPager = ref(null);
-	onActivated(() => nextPager.value?.focus());
 </script>
 
 <style lang="sass" scoped>
@@ -168,6 +143,10 @@ p-header
 
 			svg
 				@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
+
+			&[keyword]
+				@apply w-48
+
 p-illusts
 	@apply block mt-12 z-10 w-full overflow-x-hidden overflow-y-scroll
 	height: calc(100vh - 3rem)

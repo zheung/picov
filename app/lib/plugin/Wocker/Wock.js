@@ -140,7 +140,14 @@ class Wock {
 
 				if(this.ping) { check(); }
 
-				this.handles_type.$open.forEach(handle => setTimeout(() => handle(this), 0));
+				this.handles_type.$open.forEach((handle, id) => {
+					if(!handle) { return; }
+					setTimeout(() => handle(this), 0);
+					if(this.keysHandlesOnce.has(`$open:${id + 1}`)) {
+						this.del('$open', id + 1);
+					}
+				});
+
 
 				resolve(this);
 			});
@@ -191,9 +198,12 @@ class Wock {
 
 		return id;
 	}
-	at(type, handle) {
+	at(type, handle, once = false) {
 		if(type == 'open' && this.opening) {
 			setTimeout(() => handle(), 0);
+		}
+		else if(once) {
+			return this.one(`$${type}`, handle);
 		}
 		else {
 			return this.add(`$${type}`, handle);

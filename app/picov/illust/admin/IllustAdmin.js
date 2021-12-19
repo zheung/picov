@@ -25,9 +25,13 @@ class IllustAdmin {
 			)
 		);
 
-		wock.at('open', () =>
-			this.wock.cast('picov/illust/pull', this.illusts.value.map(illust => illust.iid), this.who)
-		);
+		wock.at('open', () => {
+			const illusts = this.illusts.value;
+
+			if(illusts.length) {
+				this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
+			}
+		});
 	}
 
 	set type(type) { this.#type.value = type; }
@@ -64,7 +68,8 @@ class IllustAdmin {
 		this.type = sid;
 	}
 
-	pull(illusts) { this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who); }
+	pull(illusts) { if(illusts.length) { this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who); } }
+	save(illust, force = false) { this.wock.cast('picov/illust/save', illust, this.who, force); }
 }
 
 

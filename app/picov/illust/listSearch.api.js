@@ -17,14 +17,10 @@ const formatItem = item => {
 	};
 };
 
-let cache;
-
 const method = 'get';
 const handle = async raw => {
 	const profile = C.profile[raw.who];
 	AS(profile, `未找到~[档案]~{${raw.who}}`);
-
-	if(cache) { return cache; }
 
 	const { keyword = '', page = 1, mode = 'all', smode = 's_tag_tc', type = '' } = raw;
 
@@ -33,7 +29,10 @@ const handle = async raw => {
 		profile.cookie
 	);
 
-	return (cache = data?.body?.illusts?.map(item => item.is_ad_container ? null : formatItem(item)).filter(i => i)) ?? [];
+	return data?.body?.illusts
+		?.filter(item => !item.is_ad_container)
+		?.map(item => formatItem(item)).filter(i => i)
+		?? [];
 };
 
 

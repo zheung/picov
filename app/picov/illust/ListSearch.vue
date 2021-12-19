@@ -1,16 +1,21 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<p-header>
+			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> </p-part>
+			<p-part v-if="I.illustsNow.length" :title="I.params.uid">搜索</p-part>
+
 			<p-button v-tip.bottom="'关键词'" input keyword>
 				<Fas icon="search" />
-				<input v-model="now.info.paramsPre.keyword" tabindex="4" type="text" @keydown.enter="atFetch" />
+				<input v-model="I.paramsPre.keyword" tabindex="4" type="text" @keydown.enter="atFetch" />
 			</p-button>
-			<p-button v-tip.bottom="'下一页'" right tabindex="7" @click="nextPage()" @keydown.enter.space="nextPage()">
+			<p-part v-if="I.illustsNow.length">{{counter}}</p-part>
+
+			<p-button ref="nextPager" v-tip.bottom="'下一页'" right tabindex="7" @click="nextPage()" @keydown.enter.space="nextPage()">
 				<Fas icon="angle-double-right" />
 			</p-button>
 			<p-button v-tip.bottom="'当前页'" right input>
 				<Fas icon="book-open" />
-				<input v-model="now.info.paramsPre.page" tabindex="6" type="text" @keydown.enter="atFetch" />
+				<input v-model="I.paramsPre.page" tabindex="6" type="text" @keydown.enter="atFetch" />
 			</p-button>
 			<p-button v-tip.bottom="'上一页'" right tabindex="5" @click="prevPage()" @keydown.enter.space="prevPage()">
 				<Fas icon="angle-double-left" />
@@ -18,14 +23,16 @@
 		</p-header>
 
 		<p-illusts>
-			<template v-for="(illust, index) of now.illusts" :key="`illust-${illust.iid}`">
+			<template v-for="(illust, index) of I.illustsNow" :key="`illust-${illust.iid}`">
 				<p-illust
+					v-menu="{ params: illust, ...menuIllust }"
 					:title="`${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('、')}`"
 					:style="{
 						backgroundImage: `url(api/picov/illust/thumb?who=${who}&iid=${illust.iid}&time=${illust.time}&type=${illust.type})`,
-						zIndex: now.illusts.length-index
+						zIndex: I.illustsNow.length - index
 					}"
-					@click.exact="atSave(illust)"
+					@click.exact="IS.save(illust)"
+					@click.ctrl="IS.save(illust, true)"
 				>
 					<template v-if="state[illust.iid]?.fetch == 1">
 						<progress :max="100" :value="100" />
@@ -50,79 +57,102 @@
 </template>
 
 <script setup>
-	import { inject, onBeforeMount, ref } from 'vue';
+	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
 
+	import { Tab } from './admin/TabAdmin.js';
 
 	const $get = inject('$get');
-	const wock = inject('$wock');
 
 	const who = inject('who');
+	const menuIllust = inject('menuIllust');
+
 	/** @type {import('./admin/IllustAdmin.js').default} */
 	const IS = inject('IS');
 	/** @type {import('./admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
-
-	const now = ref({ illusts: [] });
+	const now = ref(new Tab());
+	const I = computed(() => now.value.info);
 
 	const state = IS.state;
 
+	const counter = computed(() => {
+		const illustsNow = I.value.illustsNow;
+
+		const countAll = illustsNow.reduce((acc, cur) => acc + cur.count, 0);
+		const iids = illustsNow.map(i => i.iid);
+		const states = Object.entries(state.value).filter(([iid]) => iids.includes(~~iid)).map(([, state]) => state);
+		const countFetched = states.reduce((acc, state) => acc + (state.fetch == 1
+			? (illustsNow.find(i => i.iid == state.iid).count ?? 0)
+			: (state.fetched ?? 0)
+		), 0);
+		return `共 ${countAll}（${countAll - countFetched}）张`;
+	});
 	const atFetch = async () => {
-		const info = now.value.info;
+		const tabNow = now.value;
+		const info = tabNow.info;
 
 		const { keyword, page } = info.paramsPre;
 
-		info.illusts = (await $get('picov/illust/listSearch', { who: who.value, keyword, page })) ?? [];
+		info.illustsNow = (await $get('picov/illust/listSearch', { who: who.value, keyword, page })) ?? [];
 
-		IS.pull(info.illusts);
+		IS.pull(info.illustsNow);
 
+		tabNow.title = `【搜索】${keyword}`;
 		info.params.keyword = keyword;
 		info.params.page = page;
 	};
 
 
-	const page = ref(1);
-	const nextPage = () => now.value.info.paramsPre.page++ && atFetch();
-	const prevPage = () => page.value > 1 ? page.value-- : page.value;
+	const nextPage = () => {
+		now.value.info.paramsPre.page++;
+		atFetch();
+	};
+	const prevPage = () => {
+		now.value.info.paramsPre.page > 1 ? now.value.info.paramsPre.page-- : void 0;
+		atFetch();
+	};
 
-
-
-	const atSave = illust => wock.cast('picov/illust/save', illust, who.value, true);
 
 
 	const atUpdateTab = () => {
-		const tabNew = TA.now.value;
+		const tab = TA.now.value;
 		const params = TA.params.value;
 
-		if(tabNew.typeList == 'search') {
+		if(tab.typeList == 'search') {
+			now.value = tab;
 			const [keyword, sFirst] = params;
 
 			if(sFirst === TA.sFirst) {
-				tabNew.info.illusts = [];
-				tabNew.info.params = { keyword, page: 1 };
-				tabNew.info.paramsPre = { keyword, page: 1 };
+				tab.info.params = { keyword, page: 1 };
+				tab.info.paramsPre = { keyword, page: 1 };
 
 				atFetch();
 			}
-
-			now.value = tabNew;
 		}
 	};
 
-	// watch(page, pageNew => atFetch(pagePre.value = pageNew));
-
+	watch(TA.now, atUpdateTab);
 	onBeforeMount(atUpdateTab);
 
-
-
+	const nextPager = ref(null);
+	onActivated(() => nextPager.value?.focus());
 </script>
 
 <style lang="sass" scoped>
 p-header
 	@apply absolute block w-full h-12 bg-blue-200 z-20 shadow-mdd
 
+	>*
+		@apply mt-1 ml-2 mr-0
+		&[right]
+			@apply float-right ml-0 mr-2
+	p-part
+		@apply inblock
+		height: calc( var(--widthSidebar) - 1rem)
+		line-height: calc( var(--widthSidebar) - 1rem)
 	p-button
-		@apply relative inblock rounded-md text-center text-xl ml-2 mr-0 shadow-mdd cursor-pointer outline-none mt-1
+		@apply relative inblock rounded-md text-center text-xl shadow-mdd cursor-pointer outline-none
 		width: calc( var(--widthSidebar) - 1rem)
 		height: calc( var(--widthSidebar) - 1rem)
 		line-height: calc( var(--widthSidebar) - 1rem)
@@ -132,8 +162,6 @@ p-header
 		&:focus
 			@apply ring-2 ring-yellow-600
 
-		&[right]
-			@apply float-right ml-0 mr-2
 
 		&[input]
 			@apply px-1 w-24
@@ -155,7 +183,7 @@ p-illusts
 	height: calc(100vh - 3rem)
 
 	p-illust
-		@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
+		@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
 
 		max-height: calc(100% / 3)
 
@@ -198,5 +226,4 @@ p-illusts
 
 			&[right]
 				@apply float-right
-
 </style>

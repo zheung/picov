@@ -20,14 +20,22 @@ const parseResult = async function(result) {
 };
 
 
-export const $get = async function(action, params, configRaw = {}) {
-	const urlAction = parseURLAction(action, configRaw.prefix);
+export const $get = async function(action, params, configRaw_ = {}) {
+	const config = Object.assign({ params }, configRaw_);
 
-	const config = Object.assign({ params }, configRaw);
+	const urlAction = parseURLAction(action, config.prefix);
+	delete config.prefix;
+
+	const typeReturn = config.return ?? 'data';
+	delete config.return;
+
 
 	const response = await Axios.get(urlAction, config);
 
-	return parseResult(response.data);
+
+	if(typeReturn == 'response') { return response; }
+	if(typeReturn == 'raw') { return response.data; }
+	else { return parseResult(response.data); }
 };
 
 export const $post = async function(action, params, configRaw = {}, alertUnSuccess = false) {
@@ -53,9 +61,9 @@ export const $jump = async function(action, params, configRaw = {}) {
 	const urlAction = parseURLAction(action, configRaw.prefix);
 	let query = '';
 
-	for (let key in params) {
-		if (params[key]) {
-			if (typeof params[key] == 'object') {
+	for(let key in params) {
+		if(params[key]) {
+			if(typeof params[key] == 'object') {
 				query += `&${key}=${JSON.stringify(params[key])}`;
 			}
 			else {

@@ -2,37 +2,33 @@
 	<!-- 侧边栏 -->
 	<p-sidebar>
 		<p-button v-tip.right="'我的档案'" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
-		<!-- <p-button v-tip.right="'下一页'" tabindex="3" @click="IS.next()" @keydown.enter.space="IS.next()"><Fas icon="angle-double-right" /></p-button>
-		<p-button v-tip.right="'当前页'" expand>
-			<Fas icon="book-open" />
-			<input v-model="pageNew" tabindex="4" type="text" @keydown.enter="IS.jump(pageNew)" />
-		</p-button>
-		<p-button v-tip.right="'上一页'" tabindex="5" @click="IS.prev()" @keydown.enter.space="IS.prev()"><Fas icon="angle-double-left" /></p-button> -->
 		<p-button v-tip.right="'搜索栏'" expand keyword>
 			<Fas icon="search" />
-			<input v-model="keyword" tabindex="2" type="text" @keydown.enter="atSearch(keyword)" />
+			<input v-model="keyword" tabindex="2" type="text" @keydown.enter.exact="atSearch(keyword)" @keydown.enter.shift="atSearch(keyword, true)" />
 		</p-button>
 
 
-		<!-- <p-button v-tip.right="'我的关注'" tabindex="2" :now="brop(IS.type == 'follow')" @click="IS.type = 'follow'" @keydown.enter.space="IS.type = 'follow'"><Fas icon="home" /></p-button> -->
 		<template v-for="(tab, index) of tabs" :key="`tab-${tab?.id}`">
-			<template v-if="tab.typeTab == 'icon'">
-				<p-button
-					v-tip.right="tab.title"
-					:now="brop(tabNow === tab)"
-					:tabindex="3 + index"
-					@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
-				>
-					<Fas :icon="tab.icon" />
-				</p-button>
-			</template>
+			<p-button
+				v-tip.right="tab.title"
+				v-menu=" { params: tab, ...menuTab }"
+				:now="brop(tabNow === tab)"
+				:tabindex="3 + index"
+				@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
+			>
+				<template v-if="tab.typeTab == 'icon'"><Fas :icon="tab.icon" /></template>
+				<template v-if="tab.typeTab == 'header'">
+					<Fas header :icon="tab.icon" />
+					<p-header :style="{ backgroundImage: `url(${tab.header})` }" />
+				</template>
+			</p-button>
 		</template>
 	</p-sidebar>
 
 	<!-- 主模块 -->
 	<p-main>
 		<keep-alive>
-			<component :is="moduleNow" />
+			<component :is="moduleNow" :key="`module-${moduleNow}`" />
 		</keep-alive>
 	</p-main>
 </template>
@@ -69,10 +65,65 @@
 	const TA = new TabAdmin(modulePre, wock, profile);
 	provide('TA', TA);
 
+	const menuTab = {
+		useLongPressInMobile: true,
+		menuWrapperCss: {
+			background: 'snow',
+			borderRadius: '4px'
+		},
+		menuItemCss: {
+			hoverBackground: '#bfdbfe',
+		},
+		menuList: [
+			{
+				label: '关闭',
+				tips: '关闭该标签页',
+				disabled: tab => tab.typeList == 'follow',
+				fn: tab => TA.del(tab)
+			},
+		]
+	};
+
+	const menuIllust = {
+		useLongPressInMobile: true,
+		menuWrapperCss: {
+			background: 'snow',
+			borderRadius: '4px'
+		},
+		menuItemCss: {
+			hoverBackground: '#bfdbfe',
+		},
+		menuList: [
+			{
+				label: '浏览',
+				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'picov-illust-viewer-Ugoira', illust); }
+			},
+			{
+				label: '浏览作者',
+				fn(illust) { TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'picov-illust-ListUser', illust.uid); }
+			},
+			{ line: true },
+			{
+				label: '作品页',
+				fn(illust) { window.open(`https://www.pixiv.net/artworks/${illust.iid}`); }
+			},
+			{
+				label: '作者主页',
+				fn(illust) { window.open(`https://www.pixiv.net/users/${illust.uid}/illustrations`); }
+			},
+		]
+	};
+	provide('menuIllust', menuIllust);
+
+
 	const tabs = TA.list;
 	const tabNow = TA.now;
 
-	const keyword = ref('科学');
+
+	const keyword = ref('');
+
+
+	const namesProfile = ref([]);
 
 
 	// 设置全局CSS变量
@@ -85,10 +136,6 @@
 	});
 
 
-
-
-	const namesProfile = ref([]);
-
 	const atReady = async () => {
 		namesProfile.value = await $get('picov/profile/list') ?? [];
 		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
@@ -96,15 +143,32 @@
 		TA.addIcon('我的关注', 'home', 'follow', 'picov-illust-ListFollow');
 	};
 
-	const atSearch = keyword => {
-		// paint-brush
-		// user-edit
-		TA.addIcon(`搜索：${keyword}`, 'search', 'search', 'picov-illust-ListSearch', keyword);
+	const atSearch = (keywordNew, author = false) => {
+		if(/^[1-9]\d*$/.test(keywordNew.trim())) {
+			if(author) {
+				TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'picov-illust-ListUser', keywordNew.replace(/i/i, ''));
+			}
+			else {
+				TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'picov-illust-ListNumber', keywordNew);
+			}
+		}
+		else if(/^u[1-9]\d*$/i.test(keywordNew.trim())) {
+			TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'picov-illust-ListUser', keywordNew.replace(/u/i, ''));
+		}
+		else if(/^i[1-9]\d*$/i.test(keywordNew.trim())) {
+			TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'picov-illust-ListNumber', keywordNew.replace(/i/i, ''));
+		}
+		else {
+			TA.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'picov-illust-ListSearch', keywordNew);
+		}
+
+
+		keyword.value = '';
 	};
 
 
 
-	onBeforeMount(async () => wock.at('open', atReady));
+	onBeforeMount(async () => wock.at('open', atReady, true));
 
 	watch(modulePre, async slot => {
 		if(app.component(slot)) { return moduleNow.value = slot; }
@@ -171,6 +235,14 @@ p-sidebar
 
 		&[now]
 			@apply ring-2 ring-pink-400
+
+		p-header
+			@apply relative block rounded-md shadow-md absolute top-1 left-1 bg-cover
+			width: calc( 100% - 0.5rem)
+			height: calc( 100% - 0.5rem)
+
+		svg[header]
+			@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
 
 
 p-main
