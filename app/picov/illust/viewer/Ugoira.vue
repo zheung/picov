@@ -21,14 +21,14 @@
 
 
 	/** @type {import('../admin/IllustAdmin.js').default} */
-	const IS = inject('IS');
+	const IA = inject('IA');
 	/** @type {import('../admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
 
-	const state = IS.state;
+	const state = IA.state;
 
 
 	const domBox = ref(null);

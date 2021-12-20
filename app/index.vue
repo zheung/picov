@@ -58,8 +58,8 @@
 	provide('who', computed(() => profile.value.name));
 
 
-	const IS = new IllustAdmin(wock, profile);
-	provide('IS', IS);
+	const IA = new IllustAdmin(wock, profile);
+	provide('IA', IA);
 
 
 	const TA = new TabAdmin(modulePre, wock, profile);

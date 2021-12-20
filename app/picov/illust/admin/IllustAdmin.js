@@ -70,6 +70,13 @@ class IllustAdmin {
 
 	pull(illusts) { if(illusts.length) { this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who); } }
 	save(illust, force = false) { this.wock.cast('picov/illust/save', illust, this.who, force); }
+	async saveAll(illusts) {
+		for(const illust of illusts) {
+			this.save(illust);
+
+			await new Promise(r => setTimeout(() => r(), 147));
+		}
+	}
 }
 
 
