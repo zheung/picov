@@ -55,7 +55,7 @@
 
 		const { uid } = info.paramsPre;
 
-		info.illustsNow = (await $get('picov/illust/listIllust', { who: who.value, iids: [uid] })) ?? [];
+		info.illustsNow = (await $get('pixiv/illust/listIllust', { who: who.value, iids: [uid] })) ?? [];
 
 		IA.pull(info.illustsNow);
 

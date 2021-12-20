@@ -71,7 +71,7 @@
 
 		const { keyword, page } = info.paramsPre;
 
-		info.illustsNow = (await $get('picov/illust/listSearch', { who: who.value, keyword, page })) ?? [];
+		info.illustsNow = (await $get('pixiv/illust/listSearch', { who: who.value, keyword, page })) ?? [];
 
 		IA.pull(info.illustsNow);
 

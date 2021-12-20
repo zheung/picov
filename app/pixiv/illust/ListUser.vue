@@ -76,7 +76,7 @@
 
 		const iidsNow = info.alls.slice((page - 1) * 15, page * 15);
 
-		info.illustsNow = (await $get('picov/illust/listIllust', { who: who.value, uid, iids: iidsNow }))?.reverse() ?? [];
+		info.illustsNow = (await $get('pixiv/illust/listIllust', { who: who.value, uid, iids: iidsNow }))?.reverse() ?? [];
 
 		IA.pull(info.illustsNow);
 
@@ -113,7 +113,7 @@
 				tab.info.header = {};
 
 
-				const { illusts, mangas, alls, name, isFollowed, header } = (await $get('picov/illust/listUser', { who: who.value, uid })) ?? [];
+				const { illusts, mangas, alls, name, isFollowed, header } = (await $get('pixiv/illust/listUser', { who: who.value, uid })) ?? [];
 
 				tab.info.illusts = illusts;
 				tab.info.mangas = mangas;

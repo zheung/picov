@@ -29,7 +29,7 @@ class IllustAdmin {
 			const illusts = this.illusts.value;
 
 			if(illusts.length) {
-				this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
+				this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
 			}
 		});
 	}
@@ -43,17 +43,17 @@ class IllustAdmin {
 
 
 	async getSearch(keyword, page) {
-		const illusts = await $get('picov/illust/listSearch', { who: this.who, page, keyword });
+		const illusts = await $get('pixiv/illust/listSearch', { who: this.who, page, keyword });
 
-		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
+		this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
 	}
 
 	async search(keyword) {
 		if(!keyword || !keyword.trim()) { return; }
 
-		const illusts = await $get('picov/illust/listSearch', { who: this.who, page: 2, keyword });
+		const illusts = await $get('pixiv/illust/listSearch', { who: this.who, page: 2, keyword });
 
-		this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who);
+		this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
 
 		const sid = Math.random().toFixed(8).slice(2);
 		this.map.value[sid] = {
@@ -68,8 +68,8 @@ class IllustAdmin {
 		this.type = sid;
 	}
 
-	pull(illusts) { if(illusts.length) { this.wock.cast('picov/illust/pull', illusts.map(illust => illust.iid), this.who); } }
-	save(illust, force = false) { this.wock.cast('picov/illust/save', illust, this.who, force); }
+	pull(illusts) { if(illusts.length) { this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who); } }
+	save(illust, force = false) { this.wock.cast('pixiv/illust/save', illust, this.who, force); }
 	async saveAll(illusts) {
 		for(const illust of illusts) {
 			this.save(illust);

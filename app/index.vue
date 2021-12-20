@@ -35,8 +35,8 @@
 
 <script setup>
 	import { ref, watch, onBeforeMount, inject, provide, computed, } from 'vue';
-	import IllustAdmin from './picov/illust/admin/IllustAdmin.js';
-	import TabAdmin from './picov/illust/admin/TabAdmin.js';
+	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
+	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
 
 
 	document.title = 'Picov 5';
@@ -96,11 +96,11 @@
 		menuList: [
 			{
 				label: '浏览',
-				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'picov-illust-viewer-Ugoira', illust); }
+				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-viewer-Ugoira', illust); }
 			},
 			{
 				label: '浏览作者',
-				fn(illust) { TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'picov-illust-ListUser', illust.uid); }
+				fn(illust) { TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-ListUser', illust.uid); }
 			},
 			{ line: true },
 			{
@@ -140,26 +140,26 @@
 		namesProfile.value = await $get('picov/profile/list') ?? [];
 		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
 
-		TA.addIcon('我的关注', 'home', 'follow', 'picov-illust-ListFollow');
+		TA.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-ListFollow');
 	};
 
 	const atSearch = (keywordNew, author = false) => {
 		if(/^[1-9]\d*$/.test(keywordNew.trim())) {
 			if(author) {
-				TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'picov-illust-ListUser', keywordNew.replace(/i/i, ''));
+				TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-ListUser', keywordNew.replace(/i/i, ''));
 			}
 			else {
-				TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'picov-illust-ListNumber', keywordNew);
+				TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-ListNumber', keywordNew);
 			}
 		}
 		else if(/^u[1-9]\d*$/i.test(keywordNew.trim())) {
-			TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'picov-illust-ListUser', keywordNew.replace(/u/i, ''));
+			TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-ListUser', keywordNew.replace(/u/i, ''));
 		}
 		else if(/^i[1-9]\d*$/i.test(keywordNew.trim())) {
-			TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'picov-illust-ListNumber', keywordNew.replace(/i/i, ''));
+			TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-ListNumber', keywordNew.replace(/i/i, ''));
 		}
 		else {
-			TA.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'picov-illust-ListSearch', keywordNew);
+			TA.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'pixiv-illust-ListSearch', keywordNew);
 		}
 
 

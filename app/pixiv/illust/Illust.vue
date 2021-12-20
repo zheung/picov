@@ -3,7 +3,7 @@
 		v-menu="{ params: illust, ...menuIllust }"
 		:title="`${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('、')}`"
 		:style="{
-			backgroundImage: `url(api/picov/illust/thumb?who=${who}&iid=${illust.iid}&time=${illust.time}&type=${illust.type})`,
+			backgroundImage: `url(api/pixiv/illust/thumb?who=${who}&iid=${illust.iid}&time=${illust.time}&type=${illust.type})`,
 			zIndex
 		}"
 		@click.exact="IA.save(illust)"
