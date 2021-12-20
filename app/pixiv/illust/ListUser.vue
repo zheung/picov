@@ -124,7 +124,7 @@
 				tab.info.header = header;
 
 				tab.typeTab = 'header';
-				tab.header = header.noProfile ? 'no_profile.png' : `api/picov/user/header?who=${who.value}&time=${tab.info.header.time}&token=${tab.info.header.token}&ext=${tab.info.header.ext}`;
+				tab.header = header.noProfile ? 'no_profile.png' : `api/pixiv/user/header?who=${who.value}&time=${tab.info.header.time}&token=${tab.info.header.token}&ext=${tab.info.header.ext}`;
 				tab.title = `作者：${name}`;
 
 				atFetch();
