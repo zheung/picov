@@ -2,7 +2,7 @@ import { computed, ref } from 'vue';
 import randomString from '../../../lib/random.js';
 
 
-const sFirst = Symbol('first');
+const sInitTab = Symbol('initTab');
 
 class Tab {
 	constructor(id, title, typeTab, icon, typeList, module) {
@@ -25,7 +25,7 @@ class TabAdmin {
 	list = computed(() => Object.values(this.map.value));
 	params = ref([]);
 
-	sFirst = sFirst;
+	sInitTab = sInitTab;
 
 	constructor(modulePre) {
 		this.modulePre = modulePre;
@@ -36,7 +36,7 @@ class TabAdmin {
 		const id = randomString();
 		const tabNew = this.map.value[id] = new Tab(id, title, 'icon', icon, type, module);
 
-		this.change(tabNew, ...params, sFirst);
+		this.change(tabNew, ...params, sInitTab);
 
 		return tabNew;
 	}
@@ -63,5 +63,5 @@ class TabAdmin {
 
 
 
-export { Tab, sFirst };
+export { Tab, sInitTab };
 export default TabAdmin;

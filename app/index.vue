@@ -13,10 +13,12 @@
 				v-tip.right="tab.title"
 				v-menu=" { params: tab, ...menuTab }"
 				:now="brop(tabNow === tab)"
-				:tabindex="3 + index"
+				:tabindex="100 + index"
 				@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
 			>
-				<template v-if="tab.typeTab == 'icon'"><Fas :icon="tab.icon" /></template>
+				<template v-if="tab.typeTab == 'icon'">
+					<Fas :icon="tab.icon" />
+				</template>
 				<template v-if="tab.typeTab == 'header'">
 					<Fas header :icon="tab.icon" />
 					<p-header :style="{ backgroundImage: `url(${tab.header})` }" />
@@ -35,6 +37,7 @@
 
 <script setup>
 	import { ref, watch, onBeforeMount, inject, provide, computed, } from 'vue';
+
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
 
@@ -51,6 +54,31 @@
 
 	const moduleNow = ref(null);
 	const modulePre = ref('');
+	watch(modulePre, async slot => {
+		if(app.component(slot)) { return moduleNow.value = slot; }
+
+		try {
+			const parts = String(slot).split('-');
+
+			try {
+				if(parts.length == 2) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}.vue`)).default); }
+				else if(parts.length == 3) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}.vue`)).default); }
+				else if(parts.length == 4) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}.vue`)).default); }
+				else if(parts.length == 5) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/${parts[4]}.vue`)).default); }
+				else { throw TypeError(`模块深度不为[2,3,4,5]: ${slot}`); }
+			}
+			catch(error) {
+				if(parts.length == 2) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/index.vue`)).default); }
+				else if(parts.length == 3) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/index.vue`)).default); }
+				else if(parts.length == 4) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/index.vue`)).default); }
+				else if(parts.length == 5) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/${parts[4]}/index.vue`)).default); }
+				else { throw TypeError(`模块深度不为[2,3,4,5]: ${slot}`); }
+			}
+
+			moduleNow.value = slot;
+		}
+		catch(error) { $alert(`加载模块失败: ${slot}, ${error.message || error}`, '加载模块失败'); }
+	});
 
 
 	const profile = ref({});
@@ -58,11 +86,14 @@
 	provide('who', computed(() => profile.value.name));
 
 
-	const IA = new IllustAdmin(wock, profile);
+	const IA = ref(new IllustAdmin(wock, profile));
 	provide('IA', IA);
 
 	const TA = new TabAdmin(modulePre, wock, profile);
 	provide('TA', TA);
+
+	const tabs = TA.list;
+	const tabNow = TA.now;
 
 
 	const menuTab = {
@@ -85,18 +116,6 @@
 	};
 
 
-	const tabs = TA.list;
-	const tabNow = TA.now;
-
-
-	const keyword = ref('');
-
-
-	const namesProfile = ref([]);
-
-
-	// 设置全局CSS变量
-	// theme变量由于postcss处理，依然在<style>中定义
 	CV.setAll({
 		widthSidebar: '3.5rem',
 
@@ -105,13 +124,18 @@
 	});
 
 
+	const namesProfile = ref([]);
 	const atReady = async () => {
 		namesProfile.value = await $get('picov/profile/list') ?? [];
 		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
 
-		TA.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-list-follow');
+		TA.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-list-Follow');
 	};
 
+	onBeforeMount(async () => wock.at('open', atReady, true));
+
+
+	const keyword = ref('');
 	const atSearch = (keywordNew, author = false) => {
 		if(/^[1-9]\d*$/.test(keywordNew.trim())) {
 			if(author) {
@@ -134,34 +158,6 @@
 
 		keyword.value = '';
 	};
-
-
-
-	onBeforeMount(async () => wock.at('open', atReady, true));
-
-	watch(modulePre, async slot => {
-		if(app.component(slot)) { return moduleNow.value = slot; }
-
-		try {
-			const parts = String(slot).split('-');
-
-			try {
-				if(parts.length == 2) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}.vue`)).default); }
-				else if(parts.length == 3) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}.vue`)).default); }
-				else if(parts.length == 4) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}.vue`)).default); }
-				else { throw TypeError(`模块深度不为[2,3,4]: ${slot}`); }
-			}
-			catch(error) {
-				if(parts.length == 2) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/index.vue`)).default); }
-				else if(parts.length == 3) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/index.vue`)).default); }
-				else if(parts.length == 4) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/index.vue`)).default); }
-				else { throw TypeError(`模块深度不为[2,3,4]: ${slot}`); }
-			}
-
-			moduleNow.value = slot;
-		}
-		catch(error) { $alert(`加载模块失败: ${slot}, ${error.message || error}`, '加载模块失败'); }
-	});
 </script>
 
 <style lang="sass" scoped>

@@ -1,19 +1,9 @@
-import { computed, ref, watch } from 'vue';
-import { $get } from '../../../lib/plugin/Aegis.js';
-
-
 class IllustAdmin {
-	#type = ref('follow');
-	map = ref({ follow: { id: 'follow', illusts: [], page: 1, type: 'follow', } });
-
-	state = ref({});
-	illusts = computed(() => this.map.value[this.#type.value]?.illusts);
-	page = computed(() => this.map.value[this.#type.value]?.page);
-
-	tabs = computed(() => Object.values(this.map.value).filter(i => i.type != 'follow'));
+	state = {};
 
 	profile = null;
 	get who() { return this.profile?.value?.name; }
+
 
 	constructor(wock, profile) {
 		this.wock = wock;
@@ -34,41 +24,9 @@ class IllustAdmin {
 		});
 	}
 
-	set type(type) { this.#type.value = type; }
-	get type() { return this.#type.value; }
 
-	next() { this.map.value[this.#type.value].page++; }
-	prev() { if(this.map.value[this.#type.value].page > 1) { this.map.value[this.#type.value].page--; } }
-	jump(page) { this.map.value[this.#type.value].page = ~~page; }
+	watch(illusts) { if(illusts.length) { this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who); } }
 
-
-	async getSearch(keyword, page) {
-		const illusts = await $get('pixiv/illust/list/search', { who: this.who, page, keyword });
-
-		this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
-	}
-
-	async search(keyword) {
-		if(!keyword || !keyword.trim()) { return; }
-
-		const illusts = await $get('pixiv/illust/list/search', { who: this.who, page: 2, keyword });
-
-		this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
-
-		const sid = Math.random().toFixed(8).slice(2);
-		this.map.value[sid] = {
-			illusts,
-			type: sid,
-			page: 1,
-			title: `搜索：${keyword}`,
-			tag: 'search',
-			wathHandle: watch(this.map.value[sid].page, page => this.getSearch(page), { immediate: true })
-		};
-
-		this.type = sid;
-	}
-
-	pull(illusts) { if(illusts.length) { this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who); } }
 	save(illust, force = false) { this.wock.cast('pixiv/illust/save', illust, this.who, force); }
 	async saveAll(illusts) {
 		for(const illust of illusts) {
@@ -76,6 +34,27 @@ class IllustAdmin {
 
 			await new Promise(r => setTimeout(() => r(), 147));
 		}
+	}
+
+	count(illusts) {
+		const state = this.state;
+
+		const countAll = illusts.reduce((acc, illust) => acc + illust.count, 0);
+
+		const iids = illusts.map(i => i.iid);
+		const states = iids.map(iid => state[iid]).filter(i => i);
+
+		const countFetched = states.reduce((acc, state) => acc + (state.fetch == 1
+			? (illusts.find(i => i.iid == state.iid).count ?? 0)
+			: (state.fetched ?? 0)
+		), 0);
+
+		return [countAll, countFetched];
+	}
+	countText(illusts) {
+		const [countAll, countFetched] = this.count(illusts);
+
+		return `${countAll} (${countAll - countFetched})`;
 	}
 }
 

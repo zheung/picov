@@ -24,12 +24,12 @@ export default defineConfig({
 		chunkSizeWarningLimit: 1024
 	},
 	publicDir: resolve(dirProject, 'app', 'public'),
+	clearScreen: false,
 	server: {
 		port: 4791,
 		proxy: {
 			'^/ugoira/': {
 				target: 'http://127.0.0.1:14791',
-				// changeOrigin: true,
 			},
 			'^/api/': {
 				target: 'http://127.0.0.1:14791',

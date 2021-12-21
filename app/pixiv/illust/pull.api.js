@@ -10,7 +10,7 @@ const handle = async (illusts, who, wock) => {
 	const profile = C.profile[who];
 	AS(profile, `未找到~[档案]~{${who}}`);
 
-	stateAdmin.pull(illusts, wock);
+	stateAdmin.watch(illusts, wock);
 };
 
 

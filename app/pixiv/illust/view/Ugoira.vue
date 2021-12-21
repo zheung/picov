@@ -239,9 +239,9 @@
 	};
 
 
-	const atUpdateTab = async () => {
+	const atChangeTab = async () => {
 		const tab = TA.now.value;
-		const [illustNew, sFirst] = TA.params.value;
+		const [illustNew, sInitTab] = TA.params.value;
 
 		const old = now.value;
 		const info = tab.info;
@@ -268,7 +268,7 @@
 
 				now.value = tab;
 
-				if(sFirst === TA.sFirst) {
+				if(sInitTab === TA.sInitTab) {
 					info.illust = illustNew;
 
 					info.frames = JSON.parse(JSON.stringify(state.value[illustNew.iid]?.files));
@@ -305,8 +305,8 @@
 		}
 	};
 
-	watch(TA.now, atUpdateTab);
-	onBeforeMount(atUpdateTab);
+	watch(TA.now, atChangeTab);
+	onBeforeMount(atChangeTab);
 
 
 	onActivated(() => domCanvas.value?.focus());

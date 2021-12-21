@@ -42,9 +42,9 @@
 
 	const who = inject('who');
 
-	/** @type {import('../../admin/IllustAdmin.js').default} */
+	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
 	const IA = inject('IA');
-	const S = IA.state;
+	const S = IA.value.state;
 	/** @type {import('../../admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
@@ -79,7 +79,7 @@
 					const clipboard = new Clipboard(document.documentElement, { text: () => illust.iid });
 					clipboard.on('success', () => { clipboard.destroy(); });
 					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制失败${illust.iid}`); });
-					clipboard.onClick();
+					clipboard.onClick(event);
 				}
 			},
 		]

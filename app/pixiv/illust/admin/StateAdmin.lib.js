@@ -4,7 +4,7 @@ class StateAdmin {
 	#maps = {};
 	#push = {};
 
-	async pull(iids = [], wock) {
+	async watch(iids = [], wock) {
 		const db = await DB.pick();
 
 		if(!iids?.length) { return; }
