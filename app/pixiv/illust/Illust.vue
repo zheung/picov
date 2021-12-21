@@ -57,7 +57,7 @@
 		menuList: [
 			{
 				label: '浏览',
-				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-viewer-Ugoira', illust); }
+				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust); }
 			},
 			{
 				label: '浏览作者...',
