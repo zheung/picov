@@ -43,7 +43,7 @@ class IllustAdmin {
 
 
 	async getSearch(keyword, page) {
-		const illusts = await $get('pixiv/illust/listSearch', { who: this.who, page, keyword });
+		const illusts = await $get('pixiv/illust/list/search', { who: this.who, page, keyword });
 
 		this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
 	}
@@ -51,7 +51,7 @@ class IllustAdmin {
 	async search(keyword) {
 		if(!keyword || !keyword.trim()) { return; }
 
-		const illusts = await $get('pixiv/illust/listSearch', { who: this.who, page: 2, keyword });
+		const illusts = await $get('pixiv/illust/list/search', { who: this.who, page: 2, keyword });
 
 		this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
 

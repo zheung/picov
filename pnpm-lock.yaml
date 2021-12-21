@@ -13,6 +13,7 @@ specifiers:
   autoprefixer: ^10.4.0
   axios: ^0.24.0
   bluebird: ^3.7.2
+  clipboard: ^2.0.8
   eslint: ^8.5.0
   eslint-plugin-vue: ^8.2.0
   fflate: ^0.7.2
@@ -48,6 +49,7 @@ devDependencies:
   '@howdyjs/mouse-menu': 2.0.2_vue@3.2.26
   '@vitejs/plugin-vue': 2.0.1_vite@2.7.4+vue@3.2.26
   autoprefixer: 10.4.0_postcss@8.4.5
+  clipboard: 2.0.8
   eslint: 8.5.0
   eslint-plugin-vue: 8.2.0_eslint@8.5.0
   fflate: 0.7.2
@@ -636,6 +638,14 @@ packages:
       restore-cursor: 3.1.0
     dev: false
 
+  /clipboard/2.0.8:
+    resolution: {integrity: sha512-Y6WO0unAIQp5bLmk1zdThRhgJt/x3ks6f30s3oE3H1mgIEU33XyQjEf8gsf6DxC7NPX8Y1SsNWjUjL/ywLnnbQ==}
+    dependencies:
+      good-listener: 1.2.2
+      select: 1.1.2
+      tiny-emitter: 2.1.0
+    dev: true
+
   /co-body/6.1.0:
     resolution: {integrity: sha512-m7pOT6CdLN7FuXUcpuz/8lfQ/L77x8SchHCF4G0RBTJO20Wzmhn5Sp4/5WsKy8OSpifBSUrmg83qEqaDHdyFuQ==}
     dependencies:
@@ -812,6 +822,10 @@ packages:
 
   /defined/1.0.0:
     resolution: {integrity: sha1-yY2bzvdWdBiOEQlpFRGZ45sfppM=}
+    dev: true
+
+  /delegate/3.2.0:
+    resolution: {integrity: sha512-IofjkYBZaZivn0V8nnsMJGBr4jVLxHDheKSW88PyxS5QC4Vo9ZbZVvhzlSxY87fVq3STR6r+4cGepyHkcWOQSw==}
     dev: true
 
   /delegates/1.0.0:
@@ -1369,6 +1383,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.20.2
+    dev: true
+
+  /good-listener/1.2.2:
+    resolution: {integrity: sha1-1TswzfkxPf+33JoNR3CWqm0UXFA=}
+    dependencies:
+      delegate: 3.2.0
     dev: true
 
   /graceful-fs/4.2.8:
@@ -2392,6 +2412,10 @@ packages:
       source-map-js: 1.0.1
     dev: true
 
+  /select/1.1.2:
+    resolution: {integrity: sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=}
+    dev: true
+
   /semver/7.3.5:
     resolution: {integrity: sha512-PoeGJYh8HK4BTO/a9Tf6ZG3veo/A7ZVsYrSA6J8ny9nb3B1VrpkuN+z9OE5wfE5p6H4LchYZsegiQgbJD94ZFQ==}
     engines: {node: '>=10'}
@@ -2597,6 +2621,10 @@ packages:
     dependencies:
       any-promise: 1.3.0
     dev: false
+
+  /tiny-emitter/2.1.0:
+    resolution: {integrity: sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==}
+    dev: true
 
   /tippy.js/6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}

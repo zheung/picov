@@ -32,18 +32,18 @@
 <script setup>
 	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
 
-	import { Tab } from './admin/TabAdmin.js';
+	import { Tab } from '../admin/TabAdmin.js';
 
-	import Illust from './Illust.vue';
+	import Illust from '../Illust.vue';
 
 
 	const $get = inject('$get');
 
 	const who = inject('who');
 
-	/** @type {import('./admin/IllustAdmin.js').default} */
+	/** @type {import('../admin/IllustAdmin.js').default} */
 	const IA = inject('IA');
-	/** @type {import('./admin/TabAdmin.js').default} */
+	/** @type {import('../admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
 	const now = ref(new Tab());
@@ -76,7 +76,7 @@
 
 		const iidsNow = info.alls.slice((page - 1) * 15, page * 15);
 
-		info.illustsNow = (await $get('pixiv/illust/listIllust', { who: who.value, uid, iids: iidsNow }))?.reverse() ?? [];
+		info.illustsNow = (await $get('pixiv/illust/list/illust', { who: who.value, uid, iids: iidsNow }))?.reverse() ?? [];
 
 		IA.pull(info.illustsNow);
 
@@ -113,7 +113,7 @@
 				tab.info.header = {};
 
 
-				const { illusts, mangas, alls, name, isFollowed, header } = (await $get('pixiv/illust/listUser', { who: who.value, uid })) ?? [];
+				const { illusts, mangas, alls, name, isFollowed, header } = (await $get('pixiv/illust/list/user', { who: who.value, uid })) ?? [];
 
 				tab.info.illusts = illusts;
 				tab.info.mangas = mangas;

@@ -1,7 +1,7 @@
 import AS from 'assert';
 
-import { C } from '../../../lib/global.js';
-import { getJSON } from '../get.lib.js';
+import { C } from '../../../../lib/global.js';
+import { getJSON } from '../../get.lib.js';
 
 
 const formatItem = item => {

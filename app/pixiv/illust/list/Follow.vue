@@ -29,18 +29,18 @@
 <script setup>
 	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
 
-	import { Tab } from './admin/TabAdmin.js';
+	import { Tab } from '../admin/TabAdmin.js';
 
-	import Illust from './Illust.vue';
+	import Illust from '../Illust.vue';
 
 
 	const $get = inject('$get');
 
 	const who = inject('who');
 
-	/** @type {import('./admin/IllustAdmin.js').default} */
+	/** @type {import('../admin/IllustAdmin.js').default} */
 	const IA = inject('IA');
-	/** @type {import('./admin/TabAdmin.js').default} */
+	/** @type {import('../admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
 	const now = ref(new Tab());
@@ -67,7 +67,7 @@
 
 		const { page } = info.paramsPre;
 
-		info.illustsNow = (await $get('pixiv/illust/listFollow', { who: who.value, page })) ?? [];
+		info.illustsNow = (await $get('pixiv/illust/list/follow', { who: who.value, page })) ?? [];
 
 		IA.pull(info.illustsNow);
 

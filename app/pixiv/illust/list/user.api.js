@@ -1,8 +1,8 @@
 import AS from 'assert';
 import { posix } from 'path';
 
-import { C } from '../../../lib/global.js';
-import { getJSON } from '../get.lib.js';
+import { C } from '../../../../lib/global.js';
+import { getJSON } from '../../get.lib.js';
 
 
 const method = 'get';

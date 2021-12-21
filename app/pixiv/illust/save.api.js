@@ -193,7 +193,7 @@ const handle = async (illust, who, force) => {
 		}
 		else if(info.illust_details.manga_a) {
 			for(const manga of info.illust_details.manga_a) {
-				infosFetch.push({ url: manga.url_big, dir: C.path.save });
+				infosFetch.push({ url: manga.url_big, dir: C.path.dirIllustSave });
 			}
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
@@ -201,7 +201,7 @@ const handle = async (illust, who, force) => {
 			statesIllust.push(iid, { files: infosFetch });
 		}
 		else {
-			infosFetch.push({ url: info.illust_details.url_big, dir: C.path.save });
+			infosFetch.push({ url: info.illust_details.url_big, dir: C.path.dirIllustSave });
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 

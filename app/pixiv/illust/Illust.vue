@@ -31,6 +31,8 @@
 <script setup>
 	import { inject } from 'vue';
 
+	import Clipboard from 'clipboard';
+
 
 	defineProps({
 		illust: { type: Object, default: () => ({}) },
@@ -39,19 +41,54 @@
 
 
 	const who = inject('who');
-	const menuIllust = inject('menuIllust');
-
 
 	/** @type {import('./admin/IllustAdmin.js').default} */
 	const IA = inject('IA');
-
-
 	const S = IA.state;
+	/** @type {import('../admin/TabAdmin.js').default} */
+	const TA = inject('TA');
+
+	const $alert = inject('$alert');
+
+	const menuIllust = {
+		useLongPressInMobile: true,
+		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
+		menuItemCss: { hoverBackground: '#bfdbfe', },
+		menuList: [
+			{
+				label: '浏览',
+				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-viewer-Ugoira', illust); }
+			},
+			{
+				label: '浏览作者...',
+				fn(illust) { TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid); }
+			},
+			{ line: true },
+			{
+				label: '作品页',
+				fn(illust) { window.open(`https://www.pixiv.net/artworks/${illust.iid}`); }
+			},
+			{
+				label: '作者主页',
+				fn(illust) { window.open(`https://www.pixiv.net/users/${illust.uid}/illustrations`); }
+			},
+			{ line: true },
+			{
+				label: '复制ID',
+				fn(illust) {
+					const clipboard = new Clipboard(document.documentElement, { text: () => illust.iid });
+					clipboard.on('success', () => { clipboard.destroy(); });
+					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制失败${illust.iid}`); });
+					clipboard.onClick();
+				}
+			},
+		]
+	};
 </script>
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
+	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
 
 	max-height: calc(100% / 3)
 
