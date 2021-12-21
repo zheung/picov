@@ -36,7 +36,7 @@
 
 	import { Tab } from '../admin/TabAdmin.js';
 
-	import Illust from '../Illust.vue';
+	import Illust from './utility/Illust.vue';
 
 
 	const $get = inject('$get');

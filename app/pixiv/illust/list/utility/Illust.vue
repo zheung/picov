@@ -42,10 +42,10 @@
 
 	const who = inject('who');
 
-	/** @type {import('./admin/IllustAdmin.js').default} */
+	/** @type {import('../../admin/IllustAdmin.js').default} */
 	const IA = inject('IA');
 	const S = IA.state;
-	/** @type {import('../admin/TabAdmin.js').default} */
+	/** @type {import('../../admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
 	const $alert = inject('$alert');
