@@ -22,10 +22,10 @@ specifiers:
   moment: ^2.29.1
   pg: ^8.7.1
   postcss: ^8.4.5
-  sass: ^1.45.0
+  sass: ^1.45.1
   tailwindcss: ^2.2.19
   tippy.js: ^6.3.7
-  vite: ^2.7.3
+  vite: ^2.7.4
   vue: ^3.2.26
 
 dependencies:
@@ -46,16 +46,16 @@ devDependencies:
   '@fortawesome/free-solid-svg-icons': 5.15.4
   '@fortawesome/vue-fontawesome': 3.0.0-5_41bc725dd4c8249e5fa2dea5307a76ed
   '@howdyjs/mouse-menu': 2.0.2_vue@3.2.26
-  '@vitejs/plugin-vue': 2.0.1_vite@2.7.3+vue@3.2.26
+  '@vitejs/plugin-vue': 2.0.1_vite@2.7.4+vue@3.2.26
   autoprefixer: 10.4.0_postcss@8.4.5
   eslint: 8.5.0
   eslint-plugin-vue: 8.2.0_eslint@8.5.0
   fflate: 0.7.2
   postcss: 8.4.5
-  sass: 1.45.0
+  sass: 1.45.1
   tailwindcss: 2.2.19_16a290f6d0e3717bf6d2667234aebd30
   tippy.js: 6.3.7
-  vite: 2.7.3_sass@1.45.0
+  vite: 2.7.4_sass@1.45.1
   vue: 3.2.26
 
 packages:
@@ -216,7 +216,7 @@ packages:
       koa-router: 10.1.1
       koa-static: 5.0.0
       multer: 1.4.4
-      ws: 8.3.0
+      ws: 8.4.0
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -266,14 +266,14 @@ packages:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
     dev: true
 
-  /@vitejs/plugin-vue/2.0.1_vite@2.7.3+vue@3.2.26:
+  /@vitejs/plugin-vue/2.0.1_vite@2.7.4+vue@3.2.26:
     resolution: {integrity: sha512-wtdMnGVvys9K8tg+DxowU1ytTrdVveXr3LzdhaKakysgGXyrsfaeds2cDywtvujEASjWOwWL/OgWM+qoeM8Plg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.7.3_sass@1.45.0
+      vite: 2.7.4_sass@1.45.1
       vue: 3.2.26
     dev: true
 
@@ -2382,8 +2382,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: false
 
-  /sass/1.45.0:
-    resolution: {integrity: sha512-ONy5bjppoohtNkFJRqdz1gscXamMzN3wQy1YH9qO2FiNpgjLhpz/IPRGg0PpCjyz/pWfCOaNEaiEGCcjOFAjqw==}
+  /sass/1.45.1:
+    resolution: {integrity: sha512-pwPRiq29UR0o4X3fiQyCtrESldXvUQAAE0QmcJTpsI4kuHHcLzZ54M1oNBVIXybQv8QF2zfkpFcTxp8ta97dUA==}
     engines: {node: '>=8.9.0'}
     hasBin: true
     dependencies:
@@ -2693,8 +2693,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /vite/2.7.3_sass@1.45.0:
-    resolution: {integrity: sha512-GAY1P+9fLJOju1SRm8+hykVnEXog+E+KXuqqyMBQDriKCUIKzWnPn142yNNhSdf/ixYGYdUa5ce3A8WaEajzGw==}
+  /vite/2.7.4_sass@1.45.1:
+    resolution: {integrity: sha512-f+0426k9R/roz5mRNwJlQ+6UOnhCwIypJSbfgCmsVzVJe9jTTM5iRX2GWYUean+iqPBWaU/dYLryx9AoH2pmrw==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -2713,7 +2713,7 @@ packages:
       postcss: 8.4.5
       resolve: 1.20.0
       rollup: 2.61.1
-      sass: 1.45.0
+      sass: 1.45.1
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
@@ -2772,8 +2772,8 @@ packages:
     resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
     dev: true
 
-  /ws/8.3.0:
-    resolution: {integrity: sha512-Gs5EZtpqZzLvmIM59w4igITU57lrtYVFneaa434VROv4thzJyV6UjIL3D42lslWlI+D4KzLYnxSwtfuiO79sNw==}
+  /ws/8.4.0:
+    resolution: {integrity: sha512-IHVsKe2pjajSUIl4KYMQOdlyliovpEPquKkqbwswulszzI7r0SfQrxnXdWAEqOlDCLrVSJzo+O1hAwdog2sKSQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
