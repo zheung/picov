@@ -5,12 +5,12 @@ import { parse, resolve } from 'path';
 import Bluebird from 'bluebird';
 import FX from 'fs-extra';
 
-import Moment from '../../lib/Moment.js';
+import Moment from '../../../lib/Moment.js';
+import { dirCacheLarge } from '../../../lib/global.dir.js';
 import { C, DB, G } from '../../../lib/global.js';
 
 import { getJSON, getStream } from '../get.lib.js';
-import statesIllust from './State.lib.js';
-import { dirCacheLarge } from '../../../lib/global.dir.js';
+import stateAdmin from './admin/StateAdmin.lib.js';
 
 
 const ensureIllust = async (db, id, type) => {
@@ -105,7 +105,7 @@ const fetchMap = async (db, infosFetch, iid, cookie) => {
 
 			logger.totalSum = convertByte(sizeAll, 0);
 
-			statesIllust.push(iid, {
+			stateAdmin.push(iid, {
 				progMax: sizeAll,
 				prog: passedAll,
 				R: Math.round(passedAll * 100 / sizeAll) + ' %',
@@ -113,7 +113,7 @@ const fetchMap = async (db, infosFetch, iid, cookie) => {
 			});
 		},
 		done() {
-			statesIllust.push(iid, { fetched: ++logger.fetched });
+			stateAdmin.push(iid, { fetched: ++logger.fetched });
 		}
 	};
 
@@ -137,7 +137,7 @@ const fetchMap = async (db, infosFetch, iid, cookie) => {
 
 	await updateIllustInfo(db, iid, { fetch: 1 });
 
-	statesIllust.push(iid, { fetch: 1, L: logger.totalSum ? `✔ [${logger.totalSum}]` : '完成' });
+	stateAdmin.push(iid, { fetch: 1, L: logger.totalSum ? `✔ [${logger.totalSum}]` : '完成' });
 };
 
 
@@ -157,15 +157,15 @@ const handle = async (illust, who, force) => {
 		// 预插入作品记录
 		let state = await ensureIllust(db, iid, type);
 
-		statesIllust.push(iid, { L: '开始...', R: '' });
+		stateAdmin.push(iid, { L: '开始...', R: '' });
 
 		// 判断下载状态
 		if(force === true) { state = 0; }
-		if(state == 2) { return statesIllust.push(iid, { L: '在下' }); }
-		if(state == 1) { return statesIllust.push(iid, { L: '✔ 已下' }); }
+		if(state == 2) { return stateAdmin.push(iid, { L: '在下' }); }
+		if(state == 1) { return stateAdmin.push(iid, { L: '✔ 已下' }); }
 
 		// 获取完整信息并更新
-		statesIllust.push(iid, { L: '解析...' });
+		stateAdmin.push(iid, { L: '解析...' });
 		const info = (await getJSON(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, profile.cookie))?.body ?? {};
 
 		await updateIllustInfo(db, iid, {
@@ -178,7 +178,7 @@ const handle = async (illust, who, force) => {
 			timeUpload: Moment(info.illust_details.upload_timestamp, 'X').format()
 		});
 
-		statesIllust.push(iid, { fetch: 2, L: `下载${count}张` });
+		stateAdmin.push(iid, { fetch: 2, L: `下载${count}张` });
 
 		// 提取需要下载的url，并将保存文件信息
 		const infosFetch = [];
@@ -189,7 +189,7 @@ const handle = async (illust, who, force) => {
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 
-			statesIllust.push(iid, { files: meta.body.frames });
+			stateAdmin.push(iid, { files: meta.body.frames });
 		}
 		else if(info.illust_details.manga_a) {
 			for(const manga of info.illust_details.manga_a) {
@@ -198,21 +198,21 @@ const handle = async (illust, who, force) => {
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 
-			statesIllust.push(iid, { files: infosFetch });
+			stateAdmin.push(iid, { files: infosFetch });
 		}
 		else {
 			infosFetch.push({ url: info.illust_details.url_big, dir: C.path.dirIllustSave });
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 
-			statesIllust.push(iid, { files: infosFetch });
+			stateAdmin.push(iid, { files: infosFetch });
 		}
 
 		// 下载
 		await fetchMap(db, infosFetch, iid, profile.cookie);
 	}
 	catch(error) {
-		statesIllust.push(iid, { L: '✖', R: error?.message ?? error });
+		stateAdmin.push(iid, { L: '✖', R: error?.message ?? error });
 
 		throw error;
 	}

@@ -1,6 +1,6 @@
-import { DB, G } from '../../../lib/global.js';
+import { DB, G } from '../../../../lib/global.js';
 
-class IllustStates {
+class StateAdmin {
 	#maps = {};
 	#push = {};
 
@@ -68,6 +68,6 @@ class IllustStates {
 }
 
 
-const statesIllust = new IllustStates();
+const stateAdmin = new StateAdmin();
 
-export default statesIllust;
+export default stateAdmin;
