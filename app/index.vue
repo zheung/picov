@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-	import { ref, watch, onBeforeMount, inject, provide, computed, } from 'vue';
+	import { ref, watch, onBeforeMount, inject, provide, computed } from 'vue';
 
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
@@ -86,7 +86,7 @@
 	provide('who', computed(() => profile.value.name));
 
 
-	const IA = ref(new IllustAdmin(wock, profile));
+	const IA = ref(new IllustAdmin(wock, profile).init());
 	provide('IA', IA);
 
 	const TA = new TabAdmin(modulePre, wock, profile);

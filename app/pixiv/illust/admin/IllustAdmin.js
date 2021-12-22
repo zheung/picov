@@ -1,31 +1,49 @@
+import { reactive } from 'vue';
+
+
 class IllustAdmin {
 	state = {};
+	get stateProxy() { return this.ref?.value?.state; }
+
+	iids = new Set();
 
 	profile = null;
-	get who() { return this.profile?.value?.name; }
+	get who() { return this.profile?.name; }
+
+
 
 
 	constructor(wock, profile) {
 		this.wock = wock;
 		this.profile = profile;
 
-		wock.add('updateIllustStates', states =>
+		return reactive(this);
+	}
+
+	init() {
+		this.wock.add('updateIllustStates', states =>
 			states.forEach(state =>
-				this.state.value[state.iid] = Object.assign(this.state.value[state.iid] ?? {}, state)
+				this.state[state.iid] = Object.assign(this.state[state.iid] ?? {}, state)
 			)
 		);
 
-		wock.at('open', () => {
-			const illusts = this.illusts.value;
-
-			if(illusts.length) {
-				this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who);
+		this.wock.at('open', () => {
+			if(this.iids.size) {
+				this.wock.cast('pixiv/illust/watch', [...this.iids], this.who);
 			}
 		});
+
+		return this;
 	}
 
 
-	watch(illusts) { if(illusts.length) { this.wock.cast('pixiv/illust/pull', illusts.map(illust => illust.iid), this.who); } }
+	watch(illusts) {
+		if(illusts.length) {
+			const iids = illusts.map(illust => illust.iid);
+			this.wock.cast('pixiv/illust/watch', iids, this.who);
+			iids.forEach(iid => this.iids.add(iid));
+		}
+	}
 
 	save(illust, force = false) { this.wock.cast('pixiv/illust/save', illust, this.who, force); }
 	async saveAll(illusts) {

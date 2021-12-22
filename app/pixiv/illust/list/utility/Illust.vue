@@ -9,11 +9,11 @@
 		@click.exact="IA.save(illust)"
 		@click.ctrl="IA.save(illust, true)"
 	>
-		<template v-if="S[illust.iid]?.fetch == 1">
+		<template v-if="IA.state[illust.iid]?.fetch == 1">
 			<progress :max="100" :value="100" />
 		</template>
 		<template v-else>
-			<progress :max="S[illust.iid]?.progMax ?? 0" :value="S[illust.iid]?.prog ?? 0" />
+			<progress :max="IA.state[illust.iid]?.progMax ?? 0" :value="IA.state[illust.iid]?.prog ?? 0" />
 		</template>
 		<p-title
 			:title="illust.title"
@@ -23,8 +23,8 @@
 			{{illust.count > 1 ? `(${illust.count})` : ''}} {{illust.title}}
 		</p-title>
 
-		<p-state v-if="S[illust.iid]?.L" :title="S[illust.iid]?.L">{{S[illust.iid]?.L}}</p-state>
-		<p-state v-if="S[illust.iid]?.R" right :title="S[illust.iid]?.R">{{S[illust.iid]?.R}}</p-state>
+		<p-state v-if="IA.state[illust.iid]?.L" :title="IA.state[illust.iid]?.L">{{IA.state[illust.iid]?.L}}</p-state>
+		<p-state v-if="IA.state[illust.iid]?.R" right :title="IA.state[illust.iid]?.R">{{IA.state[illust.iid]?.R}}</p-state>
 	</p-illust>
 </template>
 
@@ -44,7 +44,6 @@
 
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
 	const IA = inject('IA');
-	const S = IA.value.state;
 	/** @type {import('../../admin/TabAdmin.js').default} */
 	const TA = inject('TA');
 
@@ -88,7 +87,7 @@
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
+	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
 
 	max-height: calc(100% / 3)
 
