@@ -6,14 +6,14 @@
 			<p-part v-if="I.illustsNow.length" :title="I.params.uid">作者（{{I.name}}）{{I.isFollowed ? '已关注' : '未关注'}}</p-part>
 
 
-			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="nextPage()" @keydown.enter.space="nextPage()">
+			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
 				<Fas icon="angle-double-right" />
 			</p-part>
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
 				<Fas icon="book-open" corner />
 				<input v-model="I.paramsPre.page" tabindex="6" type="text" @keydown.enter="atFetch" />
 			</p-part>
-			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="prevPage()" @keydown.enter.space="prevPage()">
+			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
 				<Fas icon="angle-double-left" />
 			</p-part>
 			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)"><Fas icon="download" /></p-part>

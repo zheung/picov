@@ -89,6 +89,13 @@
 p-illust
 	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
 
+	transition-property: all
+	transition-duration: 0.4s
+	transform: translateZ(0)
+
+	&:hover
+		@apply bg-bottom
+
 	max-height: calc(100% / 3)
 
 	width: calc((100vw - var(--widthSidebar) - var(--widthScroll)) / 3)
