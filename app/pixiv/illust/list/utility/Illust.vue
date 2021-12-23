@@ -1,11 +1,8 @@
 <template>
 	<p-illust
 		v-menu="{ params: illust, ...menuIllust }"
-		:title="`${illust.iid}\n标题：${illust.title}\n作者：${illust.user}\n标签：${illust.tags.join('、')}`"
-		:style="{
-			backgroundImage: `url(api/pixiv/illust/thumb?who=${who}&iid=${illust.iid}&time=${illust.time}&type=${illust.type})`,
-			zIndex
-		}"
+		:title="title"
+		:style="{ backgroundImage, zIndex }"
 		@click.exact="IA.save(illust)"
 		@click.ctrl="IA.save(illust, true)"
 	>
@@ -15,10 +12,11 @@
 		<template v-else>
 			<progress :max="IA.state[illust.iid]?.progMax ?? 0" :value="IA.state[illust.iid]?.prog ?? 0" />
 		</template>
+
 		<p-title
 			:title="illust.title"
-			:multi="brop(illust.count>1)"
-			:ugoira="brop(illust.type ==2)"
+			:multi="brop(illust.count > 1)"
+			:ugoira="brop(illust.type == 2)"
 		>
 			{{illust.count > 1 ? `(${illust.count})` : ''}} {{illust.title}}
 		</p-title>
@@ -29,12 +27,12 @@
 </template>
 
 <script setup>
-	import { inject } from 'vue';
+	import { computed, inject } from 'vue';
 
 	import Clipboard from 'clipboard';
 
 
-	defineProps({
+	const props = defineProps({
 		illust: { type: Object, default: () => ({}) },
 		zIndex: { type: [Number], default: null },
 	});
@@ -49,37 +47,51 @@
 
 	const $alert = inject('$alert');
 
+
+	const backgroundImage = computed(()=> `url(api/pixiv/illust/thumb?who=${who.value}&iid=${props.illust.iid}&time=${props.illust.time}&type=${props.illust.type})`);
+	const title = computed(()=> `${props.illust.iid}\n标题：${props.illust.title}\n作者：${props.illust.user}（${props.illust.uid}）\n标签：${props.illust.tags.join('、')}`);
+
+
 	const menuIllust = {
 		useLongPressInMobile: true,
 		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
-		menuItemCss: { hoverBackground: '#bfdbfe', },
+		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
 				label: '浏览',
-				fn(illust) { TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust); }
+				fn: illust => TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust),
 			},
 			{
 				label: '浏览作者...',
-				fn(illust) { TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid); }
+				fn: illust => TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid),
 			},
 			{ line: true },
 			{
 				label: '作品页',
-				fn(illust) { window.open(`https://www.pixiv.net/artworks/${illust.iid}`); }
+				fn: illust => window.open(`https://www.pixiv.net/artworks/${illust.iid}`),
 			},
 			{
 				label: '作者主页',
-				fn(illust) { window.open(`https://www.pixiv.net/users/${illust.uid}/illustrations`); }
+				fn: illust => window.open(`https://www.pixiv.net/users/${illust.uid}/illustrations`),
 			},
 			{ line: true },
 			{
 				label: '复制ID',
-				fn(illust) {
+				fn: illust => {
 					const clipboard = new Clipboard(document.documentElement, { text: () => illust.iid });
 					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制失败${illust.iid}`); });
+					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${illust.iid}）失败`); });
 					clipboard.onClick(event);
-				}
+				},
+			},
+			{
+				label: '复制作者ID',
+				fn: illust => {
+					const clipboard = new Clipboard(document.documentElement, { text: () => illust.uid });
+					clipboard.on('success', () => { clipboard.destroy(); });
+					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${illust.uid}）失败`); });
+					clipboard.onClick(event);
+				},
 			},
 		]
 	};
@@ -87,7 +99,7 @@
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
+	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
 
 	transition-property: all
 	transition-duration: 0.4s

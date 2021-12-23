@@ -2,9 +2,9 @@
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
 			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> </p-part>
-			<p-part>作品ID（{{I.params.uid}}）</p-part>
+			<p-part>作品ID（{{I.params.iid}}）</p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas icon="paint-brush" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
 		<p-illusts>
@@ -46,15 +46,15 @@
 		const info = tabNow.info;
 
 
-		const { uid } = info.paramsPre;
+		const { iid } = info.paramsPre;
 
 
-		info.illustsNow = (await $get('pixiv/illust/list/illust', { who: who.value, iids: [uid] })) ?? [];
+		info.illustsNow = (await $get('pixiv/illust/list/illust', { who: who.value, iids: [iid] })) ?? [];
 
 		IA.value.watch(info.illustsNow);
 
 
-		tabNow.title = `【数字】（${uid}）${info.illustsNow[0]?.title ?? ''}`;
+		tabNow.title = `【数字】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
 	};
 
 
@@ -66,11 +66,11 @@
 
 
 		now.value = tab;
-		const [uid, sInitTab] = params;
+		const [iid, sInitTab] = params;
 
 		if(sInitTab === TA.sInitTab) {
-			tab.info.params = { uid };
-			tab.info.paramsPre = { uid };
+			tab.info.params = { iid };
+			tab.info.paramsPre = { iid };
 
 			atFetch();
 		}

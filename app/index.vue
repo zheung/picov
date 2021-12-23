@@ -41,6 +41,8 @@
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
 
+	import Clipboard from 'clipboard';
+
 
 	document.title = 'Picov 5';
 
@@ -98,19 +100,35 @@
 
 	const menuTab = {
 		useLongPressInMobile: true,
-		menuWrapperCss: {
-			background: 'snow',
-			borderRadius: '4px'
-		},
-		menuItemCss: {
-			hoverBackground: '#bfdbfe',
-		},
+		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
+		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
 				label: '关闭',
 				tips: '关闭该标签页',
-				disabled: tab => tab.typeList == 'follow',
-				fn: tab => TA.del(tab)
+				hidden: tab => tab.typeList == 'follow',
+				fn: tab => TA.del(tab),
+			},
+			{ line: true },
+			{
+				label: '复制ID',
+				hidden: tab => tab.typeList != 'number',
+				fn: tab => {
+					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.params.iid });
+					clipboard.on('success', () => { clipboard.destroy(); });
+					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${tab.info.iid}）失败`); });
+					clipboard.onClick(event);
+				},
+			},
+			{
+				label: '复制作者ID',
+				hidden: tab => tab.typeList != 'user',
+				fn: tab => {
+					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.params.uid });
+					clipboard.on('success', () => { clipboard.destroy(); });
+					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${tab.info.uid}）失败`); });
+					clipboard.onClick(event);
+				},
 			},
 		]
 	};

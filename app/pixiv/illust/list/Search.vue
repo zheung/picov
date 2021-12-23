@@ -26,7 +26,7 @@
 				<Fas icon="download" />
 			</p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas icon="paint-brush" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
 		<p-illusts>
