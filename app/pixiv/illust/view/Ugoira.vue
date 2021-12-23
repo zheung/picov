@@ -21,9 +21,9 @@
 
 
 	/** @type {import('../admin/IllustAdmin.js').default} */
-	const IA = inject('IA');
-	/** @type {import('../admin/TabAdmin.js').default} */
-	const TA = inject('TA');
+	const IA = inject('illustAdmin');
+	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
+	const TA = inject('tabAdmin');
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
@@ -240,7 +240,7 @@
 
 
 	const atChangeTab = async () => {
-		const tab = TA.now.value;
+		const tab = TA.value.now;
 		const [illustNew, sInitTab] = TA.params.value;
 
 		const old = now.value;
@@ -268,7 +268,7 @@
 
 				now.value = tab;
 
-				if(sInitTab === TA.sInitTab) {
+				if(sInitTab === TA.value.sInitTab) {
 					info.illust = illustNew;
 
 					info.frames = JSON.parse(JSON.stringify(state.value[illustNew.iid]?.files));
@@ -305,7 +305,7 @@
 		}
 	};
 
-	watch(TA.now, atChangeTab);
+	watch(() => TA.value.now, atChangeTab);
 	onBeforeMount(atChangeTab);
 
 

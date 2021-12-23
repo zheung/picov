@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue';
+import { reactive } from 'vue';
 import randomString from '../../../lib/random.js';
 
 
@@ -17,24 +17,28 @@ class Tab {
 }
 
 class TabAdmin {
-	map = ref({});
-
-	key = ref('');
-	/** @type {import('vue').ComputedRef<Tab>} */
-	now = computed(() => this.map.value[this.key.value]);
-	list = computed(() => Object.values(this.map.value));
-	params = ref([]);
-
 	sInitTab = sInitTab;
+
+	map = {};
+	key = '';
+
+	params = [];
+
+	/** @type {Tab} */
+	get now() { return this.map[this.key]; }
+	get list() { return Object.values(this.map); }
+
 
 	constructor(modulePre) {
 		this.modulePre = modulePre;
+
+		return reactive(this);
 	}
 
 
 	addIcon(title, icon, type, module, ...params) {
 		const id = randomString();
-		const tabNew = this.map.value[id] = new Tab(id, title, 'icon', icon, type, module);
+		const tabNew = this.map[id] = new Tab(id, title, 'icon', icon, type, module);
 
 		this.change(tabNew, ...params, sInitTab);
 
@@ -42,22 +46,22 @@ class TabAdmin {
 	}
 
 	del(tab) {
-		const map = this.map.value;
+		const map = this.map;
 		const ids = Object.keys(map);
 		const index = ids.indexOf(tab.id);
 
-		delete this.map.value[tab.id];
+		delete this.map[tab.id];
 
 		this.change(map[ids[index + 1] ?? ids[index - 1]]);
 	}
 
 	/** @param {Tab} tab */
 	change(tab, ...params) {
-		if(this.key.value == tab.id) { return; }
+		if(this.key == tab.id) { return; }
 
-		this.key.value = tab.id;
-		this.modulePre.value = tab.module;
-		this.params.value = params;
+		this.key = tab.id;
+		this.modulePre = tab.module;
+		this.params = params;
 	}
 }
 

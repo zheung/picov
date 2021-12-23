@@ -11,8 +11,6 @@ class IllustAdmin {
 	get who() { return this.profile?.name; }
 
 
-
-
 	constructor(wock, profile) {
 		this.wock = wock;
 		this.profile = profile;
@@ -72,7 +70,7 @@ class IllustAdmin {
 	countText(illusts) {
 		const [countAll, countFetched] = this.count(illusts);
 
-		return `${countAll} (${countAll - countFetched})`;
+		return `${countFetched}/${countAll}`;
 	}
 }
 

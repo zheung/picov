@@ -40,10 +40,10 @@
 
 	const who = inject('who');
 
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('IA');
-	/** @type {import('../../admin/TabAdmin.js').default} */
-	const TA = inject('TA');
+	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
+	const IA = inject('illustAdmin');
+	/** @type {import('vue').Ref<import('../../admin/TabAdmin.js').default>} */
+	const TA = inject('tabAdmin');
 
 	const $alert = inject('$alert');
 
@@ -59,11 +59,11 @@
 		menuList: [
 			{
 				label: '浏览',
-				fn: illust => TA.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust),
+				fn: illust => TA.value.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust),
 			},
 			{
 				label: '浏览作者...',
-				fn: illust => TA.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid),
+				fn: illust => TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid),
 			},
 			{ line: true },
 			{

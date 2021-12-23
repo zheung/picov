@@ -14,6 +14,8 @@ import {
 	faHome,
 	faPaintBrush,
 	faSave,
+	faUserCheck,
+	faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 // import { far } from '@fortawesome/free-regular-svg-icons';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -36,6 +38,8 @@ export const install = function(app) {
 	library.add(faHome);
 	library.add(faPaintBrush);
 	library.add(faSave);
+	library.add(faUserCheck);
+	library.add(faUserPlus);
 
 	app.component('Fas', FontAwesomeIcon);
 };

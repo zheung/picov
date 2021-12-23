@@ -3,7 +3,7 @@
 		<Topbar>
 			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> 加载作者（{{I.params.uid}}）</p-part>
 			<p-part v-if="I.illustsNow.length" header :style="{ backgroundImage: `url(${now.header})` }" />
-			<p-part v-if="I.illustsNow.length" :title="I.params.uid">作者（{{I.name}}）{{I.isFollowed ? '已关注' : '未关注'}}</p-part>
+			<p-part v-if="I.illustsNow.length" :title="I.params.uid">作者（{{I.name}}</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
@@ -18,14 +18,11 @@
 			</p-part>
 			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)"><Fas icon="download" /></p-part>
 			<p-part v-tip.bottom="'作者主页'" panel right @click="atOpen"><Fas icon="house-user" /></p-part>
+			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atOpen"><Fas :icon="I.isFollowed ? 'user-check' : 'user-plus'" /></p-part>
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
-		<p-illusts>
-			<Illust v-for="(illust, index) of I.illustsNow" :key="`illust-${illust.iid}`"
-				:illust="illust" :z-index="I.illustsNow.length - index"
-			/>
-		</p-illusts>
+		<Illusts :illusts="I.illustsNow" />
 	</module>
 </template>
 
@@ -34,7 +31,7 @@
 
 	import { Tab } from '../admin/TabAdmin.js';
 
-	import Illust from './utility/Illust.vue';
+	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
 
@@ -44,9 +41,9 @@
 
 
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('IA');
-	/** @type {import('../admin/TabAdmin.js').default} */
-	const TA = inject('TA');
+	const IA = inject('illustAdmin');
+	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
+	const TA = inject('tabAdmin');
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
@@ -79,15 +76,15 @@
 
 
 	const atChangeTab = async () => {
-		const tab = TA.now.value;
-		const params = TA.params.value;
+		const tab = TA.value.now;
+		const params = TA.value.params;
 
 		if(tab.typeList != 'user') { return; }
 		now.value = tab;
 
 		const [uid, sInitTab] = params;
 
-		if(sInitTab === TA.sInitTab) {
+		if(sInitTab === TA.value.sInitTab) {
 			tab.info.params = { uid, page: 1 };
 			tab.info.paramsPre = { uid, page: 1 };
 			tab.info.header = {};
@@ -111,7 +108,7 @@
 		}
 	};
 
-	watch(TA.now, atChangeTab);
+	watch(() => TA.value.now, atChangeTab);
 	onBeforeMount(atChangeTab);
 
 
@@ -123,7 +120,4 @@
 </script>
 
 <style lang="sass" scoped>
-p-illusts
-	@apply block mt-12 z-10 w-full overflow-x-hidden overflow-y-scroll
-	height: calc(100vh - 3rem)
 </style>

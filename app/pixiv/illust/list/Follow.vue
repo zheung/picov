@@ -25,11 +25,7 @@
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
-		<p-illusts>
-			<Illust v-for="(illust, index) of I.illustsNow" :key="`illust-${illust.iid}`"
-				:illust="illust" :z-index="I.illustsNow.length - index"
-			/>
-		</p-illusts>
+		<Illusts :illusts="I.illustsNow" />
 	</module>
 </template>
 
@@ -38,7 +34,7 @@
 
 	import { Tab } from '../admin/TabAdmin.js';
 
-	import Illust from './utility/Illust.vue';
+	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
 
@@ -48,9 +44,9 @@
 
 
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('IA');
-	/** @type {import('../admin/TabAdmin.js').default} */
-	const TA = inject('TA');
+	const IA = inject('illustAdmin');
+	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
+	const TA = inject('tabAdmin');
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
@@ -81,8 +77,8 @@
 
 
 	const atChangeTab = () => {
-		const tab = TA.now.value;
-		const params = TA.params.value;
+		const tab = TA.value.now;
+		const params = TA.value.params;
 
 		if(tab.typeList != 'follow') { return; }
 
@@ -90,15 +86,14 @@
 		now.value = tab;
 		const [sInitTab] = params;
 
-		if(sInitTab === TA.sInitTab) {
+		if(sInitTab === TA.value.sInitTab) {
 			tab.info.params = { page: 1 };
 			tab.info.paramsPre = { page: 1 };
-
 			atFetch();
 		}
 	};
 
-	watch(TA.now, atChangeTab);
+	watch(() => TA.value.now, atChangeTab);
 	onBeforeMount(atChangeTab);
 
 	const nextPager = ref(null);
@@ -106,7 +101,4 @@
 </script>
 
 <style lang="sass" scoped>
-p-illusts
-	@apply block mt-12 z-10 w-full overflow-x-hidden overflow-y-scroll
-	height: calc(100vh - 3rem)
 </style>

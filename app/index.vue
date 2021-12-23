@@ -8,11 +8,11 @@
 		</p-button>
 
 
-		<template v-for="(tab, index) of tabs" :key="`tab-${tab?.id}`">
+		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<p-button
 				v-tip.right="tab.title"
 				v-menu=" { params: tab, ...menuTab }"
-				:now="brop(tabNow === tab)"
+				:now="brop(TA.now === tab)"
 				:tabindex="100 + index"
 				@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
 			>
@@ -89,13 +89,10 @@
 
 
 	const IA = ref(new IllustAdmin(wock, profile).init());
-	provide('IA', IA);
+	provide('illustAdmin', IA);
 
-	const TA = new TabAdmin(modulePre, wock, profile);
-	provide('TA', TA);
-
-	const tabs = TA.list;
-	const tabNow = TA.now;
+	const TA = ref(new TabAdmin(modulePre));
+	provide('tabAdmin', TA);
 
 
 	const menuTab = {
@@ -107,7 +104,7 @@
 				label: '关闭',
 				tips: '关闭该标签页',
 				hidden: tab => tab.typeList == 'follow',
-				fn: tab => TA.del(tab),
+				fn: tab => TA.value.del(tab),
 			},
 			{ line: true },
 			{
@@ -147,7 +144,7 @@
 		namesProfile.value = await $get('picov/profile/list') ?? [];
 		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
 
-		TA.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-list-Follow');
+		TA.value.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-list-Follow');
 	};
 
 	onBeforeMount(async () => wock.at('open', atReady, true));
@@ -157,20 +154,20 @@
 	const atSearch = (keywordNew, author = false) => {
 		if(/^[1-9]\d*$/.test(keywordNew.trim())) {
 			if(author) {
-				TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew.replace(/i/i, ''));
+				TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew.replace(/i/i, ''));
 			}
 			else {
-				TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew);
+				TA.value.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew);
 			}
 		}
 		else if(/^u[1-9]\d*$/i.test(keywordNew.trim())) {
-			TA.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew.replace(/u/i, ''));
+			TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew.replace(/u/i, ''));
 		}
 		else if(/^i[1-9]\d*$/i.test(keywordNew.trim())) {
-			TA.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew.replace(/i/i, ''));
+			TA.value.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew.replace(/i/i, ''));
 		}
 		else {
-			TA.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'pixiv-illust-list-Search', keywordNew);
+			TA.value.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'pixiv-illust-list-Search', keywordNew);
 		}
 
 
