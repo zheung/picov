@@ -2,20 +2,19 @@ import AS from 'assert';
 
 import { C } from '../../../../lib/global.js';
 import { getJSON } from '../../get.lib.js';
+import assignThumbURL from './utility/assignThumbURL.lib.js';
 
 
-const formatItem = item => {
-	return {
-		iid: ~~item.id,
-		title: item.title,
-		uid: ~~item.userId,
-		user: item.userName,
-		tags: item.tags,
-		time: item.url.match(/20(\d{2}\/){5}(\d{2})/g)[0],
-		type: ~~item.illustType,
-		count: ~~item.pageCount
-	};
-};
+const formatItem = (item, who) => assignThumbURL({
+	iid: ~~item.id,
+	title: item.title,
+	uid: ~~item.userId,
+	user: item.userName,
+	tags: item.tags,
+	time: item.url.match(/20(\d{2}\/){5}(\d{2})/g)[0],
+	type: ~~item.illustType,
+	count: ~~item.pageCount
+}, who);
 
 
 const method = 'get';
@@ -37,7 +36,7 @@ const handle = async raw => {
 
 
 	return Object.values(data?.body ?? {})
-		?.map(item => formatItem(item))
+		?.map(item => formatItem(item, raw.who))
 		?? [];
 };
 

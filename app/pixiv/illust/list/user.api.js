@@ -41,7 +41,7 @@ const handle = async raw => {
 	return {
 		illusts, mangas, alls,
 		isFollowed, name,
-		headerURL: header.noProfile
+		urlHeader: header.noProfile
 			? 'no_profile.png'
 			: `api/pixiv/user/header?who=${raw.who}&time=${header.time}&token=${header.token}&ext=${header.ext}`,
 	};

@@ -38,8 +38,6 @@
 	});
 
 
-	const who = inject('who');
-
 	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
 	/** @type {import('vue').Ref<import('../../admin/TabAdmin.js').default>} */
@@ -48,7 +46,7 @@
 	const $alert = inject('$alert');
 
 
-	const backgroundImage = computed(()=> `url(api/pixiv/illust/thumb?who=${who.value}&iid=${props.illust.iid}&time=${props.illust.time}&type=${props.illust.type})`);
+	const backgroundImage = computed(()=> `url(${props.illust.urlThumb})`);
 	const title = computed(()=> `${props.illust.iid}\n标题：${props.illust.title}\n作者：${props.illust.user}（${props.illust.uid}）\n标签：${props.illust.tags.join('、')}`);
 
 

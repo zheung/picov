@@ -81,7 +81,7 @@
 			tab.info.paramsPre = { uid, page: 1 };
 
 
-			const { illusts, mangas, alls, name, isFollowed, headerURL } = await IA.value.fetchUser(uid, false);
+			const { illusts, mangas, alls, name, isFollowed, urlHeader } = await IA.value.fetchUser(uid, false);
 
 			tab.info.illusts = illusts;
 			tab.info.mangas = mangas;
@@ -89,10 +89,10 @@
 
 			tab.info.name = name;
 			tab.info.isFollowed = isFollowed;
-			tab.info.headerURL = headerURL;
+			tab.info.urlHeader = urlHeader;
 
 			tab.typeTab = 'header';
-			tab.header = headerURL;
+			tab.header = urlHeader;
 			tab.title = `作者：${name}`;
 
 			atFetch();
