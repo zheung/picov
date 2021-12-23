@@ -11,9 +11,10 @@ class IllustAdmin {
 	get who() { return this.profile?.name; }
 
 
-	constructor(wock, profile) {
+	constructor(wock, profile, $get) {
 		this.wock = wock;
 		this.profile = profile;
+		this.$get = $get;
 
 		return reactive(this);
 	}
@@ -41,6 +42,8 @@ class IllustAdmin {
 			this.wock.cast('pixiv/illust/watch', iids, this.who);
 			iids.forEach(iid => this.iids.add(iid));
 		}
+
+		return illusts;
 	}
 
 	save(illust, force = false) { this.wock.cast('pixiv/illust/save', illust, this.who, force); }
@@ -71,6 +74,27 @@ class IllustAdmin {
 		const [countAll, countFetched] = this.count(illusts);
 
 		return `${countFetched}/${countAll}`;
+	}
+
+	async fetchFollow(page, isWatch = true) {
+		const illusts = await this.$get('pixiv/illust/list/follow', { who: this.who, page }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+	async fetchIllusts(iids, isWatch = true) {
+		const illusts = await this.$get('pixiv/illust/list/illust', { who: this.who, iids }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+	async fetchSearch(keyword, page, isWatch = true) {
+		const illusts = await this.$get('pixiv/illust/list/search', { who: this.who, keyword, page }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+	async fetchUser(uid, isWatch = true) {
+		const illusts = await this.$get('pixiv/illust/list/user', { who: this.who, uid }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
 	}
 }
 

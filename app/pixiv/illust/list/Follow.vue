@@ -37,10 +37,8 @@
 	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
+	import updatePage from './utility/updatePage.js';
 
-	const $get = inject('$get');
-
-	const who = inject('who');
 
 
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
@@ -60,15 +58,8 @@
 		const info = tabNow.info;
 
 
-		const step = ~~step_;
-		let { page } = info.paramsPre;
-
-		if(step > 0 || step < 0 && page + step > 0) { page = (info.paramsPre.page += step); }
-
-
-		info.illustsNow = (await $get('pixiv/illust/list/follow', { who: who.value, page })) ?? [];
-
-		IA.value.watch(info.illustsNow);
+		const { page } = updatePage(info.paramsPre, step_);
+		info.illustsNow = await IA.value.fetchFollow(page);
 
 
 		tabNow.title = `【我的关注】（第${page}页）`;

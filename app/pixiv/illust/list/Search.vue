@@ -41,10 +41,7 @@
 	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
-
-	const $get = inject('$get');
-
-	const who = inject('who');
+	import updatePage from './utility/updatePage.js';
 
 
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
@@ -64,15 +61,8 @@
 		const info = tabNow.info;
 
 
-		const step = ~~step_;
-		let { keyword, page } = info.paramsPre;
-
-		if(step > 0 || step < 0 && page + step > 0) { page = (info.paramsPre.page += step); }
-
-
-		info.illustsNow = (await $get('pixiv/illust/list/search', { who: who.value, keyword, page })) ?? [];
-
-		IA.value.watch(info.illustsNow);
+		const { keyword, page } = updatePage(info.paramsPre, step_);
+		info.illustsNow = await IA.value.fetchSearch(page);
 
 
 		tabNow.title = `【搜索】${keyword}（第${page}页）`;

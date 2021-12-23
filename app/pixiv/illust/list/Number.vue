@@ -20,11 +20,6 @@
 	import Topbar from './utility/Topbar.vue';
 
 
-	const $get = inject('$get');
-
-	const who = inject('who');
-
-
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
@@ -43,11 +38,7 @@
 
 
 		const { iid } = info.paramsPre;
-
-
-		info.illustsNow = (await $get('pixiv/illust/list/illust', { who: who.value, iids: [iid] })) ?? [];
-
-		IA.value.watch(info.illustsNow);
+		info.illustsNow = await IA.value.fetchIllusts([iid]);
 
 
 		tabNow.title = `【数字】（${iid}）${info.illustsNow[0]?.title ?? ''}`;

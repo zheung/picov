@@ -32,14 +32,18 @@ const handle = async raw => {
 	const urlHeader = new URL(image);
 	const infoName = posix.parse(urlHeader.pathname);
 
+	const header = image.includes('no_profile') ? { noProfile: true } : {
+		time: urlHeader.pathname.split('/').slice(3, 9).join('/'),
+		token: infoName.name.replace(/_\d+$/, ''),
+		ext: infoName.ext,
+	};
+
 	return {
 		illusts, mangas, alls,
 		isFollowed, name,
-		header: image.includes('no_profile') ? { noProfile: true } : {
-			time: urlHeader.pathname.split('/').slice(3, 9).join('/'),
-			token: infoName.name.replace(/_\d+$/, ''),
-			ext: infoName.ext,
-		}
+		headerURL: header.noProfile
+			? 'no_profile.png'
+			: `api/pixiv/user/header?who=${raw.who}&time=${header.time}&token=${header.token}&ext=${header.ext}`,
 	};
 };
 

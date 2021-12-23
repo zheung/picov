@@ -34,10 +34,7 @@
 	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
-
-	const $get = inject('$get');
-
-	const who = inject('who');
+	import updatePage from './utility/updatePage.js';
 
 
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
@@ -52,25 +49,20 @@
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 
+	const atOpen = () => window.open(`https://www.pixiv.net/users/${I.value.params.uid}/illustrations`);
+
+
 	const atFetch = async step_ => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
 
-		const step = ~~step_;
-		let { uid, page } = info.paramsPre;
-
-		if(step > 0 || step < 0 && page + step > 0) { page = (info.paramsPre.page += step); }
-
-
+		const { page } = updatePage(info.paramsPre, step_);
 		const iidsNow = info.alls.slice((page - 1) * 15, page * 15);
+		info.illustsNow = await IA.value.fetchIllusts(iidsNow);
 
-		info.illustsNow = (await $get('pixiv/illust/list/illust', { who: who.value, uid, iids: iidsNow }))?.reverse() ?? [];
-
-		IA.value.watch(info.illustsNow);
 
 		tabNow.title = `【作者】${info.name}（第${page}页）`;
-		info.params.uid = uid;
 		info.params.page = page;
 	};
 
@@ -87,10 +79,9 @@
 		if(sInitTab === TA.value.sInitTab) {
 			tab.info.params = { uid, page: 1 };
 			tab.info.paramsPre = { uid, page: 1 };
-			tab.info.header = {};
 
 
-			const { illusts, mangas, alls, name, isFollowed, header } = (await $get('pixiv/illust/list/user', { who: who.value, uid })) ?? [];
+			const { illusts, mangas, alls, name, isFollowed, headerURL } = await IA.value.fetchUser(uid, false);
 
 			tab.info.illusts = illusts;
 			tab.info.mangas = mangas;
@@ -98,10 +89,10 @@
 
 			tab.info.name = name;
 			tab.info.isFollowed = isFollowed;
-			tab.info.header = header;
+			tab.info.headerURL = headerURL;
 
 			tab.typeTab = 'header';
-			tab.header = header.noProfile ? 'no_profile.png' : `api/pixiv/user/header?who=${who.value}&time=${tab.info.header.time}&token=${tab.info.header.token}&ext=${tab.info.header.ext}`;
+			tab.header = headerURL;
 			tab.title = `作者：${name}`;
 
 			atFetch();
@@ -110,10 +101,6 @@
 
 	watch(() => TA.value.now, atChangeTab);
 	onBeforeMount(atChangeTab);
-
-
-	const atOpen = () => window.open(`https://www.pixiv.net/users/${I.value.params.uid}/illustrations`);
-
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());

@@ -88,7 +88,7 @@
 	provide('who', computed(() => profile.value.name));
 
 
-	const IA = ref(new IllustAdmin(wock, profile).init());
+	const IA = ref(new IllustAdmin(wock, profile, $get).init());
 	provide('illustAdmin', IA);
 
 	const TA = ref(new TabAdmin(modulePre));
