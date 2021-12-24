@@ -38,10 +38,10 @@
 	});
 
 
-	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
-	const IA = inject('illustAdmin');
 	/** @type {import('vue').Ref<import('../../admin/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
+	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
+	const IA = inject('illustAdmin');
 
 	const $alert = inject('$alert');
 

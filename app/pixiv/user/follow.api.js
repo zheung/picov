@@ -4,7 +4,7 @@ import { C, G } from '../../../lib/global.js';
 import { postJSON } from '../get.lib.js';
 
 
-const method = 'get';
+const method = 'post';
 const handle = async raw => {
 	const profile = C.profile[raw.who];
 	AS(profile, `未找到~[档案]~{${raw.who}}`);

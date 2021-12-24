@@ -3,11 +3,9 @@ import { reactive } from 'vue';
 
 class IllustAdmin {
 	state = {};
-	get stateProxy() { return this.ref?.value?.state; }
-
 	iids = new Set();
 
-	profile = null;
+
 	get who() { return this.profile?.name; }
 
 

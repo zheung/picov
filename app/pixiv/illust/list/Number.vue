@@ -20,10 +20,10 @@
 	import Topbar from './utility/Topbar.vue';
 
 
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('illustAdmin');
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
+	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
+	const IA = inject('illustAdmin');
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);

@@ -38,10 +38,11 @@
 <script setup>
 	import { ref, watch, onBeforeMount, inject, provide, computed } from 'vue';
 
+	import Clipboard from 'clipboard';
+
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
-
-	import Clipboard from 'clipboard';
+	import UserAdmin from './pixiv/illust/admin/UserAdmin.js';
 
 
 	document.title = 'Picov 5';
@@ -51,6 +52,7 @@
 	const CV = inject('CV');
 	const $alert = inject('$alert');
 	const $get = inject('$get');
+	const $post = inject('$post');
 	const wock = window.W = inject('$wock');
 
 
@@ -87,12 +89,15 @@
 	provide('profile', profile);
 	provide('who', computed(() => profile.value.name));
 
-
-	const IA = ref(new IllustAdmin(wock, profile, $get).init());
-	provide('illustAdmin', IA);
-
 	const TA = ref(new TabAdmin(modulePre));
 	provide('tabAdmin', TA);
+
+	const IA = ref(new IllustAdmin(wock, profile, $post).init());
+	provide('illustAdmin', IA);
+
+	const UA = ref(new UserAdmin(wock, profile, $get).init());
+	provide('userAdmin', UA);
+
 
 
 	const menuTab = {

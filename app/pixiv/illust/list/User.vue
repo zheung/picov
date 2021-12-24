@@ -18,7 +18,7 @@
 			</p-part>
 			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)"><Fas icon="download" /></p-part>
 			<p-part v-tip.bottom="'作者主页'" panel right @click="atOpen"><Fas icon="house-user" /></p-part>
-			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atOpen"><Fas :icon="I.isFollowed ? 'user-check' : 'user-plus'" /></p-part>
+			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atFollow"><Fas :icon="I.isFollowed ? 'user-check' : 'user-plus'" /></p-part>
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
@@ -37,10 +37,13 @@
 	import updatePage from './utility/updatePage.js';
 
 
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('illustAdmin');
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
+	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
+	const IA = inject('illustAdmin');
+	/** @type {import('vue').Ref<import('../admin/UserAdmin.js').default>} */
+	const UA = inject('userAdmin');
+
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
@@ -50,6 +53,14 @@
 
 
 	const atOpen = () => window.open(`https://www.pixiv.net/users/${I.value.params.uid}/illustrations`);
+	const atFollow = async () => {
+		try {
+			await UA.value.followUser(I.value.params.uid);
+
+			now.value.info.isFollowed = true;
+		}
+		catch { void 0; }
+	};
 
 
 	const atFetch = async step_ => {
