@@ -1,12 +1,12 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part :title="I.params.uid">搜索</p-part>
+			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part>搜索</p-part>
 
 			<p-part v-tip.bottom="'关键词'" panel input _keyword>
 				<Fas icon="search" corner />
-				<input v-model="I.paramsPre.keyword" tabindex="4" type="text" @keydown.enter="atFetch" />
+				<input v-model="I.keywordPre" tabindex="4" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
@@ -15,7 +15,7 @@
 
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
 				<Fas icon="book-open" corner />
-				<input v-model="I.paramsPre.page" tabindex="6" type="text" @keydown.enter="atFetch" />
+				<input v-model="I.pagePre" tabindex="6" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
+	import { computed, inject, onActivated, onMounted, ref } from 'vue';
 
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -57,20 +57,20 @@
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 	const stateFetch = ref(0);
-	const atFetch = async step_ => {
+	const atFetch = async (step_ = 0) => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
 		stateFetch.value = 1;
 		try {
-			const { keyword, page } = updatePage(info.paramsPre, step_);
-			info.illustsNow = await IA.value.fetchSearch(keyword, page);
+			const { keywordPre, pagePre } = updatePage(info, step_);
+			info.illustsNow = await IA.value.fetchSearch(keywordPre, pagePre);
 			stateFetch.value = 2;
 
 
-			tabNow.title = `【搜索】${keyword}（第${page}页）`;
-			info.params.keyword = keyword;
-			info.params.page = page;
+			tabNow.title = `【搜索】${keywordPre}（第${pagePre}页）`;
+			info.keyword = keywordPre;
+			info.page = pagePre;
 		}
 		catch(error) {
 			stateFetch.value = 3;
@@ -80,26 +80,27 @@
 	};
 
 
-	const atChangeTab = () => {
-		const tab = TA.value.now;
-		const params = TA.value.params;
+	onMounted(() => TA.value.emitChange());
 
-		if(tab.typeList != 'search') { return; }
-
-
+	TA.value.addChanger('search', tab => {
 		now.value = tab;
-		const [keyword, sInitTab] = params;
 
-		if(sInitTab === TA.value.sInitTab) {
-			tab.info.params = { keyword, page: 1 };
-			tab.info.paramsPre = { keyword, page: 1 };
+
+		if(!tab.info.isInit) {
+			tab.info.isInit = true;
+
+			const [keyword] = tab.params;
+
+			tab.info.keyword = '';
+			tab.info.page = 0;
+			tab.info.keywordPre = keyword;
+			tab.info.pagePre = 1;
+
 
 			atFetch();
 		}
-	};
+	});
 
-	watch(() => TA.value.now, atChangeTab);
-	onBeforeMount(atChangeTab);
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());

@@ -1,8 +1,8 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part>作品ID（{{I.params.iid}}）</p-part>
+			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part>作品ID（{{I.iid}}）</p-part>
 
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-	import { computed, inject, onBeforeMount, ref, watch } from 'vue';
+	import { computed, inject, onMounted, ref } from 'vue';
 
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -41,7 +41,7 @@
 
 		stateFetch.value = 1;
 		try {
-			const { iid } = info.paramsPre;
+			const iid = info.iid;
 			info.illustsNow = await IA.value.fetchIllusts([iid]);
 			stateFetch.value = 2;
 
@@ -56,26 +56,23 @@
 	};
 
 
-	const atChangeTab = () => {
-		const tab = TA.value.now;
-		const params = TA.value.params;
+	onMounted(() => TA.value.emitChange());
 
-		if(tab.typeList != 'number') { return; }
-
-
+	TA.value.addChanger('number', tab => {
 		now.value = tab;
-		const [iid, sInitTab] = params;
 
-		if(sInitTab === TA.value.sInitTab) {
-			tab.info.params = { iid };
-			tab.info.paramsPre = { iid };
+
+		if(!tab.info.isInit) {
+			tab.info.isInit = true;
+
+			const [iid] = tab.params;
+
+			tab.info.iid = iid;
+
 
 			atFetch();
 		}
-	};
-
-	watch(() => TA.value.now, atChangeTab);
-	onBeforeMount(atChangeTab);
+	});
 </script>
 
 <style lang="sass" scoped>

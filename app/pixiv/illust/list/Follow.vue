@@ -1,8 +1,8 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part :title="I.params.uid">我的关注</p-part>
+			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part>我的关注</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="6" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
@@ -11,7 +11,7 @@
 
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
 				<Fas icon="book-open" corner />
-				<input v-model="I.paramsPre.page" tabindex="5" type="text" @keydown.enter="atFetch()" />
+				<input v-model="I.pagePre" tabindex="5" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="4" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
+	import { computed, inject, onActivated, onMounted, ref } from 'vue';
 
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -54,19 +54,19 @@
 
 
 	const stateFetch = ref(0);
-	const atFetch = async step_ => {
+	const atFetch = async (step_ = 0) => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
 		stateFetch.value = 1;
 		try {
-			const { page } = updatePage(info.paramsPre, step_);
-			info.illustsNow = await IA.value.fetchFollow(page);
+			const { pagePre } = updatePage(info, step_);
+			info.illustsNow = await IA.value.fetchFollow(pagePre);
 			stateFetch.value = 2;
 
 
-			tabNow.title = `【我的关注】（第${page}页）`;
-			info.params.page = page;
+			tabNow.title = `【我的关注】（第${pagePre}页）`;
+			info.pagePre = pagePre;
 		}
 		catch(error) {
 			stateFetch.value = 3;
@@ -76,26 +76,23 @@
 	};
 
 
-	const atChangeTab = () => {
-		const tab = TA.value.now;
-		const params = TA.value.params;
+	onMounted(() => TA.value.emitChange());
 
-		if(tab.typeList != 'follow') { return; }
-
-
+	TA.value.addChanger('follow', tab => {
 		now.value = tab;
-		const [sInitTab] = params;
 
-		if(sInitTab === TA.value.sInitTab) {
-			tab.info.params = { page: 1 };
-			tab.info.paramsPre = { page: 1 };
+
+		if(!tab.info.isInit) {
+			tab.info.isInit = true;
+
+			tab.info.page = 0;
+			tab.info.pagePre = 1;
+
 
 			atFetch();
 		}
-	};
+	});
 
-	watch(() => TA.value.now, atChangeTab);
-	onBeforeMount(atChangeTab);
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());

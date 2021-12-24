@@ -1,9 +1,9 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part v-if="I.urlHeader" header :style="{ backgroundImage: `url(${I.urlHeader})` }" />
-			<p-part v-if="I.params.uid" :title="I.params.uid">作者（{{I.name ?? I.params.uid}}）</p-part>
+			<p-part v-if="I.uid" :title="I.uid">作者（{{I.name ?? I.uid}}）</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
@@ -11,7 +11,7 @@
 			</p-part>
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
 				<Fas icon="book-open" corner />
-				<input v-model="I.paramsPre.page" tabindex="6" type="text" @keydown.enter="atFetch" />
+				<input v-model="I.pagePre" tabindex="6" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
 				<Fas icon="angle-double-left" />
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onBeforeMount, ref, watch } from 'vue';
+	import { computed, inject, onActivated, onMounted, ref } from 'vue';
 
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -53,10 +53,10 @@
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 
-	const atOpen = () => window.open(`https://www.pixiv.net/users/${I.value.params.uid}/illustrations`);
+	const atOpen = () => window.open(`https://www.pixiv.net/users/${I.value.uid}/illustrations`);
 	const atFollow = async () => {
 		try {
-			await UA.value.followUser(I.value.params.uid);
+			await UA.value.followUser(I.value.uid);
 
 			now.value.info.isFollowed = true;
 		}
@@ -65,20 +65,20 @@
 
 
 	const stateFetch = ref(0);
-	const atFetch = async step_ => {
+	const atFetch = async (step_ = 0) => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
 		stateFetch.value = 1;
 		try {
-			const { page } = updatePage(info.paramsPre, step_);
-			const iidsNow = info.alls.slice((page - 1) * 15, page * 15);
+			const { pagePre } = updatePage(info, step_);
+			const iidsNow = info.alls.slice((pagePre - 1) * 15, pagePre * 15);
 			info.illustsNow = await IA.value.fetchIllusts(iidsNow);
 			stateFetch.value = 2;
 
 
-			tabNow.title = `【作者】${info.name}（第${page}页）`;
-			info.params.page = page;
+			tabNow.title = `【作者】${info.name}（第${pagePre}页）`;
+			info.page = pagePre;
 		}
 		catch(error) {
 			stateFetch.value = 3;
@@ -88,18 +88,24 @@
 	};
 
 
-	const atChangeTab = async () => {
-		const tab = TA.value.now;
-		const params = TA.value.params;
+	onMounted(() => TA.value.emitChange());
 
-		if(tab.typeList != 'user') { return; }
+	TA.value.addChanger('user', async tab_ => {
+		const tab = tab_;
+
+
 		now.value = tab;
 
-		const [uid, sInitTab] = params;
 
-		if(sInitTab === TA.value.sInitTab) {
-			tab.info.params = { uid, page: 1 };
-			tab.info.paramsPre = { uid, page: 1 };
+		if(!tab.info.isInit) {
+			tab.info.isInit = true;
+
+			const [uid] = tab.params;
+
+			tab.info.uid = uid;
+			tab.info.page = 0;
+			tab.info.pagePre = 1;
+
 
 			stateFetch.value = 1;
 			try {
@@ -127,10 +133,7 @@
 				throw error;
 			}
 		}
-	};
-
-	watch(() => TA.value.now, atChangeTab);
-	onBeforeMount(atChangeTab);
+	});
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());
