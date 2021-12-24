@@ -1,7 +1,7 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> </p-part>
+			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part>作品ID（{{I.params.iid}}）</p-part>
 
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
@@ -19,6 +19,8 @@
 	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
+	import { stateFetchIcon } from './utility/stateFetch.js';
+
 
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
@@ -32,16 +34,25 @@
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 
+	const stateFetch = ref(0);
 	const atFetch = async () => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
+		stateFetch.value = 1;
+		try {
+			const { iid } = info.paramsPre;
+			info.illustsNow = await IA.value.fetchIllusts([iid]);
+			stateFetch.value = 2;
 
-		const { iid } = info.paramsPre;
-		info.illustsNow = await IA.value.fetchIllusts([iid]);
 
+			tabNow.title = `【数字】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
+		}
+		catch(error) {
+			stateFetch.value = 3;
 
-		tabNow.title = `【数字】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
+			throw error;
+		}
 	};
 
 

@@ -1,7 +1,7 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> </p-part>
+			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part :title="I.params.uid">搜索</p-part>
 
 			<p-part v-tip.bottom="'关键词'" panel input _keyword>
@@ -42,6 +42,7 @@
 	import Topbar from './utility/Topbar.vue';
 
 	import updatePage from './utility/updatePage.js';
+	import { stateFetchIcon } from './utility/stateFetch.js';
 
 
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
@@ -55,19 +56,27 @@
 
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
-
+	const stateFetch = ref(0);
 	const atFetch = async step_ => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
+		stateFetch.value = 1;
+		try {
+			const { keyword, page } = updatePage(info.paramsPre, step_);
+			info.illustsNow = await IA.value.fetchSearch(keyword, page);
+			stateFetch.value = 2;
 
-		const { keyword, page } = updatePage(info.paramsPre, step_);
-		info.illustsNow = await IA.value.fetchSearch(keyword, page);
 
+			tabNow.title = `【搜索】${keyword}（第${page}页）`;
+			info.params.keyword = keyword;
+			info.params.page = page;
+		}
+		catch(error) {
+			stateFetch.value = 3;
 
-		tabNow.title = `【搜索】${keyword}（第${page}页）`;
-		info.params.keyword = keyword;
-		info.params.page = page;
+			throw error;
+		}
 	};
 
 

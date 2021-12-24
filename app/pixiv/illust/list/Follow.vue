@@ -1,7 +1,7 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part v-if="isFetching"><Fas icon="compass" :spin="true" /> </p-part>
+			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part :title="I.params.uid">我的关注</p-part>
 
 
@@ -38,7 +38,7 @@
 	import Topbar from './utility/Topbar.vue';
 
 	import updatePage from './utility/updatePage.js';
-
+	import { stateFetchIcon } from './utility/stateFetch.js';
 
 
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
@@ -52,22 +52,26 @@
 
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
-	const isFetching = ref(false);
+
+	const stateFetch = ref(0);
 	const atFetch = async step_ => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
-		isFetching.value = true;
+		stateFetch.value = 1;
 		try {
 			const { page } = updatePage(info.paramsPre, step_);
 			info.illustsNow = await IA.value.fetchFollow(page);
+			stateFetch.value = 2;
 
 
 			tabNow.title = `【我的关注】（第${page}页）`;
 			info.params.page = page;
 		}
-		finally {
-			isFetching.value = false;
+		catch(error) {
+			stateFetch.value = 3;
+
+			throw error;
 		}
 	};
 
@@ -85,6 +89,7 @@
 		if(sInitTab === TA.value.sInitTab) {
 			tab.info.params = { page: 1 };
 			tab.info.paramsPre = { page: 1 };
+
 			atFetch();
 		}
 	};

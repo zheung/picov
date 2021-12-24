@@ -1,9 +1,9 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> 加载作者（{{I.params.uid}}）</p-part>
-			<p-part v-if="I.illustsNow.length" header :style="{ backgroundImage: `url(${now.header})` }" />
-			<p-part v-if="I.illustsNow.length" :title="I.params.uid">作者（{{I.name}}</p-part>
+			<p-part><Fas :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part v-if="I.urlHeader" header :style="{ backgroundImage: `url(${I.urlHeader})` }" />
+			<p-part v-if="I.params.uid" :title="I.params.uid">作者（{{I.name ?? I.params.uid}}）</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
@@ -35,6 +35,7 @@
 	import Topbar from './utility/Topbar.vue';
 
 	import updatePage from './utility/updatePage.js';
+	import { stateFetchIcon } from './utility/stateFetch.js';
 
 
 	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
@@ -63,18 +64,27 @@
 	};
 
 
+	const stateFetch = ref(0);
 	const atFetch = async step_ => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
+		stateFetch.value = 1;
+		try {
+			const { page } = updatePage(info.paramsPre, step_);
+			const iidsNow = info.alls.slice((page - 1) * 15, page * 15);
+			info.illustsNow = await IA.value.fetchIllusts(iidsNow);
+			stateFetch.value = 2;
 
-		const { page } = updatePage(info.paramsPre, step_);
-		const iidsNow = info.alls.slice((page - 1) * 15, page * 15);
-		info.illustsNow = await IA.value.fetchIllusts(iidsNow);
 
+			tabNow.title = `【作者】${info.name}（第${page}页）`;
+			info.params.page = page;
+		}
+		catch(error) {
+			stateFetch.value = 3;
 
-		tabNow.title = `【作者】${info.name}（第${page}页）`;
-		info.params.page = page;
+			throw error;
+		}
 	};
 
 
@@ -91,22 +101,31 @@
 			tab.info.params = { uid, page: 1 };
 			tab.info.paramsPre = { uid, page: 1 };
 
+			stateFetch.value = 1;
+			try {
+				const { illusts, mangas, alls, name, isFollowed, urlHeader } = await IA.value.fetchUser(uid, false);
+				stateFetch.value = 2;
 
-			const { illusts, mangas, alls, name, isFollowed, urlHeader } = await IA.value.fetchUser(uid, false);
 
-			tab.info.illusts = illusts;
-			tab.info.mangas = mangas;
-			tab.info.alls = alls;
+				tab.info.illusts = illusts;
+				tab.info.mangas = mangas;
+				tab.info.alls = alls;
 
-			tab.info.name = name;
-			tab.info.isFollowed = isFollowed;
-			tab.info.urlHeader = urlHeader;
+				tab.info.name = name;
+				tab.info.isFollowed = isFollowed;
+				tab.info.urlHeader = urlHeader;
 
-			tab.typeTab = 'header';
-			tab.header = urlHeader;
-			tab.title = `作者：${name}`;
+				tab.typeTab = 'header';
+				tab.header = urlHeader;
+				tab.title = `作者：${name}`;
 
-			atFetch();
+				atFetch();
+			}
+			catch(error) {
+				stateFetch.value = 3;
+
+				throw error;
+			}
 		}
 	};
 

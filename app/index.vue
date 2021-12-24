@@ -92,10 +92,10 @@
 	const TA = ref(new TabAdmin(modulePre));
 	provide('tabAdmin', TA);
 
-	const IA = ref(new IllustAdmin(wock, profile, $post).init());
+	const IA = ref(new IllustAdmin(wock, profile, $get).init());
 	provide('illustAdmin', IA);
 
-	const UA = ref(new UserAdmin(wock, profile, $get).init());
+	const UA = ref(new UserAdmin(wock, profile, $post).init());
 	provide('userAdmin', UA);
 
 

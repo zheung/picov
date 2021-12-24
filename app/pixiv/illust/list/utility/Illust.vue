@@ -97,7 +97,7 @@
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
+	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
 
 	transition-property: all
 	transition-duration: 0.4s
