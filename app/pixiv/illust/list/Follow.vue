@@ -1,7 +1,7 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part v-if="!I.illustsNow.length"><Fas icon="compass" :spin="true" /> </p-part>
+			<p-part v-if="isFetching"><Fas icon="compass" :spin="true" /> </p-part>
 			<p-part :title="I.params.uid">我的关注</p-part>
 
 
@@ -52,18 +52,23 @@
 
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
-
+	const isFetching = ref(false);
 	const atFetch = async step_ => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
+		isFetching.value = true;
+		try {
+			const { page } = updatePage(info.paramsPre, step_);
+			info.illustsNow = await IA.value.fetchFollow(page);
 
-		const { page } = updatePage(info.paramsPre, step_);
-		info.illustsNow = await IA.value.fetchFollow(page);
 
-
-		tabNow.title = `【我的关注】（第${page}页）`;
-		info.params.page = page;
+			tabNow.title = `【我的关注】（第${page}页）`;
+			info.params.page = page;
+		}
+		finally {
+			isFetching.value = false;
+		}
 	};
 
 

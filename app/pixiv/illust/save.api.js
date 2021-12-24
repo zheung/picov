@@ -9,7 +9,7 @@ import Moment from '../../../lib/Moment.js';
 import { dirCacheLarge } from '../../../lib/global.dir.js';
 import { C, DB, G } from '../../../lib/global.js';
 
-import { getJSON, getStream } from '../get.lib.js';
+import { getJSON, getStream, head } from '../get.lib.js';
 import stateAdmin from './admin/StateAdmin.lib.js';
 
 
@@ -47,15 +47,20 @@ const convertByte = (number, fixed = 2) => {
 };
 
 
-const fetch = async (infosFetch, pid, logger, cookie) => {
-	const fileStream = (await getStream(infosFetch.url, cookie))
-		.on('response', res => {
-			logger.total[pid] = ~~res.headers['content-length'];
-		})
+const fetch = async (infoFetch, pid, logger, cookie) => {
+	const response = await head(infoFetch.url, cookie);
+	logger.total[pid] = ~~response.headers['content-length'];
+
+	G.debug('保存', `~{${infoFetch.iid}.${pid}}~[文件大小]`, `~{${logger.total[pid]}}`);
+
+	const fileStream = (await getStream(infoFetch.url, cookie))
+		// .on('response', res => {
+		// 	logger.total[pid] = ~~res.headers['content-length'];
+		// })
 		.on('data', chunk => {
 			if(!logger.total[pid]) {
 				logger.total[pid] = ~~fileStream.headers['content-length'];
-				G.debug('保存', `保存~[文件大小]`, `~{${logger.total[pid]}}`);
+				G.debug('保存', `~{${infoFetch.iid}.${pid}}~[文件大小]`, `~{${logger.total[pid]}}`);
 			}
 
 			logger.passed[pid] ?? (logger.passed[pid] = 0);
@@ -65,7 +70,7 @@ const fetch = async (infosFetch, pid, logger, cookie) => {
 		})
 		.on('error', error => { throw error; });
 
-	const nameFile = infosFetch.name ?? parse(infosFetch.url).base;
+	const nameFile = infoFetch.name ?? parse(infoFetch.url).base;
 	const tempPath = resolve(dirCacheLarge, nameFile);
 
 	FX.removeSync(tempPath);
@@ -76,7 +81,7 @@ const fetch = async (infosFetch, pid, logger, cookie) => {
 			.on('error', error => reject(error)))
 	);
 
-	FX.moveSync(tempPath, resolve(infosFetch.dir, nameFile), { overwrite: true });
+	FX.moveSync(tempPath, resolve(infoFetch.dir, nameFile), { overwrite: true });
 
 	logger.done();
 };
@@ -185,7 +190,7 @@ const handle = async (illust, who, force) => {
 		if(type == 2) {
 			const meta = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, profile.cookie);
 
-			infosFetch.push({ url: meta.body.originalSrc, dir: C.path.dirUgoiraSave, name: `ugoira-${iid}.zip` });
+			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.path.dirUgoiraSave, name: `ugoira-${iid}.zip` });
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 
@@ -193,7 +198,7 @@ const handle = async (illust, who, force) => {
 		}
 		else if(info.illust_details.manga_a) {
 			for(const manga of info.illust_details.manga_a) {
-				infosFetch.push({ url: manga.url_big, dir: C.path.dirIllustSave });
+				infosFetch.push({ iid, url: manga.url_big, dir: C.path.dirIllustSave });
 			}
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
@@ -201,7 +206,7 @@ const handle = async (illust, who, force) => {
 			stateAdmin.push(iid, { files: infosFetch });
 		}
 		else {
-			infosFetch.push({ url: info.illust_details.url_big, dir: C.path.dirIllustSave });
+			infosFetch.push({ iid, url: info.illust_details.url_big, dir: C.path.dirIllustSave });
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 

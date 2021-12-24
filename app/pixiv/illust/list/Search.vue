@@ -62,7 +62,7 @@
 
 
 		const { keyword, page } = updatePage(info.paramsPre, step_);
-		info.illustsNow = await IA.value.fetchSearch(page);
+		info.illustsNow = await IA.value.fetchSearch(keyword, page);
 
 
 		tabNow.title = `【搜索】${keyword}（第${page}页）`;

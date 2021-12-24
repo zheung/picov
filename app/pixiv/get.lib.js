@@ -26,6 +26,13 @@ export const getText = async (url, cookie, params, returnData = true) => {
 };
 
 
+export const head = async (url, cookie) => {
+	return await Axios.head(url, {
+		responseType: 'text', headers: getHeader(cookie),
+		httpsAgent: getProxy(C.proxy.api)
+	});
+};
+
 export const getJSON = async (url, cookie, params, returnData = true) => {
 	const response = await Axios.get(url, {
 		params,
