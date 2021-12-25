@@ -25,7 +25,7 @@ const ensureIllust = async (db, id, type) => {
 	return illust.fetch;
 };
 
-const updateUserInfo = async (db, info) => {
+export const updateUserInfo = async (db, info) => {
 	const userLatest = await db.queryOne('SELECT * FROM "pixiv"."user" WHERE id=$ ORDER BY "timeCreate" DESC', info.id);
 
 	if(!userLatest
@@ -38,7 +38,7 @@ const updateUserInfo = async (db, info) => {
 	}
 };
 
-const updateIllustInfo = (db, iid, info) => db.query('UPDATE "pixiv"."illust" SET $ WHERE id=$', info, iid);
+export const updateIllustInfo = (db, iid, info) => db.query('UPDATE "pixiv"."illust" SET $ WHERE id=$', info, iid);
 
 const insertFiles = (db, files) => {
 	return Bluebird.mapSeries(files, async (file, index) => {

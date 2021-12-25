@@ -5,6 +5,9 @@ import Moment from '../../../lib/Moment.js';
 import { C, DB } from '../../../lib/global.js';
 import assignThumbURL from '../../pixiv/illust/list/utility/assignThumbURL.lib.js';
 
+import { handle as fetchIllust } from '../../pixiv/illust/list/illust.api.js';
+import { updateIllustInfo } from '../../pixiv/illust/save.api.js';
+
 
 const method = 'get';
 const handle = async raw => {
@@ -31,10 +34,30 @@ const handle = async raw => {
 				uid: illust.user,
 				user: illust.nameLatest,
 				tags: illust.tags,
-				time: Moment(illust.timeUpload).format('YY/DD/MM/HH/mm/ss'),
+				time: Moment(illust.timeUpload).format('YY/MM/DD/HH/mm/ss'),
 				type: illust.type,
 				count: illust.count
 			}, raw.who));
+
+		const unfinishedIIDs = result.filter(illust => illust.count == 0).map(illust => illust.iid);
+
+		if(unfinishedIIDs.length) {
+			debugger
+			const resultIllust = await fetchIllust(unfinishedIIDs);
+
+			for(const illustPixiv of resultIllust) {
+				await updateIllustInfo(db, illustPixiv.iid, {
+					title: illustPixiv.title,
+					user: illustPixiv.user,
+					type: illustPixiv.type,
+					tags: illustPixiv.tags,
+					count: illustPixiv.count,
+					timeUpload: Moment(illustPixiv.time, 'YY/MM/DD/HH/mm/ss').format(),
+				});
+
+				result.find(illust => illust.iid = illustPixiv.iid).count = illustPixiv.count;
+			}
+		}
 
 		return result;
 	}
