@@ -34,8 +34,8 @@ class StateAdmin {
 
 
 		try {
-			const illustsDB = await db.query('SELECT * FROM pixiv.illust WHERE id IN ($r)', iids);
-			const files = await db.query('SELECT * FROM pixiv.file WHERE illust IN ($r)', iids);
+			const illustsDB = await db.query('SELECT * FROM "pixiv"."illust" WHERE id IN ($r)', iids);
+			const files = await db.query('SELECT * FROM "pixiv"."file" WHERE illust IN ($r)', iids);
 
 
 			illustsDB.forEach(illustDB => {

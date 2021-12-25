@@ -99,12 +99,16 @@
 	provide('userAdmin', UA);
 
 
-
 	const menuTab = {
 		useLongPressInMobile: true,
 		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
+			{
+				label: '打开本地新动图库',
+				hidden: tab => tab.typeList != 'follow',
+				fn: () => TA.value.addIcon('【本地】新动图库', 'hdd', 'local-ugoira', 'pixiv-illust-list-LocalUgoira')
+			},
 			{
 				label: '关闭',
 				tips: '关闭该标签页',

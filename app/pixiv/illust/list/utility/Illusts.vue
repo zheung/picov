@@ -2,7 +2,7 @@
 	<p-illusts>
 		<Illust v-for="(illust, index) of illusts" :key="`illust-${illust.iid}`"
 			:illust="illust"
-			:z-index="illusts.length - index"
+			:tab-index="illusts.length - index"
 		/>
 	</p-illusts>
 </template>

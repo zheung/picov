@@ -85,12 +85,23 @@ class IllustAdmin {
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 	async fetchSearch(keyword, page, isWatch = true) {
-		const illusts = await this.$get('pixiv/illust/list/search', { who: this.who, keyword, page }) ?? [];
+		const { illusts, total } = await this.$get('pixiv/illust/list/search', { who: this.who, keyword, page }) ?? [];
 
-		return isWatch ? this.watch(illusts) : illusts;
+		return { illusts: isWatch ? this.watch(illusts) : illusts, total };
 	}
 	async fetchUser(uid, isWatch = true) {
 		const illusts = await this.$get('pixiv/illust/list/user', { who: this.who, uid }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+
+	async getLocalIllusts(iids, isWatch = true) {
+		const illusts = await this.$get('local/illust/list/illust', { who: this.who, iids }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+	async getLocalUgoira(isWatch = true) {
+		const illusts = await this.$get('local/illust/list/ugoira/new', { who: this.who }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}

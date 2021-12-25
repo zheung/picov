@@ -2,7 +2,7 @@ import FX from 'fs-extra';
 
 
 const method = 'get';
-const handle = function() {
+const handle = () => {
 	try {
 		return FX.readJSONSync('package.json', 'utf8').version;
 	}

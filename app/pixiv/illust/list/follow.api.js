@@ -8,12 +8,12 @@ import assignThumbURL from './utility/assignThumbURL.lib.js';
 const formatItem = (item, who) => assignThumbURL({
 	iid: ~~item.id,
 	title: item.title,
-	uid: ~~item.author_details.user_id,
-	user: item.author_details.user_name,
+	uid: ~~item.userId,
+	user: item.userName,
 	tags: item.tags,
-	time: item.url_s.match(/20(\d{2}\/){5}(\d{2})/g)[0],
-	type: ~~item.type,
-	count: ~~item.page_count
+	time: item.url.match(/20(\d{2}\/){5}(\d{2})/g)?.[0],
+	type: ~~item.illustType,
+	count: ~~item.pageCount
 }, who);
 
 
@@ -23,11 +23,11 @@ const handle = async raw => {
 	AS(profile, `未找到~[档案]~{${raw.who}}`);
 
 	const data = await getJSON(
-		`https://www.pixiv.net/touch/ajax/follow/latest?type=illusts&p=${raw.page ?? 1}`,
+		`https://www.pixiv.net/ajax/follow_latest/illust?p=${raw.page ?? 1}&mode=all`,
 		profile.cookie
 	);
 
-	return data?.body?.illusts
+	return data?.body?.thumbnails?.illust
 		?.map(item => formatItem(item, raw.who))
 		?? [];
 };

@@ -18,6 +18,7 @@ import {
 	faUserPlus,
 	faTimesCircle,
 	faCheckCircle,
+	faHdd,
 } from '@fortawesome/free-solid-svg-icons';
 // import { far } from '@fortawesome/free-regular-svg-icons';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -44,6 +45,7 @@ export const install = function(app) {
 	library.add(faUserPlus);
 	library.add(faTimesCircle);
 	library.add(faCheckCircle);
+	library.add(faHdd);
 
 	app.component('Fas', FontAwesomeIcon);
 };

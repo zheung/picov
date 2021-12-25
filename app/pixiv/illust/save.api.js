@@ -14,10 +14,10 @@ import stateAdmin from './admin/StateAdmin.lib.js';
 
 
 const ensureIllust = async (db, id, type) => {
-	const illust = await db.queryOne('SELECT "fetch" FROM pixiv.illust WHERE id=$', id);
+	const illust = await db.queryOne('SELECT "fetch" FROM "pixiv"."illust" WHERE id=$', id);
 
 	if(!illust) {
-		await db.queryOne('INSERT INTO pixiv.illust$i', { id, type });
+		await db.queryOne('INSERT INTO "pixiv"."illust"$i', { id, type });
 
 		return 0;
 	}
@@ -25,12 +25,25 @@ const ensureIllust = async (db, id, type) => {
 	return illust.fetch;
 };
 
-const updateIllustInfo = (db, iid, info) => db.query('UPDATE pixiv.illust SET $ WHERE id=$', info, iid);
+const updateUserInfo = async (db, info) => {
+	const userLatest = await db.queryOne('SELECT * FROM "pixiv"."user" WHERE id=$ ORDER BY "timeCreate" DESC', info.id);
+
+	if(!userLatest
+		|| userLatest.account != info.account
+		|| userLatest.name != info.name
+		|| userLatest.urlHeader != info.urlHeader
+	) {
+		G.debug('保存', '~[用户快照]', `~{${info.name}}~{${info.account}}`);
+		return db.queryOne('INSERT INTO "pixiv"."user"$i', info);
+	}
+};
+
+const updateIllustInfo = (db, iid, info) => db.query('UPDATE "pixiv"."illust" SET $ WHERE id=$', info, iid);
 
 const insertFiles = (db, files) => {
 	return Bluebird.mapSeries(files, async (file, index) => {
 		try {
-			await db.queryOne('INSERT INTO pixiv.file$i', { index, illust: file.illust, name: file.name, delay: file.delay });
+			await db.queryOne('INSERT INTO "pixiv"."file"$i', { index, illust: file.illust, name: file.name, delay: file.delay });
 		}
 		catch(error) {
 			if(error.code != 23505) { throw error; }
@@ -51,16 +64,13 @@ const fetch = async (infoFetch, pid, logger, cookie) => {
 	const response = await head(infoFetch.url, cookie);
 	logger.total[pid] = ~~response.headers['content-length'];
 
-	G.debug('保存', `~{${infoFetch.iid}.${pid}}~[文件大小]`, `~{${logger.total[pid]}}`);
+	G.debug('保存', `~[作品文件]~{${infoFetch.iid}.p${pid}}`, `~[大小]~{${logger.total[pid]}}`);
 
 	const fileStream = (await getStream(infoFetch.url, cookie))
-		// .on('response', res => {
-		// 	logger.total[pid] = ~~res.headers['content-length'];
-		// })
 		.on('data', chunk => {
 			if(!logger.total[pid]) {
 				logger.total[pid] = ~~fileStream.headers['content-length'];
-				G.debug('保存', `~{${infoFetch.iid}.${pid}}~[文件大小]`, `~{${logger.total[pid]}}`);
+				G.debug('保存', `~[作品文件]~{${infoFetch.iid}.p${pid}}`, `~[大小]~{${logger.total[pid]}}`);
 			}
 
 			logger.passed[pid] ?? (logger.passed[pid] = 0);
@@ -171,16 +181,25 @@ const handle = async (illust, who, force) => {
 
 		// 获取完整信息并更新
 		stateAdmin.push(iid, { L: '解析...' });
-		const info = (await getJSON(`https://www.pixiv.net/touch/ajax/illust/details?illust_id=${iid}`, profile.cookie))?.body ?? {};
+		const info = (await getJSON(`https://www.pixiv.net/ajax/illust/${iid}`, profile.cookie))?.body ?? {};
 
 		await updateIllustInfo(db, iid, {
 			fetch: 2,
-			title: info.illust_details.title,
-			user: ~~info.author_details.user_id,
-			type: info.illust_details.type,
-			tags: info.illust_details.tags,
-			comment: info.illust_details.comment_html,
-			timeUpload: Moment(info.illust_details.upload_timestamp, 'X').format()
+			title: info.illustTitle,
+			user: ~~info.userId,
+			type: info.illustType,
+			tags: info.tags.tags.map(tag => tag.tag),
+			count: info.pageCount,
+			comment: info.illustComment,
+			timeUpload: Moment(info.uploadDate).format(),
+		});
+
+		await updateUserInfo(db, {
+			id: ~~info.userId,
+			account: info.userAccount,
+			name: info.userName,
+			urlHeader: Object.values(info.userIllusts).map(i => i?.profileImageUrl).filter(i => i)[0],
+			from: 'save'
 		});
 
 		stateAdmin.push(iid, { fetch: 2, L: `下载${count}张` });
@@ -196,17 +215,10 @@ const handle = async (illust, who, force) => {
 
 			stateAdmin.push(iid, { files: meta.body.frames });
 		}
-		else if(info.illust_details.manga_a) {
-			for(const manga of info.illust_details.manga_a) {
-				infosFetch.push({ iid, url: manga.url_big, dir: C.path.dirIllustSave });
-			}
-
-			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
-
-			stateAdmin.push(iid, { files: infosFetch });
-		}
 		else {
-			infosFetch.push({ iid, url: info.illust_details.url_big, dir: C.path.dirIllustSave });
+			const pages = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/pages`, profile.cookie);
+
+			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: C.path.dirIllustSave }));
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 

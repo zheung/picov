@@ -2,7 +2,8 @@
 	<p-illust
 		v-menu="{ params: illust, ...menuIllust }"
 		:title="title"
-		:style="{ backgroundImage, zIndex }"
+		:style="{ backgroundImage }"
+		:tabindex="tabIndex"
 		@click.exact="IA.save(illust)"
 		@click.ctrl="IA.save(illust, true)"
 	>
@@ -34,7 +35,7 @@
 
 	const props = defineProps({
 		illust: { type: Object, default: () => ({}) },
-		zIndex: { type: [Number], default: null },
+		tabIndex: { type: [Number], default: null },
 	});
 
 
@@ -97,7 +98,7 @@
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer bg-blend-hue
+	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
 
 	transition-property: all
 	transition-duration: 0.4s
