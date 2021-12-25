@@ -1,19 +1,22 @@
 <template>
 	<module ref="domBox" class="w-full overflow-x-hidden overflow-y-hidden">
-		<canvas ref="domCanvas" tabindex="1" :grab="brop(isMouseDown)"
+		<canvas ref="domCanvas" v-menu="menuUgoira" tabindex="1" :grab="brop(isMouseDown)"
 			@keydown.exact="onKeyDown"
 			@wheel.exact="onWheel"
-			@mousedown.exact="onMouseDown"
-			@mouseup.exact="onMouseUp"
+			@mousedown.left="onMouseDown"
+			@mouseup.left="onMouseUp"
 			@mousemove.exact="onMouseMove"
 		/>
 	</module>
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
+	import Clipboard from 'clipboard';
 	import { unzipSync } from 'fflate';
+	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
+
 	import { Tab } from '../admin/TabAdmin.js';
+
 
 	const $alert = inject('$alert');
 	/** @type {import('../../../lib/plugin/Aegis.js').$get} */
@@ -27,6 +30,45 @@
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
+
+	const menuUgoira = {
+		useLongPressInMobile: true,
+		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
+		menuItemCss: { hoverBackground: '#bfdbfe' },
+		menuList: [
+			{
+				label: '保留并关闭 ✔',
+				fn: () => { IA.value.keepUgoira(I.value.illust.iid); TA.value.del(now.value); }
+			},
+			{
+				label: '删除并关闭 ✖',
+				fn: () => { IA.value.deleteUgoira(I.value.illust.iid); TA.value.del(now.value); }
+			},
+			{ line: true },
+			{
+				label: '保留 ✔',
+				fn: () => IA.value.keepUgoira(I.value.illust.iid)
+			},
+			{
+				label: '删除 ✖',
+				fn: () => IA.value.deleteUgoira(I.value.illust.iid)
+			},
+			{ line: true },
+			{
+				label: '打开作品',
+				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', I.value.illust.iid)
+			},
+			{
+				label: '复制ID',
+				fn: (params, domClick, domBind, event) => {
+					const clipboard = new Clipboard(document.documentElement, { text: () => I.value.illust.iid });
+					clipboard.on('success', () => { clipboard.destroy(); });
+					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${I.value.illust.iid}）失败`); });
+					clipboard.onClick(event);
+				},
+			},
+		]
+	};
 
 
 	const domBox = ref(null);

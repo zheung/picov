@@ -92,7 +92,7 @@
 	const TA = ref(new TabAdmin(modulePre));
 	provide('tabAdmin', TA);
 
-	const IA = ref(new IllustAdmin(wock, profile, $get).init());
+	const IA = ref(new IllustAdmin(wock, profile, $get, $post).init());
 	provide('illustAdmin', IA);
 
 	const UA = ref(new UserAdmin(wock, profile, $post).init());
@@ -115,7 +115,7 @@
 				hidden: tab => tab.typeList == 'follow',
 				fn: tab => TA.value.del(tab),
 			},
-			{ line: true },
+			{ line: true, hidden: tab => !['number', 'user'].includes(tab.typeList) },
 			{
 				label: '复制ID',
 				hidden: tab => tab.typeList != 'number',
@@ -160,20 +160,25 @@
 
 
 	const keyword = ref('');
-	const atSearch = (keywordNew, author = false) => {
-		if(/^[1-9]\d*$/.test(keywordNew.trim())) {
+	const atSearch = (keywordNew = '', author = false) => {
+		const matchIID = keywordNew.trim().match(/pixiv\.net\/artworks\/([1-9]\d*)|^i([1-9]\d*)$/i);
+		const matchUID = keywordNew.trim().match(/pixiv\.net\/users\/([1-9]\d*)|^u([1-9]\d*)$/i);
+		const iid = matchIID?.[1] ?? matchIID?.[2];
+		const uid = matchUID?.[1] ?? matchUID?.[2];
+
+		if(iid) {
+			TA.value.addIcon(`【作品】${iid}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', iid);
+		}
+		else if(uid) {
+			TA.value.addIcon(`【作者】${uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', uid);
+		}
+		else if(/^[1-9]\d*$/.test(keywordNew.trim())) {
 			if(author) {
-				TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew.replace(/i/i, ''));
+				TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew);
 			}
 			else {
-				TA.value.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew);
+				TA.value.addIcon(`【作品】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew);
 			}
-		}
-		else if(/^u[1-9]\d*$/i.test(keywordNew.trim())) {
-			TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew.replace(/u/i, ''));
-		}
-		else if(/^i[1-9]\d*$/i.test(keywordNew.trim())) {
-			TA.value.addIcon(`【数字】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew.replace(/i/i, ''));
 		}
 		else {
 			TA.value.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'pixiv-illust-list-Search', keywordNew);

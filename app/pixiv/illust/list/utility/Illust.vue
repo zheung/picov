@@ -47,8 +47,8 @@
 	const $alert = inject('$alert');
 
 
-	const backgroundImage = computed(()=> `url(${props.illust.urlThumb})`);
-	const title = computed(()=> `${props.illust.iid}\n标题：${props.illust.title}\n作者：${props.illust.user}（${props.illust.uid}）\n标签：${props.illust.tags.join('、')}`);
+	const backgroundImage = computed(() => `url(${props.illust.urlThumb})`);
+	const title = computed(() => `${props.illust.iid}\n标题：${props.illust.title}\n作者：${props.illust.user}（${props.illust.uid}）\n标签：${props.illust.tags.join('、')}`);
 
 
 	const menuIllust = {
@@ -57,8 +57,19 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '浏览',
+				label: '播放动图',
+				hidden: illust => illust.type != 2,
 				fn: illust => TA.value.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust),
+			},
+			{
+				label: '保留 ✔',
+				hidden: illust => illust.type != 2,
+				fn: illust => IA.value.keepUgoira(illust.iid)
+			},
+			{
+				label: '删除 ✖',
+				hidden: illust => illust.type != 2,
+				fn: illust => IA.value.deleteUgoira(illust.iid)
 			},
 			{
 				label: '浏览作者...',

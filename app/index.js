@@ -20,5 +20,6 @@ window.addEventListener('load', async () => {
 	(await import('./lib/plugin/Wocker/Wocker.js')).install(app);
 	(await import('./lib/plugin/RightMenu.js')).install(app);
 
+
 	app.mount('#app');
 });

@@ -1,7 +1,7 @@
 import AS from 'assert';
 
-import { C, DB } from '../../../../lib/global.js';
-import assignThumbURL from '../../../pixiv/illust/list/utility/assignThumbURL.lib.js';
+import { C, DB } from '../../../lib/global.js';
+import assignThumbURL from '../../pixiv/illust/list/utility/assignThumbURL.lib.js';
 
 
 const method = 'get';

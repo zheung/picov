@@ -46,7 +46,7 @@
 			stateFetch.value = 2;
 
 
-			tabNow.title = `【数字】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
+			tabNow.title = `【作品】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
 		}
 		catch(error) {
 			stateFetch.value = 3;

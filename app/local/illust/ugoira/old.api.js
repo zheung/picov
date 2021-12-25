@@ -1,6 +1,6 @@
 import { readdirSync } from 'fs';
 
-import { C } from '../../../../../lib/global.js';
+import { C } from '../../../../lib/global.js';
 
 
 const method = 'get';

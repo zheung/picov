@@ -9,10 +9,11 @@ class IllustAdmin {
 	get who() { return this.profile?.name; }
 
 
-	constructor(wock, profile, $get) {
+	constructor(wock, profile, $get, $post) {
 		this.wock = wock;
 		this.profile = profile;
 		this.$get = $get;
+		this.$post = $post;
 
 		return reactive(this);
 	}
@@ -80,7 +81,7 @@ class IllustAdmin {
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 	async fetchIllusts(iids, isWatch = true) {
-		const illusts = await this.$get('pixiv/illust/list/illust', { who: this.who, iids }) ?? [];
+		const illusts = (await this.$get('pixiv/illust/list/illust', { who: this.who, iids }))?.reverse() ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
@@ -96,15 +97,20 @@ class IllustAdmin {
 	}
 
 	async getLocalIllusts(iids, isWatch = true) {
-		const illusts = await this.$get('local/illust/list/illust', { who: this.who, iids }) ?? [];
+		const illusts = await this.$get('local/illust/list', { who: this.who, iids }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 	async getLocalUgoira(isWatch = true) {
-		const illusts = await this.$get('local/illust/list/ugoira/new', { who: this.who }) ?? [];
+		const illusts = await this.$get('local/illust/ugoira/new', { who: this.who }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
+
+	async keepUgoira(iid) { return this.$post('local/illust/ugoira/keep', { who: this.who, iid }); }
+	async deleteUgoira(iid) { return this.$post('local/illust/ugoira/delete', { who: this.who, iid }); }
+
+
 }
 
 
