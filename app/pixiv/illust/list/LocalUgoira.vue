@@ -42,7 +42,9 @@
 		stateFetch.value = 1;
 		try {
 			info.iids = await IA.value.getLocalUgoira(false);
-			info.illustsNow = await IA.value.fetchIllusts(info.iids);
+
+			info.illustsNow = info.iids.length ? await IA.value.getLocalIllusts(info.iids) : [];
+
 			stateFetch.value = 2;
 		}
 		catch(error) {

@@ -20,6 +20,7 @@ const handle = async (raw, ctx) => {
 	const fileThumb = resolve(dirCacheThumb, `thumb-${typeThumb}-${iid}.jpg`);
 
 	if(existsSync(fileThumb)) {
+		ctx.set('Cache-Control', 'max-age=3600');
 		ctx.type = '.jpg';
 
 		return createReadStream(fileThumb);
@@ -32,6 +33,7 @@ const handle = async (raw, ctx) => {
 
 	writeFileSync(fileThumb, bufferThumb);
 
+	ctx.set('Cache-Control', 'max-age=3600');
 	ctx.type = '.jpg';
 	return bufferThumb;
 };

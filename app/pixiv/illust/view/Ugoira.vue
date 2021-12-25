@@ -194,7 +194,7 @@
 		const zipBuffer = await $get(`ugoira/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 		const imagesUint8Array = await unzipSync(new Uint8Array(zipBuffer));
 		const infosImage = Object.entries(imagesUint8Array).reduce((obj, [name, array]) => {
-			obj[name] = URL.createObjectURL(new Blob([array]));
+			obj[name] = URL.createObjectURL(new Blob([array], { type: 'image/*' }));
 
 			return obj;
 		}, {});

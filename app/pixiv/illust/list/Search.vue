@@ -9,6 +9,7 @@
 				<input v-model="I.keywordPre" tabindex="4" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
+
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
 				<Fas icon="angle-double-right" />
 			</p-part>
@@ -26,7 +27,7 @@
 				<Fas icon="download" />
 			</p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas icon="hdd" /> {{I.total}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas icon="paint-brush" /> {{I.total}}</p-part>
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 

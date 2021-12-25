@@ -71,9 +71,14 @@
 				hidden: illust => illust.type != 2,
 				fn: illust => IA.value.deleteUgoira(illust.iid)
 			},
+			{ line: true, hidden: illust => illust.type != 2 },
 			{
 				label: '浏览作者...',
 				fn: illust => TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid),
+			},
+			{
+				label: '强制下载',
+				fn: illust => IA.value.save(illust, true),
 			},
 			{ line: true },
 			{

@@ -9,16 +9,23 @@
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
 				<Fas icon="angle-double-right" />
 			</p-part>
+
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
 				<Fas icon="book-open" corner />
 				<input v-model="I.pagePre" tabindex="6" type="text" @keydown.enter="atFetch()" />
 			</p-part>
+
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
 				<Fas icon="angle-double-left" />
 			</p-part>
+
 			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)"><Fas icon="download" /></p-part>
+
 			<p-part v-tip.bottom="'作者主页'" panel right @click="atOpen"><Fas icon="house-user" /></p-part>
+
 			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atFollow"><Fas :icon="I.isFollowed ? 'user-check' : 'user-plus'" /></p-part>
+
+			<p-part v-if="I.illustsNow.length" right><Fas icon="paint-brush" /> {{I.alls.length}}</p-part>
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
