@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onBeforeMount, onDeactivated, ref, watch } from 'vue';
+	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
 	import { unzipSync } from 'fflate';
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -236,10 +236,10 @@
 		}
 	};
 
+	onMounted(() => TA.value.emitChange());
 
-	const atChangeTab = async () => {
-		const tab = TA.value.now;
-		const [illustNew, sInitTab] = TA.value.params;
+	TA.value.addChanger('ugoira', async tab => {
+		const [illustNew] = tab.params;
 
 		const old = now.value;
 		const info = tab.info;
@@ -266,7 +266,8 @@
 
 				now.value = tab;
 
-				if(sInitTab === TA.value.sInitTab) {
+				if(!tab.info.isInit) {
+					tab.info.isInit = true;
 					info.illust = illustNew;
 
 					info.frames = JSON.parse(JSON.stringify(IA.value.state[illustNew.iid]?.files));
@@ -301,10 +302,7 @@
 				info.isDeactive = false;
 			}
 		}
-	};
-
-	watch(() => TA.value.now, atChangeTab);
-	onBeforeMount(atChangeTab);
+	});
 
 
 	onActivated(() => domCanvas.value?.focus());
