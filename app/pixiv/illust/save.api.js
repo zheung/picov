@@ -59,19 +59,28 @@ const convertByte = (number, fixed = 2) => {
 	return `${(number / Math.pow(2, 10 * i)).toFixed(fixed)}${symbols[i]}`;
 };
 
+const setContentLength = (response, pid, iid, logger) => {
+	const lengthContent = ~~response.headers['content-length'];
+
+	if(lengthContent && !logger.total[pid]) {
+		logger.total[pid] = lengthContent;
+
+		G.debug('保存', `~[作品文件]~{${iid}.p${pid}}`, `~[大小]~{${lengthContent}}`);
+	}
+};
+
 
 const fetch = async (infoFetch, pid, logger, cookie) => {
 	const response = await head(infoFetch.url, cookie);
-	logger.total[pid] = ~~response.headers['content-length'];
+	setContentLength(response, pid, infoFetch.iid, logger);
 
-	G.debug('保存', `~[作品文件]~{${infoFetch.iid}.p${pid}}`, `~[大小]~{${logger.total[pid]}}`);
 
 	const fileStream = (await getStream(infoFetch.url, cookie))
+		.on('response', res => {
+			setContentLength(res, pid, infoFetch.iid, logger);
+		})
 		.on('data', chunk => {
-			if(!logger.total[pid]) {
-				logger.total[pid] = ~~fileStream.headers['content-length'];
-				G.debug('保存', `~[作品文件]~{${infoFetch.iid}.p${pid}}`, `~[大小]~{${logger.total[pid]}}`);
-			}
+			setContentLength(fileStream, pid, infoFetch.iid, logger);
 
 			logger.passed[pid] ?? (logger.passed[pid] = 0);
 			logger.passed[pid] += chunk.length;
