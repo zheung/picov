@@ -15,7 +15,7 @@
 		"预览": "http-server dist -a 127.0.0.1 -p 14727"
 	},
 	"dependencies": {
-		"@nuogz/desire": "^4.11.11",
+		"@nuogz/desire": "^4.11.12",
 		"@nuogz/hades": "^3.5.0",
 		"@nuogz/poseidon": "^4.1.0",
 		"axios": "^0.24.0",

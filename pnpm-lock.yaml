@@ -6,7 +6,7 @@ specifiers:
   '@fortawesome/free-solid-svg-icons': ^5.15.4
   '@fortawesome/vue-fontawesome': ^3.0.0-5
   '@howdyjs/mouse-menu': ^2.0.3
-  '@nuogz/desire': ^4.11.11
+  '@nuogz/desire': ^4.11.12
   '@nuogz/hades': ^3.5.0
   '@nuogz/poseidon': ^4.1.0
   '@vitejs/plugin-vue': ^2.0.1
@@ -31,7 +31,7 @@ specifiers:
   vue: ^3.2.26
 
 dependencies:
-  '@nuogz/desire': 4.11.11
+  '@nuogz/desire': 4.11.12
   '@nuogz/hades': 3.5.0
   '@nuogz/poseidon': 4.1.0
   axios: 0.24.0
@@ -228,8 +228,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@nuogz/desire/4.11.11:
-    resolution: {integrity: sha512-SehK+9S4W33rKHxjceTZcsrA/HPpAgBovL0PUcWlVM3EciX/6+9Kvnn5zhPrQMfiy992556vz3NCoHbie4SEoA==}
+  /@nuogz/desire/4.11.12:
+    resolution: {integrity: sha512-WRHG2ZP8vPHwe87oDgIsRG+LKp0iTJ2CqNblxIEYGvD235dEB51YJ0JDW8IPfqEJLNjL41di+jUEKG7S+iKDKg==}
     engines: {node: '>=14.18.1'}
     dependencies:
       '@koa/cors': 3.1.0
