@@ -19,4 +19,6 @@
 p-illusts
 	@apply block mt-12 z-10 w-full overflow-x-hidden overflow-y-scroll
 	height: calc(100vh - 3rem)
+	scroll-snap-type: y
+	scroll-snap-stop: always
 </style>

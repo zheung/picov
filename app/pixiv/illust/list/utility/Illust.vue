@@ -116,6 +116,8 @@
 p-illust
 	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover bg-auto text-center cursor-pointer
 
+	scroll-snap-align: center
+
 	transition-property: all
 	transition-duration: 0.4s
 	transform: translateZ(0)
