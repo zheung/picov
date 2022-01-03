@@ -120,7 +120,7 @@
 				label: '复制ID',
 				hidden: tab => tab.typeList != 'number',
 				fn: tab => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.params.iid });
+					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.iid });
 					clipboard.on('success', () => { clipboard.destroy(); });
 					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${tab.info.iid}）失败`); });
 					clipboard.onClick(event);
@@ -130,7 +130,7 @@
 				label: '复制作者ID',
 				hidden: tab => tab.typeList != 'user',
 				fn: tab => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.params.uid });
+					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.uid });
 					clipboard.on('success', () => { clipboard.destroy(); });
 					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${tab.info.uid}）失败`); });
 					clipboard.onClick(event);
