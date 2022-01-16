@@ -573,7 +573,7 @@ p-drop
 				&[out-month]
 					color: var(--colorDisable)
 				&[out-range]
-					@apply text-snow cursor-default
+					@apply text-[snow] cursor-default
 				&[month-t]
 					border-top-color: var(--colorMain)
 				&[month-b]
@@ -591,7 +591,7 @@ p-drop
 				&[month-b][month-r]
 					@apply rounded-br
 			[selected]
-				@apply font-bold text-snow cursor-default
+				@apply font-bold text-[snow] cursor-default
 				background-color: var(--colorMain)
 
 

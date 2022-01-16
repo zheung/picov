@@ -243,6 +243,7 @@
 			interactive: true,
 			animation: '',
 			duration: [0, 0],
+			offset: [1, 8],
 		});
 	});
 
@@ -310,7 +311,7 @@ p-sidebar
 				@apply ring-2 ring-blue-500
 
 	p-bookmarks
-		@apply block pt-0 pb-1 shadow-mdd bg-white rounded-md w-80
+		@apply block pt-0 pb-1 shadow-mdd bg-white rounded-md w-80 overflow-hidden
 		background-color: var(--colorTextMain)
 		color: var(--colorText)
 

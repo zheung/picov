@@ -4,57 +4,52 @@ const space = time => `${time * spacing}${unit}`;
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-	purge: ['./app/index.html', './app/**/*.{vue,js,ts,jsx,tsx}'],
-	darkMode: false, // or 'media' or 'class'
+	content: ['./app/index.html', './app/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
 			spacing: {
 				42: space(42),
-			},
-			width: {
-				17: space(17),
+				78: space(78),
 				80: space(80),
 			},
-			height: {
-				78: space(78),
-			},
-			maxHeight: {
-				29: space(29),
+			boxShadow: {
+				mdd: '0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
 			},
 		},
-		boxShadow: {
-			sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-			DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-			md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-			lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-			xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-			'2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-			'3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
-			inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-			none: 'none',
-
-			mdd: '0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)',
-		},
-	},
-	variants: {
-		extend: {
-			contrast: ['hover'],
-			fontWeight: ['hover', 'focus'],
-			fontBold: ['hover', 'focus'],
-			backgroundColor: ['checked'],
-			borderColor: ['checked'],
-			lineHeight: ['responsive'],
-			width: ['responsive'],
-			brightness: ['hover', 'focus']
+		trans: {
+			DEFAULT: '0.2s',
+			'04': '0.4s',
+			'07': '0.7s',
+			2: '2s',
 		},
 	},
 	plugins: [
-		plugin(({ addUtilities }) => {
+		plugin(({ addUtilities, matchUtilities, theme }) => {
 			addUtilities({
-				'.inblock': { display: 'inline-block', 'vertical-align': 'top' },
-				'.elli': { overflow: 'hidden', 'white-space': 'nowrap', 'text-overflow': 'ellipsis' },
-				'.text-snow': { color: 'snow' },
-			}, { variants: ['responsive', 'hover'] });
+				// inblock=inline-block + 顶部对齐
+				'.inblock': {
+					display: 'inline-block',
+					verticalAlign: 'top'
+				},
+				// 文本溢出省略号
+				'.elli': {
+					overflow: 'hidden',
+					whiteSpace: 'nowrap',
+					textOverflow: 'ellipsis'
+				},
+			});
+
+			// 动画延迟
+			matchUtilities(
+				{
+					trans: duration => ({
+						transitionProperty: 'all',
+						transitionDuration: duration,
+						transform: 'translateZ(0)',
+					}),
+				},
+				{ values: theme('trans') }
+			);
 		}),
-	]
+	],
 };
