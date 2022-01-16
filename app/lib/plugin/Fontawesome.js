@@ -20,7 +20,10 @@ import {
 	faCheckCircle,
 	faHdd,
 	faSync,
+	faStream,
+	faBookmark,
 } from '@fortawesome/free-solid-svg-icons';
+// import { fas } from '@fortawesome/free-solid-svg-icons';
 // import { far } from '@fortawesome/free-regular-svg-icons';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -48,6 +51,8 @@ export const install = function(app) {
 	library.add(faCheckCircle);
 	library.add(faHdd);
 	library.add(faSync);
+	library.add(faStream);
+	library.add(faBookmark);
 
 
 	app.component('Fas', FontAwesomeIcon);

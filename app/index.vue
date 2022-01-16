@@ -8,6 +8,34 @@
 		</p-button>
 
 
+		<p-button ref="domButtonMenu">
+			<Fas icon="stream" />
+		</p-button>
+		<p-menus ref="domMenus">
+			<p-button ref="domButtonBookmark">
+				<Fas icon="bookmark" />
+			</p-button>
+			<p-button v-tip.right="'【本地】新动图库'" @click="atOpenLocalUgoiraNew">
+				<Fas icon="video" />
+			</p-button>
+		</p-menus>
+
+		<p-bookmarks ref="domBookmarks">
+			<template v-for="(bookmark, kind) of profile.bookmark" :key="`bookmark-kind-${kind}`">
+				<p-bookmark-kind
+					:now="brop(kindBookmarkNow == kind)"
+					@click="kindBookmarkNow = kind"
+				>
+					{{kind}}
+				</p-bookmark-kind>
+			</template>
+			<template v-for="bookmark of bookmarksNow" :key="`bookmark-${bookmark[0]}`">
+				<p-bookmark :title="bookmark[1]" @click="atSearch(bookmark[1])">
+					{{bookmark[0]}}
+				</p-bookmark>
+			</template>
+		</p-bookmarks>
+
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<p-button
 				v-tip.right="tab.title"
@@ -36,9 +64,10 @@
 </template>
 
 <script setup>
-	import { ref, watch, onBeforeMount, inject, provide, computed } from 'vue';
+	import { ref, watch, onBeforeMount, inject, provide, computed, onMounted } from 'vue';
 
 	import Clipboard from 'clipboard';
+	import Tippy from 'tippy.js';
 
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
@@ -99,15 +128,17 @@
 	provide('userAdmin', UA);
 
 
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动图库', 'hdd', 'local-ugoira', 'pixiv-illust-list-LocalUgoira');
+
 	const menuTab = {
 		useLongPressInMobile: true,
 		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '打开本地新动图库',
+				label: '打开【本地】新动图库',
 				hidden: tab => tab.typeList != 'follow',
-				fn: () => TA.value.addIcon('【本地】新动图库', 'hdd', 'local-ugoira', 'pixiv-illust-list-LocalUgoira')
+				fn: atOpenLocalUgoiraNew
 			},
 			{
 				label: '关闭',
@@ -187,6 +218,37 @@
 
 		keyword.value = '';
 	};
+
+
+	const domMenus = ref(null);
+	const domButtonMenu = ref(null);
+
+	const domBookmarks = ref(null);
+	const domButtonBookmark = ref(null);
+
+	onMounted(() => {
+		Tippy(domButtonMenu.value, {
+			placement: 'right-start',
+			content: domMenus.value,
+			allowHTML: true,
+			interactive: true,
+			animation: '',
+			duration: [0, 0],
+		});
+
+		Tippy(domButtonBookmark.value, {
+			placement: 'right-start',
+			content: domBookmarks.value,
+			allowHTML: true,
+			interactive: true,
+			animation: '',
+			duration: [0, 0],
+		});
+	});
+
+
+	const kindBookmarkNow = ref('常用');
+	const bookmarksNow = computed(()=> profile.value.bookmark?.[kindBookmarkNow.value] ?? []);
 </script>
 
 <style lang="sass" scoped>
@@ -232,11 +294,41 @@ p-sidebar
 
 		p-header
 			@apply relative block rounded-md shadow-md absolute top-1 left-1 bg-cover
-			width: calc( 100% - 0.5rem)
-			height: calc( 100% - 0.5rem)
+			width: calc(100% - 0.5rem)
+			height: calc(100% - 0.5rem)
 
 		svg[header]
 			@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
+
+	p-menus
+		@apply block p-0.5 pt-0
+
+		p-button
+			@apply mt-0 mb-2
+
+			&:hover
+				@apply ring-2 ring-blue-500
+
+	p-bookmarks
+		@apply block pt-0 pb-1 shadow-mdd bg-white rounded-md w-80
+		background-color: var(--colorTextMain)
+		color: var(--colorText)
+
+		p-bookmark-kind
+			@apply inblock p-2 w-16 whitespace-nowrap select-none text-center cursor-pointer
+
+			&:hover
+				background-color: var(--cAccentSelected)
+
+			&[now]
+				@apply font-bold
+
+		p-bookmark
+			@apply inblock text-sm m-1 p-1 px-2 whitespace-nowrap select-none cursor-pointer border border-gray-400 rounded-lg
+
+			&:hover
+				background-color: var(--cAccentSelected)
+
 
 
 p-main
