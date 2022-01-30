@@ -16,6 +16,9 @@
 				<Fas icon="bookmark" />
 			</p-button>
 			<p-button v-tip.right="'【本地】新动图'" @click="atOpenLocalUgoiraNew">
+				<Fas icon="video" />
+			</p-button>
+			<p-button v-tip.right="'【本地】新图库'" @click="atOpenLocalGallery">
 				<Fas icon="hdd" />
 			</p-button>
 		</p-menus>
@@ -130,7 +133,8 @@
 	provide('userAdmin', UA);
 
 
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动图', 'hdd', 'local-ugoira|hidden', 'pixiv-illust-list-LocalUgoira');
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动图', 'video', 'local-ugoira|hidden|once', 'pixiv-illust-list-LocalUgoira');
+	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|hidden|once', 'pixiv-illust-list-LocalGallery');
 
 	const menuTab = {
 		useLongPressInMobile: true,

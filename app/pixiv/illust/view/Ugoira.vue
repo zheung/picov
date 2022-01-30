@@ -252,28 +252,28 @@
 
 
 
-	const onKeyDown = evnet => {
+	const onKeyDown = event => {
 		const info = I.value;
 
 		// SPACE：播放、暂停
-		if(evnet.keyCode == 32) {
+		if(event.keyCode == 32) {
 			onSwitch();
 		}
 		// +：放大
-		else if(evnet.keyCode == 107) {
+		else if(event.keyCode == 107) {
 			info.zoom += 10;
 		}
 		// -：缩小
-		else if(evnet.keyCode == 109 && info.zoom - 10 > 0) {
+		else if(event.keyCode == 109 && info.zoom - 10 > 0) {
 			info.zoom -= 10;
 		}
 		// 上下左右：移动
-		else if([37, 38].includes(evnet.keyCode)) {
-			const off = evnet.ctrlKey ? 100 : (evnet.altKey ? 1 : 10);
+		else if([37, 38].includes(event.keyCode)) {
+			const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
 			info.offsetWidth -= off;
 		}
-		else if([39, 40].includes(evnet.keyCode)) {
-			const off = evnet.ctrlKey ? 100 : (evnet.altKey ? 1 : 10);
+		else if([39, 40].includes(event.keyCode)) {
+			const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
 			info.offsetWidth += off;
 		}
 	};

@@ -39,11 +39,14 @@ class TabAdmin {
 
 		const [type, ...extras] = type_.split('|');
 
-		const tabNew = this.map[id] = new Tab(id, title, 'icon', icon, type, module, extras.includes('hidden'));
+		const tab =
+			(extras.includes('once') ? Object.values(this.map).find(t => t.typeList == type) : undefined) ||
+			(this.map[id] = new Tab(id, title, 'icon', icon, type, module, extras.includes('hidden')));
 
-		this.change(tabNew, ...params);
 
-		return tabNew;
+		if(tab) { this.change(tab, ...params); }
+
+		return tab;
 	}
 
 	del(tab) {
