@@ -37,7 +37,10 @@ class IllustAdmin {
 
 	watch(illusts) {
 		if(illusts.length) {
-			const iids = illusts.map(illust => illust.iid);
+			const iids = illusts
+				.map(illust => illust.iid)
+				.filter(iid => !this.state[iid]);
+
 			this.wock.cast('pixiv/illust/watch', iids, this.who);
 			iids.forEach(iid => this.iids.add(iid));
 		}
@@ -48,6 +51,8 @@ class IllustAdmin {
 	save(illust, force = false) { this.wock.cast('pixiv/illust/save', illust, this.who, force); }
 	async saveAll(illusts) {
 		for(const illust of illusts) {
+			if(this.state[illust.iid]?.fetch > 0) { continue; }
+
 			this.save(illust);
 
 			await new Promise(r => setTimeout(() => r(), 147));
@@ -109,8 +114,6 @@ class IllustAdmin {
 
 	async keepUgoira(iid) { return this.$post('local/illust/ugoira/keep', { who: this.who, iid }); }
 	async deleteUgoira(iid) { return this.$post('local/illust/ugoira/delete', { who: this.who, iid }); }
-
-
 }
 
 

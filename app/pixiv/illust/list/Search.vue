@@ -31,12 +31,12 @@
 			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
 		</Topbar>
 
-		<Illusts :illusts="I.illustsNow" />
+		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
 	</module>
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onMounted, ref } from 'vue';
+	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -108,6 +108,13 @@
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());
+
+
+	const atScroll = top => now.value.scrollTop = top;
+
+	const recoverScrollTop = ref(null);
+	provide('recoverScrollTop', recoverScrollTop);
+	onActivated(() => recoverScrollTop.value = [now.value]);
 </script>
 
 <style lang="sass" scoped>

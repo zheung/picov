@@ -2,18 +2,18 @@
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
 			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part>本地新动图库</p-part>
+			<p-part>本地新动图</p-part>
 
 
 			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas icon="sync" /></p-part>
 		</Topbar>
 
-		<Illusts :illusts="I.illustsNow" />
+		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
 	</module>
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onMounted, ref } from 'vue';
+	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
 	import { Tab } from '../admin/TabAdmin.js';
 
@@ -73,6 +73,13 @@
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());
+
+
+	const atScroll = top => now.value.scrollTop = top;
+
+	const recoverScrollTop = ref(null);
+	provide('recoverScrollTop', recoverScrollTop);
+	onActivated(() => recoverScrollTop.value = [now.value]);
 </script>
 
 <style lang="sass" scoped>

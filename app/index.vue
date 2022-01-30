@@ -15,8 +15,8 @@
 			<p-button ref="domButtonBookmark">
 				<Fas icon="bookmark" />
 			</p-button>
-			<p-button v-tip.right="'【本地】新动图库'" @click="atOpenLocalUgoiraNew">
-				<Fas icon="video" />
+			<p-button v-tip.right="'【本地】新动图'" @click="atOpenLocalUgoiraNew">
+				<Fas icon="hdd" />
 			</p-button>
 		</p-menus>
 
@@ -37,21 +37,23 @@
 		</p-bookmarks>
 
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
-			<p-button
-				v-tip.right="tab.title"
-				v-menu=" { params: tab, ...menuTab }"
-				:now="brop(TA.now === tab)"
-				:tabindex="100 + index"
-				@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
-			>
-				<template v-if="tab.typeTab == 'icon'">
-					<Fas :icon="tab.icon" />
-				</template>
-				<template v-if="tab.typeTab == 'header'">
-					<Fas header :icon="tab.icon" />
-					<p-header :style="{ backgroundImage: `url(${tab.header})` }" />
-				</template>
-			</p-button>
+			<template v-if="!tab.isHidden">
+				<p-button
+					v-tip.right="tab.title"
+					v-menu=" { params: tab, ...menuTab }"
+					:now="brop(TA.now === tab)"
+					:tabindex="100 + index"
+					@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
+				>
+					<template v-if="tab.typeTab == 'icon'">
+						<Fas :icon="tab.icon" />
+					</template>
+					<template v-if="tab.typeTab == 'header'">
+						<Fas header :icon="tab.icon" />
+						<p-header :style="{ backgroundImage: `url(${tab.header})` }" />
+					</template>
+				</p-button>
+			</template>
 		</template>
 	</p-sidebar>
 
@@ -128,7 +130,7 @@
 	provide('userAdmin', UA);
 
 
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动图库', 'hdd', 'local-ugoira', 'pixiv-illust-list-LocalUgoira');
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动图', 'hdd', 'local-ugoira|hidden', 'pixiv-illust-list-LocalUgoira');
 
 	const menuTab = {
 		useLongPressInMobile: true,
@@ -136,7 +138,7 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '打开【本地】新动图库',
+				label: '打开【本地】新动图',
 				hidden: tab => tab.typeList != 'follow',
 				fn: atOpenLocalUgoiraNew
 			},

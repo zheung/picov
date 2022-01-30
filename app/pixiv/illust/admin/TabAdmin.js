@@ -3,7 +3,7 @@ import randomString from '../../../lib/random.js';
 
 
 class Tab {
-	constructor(id, title, typeTab, icon, typeList, module, params) {
+	constructor(id, title, typeTab, icon, typeList, module, isHidden, params) {
 		this.id = id;
 		this.title = title;
 		this.typeTab = typeTab;
@@ -11,6 +11,7 @@ class Tab {
 		this.typeList = typeList;
 		this.module = module;
 		this.info = { illustsNow: [], params: {}, paramsPre: {} };
+		this.isHidden = isHidden ?? false;
 		this.params = params ?? {};
 	}
 }
@@ -33,9 +34,12 @@ class TabAdmin {
 	}
 
 
-	addIcon(title, icon, type, module, ...params) {
+	addIcon(title, icon, type_, module, ...params) {
 		const id = randomString();
-		const tabNew = this.map[id] = new Tab(id, title, 'icon', icon, type, module);
+
+		const [type, ...extras] = type_.split('|');
+
+		const tabNew = this.map[id] = new Tab(id, title, 'icon', icon, type, module, extras.includes('hidden'));
 
 		this.change(tabNew, ...params);
 
