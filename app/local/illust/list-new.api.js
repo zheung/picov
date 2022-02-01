@@ -13,5 +13,12 @@ export const handle = raw => {
 	AS(profile, `未找到~[档案]~{${who}}`);
 
 
-	return FX.readdirSync(C.path.dirIllustSave);
+	return FX.readdirSync(C.path.dirIllustSave).sort((a, b) => {
+		const [idA, pageA] = a.split(/_p|\./);
+		const [idB, pageB] = b.split(/_p|\./);
+
+		if(idA != idB) { return idA - idB; }
+
+		return pageA - pageB;
+	});
 };

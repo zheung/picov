@@ -7,6 +7,11 @@
 			@mouseup="onMouseUp"
 			@mousemove.exact="onMouseMove"
 		/>
+		<p-info>
+			{{`${I.indexNow + 1}/${I.files?.length ?? 0}`}}
+			<br />
+			{{`${I.imgNow?.file || '（无文件）'}`}}
+		</p-info>
 	</module>
 </template>
 
@@ -34,17 +39,18 @@
 	const caches = ref({});
 
 	watch(fileNow, file => {
+		const info = I.value;
+
+		info.zoom = 100;
+		info.offsetWidth = 0;
+		info.offsetHeight = 0;
+
+
 		if(caches[file]) { return loadImage(caches[file]); }
 
 
 		caches[file] = new Image();
-		caches[file].addEventListener('load', () => {
-			I.value.zoom = 100;
-			I.value.offsetWidth = 0;
-			I.value.offsetHeight = 0;
-
-			loadImage(caches[file]);
-		});
+		caches[file].addEventListener('load', () => loadImage(caches[file]));
 		caches[file].src = `./api/local/illust/thumb?file=${file}`;
 		caches[file].file = file;
 	});
@@ -244,13 +250,6 @@
 
 
 		ctx.drawImage(img, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
-
-		ctx.font = '14px bold';
-		ctx.fillStyle = 'black';
-		ctx.textAlign = 'left';
-		ctx.textBaseline = 'middle';
-
-		ctx.fillText(` ${info.indexNow + 1}/${I.value.files.length} | ${img.file}`, 0, boxHeight - 14);
 	};
 
 	const onWheel = e => {
@@ -340,7 +339,12 @@
 <style lang="sass" scoped>
 module
 	height: 100vh
+
 canvas[grab]
 	@apply outline-none select-none
 	cursor: grab
+
+p-info
+	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 bg-white
+
 </style>
