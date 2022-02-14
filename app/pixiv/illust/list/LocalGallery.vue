@@ -341,8 +341,7 @@ module
 	height: 100vh
 
 canvas[grab]
-	@apply outline-none select-none
-	cursor: grab
+	@apply outline-none select-none cursor-grab
 
 p-info
 	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 bg-white

@@ -1,5 +1,5 @@
 import AS from 'assert';
-import { readFileSync } from 'fs';
+import { createReadStream } from 'fs';
 import { parse, resolve } from 'path';
 
 
@@ -19,5 +19,5 @@ export const handle = (raw, ctx) => {
 	ctx.type = parse(path).ext;
 	ctx.set('Cache-Control', 'max-age=3600');
 
-	return readFileSync(path);
+	return createReadStream(path);
 };
