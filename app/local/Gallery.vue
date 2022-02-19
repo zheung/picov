@@ -19,7 +19,7 @@
 	import Clipboard from 'clipboard';
 	import { computed, inject, onActivated, onMounted, ref, watch } from 'vue';
 
-	import { Tab } from '../pixiv/illust/admin/TabAdmin.js';
+	import { Tab } from '../lib/TabAdmin.js';
 
 
 	const $get = inject('$get');
@@ -27,9 +27,9 @@
 	const $alert = inject('$alert');
 
 
-	/** @type {import('vue').Ref<import('../pixiv/illust/admin/TabAdmin.js').default>} */
+	/** @type {import('vue').Ref<import('../lib/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
+	/** @type {import('vue').Ref<import('../pixiv/illust/admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
 
 
