@@ -32,7 +32,7 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
-	import { Tab } from '../admin/TabAdmin.js';
+	import { Tab } from '../../../lib/TabAdmin.js';
 
 	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
@@ -41,7 +41,7 @@
 	import { stateFetchIcon } from './utility/stateFetch.js';
 
 
-	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
+	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');

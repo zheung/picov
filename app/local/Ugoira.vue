@@ -15,17 +15,18 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
-	import { Tab } from '../admin/TabAdmin.js';
-
-	import Illusts from './utility/Illusts.vue';
-	import Topbar from './utility/Topbar.vue';
-
-	import { stateFetchIcon } from './utility/stateFetch.js';
+	import { Tab } from '../lib/TabAdmin.js';
 
 
-	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
+	import Illusts from '../pixiv/illust/list/utility/Illusts.vue';
+	import Topbar from '../pixiv/illust/list/utility/Topbar.vue';
+
+	import { stateFetchIcon } from '../pixiv/illust/list/utility/stateFetch.js';
+
+
+	/** @type {import('vue').Ref<import('../lib/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
+	/** @type {import('vue').Ref<import('../pixiv/illust/admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
 
 

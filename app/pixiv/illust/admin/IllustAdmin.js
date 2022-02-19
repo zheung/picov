@@ -116,6 +116,11 @@ class IllustAdmin {
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
+	async getLocalGallerySaved(isWatch = true) {
+		const illusts = await this.$get('local/illust/list-saved', { who: this.who }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
 
 	async keepUgoira(iid) { return this.$post('local/illust/ugoira/keep', { who: this.who, iid }); }
 	async deleteUgoira(iid) { return this.$post('local/illust/ugoira/delete', { who: this.who, iid }); }

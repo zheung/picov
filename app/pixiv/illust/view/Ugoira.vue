@@ -15,7 +15,7 @@
 	import { unzipSync } from 'fflate';
 	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
 
-	import { Tab } from '../admin/TabAdmin.js';
+	import { Tab } from '../../../lib/TabAdmin.js';
 
 
 	const $alert = inject('$alert');
@@ -23,7 +23,7 @@
 	const $get = inject('$get');
 
 
-	/** @type {import('vue').Ref<import('../admin/TabAdmin.js').default>} */
+	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
 	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');

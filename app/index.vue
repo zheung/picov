@@ -15,6 +15,9 @@
 			<p-button v-tip.right="'【本地】新图库'" @click="atOpenLocalGallery">
 				<Fas icon="hdd" />
 			</p-button>
+			<p-button v-tip.right="'【本地】幻灯片'" @click="atOpenLocalSlider">
+				<Fas icon="images" />
+			</p-button>
 			<p-button v-tip.right="'【本地】新动画'" @click="atOpenLocalUgoiraNew">
 				<Fas icon="video" />
 			</p-button>
@@ -75,7 +78,7 @@
 	import Tippy from 'tippy.js';
 
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
-	import TabAdmin from './pixiv/illust/admin/TabAdmin.js';
+	import TabAdmin from './lib/TabAdmin.js';
 	import UserAdmin from './pixiv/illust/admin/UserAdmin.js';
 
 
@@ -133,8 +136,9 @@
 	provide('userAdmin', UA);
 
 
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', 'video', 'local-ugoira|hidden|once', 'pixiv-illust-list-LocalUgoira');
-	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|hidden|once', 'pixiv-illust-list-LocalGallery');
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', 'video', 'local-ugoira|hidden|once', 'local-Ugoira');
+	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|hidden|once', 'local-Gallery');
+	const atOpenLocalSlider = () => TA.value.addIcon('【本地】幻灯片', 'images', 'local-slider|once', 'local-Slider');
 
 	const menuTab = {
 		useLongPressInMobile: true,

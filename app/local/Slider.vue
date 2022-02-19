@@ -22,11 +22,6 @@
 	import { Tab } from '../lib/TabAdmin.js';
 
 
-	const $get = inject('$get');
-	const $post = inject('$post');
-	const $alert = inject('$alert');
-
-
 	/** @type {import('vue').Ref<import('../lib/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
 	/** @type {import('vue').Ref<import('../pixiv/illust/admin/IllustAdmin.js').default>} */
@@ -53,7 +48,7 @@
 
 		caches[file] = new Image();
 		caches[file].addEventListener('load', () => loadImage(caches[file]));
-		caches[file].src = `./api/local/illust/thumb?file=${file}`;
+		caches[file].src = `./api/local/illust/thumb-arch?file=${file}`;
 		caches[file].file = file;
 	});
 
@@ -68,7 +63,7 @@
 		try {
 			const file = fileNow.value;
 
-			info.files = await IA.value.getLocalGallery(false);
+			info.files = await IA.value.getLocalGallerySaved(false);
 
 			const indexNew = info.files.indexOf(file);
 			info.indexNow = indexNew == -1 ? 0 : indexNew;
@@ -84,7 +79,7 @@
 
 	onMounted(() => TA.value.emitChange());
 
-	TA.value.addChanger('local-gallery', async tab_ => {
+	TA.value.addChanger('local-slider', async tab_ => {
 		const tab = tab_;
 
 
@@ -115,29 +110,26 @@
 		}
 	});
 
-	const keepFile = () => {
-		const info = I.value;
 
-		IA.value.keepFile(fileNow.value);
+	let intervalSlide = null;
 
-		const length = info.files.length;
-		info.indexNow = (length + (info.indexNow + 1) % length) % length;
+	const startInterval = () => {
+		if(!intervalSlide) {
+			intervalSlide = setInterval(() => {
+				const info = I.value;
+				const length = info.files.length;
+
+				info.indexNow = (length + (info.indexNow + 1) % length) % length;
+			}, 1000);
+		}
 	};
-	const deleteFile = () => {
-		const info = I.value;
-
-		IA.value.deleteFile(fileNow.value);
-
-		const length = info.files.length;
-		info.indexNow = (length + (info.indexNow + 1) % length) % length;
+	const stopInterval = () => {
+		clearInterval(intervalSlide);
+		intervalSlide = 0;
 	};
-	const deleteFileBefore = async () => {
-		const info = I.value;
 
-		await IA.value.deleteFileBatch(info.files.slice(0, info.indexNow));
 
-		return atFetch();
-	};
+	onMounted(() => setInterval(() => atFetch(), 1000 * 10));
 
 
 	const menuUgoira = {
@@ -151,28 +143,12 @@
 			},
 			{ line: true },
 			{
-				label: '✖ 删除已看',
-				fn: deleteFileBefore
-			},
-			{ line: true },
-			{
-				label: '✔ 保留',
-				fn: keepFile
+				label: '▶️ 开始',
+				fn: startInterval
 			},
 			{
-				label: '✖ 删除',
-				fn: deleteFile
-			},
-
-			{ line: true },
-			{
-				label: '⚙️ 修改保存路径',
-				fn: async () => {
-					const dirIllustArch = await $get('local/illust/getDirIllustArch');
-					const dirIllustArchNew = prompt('修改作品保存路径', dirIllustArch);
-					await $post('local/illust/changeDirIllustArch', { path: dirIllustArchNew });
-					$alert('修改作品保存路径成功');
-				}
+				label: '⏹️ 暂停',
+				fn: stopInterval
 			},
 			{ line: true },
 			{
@@ -291,19 +267,6 @@
 	};
 	const onMouseUp = event => {
 		isMouseDown.value = false;
-
-
-		const button = event.button;
-
-		// 后退: 保留
-		if(button == 3) {
-			event.preventDefault();
-			keepFile();
-		}
-		// 前进: 删除
-		else if(button == 4) {
-			deleteFile();
-		}
 	};
 	const onMouseMove = event => {
 		const info = I.value;

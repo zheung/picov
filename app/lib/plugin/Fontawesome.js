@@ -22,6 +22,7 @@ import {
 	faSync,
 	faStream,
 	faBookmark,
+	faImages,
 } from '@fortawesome/free-solid-svg-icons';
 // import { fas } from '@fortawesome/free-solid-svg-icons';
 // import { far } from '@fortawesome/free-regular-svg-icons';
@@ -53,6 +54,7 @@ export const install = function(app) {
 	library.add(faSync);
 	library.add(faStream);
 	library.add(faBookmark);
+	library.add(faImages);
 
 
 	app.component('Fas', FontAwesomeIcon);
