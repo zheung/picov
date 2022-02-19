@@ -67,6 +67,8 @@
 
 			tabNow.title = `【我的关注】（第${pagePre}页）`;
 			info.pagePre = pagePre;
+
+			tabNow.scrollTop = 0;
 		}
 		catch(error) {
 			stateFetch.value = 3;

@@ -46,6 +46,8 @@
 			info.illustsNow = info.iids.length ? await IA.value.getLocalIllusts(info.iids) : [];
 
 			stateFetch.value = 2;
+
+			tabNow.scrollTop = 0;
 		}
 		catch(error) {
 			stateFetch.value = 3;

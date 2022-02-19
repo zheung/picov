@@ -86,6 +86,8 @@
 
 			tabNow.title = `【作者】${info.name}（第${pagePre}页）`;
 			info.page = pagePre;
+
+			tabNow.scrollTop = 0;
 		}
 		catch(error) {
 			stateFetch.value = 3;

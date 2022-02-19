@@ -297,6 +297,7 @@
 
 		// 后退: 保留
 		if(button == 3) {
+			event.preventDefault();
 			keepFile();
 		}
 		// 前进: 删除

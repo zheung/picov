@@ -75,6 +75,8 @@
 			info.keyword = keywordPre;
 			info.page = pagePre;
 			info.total = total;
+
+			tabNow.scrollTop = 0;
 		}
 		catch(error) {
 			stateFetch.value = 3;

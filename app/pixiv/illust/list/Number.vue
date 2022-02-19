@@ -49,6 +49,8 @@
 
 
 			tabNow.title = `【作品】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
+
+			tabNow.scrollTop = 0;
 		}
 		catch(error) {
 			stateFetch.value = 3;
