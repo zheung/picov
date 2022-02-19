@@ -16,8 +16,8 @@ const handle = raw => {
 	AS(~~iid, `无效~[IID]~{${iid}}`);
 
 	FX.moveSync(
-		resolve(C.path.dirUgoiraSave, `ugoira-${iid}.zip`),
-		resolve(C.path.dirUgoira, `ugoira-${iid}.zip`),
+		resolve(C.path.dirUgoiraNew, `ugoira-${iid}.zip`),
+		resolve(C.path.dirUgoiraSaved, `ugoira-${iid}.zip`),
 	);
 };
 

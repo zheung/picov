@@ -28,7 +28,7 @@ export default defineConfig({
 	server: {
 		port: 4791,
 		proxy: {
-			'^/ugoira/': {
+			'^/ugoira-(new|saved)/': {
 				target: 'http://127.0.0.1:14791',
 			},
 			'^/api/': {

@@ -2,7 +2,7 @@
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
 			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part>本地新动图</p-part>
+			<p-part>本地新动画</p-part>
 
 
 			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas icon="sync" /></p-part>

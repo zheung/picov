@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "5.9.0",
+	"version": "5.11.0",
 	"description": "",
 	"author": "Nuogz",
 	"license": "LGPL-3.0-or-later",
@@ -15,7 +15,7 @@
 		"预览": "http-server dist -a 127.0.0.1 -p 14727"
 	},
 	"dependencies": {
-		"@nuogz/desire": "^4.11.13",
+		"@nuogz/desire": "^4.11.14",
 		"@nuogz/hades": "^3.5.0",
 		"@nuogz/poseidon": "^4.1.0",
 		"axios": "^0.24.0",
@@ -33,17 +33,17 @@
 		"@fortawesome/free-solid-svg-icons": "^5.15.4",
 		"@fortawesome/vue-fontawesome": "^3.0.0-5",
 		"@howdyjs/mouse-menu": "^2.0.5",
-		"@vitejs/plugin-vue": "^2.2.0",
+		"@vitejs/plugin-vue": "^2.2.2",
 		"autoprefixer": "^10.4.2",
 		"clipboard": "^2.0.10",
 		"eslint": "^8.9.0",
 		"eslint-plugin-vue": "^8.4.1",
 		"fflate": "^0.7.3",
 		"postcss": "^8.4.6",
-		"sass": "^1.49.7",
-		"tailwindcss": "^3.0.22",
+		"sass": "^1.49.8",
+		"tailwindcss": "^3.0.23",
 		"tippy.js": "^6.3.7",
-		"vite": "^2.8.2",
+		"vite": "^2.8.4",
 		"vue": "^3.2.31"
 	}
 }

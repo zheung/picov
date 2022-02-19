@@ -22,6 +22,8 @@
 	import { Tab } from '../admin/TabAdmin.js';
 
 
+	const $get = inject('$get');
+	const $post = inject('$post');
 	const $alert = inject('$alert');
 
 
@@ -107,6 +109,7 @@
 			info.lastFinalWidth = 0;
 			info.lastFinalHeight = 0;
 
+			info.atFetch = atFetch;
 
 			atFetch();
 		}
@@ -143,37 +146,42 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '刷新',
+				label: '🔄 刷新',
 				fn: atFetch
 			},
 			{ line: true },
 			{
-				label: '删除已看 ✖',
+				label: '✖ 删除已看',
 				fn: deleteFileBefore
 			},
 			{ line: true },
 			{
-				label: '保留 ✔',
+				label: '✔ 保留',
 				fn: keepFile
 			},
 			{
-				label: '删除 ✖',
+				label: '✖ 删除',
 				fn: deleteFile
 			},
 
 			{ line: true },
 			{
-				label: '打开作品',
+				label: '⚙️ 修改保存路径',
+				fn: async () => {
+					const dirIllustArch = await $get('local/illust/getDirIllustArch');
+					const dirIllustArchNew = prompt('修改作品保存路径', dirIllustArch);
+					await $post('local/illust/changeDirIllustArch', { path: dirIllustArchNew });
+					$alert('修改作品保存路径成功');
+				}
+			},
+			{ line: true },
+			{
+				label: '📂 搜索作品 ...',
 				fn: () => TA.value.addIcon(`【作品】${fileNow.value.split('_')[0]}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', fileNow.value.split('_')[0])
 			},
 			{
-				label: '复制ID',
-				fn: (params, domClick, domBind, event) => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => fileNow.value.split('_')[0] });
-					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${fileNow.value.split('_')[0]}）失败`); });
-					clipboard.onClick(event);
-				},
+				label: '📝 复制作品ID',
+				fn: () => Clipboard.copy(fileNow.value.split('_')[0]),
 			},
 		]
 	};
@@ -275,7 +283,7 @@
 	const onMouseDown = event => {
 		const button = event.button;
 
-		// 左键: 移动图片
+		// 左键: 移动画片
 		if(button == 0) {
 			isMouseDown.value = true;
 			isMouseMove.value = false;

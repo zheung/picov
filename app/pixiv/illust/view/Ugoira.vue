@@ -37,35 +37,40 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '保留并关闭 ✔',
+				label: '✔ 保留并关闭',
+				hidden: () => I.value.isSaved,
 				fn: () => { IA.value.keepUgoira(I.value.illust.iid); TA.value.del(now.value); }
 			},
 			{
-				label: '删除并关闭 ✖',
+				label: '✖ 删除并关闭',
+				hidden: () => I.value.isSaved,
 				fn: () => { IA.value.deleteUgoira(I.value.illust.iid); TA.value.del(now.value); }
 			},
-			{ line: true },
 			{
-				label: '保留 ✔',
+				label: '🚪 关闭',
+				hidden: () => !I.value.isSaved,
+				fn: () => TA.value.del(now.value)
+			},
+			{ line: true, hidden: () => I.value.isSaved },
+			{
+				label: '✔ 保留',
+				hidden: () => I.value.isSaved,
 				fn: () => IA.value.keepUgoira(I.value.illust.iid)
 			},
 			{
-				label: '删除 ✖',
+				label: '✖ 删除',
+				hidden: () => I.value.isSaved,
 				fn: () => IA.value.deleteUgoira(I.value.illust.iid)
 			},
+
 			{ line: true },
 			{
-				label: '打开作品',
+				label: '📂 搜索作品 ...',
 				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', I.value.illust.iid)
 			},
 			{
-				label: '复制ID',
-				fn: (params, domClick, domBind, event) => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => I.value.illust.iid });
-					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${I.value.illust.iid}）失败`); });
-					clipboard.onClick(event);
-				},
+				label: '📝 复制作品ID',
+				fn: () => Clipboard.copy(String(I.value.illust.iid)),
 			},
 		]
 	};
@@ -188,10 +193,18 @@
 
 
 		const frames = info.frames;
-		if(!frames) { return $alert(`动图（${iid}）缺少序列信息`); }
+		if(!frames) { return $alert(`动画（${iid}）缺少序列信息`); }
+
+		let zipBuffer;
+		try {
+			zipBuffer = await $get(`ugoira-new/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+		}
+		catch(error) {
+			zipBuffer = await $get(`ugoira-saved/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			info.isSaved = true;
+		}
 
 
-		const zipBuffer = await $get(`ugoira/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 		const imagesUint8Array = await unzipSync(new Uint8Array(zipBuffer));
 		const infosImage = Object.entries(imagesUint8Array).reduce((obj, [name, array]) => {
 			obj[name] = URL.createObjectURL(new Blob([array], { type: 'image/*' }));
@@ -311,6 +324,7 @@
 				if(!tab.info.isInit) {
 					tab.info.isInit = true;
 					info.illust = illustNew;
+					info.isSaved = false;
 
 					info.frames = JSON.parse(JSON.stringify(IA.value.state[illustNew.iid]?.files));
 

@@ -12,14 +12,14 @@
 			<Fas icon="stream" />
 		</p-button>
 		<p-menus ref="domMenus">
-			<p-button ref="domButtonBookmark">
-				<Fas icon="bookmark" />
-			</p-button>
-			<p-button v-tip.right="'【本地】新动图'" @click="atOpenLocalUgoiraNew">
-				<Fas icon="video" />
-			</p-button>
 			<p-button v-tip.right="'【本地】新图库'" @click="atOpenLocalGallery">
 				<Fas icon="hdd" />
+			</p-button>
+			<p-button v-tip.right="'【本地】新动画'" @click="atOpenLocalUgoiraNew">
+				<Fas icon="video" />
+			</p-button>
+			<p-button ref="domButtonBookmark">
+				<Fas icon="bookmark" />
 			</p-button>
 		</p-menus>
 
@@ -43,7 +43,7 @@
 			<template v-if="!tab.isHidden">
 				<p-button
 					v-tip.right="tab.title"
-					v-menu=" { params: tab, ...menuTab }"
+					v-menu="{ params: tab, ...menuTab, disabled: ()=>tab.typeList == 'follow' }"
 					:now="brop(TA.now === tab)"
 					:tabindex="100 + index"
 					@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
@@ -133,7 +133,7 @@
 	provide('userAdmin', UA);
 
 
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动图', 'video', 'local-ugoira|hidden|once', 'pixiv-illust-list-LocalUgoira');
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', 'video', 'local-ugoira|hidden|once', 'pixiv-illust-list-LocalUgoira');
 	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|hidden|once', 'pixiv-illust-list-LocalGallery');
 
 	const menuTab = {
@@ -142,36 +142,21 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '打开【本地】新动图',
-				hidden: tab => tab.typeList != 'follow',
-				fn: atOpenLocalUgoiraNew
-			},
-			{
-				label: '关闭',
+				label: '🚪 关闭',
 				tips: '关闭该标签页',
 				hidden: tab => tab.typeList == 'follow',
 				fn: tab => TA.value.del(tab),
 			},
 			{ line: true, hidden: tab => !['number', 'user'].includes(tab.typeList) },
 			{
-				label: '复制ID',
+				label: '📝 复制ID',
 				hidden: tab => tab.typeList != 'number',
-				fn: tab => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.iid });
-					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${tab.info.iid}）失败`); });
-					clipboard.onClick(event);
-				},
+				fn: tab => Clipboard.copy(String(tab.info.iid)),
 			},
 			{
-				label: '复制作者ID',
+				label: '📝 复制作者ID',
 				hidden: tab => tab.typeList != 'user',
-				fn: tab => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => tab.info.uid });
-					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${tab.info.uid}）失败`); });
-					clipboard.onClick(event);
-				},
+				fn: tab => Clipboard.copy(String(tab.info.uid)),
 			},
 		]
 	};
@@ -255,7 +240,7 @@
 
 
 	const kindBookmarkNow = ref('常用');
-	const bookmarksNow = computed(()=> profile.value.bookmark?.[kindBookmarkNow.value] ?? []);
+	const bookmarksNow = computed(() => profile.value.bookmark?.[kindBookmarkNow.value] ?? []);
 </script>
 
 <style lang="sass" scoped>

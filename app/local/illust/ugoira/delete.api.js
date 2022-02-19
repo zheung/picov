@@ -17,7 +17,7 @@ const handle = raw => {
 	AS(~~iid, `无效~[IID]~{${iid}}`);
 
 
-	return Trash(resolve(C.path.dirUgoiraSave, `ugoira-${iid}.zip`));
+	return Trash(resolve(C.path.dirUgoiraNew, `ugoira-${iid}.zip`));
 };
 
 

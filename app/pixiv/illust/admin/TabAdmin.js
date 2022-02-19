@@ -22,6 +22,8 @@ class TabAdmin {
 
 	params = [];
 
+	histories = [];
+
 	/** @type {Tab} */
 	get now() { return this.map[this.key]; }
 	get list() { return Object.values(this.map); }
@@ -50,13 +52,30 @@ class TabAdmin {
 	}
 
 	del(tab) {
+		const now = this.now;
+
 		const map = this.map;
 		const ids = Object.keys(map);
 		const index = ids.indexOf(tab.id);
 
 		delete this.map[tab.id];
 
-		this.change(map[ids[index + 1] ?? ids[index - 1]]);
+
+		if(now === tab) {
+			this.histories.pop();
+			const tabLast = this.histories.pop();
+
+			if(tabLast) {
+				this.change(tabLast);
+			}
+			else {
+				this.change(map[ids[index + 1] ?? ids[index - 1]]);
+			}
+		}
+
+		this.histories = this.histories
+			.filter(his => his !== tab)
+			.filter((his, index, arr) => his !== arr[index - 1]);
 	}
 
 	/** @param {Tab} tab */
@@ -66,6 +85,8 @@ class TabAdmin {
 		this.key = tab.id;
 		tab.params = params;
 		this.modulePre = tab.module;
+
+		if(this.histories[this.histories.length - 1] !== tab) { this.histories.push(tab); }
 
 		this.emitChange();
 	}

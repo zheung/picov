@@ -4,10 +4,10 @@
 		:title="title"
 		:style="{ backgroundImage }"
 		:tabindex="tabIndex"
-		@click.exact="IA.save(illust)"
+		@click.exact="onClick(illust)"
 		@click.ctrl="IA.save(illust, true)"
 	>
-		<template v-if="IA.state[illust.iid]?.fetch == 1">
+		<template v-if="isFetched(illust)">
 			<progress :max="100" :value="100" />
 		</template>
 		<template v-else>
@@ -44,11 +44,39 @@
 	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
 
-	const $alert = inject('$alert');
-
 
 	const backgroundImage = computed(() => `url(${props.illust.urlThumb})`);
 	const title = computed(() => `${props.illust.iid}\n标题：${props.illust.title}\n作者：${props.illust.user}（${props.illust.uid}）\n标签：${props.illust.tags.join('、')}`);
+
+
+	const isFetched = (illust) => {
+		return IA.value.state[illust.iid]?.fetch == 1;
+	};
+
+	const atPlay = illust => TA.value.addIcon(`【动画】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust);
+	const atOpen = async illust => {
+		const tabLocalGallery = Object.values(TA.value.map).find(tab => tab.typeList == 'local-gallery');
+
+		await tabLocalGallery.info.atFetch();
+
+		const index = tabLocalGallery.info.files.findIndex(file => file.startsWith(illust.iid));
+
+		if(index + 1) {
+			tabLocalGallery.info.indexNow = index;
+
+			TA.value.change(tabLocalGallery);
+		}
+	};
+
+	const onClick = (illust) => {
+		return !isFetched(illust) ?
+			IA.value.save(illust) :
+			(
+				illust.type == 2 ?
+					atPlay(illust) :
+					atOpen(illust)
+			);
+	};
 
 
 	const menuIllust = {
@@ -57,56 +85,46 @@
 		menuItemCss: { hoverBackground: '#bfdbfe' },
 		menuList: [
 			{
-				label: '播放动图',
+				label: '▶️ 播放动画',
 				hidden: illust => illust.type != 2,
-				fn: illust => TA.value.addIcon(`【动图】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust),
+				fn: atPlay,
 			},
 			{
-				label: '保留 ✔',
+				label: '✔ 保留',
 				hidden: illust => illust.type != 2,
 				fn: illust => IA.value.keepUgoira(illust.iid)
 			},
 			{
-				label: '删除 ✖',
+				label: '✖ 删除',
 				hidden: illust => illust.type != 2,
 				fn: illust => IA.value.deleteUgoira(illust.iid)
 			},
 			{ line: true, hidden: illust => illust.type != 2 },
 			{
-				label: '浏览作者...',
+				label: '📂 浏览作者 ...',
 				fn: illust => TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid),
 			},
 			{
-				label: '强制下载',
+				label: '⏬ 强制下载',
 				fn: illust => IA.value.save(illust, true),
 			},
 			{ line: true },
 			{
-				label: '作品页',
+				label: '🔗 作品页',
 				fn: illust => window.open(`https://www.pixiv.net/artworks/${illust.iid}`),
 			},
 			{
-				label: '作者主页',
+				label: '🔗 作者主页',
 				fn: illust => window.open(`https://www.pixiv.net/users/${illust.uid}/illustrations`),
 			},
 			{ line: true },
 			{
-				label: '复制ID',
-				fn: illust => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => illust.iid });
-					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${illust.iid}）失败`); });
-					clipboard.onClick(event);
-				},
+				label: '📝 复制ID',
+				fn: illust => Clipboard.copy(String(illust.iid)),
 			},
 			{
-				label: '复制作者ID',
-				fn: illust => {
-					const clipboard = new Clipboard(document.documentElement, { text: () => illust.uid });
-					clipboard.on('success', () => { clipboard.destroy(); });
-					clipboard.on('error', () => { clipboard.destroy(); $alert(`复制（${illust.uid}）失败`); });
-					clipboard.onClick(event);
-				},
+				label: '📝 复制作者ID',
+				fn: illust => Clipboard.copy(String(illust.uid))
 			},
 		]
 	};

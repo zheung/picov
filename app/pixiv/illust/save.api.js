@@ -5,7 +5,7 @@ import { parse, resolve } from 'path';
 import Bluebird from 'bluebird';
 import FX from 'fs-extra';
 
-import Moment from '../../../lib/Moment.js';
+import Moment from 'moment';
 import { dirCacheLarge } from '../../../lib/global.dir.js';
 import { C, DB, G } from '../../../lib/global.js';
 
@@ -173,7 +173,7 @@ const handle = async (illust, who, force) => {
 	const { iid, count, type } = illust;
 
 
-	G.info('保存', `~[动图]~{${iid}}`, `~[类型]~{${type}} ~[数量]~{${count}} ~[强制]~{${force}}`);
+	G.info('保存', `~[动画]~{${iid}}`, `~[类型]~{${type}} ~[数量]~{${count}} ~[强制]~{${force}}`);
 
 
 	const db = await DB.pick();
@@ -218,7 +218,7 @@ const handle = async (illust, who, force) => {
 		if(type == 2) {
 			const meta = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, profile.cookie);
 
-			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.path.dirUgoiraSave, name: `ugoira-${iid}.zip` });
+			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.path.dirUgoiraNew, name: `ugoira-${iid}.zip` });
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 

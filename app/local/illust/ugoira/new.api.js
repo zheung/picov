@@ -5,7 +5,7 @@ import { C } from '../../../../lib/global.js';
 
 const method = 'get';
 const handle = () => {
-	return readdirSync(C.path.dirUgoiraSave, 'utf8')
+	return readdirSync(C.path.dirUgoiraNew, 'utf8')
 		.map(name => ~~name.match(/^ugoira-(\d+)\./)?.[1])
 		.filter(i => i);
 };
