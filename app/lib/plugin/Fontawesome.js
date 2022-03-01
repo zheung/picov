@@ -1,28 +1,29 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-	faSearch,
-	faAngleLeft,
-	faAngleRight,
 	faAngleDoubleLeft,
 	faAngleDoubleRight,
-	faCompass,
+	faAngleLeft,
+	faAngleRight,
+	faBookmark,
 	faBookOpen,
+	faCheckCircle,
+	faCompass,
 	faDownload,
-	faHouseUser,
-	faVideo,
-	faUserEdit,
+	faHdd,
 	faHome,
+	faHouseUser,
+	faImages,
 	faPaintBrush,
 	faSave,
-	faUserCheck,
-	faUserPlus,
-	faTimesCircle,
-	faCheckCircle,
-	faHdd,
-	faSync,
+	faSearch,
 	faStream,
-	faBookmark,
-	faImages,
+	faSync,
+	faTimesCircle,
+	faUser,
+	faUserCheck,
+	faUserEdit,
+	faUserPlus,
+	faVideo,
 } from '@fortawesome/free-solid-svg-icons';
 // import { fas } from '@fortawesome/free-solid-svg-icons';
 // import { far } from '@fortawesome/free-regular-svg-icons';
@@ -32,29 +33,32 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 export const install = function(app) {
 	// library.add(fas);
 	// library.add(far);
-	library.add(faSearch);
-	library.add(faAngleLeft);
-	library.add(faAngleRight);
+
+
 	library.add(faAngleDoubleLeft);
 	library.add(faAngleDoubleRight);
-	library.add(faCompass);
+	library.add(faAngleLeft);
+	library.add(faAngleRight);
+	library.add(faBookmark);
 	library.add(faBookOpen);
+	library.add(faCheckCircle);
+	library.add(faCompass);
 	library.add(faDownload);
-	library.add(faHouseUser);
-	library.add(faVideo);
-	library.add(faUserEdit);
+	library.add(faHdd);
 	library.add(faHome);
+	library.add(faHouseUser);
+	library.add(faImages);
 	library.add(faPaintBrush);
 	library.add(faSave);
-	library.add(faUserCheck);
-	library.add(faUserPlus);
-	library.add(faTimesCircle);
-	library.add(faCheckCircle);
-	library.add(faHdd);
-	library.add(faSync);
+	library.add(faSearch);
 	library.add(faStream);
-	library.add(faBookmark);
-	library.add(faImages);
+	library.add(faSync);
+	library.add(faTimesCircle);
+	library.add(faUser);
+	library.add(faUserCheck);
+	library.add(faUserEdit);
+	library.add(faUserPlus);
+	library.add(faVideo);
 
 
 	app.component('Fas', FontAwesomeIcon);

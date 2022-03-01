@@ -1,6 +1,3 @@
-import AS from 'assert';
-
-import { C } from '../../../../lib/global.js';
 import { getJSON } from '../../get.lib.js';
 import assignThumbURL from './utility/assignThumbURL.lib.js';
 
@@ -17,12 +14,10 @@ const formatItem = (item, who) => assignThumbURL({
 }, who);
 
 
-const method = 'get';
-const handle = async raw => {
-	const profile = C.profile[raw.who];
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
-
-	const { keyword = '', page = 1, mode = 'all', smode = 's_tag_tc', type = 'all' } = raw;
+export const optionAPI = { parseProfile: true };
+export const method = 'get';
+export const handle = async raw => {
+	const { _profile: profile, keyword = '', page = 1, mode = 'all', smode = 's_tag_tc', type = 'all' } = raw;
 
 	const data = await getJSON(
 		`https://www.pixiv.net/ajax/search/artworks/${encodeURIComponent(keyword)}`,
@@ -44,6 +39,3 @@ const handle = async raw => {
 		total: data?.body?.illustManga?.total
 	};
 };
-
-
-export { method, handle };

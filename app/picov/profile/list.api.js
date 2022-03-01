@@ -1,8 +1,5 @@
 import { C } from '../../../lib/global.js';
 
 
-const method = 'get';
-const handle = () => Object.keys(C.profile);
-
-
-export { method, handle };
+export const method = 'get';
+export const handle = raw => Object.keys(C.profile);

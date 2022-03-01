@@ -165,8 +165,8 @@ const fetchMap = async (db, infosFetch, iid, cookie) => {
 };
 
 
-const method = 'wock';
-const handle = async (illust, who, force) => {
+export const method = 'wock';
+export const handle = async (illust, who, force) => {
 	const profile = C.profile[who];
 	AS(profile, `未找到~[档案]~{${who}}`);
 
@@ -244,6 +244,3 @@ const handle = async (illust, who, force) => {
 	}
 	finally { db?.close(); }
 };
-
-
-export { method, handle };

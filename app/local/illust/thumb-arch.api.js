@@ -7,7 +7,7 @@ import { C } from '../../../lib/global.js';
 
 
 export const method = 'get';
-export const parseResult = false;
+export const optionAPI = { parseResult: false };
 export const handle = (raw, ctx) => {
 	const { file } = raw;
 

@@ -1,16 +1,17 @@
 import AS from 'assert';
 import { posix } from 'path';
 
-import { C } from '../../../../lib/global.js';
 import { getJSON } from '../../get.lib.js';
 
 
-const method = 'get';
-const handle = async raw => {
-	const profile = C.profile[raw.who];
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
+export const optionAPI = { parseProfile: true };
+export const method = 'get';
+export const handle = async raw => {
+	const { _profile: profile } = raw;
+
 
 	AS(~~raw.uid, `无效~[用户UID]~{${raw.uid}}`);
+
 
 	const data = await getJSON(
 		`https://www.pixiv.net/ajax/user/${raw.uid}/profile/all`,
@@ -46,6 +47,3 @@ const handle = async raw => {
 			: `api/pixiv/user/header?who=${raw.who}&time=${header.time}&token=${header.token}&ext=${header.ext}`,
 	};
 };
-
-
-export { method, handle };

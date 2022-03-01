@@ -1,8 +1,8 @@
 import FX from 'fs-extra';
 
 
-const method = 'get';
-const handle = () => {
+export const method = 'get';
+export const handle = () => {
 	try {
 		return FX.readJSONSync('package.json', 'utf8').version;
 	}
@@ -10,6 +10,3 @@ const handle = () => {
 		throw Error('读取版本失败');
 	}
 };
-
-
-export { method, handle };

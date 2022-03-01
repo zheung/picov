@@ -1,8 +1,7 @@
 const rcBrowser = {
 	files: ['./app/**/*.{js,vue}'],
 	excludedFiles: ['./app/**/*.{api,lib,map}.js', './app/**/*.lib/**/*.js'],
-	env: { node: false, browser: true },
-	parserOptions: { ecmaVersion: 13 },
+	env: { es2022: true, node: false, browser: true },
 	extends: ['plugin:vue/vue3-recommended'],
 	rules: {
 		indent: [0],
@@ -28,9 +27,9 @@ const rcBrowser = {
 
 const rcNode = {
 	root: true,
-	env: { es2021: true, node: true },
+	env: { es2022: true, node: true },
 	extends: ['eslint:recommended'],
-	parserOptions: { sourceType: 'module', ecmaVersion: 13 },
+	parserOptions: { sourceType: 'module' },
 	rules: {
 		indent: [2, 'tab', { ignoreComments: true, SwitchCase: 1 }],
 		linebreakStyle: [2],

@@ -1,10 +1,5 @@
 import { C } from '../../../lib/global.js';
 
 
-const method = 'get';
-const handle = raw => {
-	return C.path._dirIllustArch;
-};
-
-
-export { method, handle };
+export const method = 'get';
+export const handle = raw => C.path._dirIllustArch;

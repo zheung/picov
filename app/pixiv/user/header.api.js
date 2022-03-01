@@ -1,19 +1,15 @@
-import AS from 'assert';
 import { createReadStream, existsSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { dirCacheThumb } from '../../../lib/global.dir.js';
-import { C } from '../../../lib/global.js';
 import { getBuffer } from '../get.lib.js';
 
 
-const method = 'get';
-const parseResult = false;
-const handle = async (raw, ctx) => {
-	const profile = C.profile[raw.who];
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
+export const method = 'get';
+export const optionAPI = { parseResult: false, parseProfile: true, };
+export const handle = async (raw, ctx) => {
+	const { _profile: profile, time, token, size = '50', ext } = raw;
 
-	const { time, token, size = '50', ext } = raw;
 
 	const fileThumb = resolve(dirCacheThumb, `user-header-${token}-${size}${ext}`);
 
@@ -31,8 +27,6 @@ const handle = async (raw, ctx) => {
 	writeFileSync(fileThumb, bufferThumb);
 
 	ctx.type = ext;
+
 	return bufferThumb;
 };
-
-
-export { method, handle, parseResult };

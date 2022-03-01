@@ -7,7 +7,9 @@ import { C, G } from './lib/global.js';
 
 import initRoute from './lib/initRoute.js';
 
-import ResultParser from './lib/mare/ResultParser.js';
+import initMareParseResult from './lib/mare/parseResult.mare.js';
+import initMareParseProfile from './lib/mare/parseProfile.mare.js';
+
 
 const { folds, faces } = await initRoute(resolve(dirProject, 'app'));
 
@@ -17,8 +19,8 @@ new Server({
 	port: C.server.port,
 
 	mare: {
-		before: ['parseRaw'],
-		after: [ResultParser],
+		before: ['parseRaw', initMareParseProfile],
+		after: [initMareParseResult],
 	},
 
 	facePrefix: '/api',

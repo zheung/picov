@@ -1,9 +1,19 @@
 <template>
 	<!-- 侧边栏 -->
 	<p-sidebar>
-		<p-button v-tip.right="'我的档案'" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
+		<p-button ref="domButtonProfile" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
+		<p-profiles ref="domProfiles">
+			<template v-for="name of namesProfile" :key="`profiles-${name}`">
+				<p-profile-name :now="brop(who == name)" @click="changeProfile(name)">
+					<Fas corn :icon="who == name? 'user-check' : 'user'" />
+					{{name}}
+				</p-profile-name>
+			</template>
+		</p-profiles>
+
+
 		<p-button v-tip.right="'搜索栏'" expand keyword>
-			<Fas icon="search" />
+			<Fas corn icon="search" @click="atSearch(keyword)" />
 			<input v-model="keyword" tabindex="2" type="text" @keydown.enter.exact="atSearch(keyword)" @keydown.enter.shift="atSearch(keyword, true)" />
 		</p-button>
 
@@ -42,6 +52,7 @@
 			</template>
 		</p-bookmarks>
 
+
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<template v-if="!tab.isHidden">
 				<p-button
@@ -55,7 +66,7 @@
 						<Fas :icon="tab.icon" />
 					</template>
 					<template v-if="tab.typeTab == 'header'">
-						<Fas header :icon="tab.icon" />
+						<Fas corn :icon="tab.icon" />
 						<p-header :style="{ backgroundImage: `url(${tab.header})` }" />
 					</template>
 				</p-button>
@@ -124,7 +135,8 @@
 
 	const profile = ref({});
 	provide('profile', profile);
-	provide('who', computed(() => profile.value.name));
+	const who = computed(() => profile.value.name);
+	provide('who', who);
 
 	const TA = ref(new TabAdmin(modulePre));
 	provide('tabAdmin', TA);
@@ -174,10 +186,23 @@
 	});
 
 
+	const cookies = document.cookie.split(';')
+		.map(raw => raw.split('='))
+		.reduce((cookies, [key, value]) => void (cookies[key] = value) || cookies, {});
+
+	const updateProfile = async who => profile.value = await $get('picov/profile/info', { who });
+	const changeProfile = async name => location.reload(void await updateProfile(cookies.who = name));
+
 	const namesProfile = ref([]);
 	const atReady = async () => {
+		let who = cookies.who;
+
+
 		namesProfile.value = await $get('picov/profile/list') ?? [];
-		profile.value = await $get('picov/profile/info', { who: namesProfile.value[0] });
+		if(!who) { who = namesProfile.value[0]; }
+
+		await updateProfile(who);
+
 
 		TA.value.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-list-Follow');
 	};
@@ -215,33 +240,44 @@
 	};
 
 
-	const domMenus = ref(null);
+	const domButtonProfile = ref(null);
+	const domProfiles = ref(null);
+
+	onMounted(() => Tippy(domButtonProfile.value, {
+		placement: 'right-start',
+		content: domProfiles.value,
+		allowHTML: true,
+		interactive: true,
+		animation: '',
+		duration: [0, 0],
+	}));
+
+
 	const domButtonMenu = ref(null);
+	const domMenus = ref(null);
 
-	const domBookmarks = ref(null);
+	onMounted(() => Tippy(domButtonMenu.value, {
+		placement: 'right-start',
+		content: domMenus.value,
+		allowHTML: true,
+		interactive: true,
+		animation: '',
+		duration: [0, 0],
+	}));
+
+
 	const domButtonBookmark = ref(null);
+	const domBookmarks = ref(null);
 
-	onMounted(() => {
-		Tippy(domButtonMenu.value, {
-			placement: 'right-start',
-			content: domMenus.value,
-			allowHTML: true,
-			interactive: true,
-			animation: '',
-			duration: [0, 0],
-		});
-
-		Tippy(domButtonBookmark.value, {
-			placement: 'right-start',
-			content: domBookmarks.value,
-			allowHTML: true,
-			interactive: true,
-			animation: '',
-			duration: [0, 0],
-			offset: [1, 8],
-		});
-	});
-
+	onMounted(() => Tippy(domButtonBookmark.value, {
+		placement: 'right-start',
+		content: domBookmarks.value,
+		allowHTML: true,
+		interactive: true,
+		animation: '',
+		duration: [0, 0],
+		offset: [1, 8],
+	}));
 
 	const kindBookmarkNow = ref('常用');
 	const bookmarksNow = computed(() => profile.value.bookmark?.[kindBookmarkNow.value] ?? []);
@@ -249,11 +285,15 @@
 
 <style lang="sass" scoped>
 p-sidebar
-	@apply fixed z-20 shadow-mdd p-1 bg-gray-100
+	@apply fixed z-50 shadow-mdd p-1 bg-gray-100
 	width: var(--widthSidebar)
 	height: calc(100% - var(--heightTopbar))
 	top: var(--heightTopbar)
 	background-color: var(--colorMain)
+
+
+	svg[corn]
+			@apply absolute opacity-25 z-10 text-xs top-1 left-1
 
 
 	p-button
@@ -265,7 +305,7 @@ p-sidebar
 		color: var(--colorText)
 
 		&:focus
-			@apply ring-4 ring-yellow-600
+			@apply ring-2 ring-yellow-500
 
 		&[profile]
 			@apply font-bold mt-0
@@ -274,13 +314,10 @@ p-sidebar
 			@apply overflow-hidden px-1
 
 			&:focus-within
-				@apply overflow-visible w-24 ring-2 ring-yellow-600
+				@apply overflow-visible w-24 ring-2 ring-yellow-500
 
 			input
 				@apply rounded-md w-full text-center outline-none z-20 bg-transparent
-
-			svg
-				@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
 
 		&[keyword]:focus-within
 			@apply w-48
@@ -293,8 +330,22 @@ p-sidebar
 			width: calc(100% - 0.5rem)
 			height: calc(100% - 0.5rem)
 
-		svg[header]
-			@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
+
+	p-profiles
+		@apply block p-0.5 pt-0
+
+		p-profile-name
+			@apply relative block rounded-md mt-2 text-center text-xl shadow-mdd cursor-pointer outline-none w-40 elli
+			height: calc( var(--widthSidebar) - 0.55rem)
+			line-height: calc( var(--widthSidebar) - 0.55rem)
+			background-color: var(--colorTextMain)
+			color: var(--colorText)
+
+			&:hover
+				@apply ring-2 ring-green-500
+
+			&[now]
+				@apply font-bold
 
 	p-menus
 		@apply block p-0.5 pt-0

@@ -6,13 +6,10 @@ import FX from 'fs-extra';
 import { C } from '../../../../lib/global.js';
 
 
-const method = 'post';
-const handle = raw => {
-	const { who, iid } = raw;
+export const method = 'post';
+export const handle = raw => {
+	const { iid } = raw;
 
-	const profile = C.profile[who];
-
-	AS(profile, `未找到~[档案]~{${who}}`);
 	AS(~~iid, `无效~[IID]~{${iid}}`);
 
 	FX.moveSync(
@@ -20,6 +17,3 @@ const handle = raw => {
 		resolve(C.path.dirUgoiraSaved, `ugoira-${iid}.zip`),
 	);
 };
-
-
-export { method, handle };

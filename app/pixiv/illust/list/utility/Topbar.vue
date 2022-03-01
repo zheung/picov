@@ -35,7 +35,7 @@ comp-topbar
 			color: var(--colorText)
 
 			&:focus-within
-				@apply ring-2 ring-yellow-600
+				@apply ring-2 ring-yellow-500
 
 			&[input]>input
 					@apply rounded-md w-full text-center outline-none z-20 bg-transparent

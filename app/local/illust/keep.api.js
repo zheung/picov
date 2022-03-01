@@ -6,13 +6,10 @@ import FX from 'fs-extra';
 import { C } from '../../../lib/global.js';
 
 
-const method = 'post';
-const handle = raw => {
-	const { who, file } = raw;
+export const method = 'post';
+export const handle = raw => {
+	const { file } = raw;
 
-	const profile = C.profile[who];
-
-	AS(profile, `未找到~[档案]~{${who}}`);
 	AS(file, `无效~[文件]~{${file}}`);
 
 	FX.moveSync(
@@ -20,6 +17,3 @@ const handle = raw => {
 		resolve(C.path.dirIllustArch, file),
 	);
 };
-
-
-export { method, handle };

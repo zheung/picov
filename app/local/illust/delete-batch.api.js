@@ -3,17 +3,13 @@ import { resolve } from 'path';
 
 import Trash from 'trash';
 
-
 import { C } from '../../../lib/global.js';
 
 
-const method = 'post';
-const handle = async raw => {
-	const { who, files } = raw;
+export const method = 'post';
+export const handle = async raw => {
+	const { files } = raw;
 
-	const profile = C.profile[who];
-
-	AS(profile, `未找到~[档案]~{${who}}`);
 	AS(files, `无效~[文件集]~{${files}}`);
 
 	for(const file of files) {
@@ -22,6 +18,3 @@ const handle = async raw => {
 
 	return true;
 };
-
-
-export { method, handle };

@@ -1,8 +1,8 @@
 import { C } from '../../../lib/global.js';
 
 
-const method = 'post';
-const handle = ({ path }) => {
+export const method = 'post';
+export const handle = ({ path }) => {
 	const config = C.read('path');
 
 	config._dirIllustArch = path.replace(/\\/g, '/');
@@ -12,6 +12,3 @@ const handle = ({ path }) => {
 
 	return C.path.dirIllustArch;
 };
-
-
-export { method, handle };

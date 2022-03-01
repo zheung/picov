@@ -1,19 +1,17 @@
 import AS from 'assert';
 
-import { C, G } from '../../../lib/global.js';
+import { G } from '../../../lib/global.js';
 import { postJSON } from '../get.lib.js';
 
 
-const method = 'post';
-const handle = async raw => {
-	const profile = C.profile[raw.who];
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
+export const optionAPI = { parseProfile: true };
+export const method = 'post';
+export const handle = async raw => {
+	const { _profile: profile } = raw;
+
 
 	AS(~~raw.uid, `无效~[用户UID]~{${raw.uid}}`);
 
-
-	// const html = await getText('https://www.pixiv.net/', profile.cookie);
-	// const token = html.match(/"token":"(\w+?)"/)?.[1];
 
 	const params = new URLSearchParams();
 	params.set('mode', 'add');
@@ -31,6 +29,3 @@ const handle = async raw => {
 
 	G.debug('关注', `~[用户]~{${raw.uid}}`, '✔', JSON.stringify(data));
 };
-
-
-export { method, handle };

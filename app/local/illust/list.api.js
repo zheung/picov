@@ -2,19 +2,15 @@ import AS from 'assert';
 
 import Moment from 'moment';
 
-import { C, DB } from '../../../lib/global.js';
+import { DB } from '../../../lib/global.js';
 import assignThumbURL from '../../pixiv/illust/list/utility/assignThumbURL.lib.js';
 
 import { handle as fetchIllust } from '../../pixiv/illust/list/illust.api.js';
 import { updateIllustInfo } from '../../pixiv/illust/save.api.js';
 
 
-const method = 'get';
-const handle = async raw => {
-	const profile = C.profile[raw.who];
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
-
-
+export const method = 'get';
+export const handle = async raw => {
 	let { 'iids[]': iids } = raw;
 	AS(iids, `无效~[作品IID]~{${raw['iids[]']}}`);
 	if(!(iids instanceof Array)) { iids = [iids]; }
@@ -62,8 +58,4 @@ const handle = async raw => {
 		return result;
 	}
 	finally { db?.close(); }
-
 };
-
-
-export { method, handle };

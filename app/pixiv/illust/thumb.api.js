@@ -1,19 +1,15 @@
-import AS from 'assert';
 import { createReadStream, existsSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { dirCacheThumb } from '../../../lib/global.dir.js';
-import { C } from '../../../lib/global.js';
 import { getBuffer } from '../get.lib.js';
 
 
-const method = 'get';
-const parseResult = false;
-const handle = async (raw, ctx) => {
-	const profile = C.profile[raw.who];
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
+export const method = 'get';
+export const optionAPI = { parseProfile: true, parseResult: false };
+export const handle = async (raw, ctx) => {
+	const { _profile: profile, iid, time, type: typeIllust, master } = raw;
 
-	const { iid, time, type: typeIllust, master } = raw;
 
 	const typeThumb = !master ? 'master' : 'square';
 
@@ -35,8 +31,6 @@ const handle = async (raw, ctx) => {
 
 	ctx.set('Cache-Control', 'max-age=3600');
 	ctx.type = '.jpg';
+
 	return bufferThumb;
 };
-
-
-export { method, handle, parseResult };
