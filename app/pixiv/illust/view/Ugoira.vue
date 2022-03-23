@@ -274,11 +274,11 @@
 		}
 		// +：放大
 		else if(event.keyCode == 107) {
-			info.zoom += 10;
+			info.zoom += 20;
 		}
 		// -：缩小
 		else if(event.keyCode == 109 && info.zoom - 10 > 0) {
-			info.zoom -= 10;
+			info.zoom -= 20;
 		}
 		// 上下左右：移动
 		else if([37, 38].includes(event.keyCode)) {
