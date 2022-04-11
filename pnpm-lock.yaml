@@ -7,8 +7,8 @@ specifiers:
   '@fortawesome/vue-fontawesome': ^3.0.0-5
   '@howdyjs/mouse-menu': ^2.0.5
   '@nuogz/desire': ^4.11.16
-  '@nuogz/hades': ^3.5.0
-  '@nuogz/poseidon': ^4.1.0
+  '@nuogz/hades': ^4.0.4
+  '@nuogz/poseidon': ^6.1.1
   '@vitejs/plugin-vue': ^2.3.1
   autoprefixer: ^10.4.4
   axios: ^0.24.0
@@ -32,8 +32,8 @@ specifiers:
 
 dependencies:
   '@nuogz/desire': 4.11.16
-  '@nuogz/hades': 3.5.0
-  '@nuogz/poseidon': 4.1.0
+  '@nuogz/hades': 4.0.4
+  '@nuogz/poseidon': 6.1.1
   axios: 0.24.0
   bluebird: 3.7.2
   fs-extra: 10.0.1
@@ -90,6 +90,13 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dev: true
+
+  /@babel/runtime/7.17.9:
+    resolution: {integrity: sha512-lSiBBvodq29uShpWGNbgFdKYNiFDo5/HIYsaCEY9ff4sb10x9jizo2+pRrSyF4jKZCXqgzuqBOQKbUm90gQwJg==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.9
+    dev: false
 
   /@eslint/eslintrc/1.2.1:
     resolution: {integrity: sha512-bxvbYnBPN1Gibwyp6NrpnFzA3YtRL3BBAyEAFVIpNTm2Rn4Vy87GA5M4aSn3InRrlsbX5N0GW7XIx+U4SAEKdQ==}
@@ -246,10 +253,11 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@nuogz/hades/3.5.0:
-    resolution: {integrity: sha512-8sltfRWHglJmhC5QYdNYNfT2cENSbF0j8Rmd2bedxDTd80juUQJp0ARg9yahTEWyICkTohdBZbl7iBLVpgIRLA==}
+  /@nuogz/hades/4.0.4:
+    resolution: {integrity: sha512-KWqocd2xRHF+7IkQdjHr9ep/aoec4T3fZbTrwTre4Xn4Wx072OosX7lyOI6vQzWx67ucofFxKCZou6n4hdDreA==}
     dependencies:
       chalk: 4.1.2
+      i18next: 21.6.15
       log-update: 4.0.0
       log4js: 6.4.4
       moment: 2.29.2
@@ -258,8 +266,11 @@ packages:
       - supports-color
     dev: false
 
-  /@nuogz/poseidon/4.1.0:
-    resolution: {integrity: sha512-lEXMgKPymtAcuiut5ZsCeToCEemzfqk7kRtqtWPy/CuK2G7cP42TNrF/ys1ecDDvJOZ7TJ6JsosoibDW/LwYGw==}
+  /@nuogz/poseidon/6.1.1:
+    resolution: {integrity: sha512-r6FYqTgpBejdFNCsqbPGYyanu1ETm7VVqYW3nFoXCaIcd1+T+sP40B5GMFARdhpW6I+fWBQgLUpSxXyWo6CyEw==}
+    engines: {node: '>=14.18.1'}
+    dependencies:
+      escape-string-regexp: 5.0.0
     dev: false
 
   /@popperjs/core/2.11.5:
@@ -1570,6 +1581,12 @@ packages:
       - supports-color
     dev: false
 
+  /i18next/21.6.15:
+    resolution: {integrity: sha512-uMFyw5HGK9KSJ7ok/WUJfeNQj53VOR4NoITtErffWen2v2SjJfpCls7tKTLF1nTCdKRePY4lCoZMLKhRSj/1GA==}
+    dependencies:
+      '@babel/runtime': 7.17.9
+    dev: false
+
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
@@ -2429,6 +2446,10 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
+
+  /regenerator-runtime/0.13.9:
+    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
+    dev: false
 
   /regexpp/3.2.0:
     resolution: {integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==}

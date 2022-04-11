@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "5.15.1",
+	"version": "5.15.2",
 	"description": "",
 	"author": "Nuogz",
 	"license": "LGPL-3.0-or-later",
@@ -16,8 +16,8 @@
 	},
 	"dependencies": {
 		"@nuogz/desire": "^4.11.16",
-		"@nuogz/hades": "^3.5.0",
-		"@nuogz/poseidon": "^4.1.0",
+		"@nuogz/hades": "^4.0.4",
+		"@nuogz/poseidon": "^6.1.1",
 		"axios": "^0.24.0",
 		"bluebird": "^3.7.2",
 		"fs-extra": "^10.0.1",
