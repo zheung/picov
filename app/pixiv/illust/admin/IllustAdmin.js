@@ -50,9 +50,7 @@ class IllustAdmin {
 
 	save(illust, force = false) { this.wock.cast('pixiv/illust/save', illust, this.who, force); }
 	async saveAll(illusts) {
-		for(const illust of illusts) {
-			if(this.state[illust.iid]?.fetch > 0) { continue; }
-
+		for(const illust of illusts.filter(illust => this.state[illust.iid]?.fetch == 0)) {
 			this.save(illust);
 
 			await new Promise(r => setTimeout(() => r(), 147));
