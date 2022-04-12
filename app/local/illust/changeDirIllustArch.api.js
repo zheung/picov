@@ -3,12 +3,12 @@ import { C } from '../../../lib/global.js';
 
 export const method = 'post';
 export const handle = ({ path }) => {
-	const config = C.read('path');
+	C.$.edit('path', paths => {
+		paths._dirIllustArch = path.replace(/\\/g, '/');
 
-	config._dirIllustArch = path.replace(/\\/g, '/');
+		return paths;
+	});
 
-	C.save('path', config);
-	C.load('path');
 
 	return C.path.dirIllustArch;
 };
