@@ -34,6 +34,14 @@
 	const I = computed(() => now.value.info);
 
 
+	const recoverScrollTop = ref(null);
+	provide('recoverScrollTop', recoverScrollTop);
+	const updateScrollTop = tab => recoverScrollTop.value = [tab];
+	onActivated(() => updateScrollTop(now.value));
+
+	const atScroll = top => now.value.scrollTop = top;
+
+
 	const stateFetch = ref(0);
 	const atFetch = async (step_ = 0) => {
 		const tabNow = now.value;
@@ -49,6 +57,7 @@
 			stateFetch.value = 2;
 
 			tabNow.scrollTop = 0;
+			updateScrollTop(tabNow);
 		}
 		catch(error) {
 			stateFetch.value = 3;
@@ -76,13 +85,6 @@
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());
-
-
-	const atScroll = top => now.value.scrollTop = top;
-
-	const recoverScrollTop = ref(null);
-	provide('recoverScrollTop', recoverScrollTop);
-	onActivated(() => recoverScrollTop.value = [now.value]);
 </script>
 
 <style lang="sass" scoped>

@@ -36,6 +36,14 @@
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 
+	const recoverScrollTop = ref(null);
+	provide('recoverScrollTop', recoverScrollTop);
+	const updateScrollTop = tab => recoverScrollTop.value = [tab];
+	onActivated(() => updateScrollTop(now.value));
+
+	const atScroll = top => now.value.scrollTop = top;
+
+
 	const stateFetch = ref(0);
 	const atFetchNew = async iid => {
 		const tabNow = now.value;
@@ -50,6 +58,7 @@
 
 
 			tabNow.scrollTop = 0;
+			updateScrollTop(tabNow);
 		}
 		catch(error) {
 			stateFetch.value = 3;
@@ -69,6 +78,7 @@
 
 
 			tabNow.scrollTop = 0;
+			updateScrollTop(tabNow);
 		}
 		catch(error) {
 			stateFetch.value = 3;
@@ -100,13 +110,6 @@
 			atFetchNew(iid);
 		}
 	});
-
-
-	const atScroll = top => now.value.scrollTop = top;
-
-	const recoverScrollTop = ref(null);
-	provide('recoverScrollTop', recoverScrollTop);
-	onActivated(() => recoverScrollTop.value = [now.value]);
 </script>
 
 <style lang="sass" scoped>

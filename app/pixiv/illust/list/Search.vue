@@ -75,18 +75,31 @@
 
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
+
+	const recoverScrollTop = ref(null);
+	provide('recoverScrollTop', recoverScrollTop);
+	const updateScrollTop = tab => recoverScrollTop.value = [tab];
+	onActivated(() => updateScrollTop(now.value));
+
+	const atScroll = top => now.value.scrollTop = top;
+
+
 	const stateFetch = ref(0);
 	const atFetch = async (step_ = 0) => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
-		stateFetch.value = 1;
+		const stateFetch_ = stateFetch;
+		if(stateFetch_.value == 1) { return; }
+
+
+		stateFetch_.value = 1;
 		try {
 			const { keywordPre, pagePre, modePre, modeSearchPre, typePre } = updatePage(info, step_);
 
 			let total;
 			({ illusts: info.illustsNow, total } = await IA.value.fetchSearch(keywordPre, pagePre, modePre, modeSearchPre, typePre));
-			stateFetch.value = 2;
+			stateFetch_.value = 2;
 
 
 			tabNow.title = `【搜索】${keywordPre}（第${pagePre}页）`;
@@ -100,9 +113,10 @@
 			info.total = total;
 
 			tabNow.scrollTop = 0;
+			updateScrollTop(tabNow);
 		}
 		catch(error) {
-			stateFetch.value = 3;
+			stateFetch_.value = 3;
 
 			throw error;
 		}
@@ -140,13 +154,6 @@
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());
-
-
-	const atScroll = top => now.value.scrollTop = top;
-
-	const recoverScrollTop = ref(null);
-	provide('recoverScrollTop', recoverScrollTop);
-	onActivated(() => recoverScrollTop.value = [now.value]);
 
 
 	const listMode = [
