@@ -70,11 +70,51 @@
 		catch { void 0; }
 	};
 
-
 	const stateFetch = ref(0);
+
+	const initUser = async () => {
+		const tabNow = now.value;
+		const info = tabNow.info;
+
+
+		stateFetch.value = 1;
+		try {
+			const { illusts, mangas, alls, name, isFollowed, urlHeader } = await IA.value.fetchUser(info.uid, false);
+			stateFetch.value = 2;
+
+
+			info.illusts = illusts;
+			info.mangas = mangas;
+			info.alls = alls;
+
+			info.name = name;
+			info.isFollowed = isFollowed;
+			info.urlHeader = urlHeader;
+
+			tabNow.typeTab = 'header';
+			tabNow.header = urlHeader;
+			tabNow.title = `作者：${name}`;
+
+			info.isInitUser = true;
+
+			atFetch();
+		}
+		catch(error) {
+			stateFetch.value = 3;
+
+			throw error;
+		}
+	};
+
+
+
 	const atFetch = async (step_ = 0) => {
 		const tabNow = now.value;
 		const info = tabNow.info;
+
+
+		if(!info.isInitUser) { return initUser(); }
+
 
 		stateFetch.value = 1;
 		try {
@@ -108,6 +148,7 @@
 
 		if(!tab.info.isInit) {
 			tab.info.isInit = true;
+			tab.info.isInitUser = false;
 
 			const [uid] = tab.params;
 
@@ -116,31 +157,7 @@
 			tab.info.pagePre = 1;
 
 
-			stateFetch.value = 1;
-			try {
-				const { illusts, mangas, alls, name, isFollowed, urlHeader } = await IA.value.fetchUser(uid, false);
-				stateFetch.value = 2;
-
-
-				tab.info.illusts = illusts;
-				tab.info.mangas = mangas;
-				tab.info.alls = alls;
-
-				tab.info.name = name;
-				tab.info.isFollowed = isFollowed;
-				tab.info.urlHeader = urlHeader;
-
-				tab.typeTab = 'header';
-				tab.header = urlHeader;
-				tab.title = `作者：${name}`;
-
-				atFetch();
-			}
-			catch(error) {
-				stateFetch.value = 3;
-
-				throw error;
-			}
+			atFetch();
 		}
 	});
 
