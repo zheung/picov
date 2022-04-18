@@ -3,7 +3,7 @@ import randomString from './random.js';
 
 
 class Tab {
-	constructor(id, title, typeTab, icon, typeList, module, isHidden, params) {
+	constructor(id, title, typeTab, icon, typeList, module, isHidden, isOnce, params) {
 		this.id = id;
 		this.title = title;
 		this.typeTab = typeTab;
@@ -12,6 +12,7 @@ class Tab {
 		this.module = module;
 		this.info = { illustsNow: [], params: {}, paramsPre: {} };
 		this.isHidden = isHidden ?? false;
+		this.isOnce = isOnce ?? false;
 		this.params = params ?? {};
 	}
 }
@@ -41,9 +42,12 @@ class TabAdmin {
 
 		const [type, ...extras] = type_.split('|');
 
+		const isOnce = extras.includes('once');
+		const isHidden = extras.includes('hidden');
+
 		const tab =
-			(extras.includes('once') ? Object.values(this.map).find(t => t.typeList == type) : undefined) ||
-			(this.map[id] = new Tab(id, title, 'icon', icon, type, module, extras.includes('hidden')));
+			(isOnce ? Object.values(this.map).find(t => t.typeList == type) : undefined) ||
+			(this.map[id] = new Tab(id, title, 'icon', icon, type, module, isHidden, isOnce));
 
 
 		if(tab) { this.change(tab, ...params); }
@@ -80,7 +84,7 @@ class TabAdmin {
 
 	/** @param {Tab} tab */
 	change(tab, ...params) {
-		if(this.key == tab.id) { return; }
+		if(this.key == tab.id && !tab.isOnce) { return; }
 
 		this.key = tab.id;
 		tab.params = params;

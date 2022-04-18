@@ -2,7 +2,7 @@
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
 			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part>作品ID（{{I.iid}}）</p-part>
+			<p-part>搜索ID</p-part>
 
 			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas icon="sync" /></p-part>
 
@@ -37,18 +37,36 @@
 
 
 	const stateFetch = ref(0);
+	const atFetchNew = async iid => {
+		const tabNow = now.value;
+		const info = tabNow.info;
+
+		stateFetch.value = 1;
+		try {
+			info.iids.unshift(iid);
+			info.illustsNow.unshift(...await IA.value.fetchIllusts([iid]));
+
+			stateFetch.value = 2;
+
+
+			tabNow.scrollTop = 0;
+		}
+		catch(error) {
+			stateFetch.value = 3;
+
+			throw error;
+		}
+	};
 	const atFetch = async () => {
 		const tabNow = now.value;
 		const info = tabNow.info;
 
 		stateFetch.value = 1;
 		try {
-			const iid = info.iid;
-			info.illustsNow = await IA.value.fetchIllusts([iid]);
+			info.illustsNow = await IA.value.fetchIllusts(info.iids);
+
 			stateFetch.value = 2;
 
-
-			tabNow.title = `【作品】（${iid}）${info.illustsNow[0]?.title ?? ''}`;
 
 			tabNow.scrollTop = 0;
 		}
@@ -69,12 +87,17 @@
 		if(!tab.info.isInit) {
 			tab.info.isInit = true;
 
-			const [iid] = tab.params;
+			tab.title = '【搜索ID】';
 
-			tab.info.iid = iid;
+			tab.info.illustsNow = [];
 
+			tab.info.iids = [];
+		}
 
-			atFetch();
+		const [iid] = tab.params;
+
+		if(iid) {
+			atFetchNew(iid);
 		}
 	});
 

@@ -218,7 +218,7 @@
 		const uid = matchUID?.[1] ?? matchUID?.[2];
 
 		if(iid) {
-			TA.value.addIcon(`【作品】${iid}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', iid);
+			TA.value.addIcon('【搜索ID】', 'list-ol', 'number|once', 'pixiv-illust-list-Number', iid);
 		}
 		else if(uid) {
 			TA.value.addIcon(`【作者】${uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', uid);
@@ -228,7 +228,7 @@
 				TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew);
 			}
 			else {
-				TA.value.addIcon(`【作品】${keywordNew}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', keywordNew);
+				TA.value.addIcon('【搜索ID】', 'list-ol', 'number|once', 'pixiv-illust-list-Number', keywordNew);
 			}
 		}
 		else {
