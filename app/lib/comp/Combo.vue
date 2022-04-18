@@ -71,12 +71,17 @@
 
 		// 下拉列表
 		list: { type: Array, default: () => ([]) },
+
+		// 下拉列表宽度
+		widthDrop: { type: String, default: 'full' },
+
 	});
 	const emit = defineEmits(['update:modelValue', 'update:disable', 'update:value']);
 
 
 	const disabling_ = computed(() => parseBoolAttr(props.disabling));
 	const readonly_ = computed(() => parseBoolAttr(props.readonly));
+	const widthDrop_ = computed(() => props.widthDrop);
 
 	const { label_, labelWidth_, labelAlign_ } = setupLabel(props, disabling_);
 
@@ -84,7 +89,6 @@
 
 	const value_ = ref(disabling_.value ? (props.modelValue === false ? props.default : props.modelValue) : props.modelValue);
 	const disable_ = ref(disabling_.value ? (props.modelValue === false ? true : false) : props.disable);
-
 
 	watch(() => props.disable, disable => {
 		if(!disabling_.value) {
@@ -152,8 +156,12 @@
 			tippyDrop.value.hide();
 		}
 		else {
-			widthDrop.value = 'auto';
-			// widthDrop.value = window.getComputedStyle(domValue.value).width;
+			if(widthDrop_.value == 'full') {
+				widthDrop.value = window.getComputedStyle(domValue.value).width;
+			}
+			else {
+				widthDrop.value = widthDrop_.value;
+			}
 
 			tippyDrop.value.show();
 		}
@@ -204,7 +212,7 @@ p-label
 
 
 p-value
-	@apply block relative w-auto h-full overflow-hidden border-b-2 border-solid
+	@apply block relative w-auto h-full overflow-hidden
 	border-color: var(--colorMain)
 	padding: 0 0.25rem
 	z-index: 1
@@ -222,7 +230,7 @@ p-value
 
 
 p-drop
-	@apply block bg-white py-0 border-2 rounded-b-sm shadow-2xl
+	@apply block bg-white py-0 border-2 rounded-b-sm shadow-mdd
 	border-color: var(--colorMain)
 
 	max-height: 24rem

@@ -88,8 +88,8 @@ class IllustAdmin {
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
-	async fetchSearch(keyword, page, isWatch = true) {
-		const { illusts, total } = await this.$get('pixiv/illust/list/search', { who: this.who, keyword, page }) ?? [];
+	async fetchSearch(keyword, page, mode, modeSearch, type, isWatch = true) {
+		const { illusts, total } = await this.$get('pixiv/illust/list/search', { who: this.who, keyword, page, mode, modeSearch, type }) ?? [];
 
 		return { illusts: isWatch ? this.watch(illusts) : illusts, total };
 	}

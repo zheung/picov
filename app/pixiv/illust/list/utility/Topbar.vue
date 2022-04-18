@@ -40,6 +40,9 @@ comp-topbar
 			&[input]>input
 					@apply rounded-md w-full text-center outline-none z-20 bg-transparent
 
+			&[input]>select
+					@apply rounded-md w-full text-center outline-none z-20 bg-transparent
+
 		svg[corner]
 			@apply absolute opacity-25 z-10 text-xs top-0.5 left-0.5
 

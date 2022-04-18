@@ -24,6 +24,7 @@ import {
 	faUserEdit,
 	faUserPlus,
 	faVideo,
+	faCaretDown,
 } from '@fortawesome/free-solid-svg-icons';
 // import { fas } from '@fortawesome/free-solid-svg-icons';
 // import { far } from '@fortawesome/free-regular-svg-icons';
@@ -59,6 +60,7 @@ export const install = function(app) {
 	library.add(faUserEdit);
 	library.add(faUserPlus);
 	library.add(faVideo);
+	library.add(faCaretDown);
 
 
 	app.component('Fas', FontAwesomeIcon);

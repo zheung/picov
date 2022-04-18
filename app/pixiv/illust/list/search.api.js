@@ -17,25 +17,32 @@ const formatItem = (item, who) => assignThumbURL({
 export const optionAPI = { parseProfile: true };
 export const method = 'get';
 export const handle = async raw => {
-	const { _profile: profile, keyword = '', page = 1, mode = 'all', smode = 's_tag_tc', type = 'all' } = raw;
+	const { _profile: profile, keyword = '', page = 1, mode = 'all', modeSearch = 's_tag_tc', type: typeRaw = 'artworks' } = raw;
+
+
+	const [typeIllust, type] = typeRaw.split('|');
+
 
 	const data = await getJSON(
-		`https://www.pixiv.net/ajax/search/artworks/${encodeURIComponent(keyword)}`,
+		`https://www.pixiv.net/ajax/search/${typeIllust}/${encodeURIComponent(keyword)}`,
 		profile.cookie,
 		{
 			word: encodeURIComponent(keyword),
 			order: 'date_d',
 			mode,
 			p: page,
-			s_mode: smode,
+			s_mode: modeSearch,
 			type,
 		}
 	);
 
+	const body= data?.body;
+	const illusts = body?.illustManga ?? body?.illust ?? body?.manga;
+
 	return {
-		illusts: data?.body?.illustManga?.data
+		illusts: illusts?.data
 			?.map(item => formatItem(item, raw.who))
 			?? [],
-		total: data?.body?.illustManga?.total
+		total: illusts?.total
 	};
 };
