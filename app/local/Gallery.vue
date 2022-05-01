@@ -118,10 +118,13 @@
 	const keepFile = () => {
 		const info = I.value;
 
-		IA.value.keepFile(fileNow.value);
+		IA.value.keepFile(fileNow.value, 'dirIllustArch');
 
 		const length = info.files.length;
 		info.indexNow = (length + (info.indexNow + 1) % length) % length;
+	};
+	const copyFile2 = () => {
+		IA.value.keepFile(fileNow.value, 'dirIllustArch2', true);
 	};
 	const deleteFile = () => {
 		const info = I.value;
@@ -162,6 +165,11 @@
 			{
 				label: '✖ 删除',
 				fn: deleteFile
+			},
+			{ line: true },
+			{
+				label: '✔ 复制到【安全】',
+				fn: copyFile2
 			},
 
 			{ line: true },

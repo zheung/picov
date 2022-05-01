@@ -122,7 +122,7 @@ class IllustAdmin {
 
 	async keepUgoira(iid) { return this.$post('local/illust/ugoira/keep', { who: this.who, iid }); }
 	async deleteUgoira(iid) { return this.$post('local/illust/ugoira/delete', { who: this.who, iid }); }
-	async keepFile(file) { return this.$post('local/illust/keep', { who: this.who, file }); }
+	async keepFile(file, type = 'dirIllustArch', isCopy) { return this.$post('local/illust/keep', { who: this.who, file, type, isCopy }); }
 	async deleteFile(file) { return this.$post('local/illust/delete', { who: this.who, file }); }
 	async deleteFileBatch(files) { return this.$post('local/illust/delete-batch', { who: this.who, files }); }
 }
