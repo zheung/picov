@@ -36,11 +36,13 @@ export const handle = async raw => {
 		}
 	);
 
-	const body= data?.body;
+	const body = data?.body;
 	const illusts = body?.illustManga ?? body?.illust ?? body?.manga;
+	const usersBlock = profile?.block?.user;
 
 	return {
 		illusts: illusts?.data
+			?.filter(item => !usersBlock?.includes(~~item.userId))
 			?.map(item => formatItem(item, raw.who))
 			?? [],
 		total: illusts?.total

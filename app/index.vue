@@ -93,7 +93,7 @@
 	import UserAdmin from './pixiv/illust/admin/UserAdmin.js';
 
 
-	document.title = 'Picov 5';
+	document.title = 'Picov';
 
 
 	const app = inject('app');
