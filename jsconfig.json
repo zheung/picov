@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "esnext",
+		"module": "nodenext",
 		"moduleResolution": "node",
 		"target": "esnext",
 		"experimentalDecorators": true,

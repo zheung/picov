@@ -66,7 +66,7 @@
 			{ line: true },
 			{
 				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', I.value.illust.iid)
+				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', I.value.illust.iid)
 			},
 			{
 				label: '📝 复制作品ID',

@@ -185,7 +185,7 @@
 			{ line: true },
 			{
 				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${fileNow.value.split('_')[0]}`, 'paint-brush', 'number', 'pixiv-illust-list-Number', fileNow.value.split('_')[0])
+				fn: () => TA.value.addIcon(`【作品】${fileNow.value.split('_')[0]}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', fileNow.value.split('_')[0])
 			},
 			{
 				label: '📝 复制作品ID',
