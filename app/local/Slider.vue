@@ -132,6 +132,14 @@
 	onMounted(() => setInterval(() => atFetch(), 1000 * 10));
 
 
+	const searchAuthor = async iid => {
+		const [illust] = await IA.value.fetchIllusts([iid]);
+
+		TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid);
+	};
+
+
+	const iidNow = computed(() => fileNow.value?.split('_')?.[0]);
 	const menuUgoira = {
 		useLongPressInMobile: true,
 		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
@@ -153,11 +161,15 @@
 			{ line: true },
 			{
 				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${fileNow.value.split('_')[0]}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', fileNow.value.split('_')[0])
+				fn: () => TA.value.addIcon(`【作品】${iidNow.value}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', iidNow.value)
+			},
+			{
+				label: '📂 搜索作者 ...',
+				fn: () => searchAuthor(iidNow.value)
 			},
 			{
 				label: '📝 复制作品ID',
-				fn: () => Clipboard.copy(fileNow.value.split('_')[0]),
+				fn: () => Clipboard.copy(iidNow.value),
 			},
 		]
 	};
@@ -284,6 +296,7 @@
 
 	const onKeyDown = event => {
 		const info = I.value;
+
 		// +：放大
 		if(event.keyCode == 107) {
 			info.zoom += 20;
@@ -292,7 +305,23 @@
 		else if(event.keyCode == 109 && info.zoom - 10 > 0) {
 			info.zoom -= 20;
 		}
-		// 上下左右：移动
+		// *: 还原缩放
+		else if(event.keyCode == 106) {
+			info.zoom = 100;
+		}
+		// home: 第一张
+		else if(event.keyCode == 36) {
+			info.indexNow = 0;
+		}
+		// end: 最后一张
+		else if(event.keyCode == 35) {
+			info.indexNow = info.files.length - 1;
+		}
+		// shift+r: 刷新
+		else if(event.keyCode == 82 && event.shiftKey) {
+			atFetch();
+		}
+		// 上下左右：图片平移
 		else if([37, 38].includes(event.keyCode)) {
 			const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
 			info.offsetWidth -= off;
@@ -301,6 +330,7 @@
 			const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
 			info.offsetWidth += off;
 		}
+
 
 		loadImage(info.imgNow);
 	};

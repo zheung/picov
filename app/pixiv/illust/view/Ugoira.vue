@@ -31,6 +31,14 @@
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
 
+
+	const searchAuthor = async iid => {
+		const [illust] = await IA.value.fetchIllusts([iid]);
+
+		TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid);
+	};
+
+
 	const menuUgoira = {
 		useLongPressInMobile: true,
 		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
@@ -67,6 +75,10 @@
 			{
 				label: '📂 搜索作品 ...',
 				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', I.value.illust.iid)
+			},
+			{
+				label: '📂 搜索作者 ...',
+				fn: () => searchAuthor(I.value.illust.iid)
 			},
 			{
 				label: '📝 复制作品ID',
