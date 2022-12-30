@@ -121,13 +121,13 @@
 	const keepFile = () => {
 		const info = I.value;
 
-		IA.value.keepFile(fileNow.value, 'dirIllustArch');
+		IA.value.keepFile(fileNow.value, 'illustArch');
 
 		const length = info.files.length;
 		info.indexNow = (length + (info.indexNow + 1) % length) % length;
 	};
 	const copyFile2 = () => {
-		IA.value.keepFile(fileNow.value, 'dirIllustArch2', true);
+		IA.value.keepFile(fileNow.value, 'illustArch2', true);
 	};
 	const deleteFile = () => {
 		const info = I.value;

@@ -193,6 +193,10 @@ export const handle = async (illust, who, force) => {
 		stateAdmin.push(iid, { L: '解析...' });
 		const info = (await getJSON(`https://www.pixiv.net/ajax/illust/${iid}`, profile.cookie))?.body ?? {};
 
+		const timeUpload1 = info?.userIllusts?.[iid]?.updateDate;
+		const timeUpload2 = info?.urls?.thumb?.match?.(/20(\d{2}\/){5}(\d{2})/g)?.[0];
+		const timeUpload3 = info?.uploadDate;
+
 		await updateIllustInfo(db, iid, {
 			fetch: 2,
 			title: info.illustTitle,
@@ -201,7 +205,11 @@ export const handle = async (illust, who, force) => {
 			tags: info.tags.tags.map(tag => tag.tag),
 			count: info.pageCount,
 			comment: info.illustComment,
-			timeUpload: Moment(info.uploadDate).format(),
+			timeUpload: timeUpload1
+				? Moment(timeUpload1).format()
+				: timeUpload2
+					? Moment(timeUpload2, 'YYYY/MM/DD/HH/mm/ss').utcOffset(420).format()
+					: Moment(timeUpload3).format()
 		});
 
 		await updateUserInfo(db, {

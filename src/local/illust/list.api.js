@@ -30,7 +30,7 @@ export const handle = async raw => {
 				uid: illust.user,
 				user: illust.nameLatest,
 				tags: illust.tags,
-				time: Moment(illust.timeUpload).format('YY/MM/DD/HH/mm/ss'),
+				time: Moment(illust.timeUpload).utcOffset(540).format('YYYY/MM/DD/HH/mm/ss'),
 				type: illust.type,
 				count: illust.count
 			}, raw.who));
@@ -48,7 +48,7 @@ export const handle = async raw => {
 					type: illustPixiv.type,
 					tags: illustPixiv.tags,
 					count: illustPixiv.count,
-					timeUpload: Moment(illustPixiv.time, 'YY/MM/DD/HH/mm/ss').format(),
+					timeUpload: Moment(illustPixiv.time, 'YYYY/MM/DD/HH/mm/ss').utcOffset(420).format(),
 				});
 
 				result.find(illust => illust.iid = illustPixiv.iid).count = illustPixiv.count;
