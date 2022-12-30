@@ -2,6 +2,7 @@ import { reactive } from 'vue';
 import randomString from './random.js';
 
 
+
 class Tab {
 	constructor(id, title, typeTab, icon, typeList, module, isHidden, isOnce, params) {
 		this.id = id;

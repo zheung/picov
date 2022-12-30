@@ -13,16 +13,17 @@ specifiers:
   '@nuogz/postgresql': ^1.0.1
   '@nuogz/utility': ^1.4.1
   '@nuogz/vue-alert': ^1.1.5
-  '@nuogz/vue-components': ^1.7.0
-  '@nuogz/vue-sidebar': ^1.1.4
+  '@nuogz/vue-components': ^1.8.1
   '@nuogz/vue-tip': ^1.0.1
   '@nuogz/wock-client': ^2.0.7
   '@vitejs/plugin-vue': ^4.0.0
   autoprefixer: ^10.4.13
   axios: ^1.2.2
   bluebird: ^3.7.2
+  clipboard: ^2.0.11
   eslint: ^8.30.0
   eslint-plugin-vue: ^9.8.0
+  fflate: ^0.7.4
   fs-extra: ^11.1.0
   https-proxy-agent: ^5.0.1
   moment: ^2.29.4
@@ -53,15 +54,16 @@ devDependencies:
   '@nuogz/aegis': 1.1.3
   '@nuogz/css-var': 2.0.3
   '@nuogz/utility': 1.4.1
-  '@nuogz/vue-alert': 1.1.5_afdjtousuw2bewiiobhbxdem3e
-  '@nuogz/vue-components': 1.7.0_ug246iqfmix34lrcgrh7oh3b5m
-  '@nuogz/vue-sidebar': 1.1.4_5xnya4jkoqavgq3c7wzby3q6ye
+  '@nuogz/vue-alert': 1.1.5_w465kcxwdo4b3oyz2wsyzxl7ia
+  '@nuogz/vue-components': 1.8.1_ug246iqfmix34lrcgrh7oh3b5m
   '@nuogz/vue-tip': 1.0.1_tippy.js@6.3.7+vue@3.2.45
   '@nuogz/wock-client': 2.0.7
   '@vitejs/plugin-vue': 4.0.0_vite@4.0.3+vue@3.2.45
   autoprefixer: 10.4.13_postcss@8.4.20
+  clipboard: 2.0.11
   eslint: 8.30.0
   eslint-plugin-vue: 9.8.0_eslint@8.30.0
+  fflate: 0.7.4
   moment: 2.29.4
   postcss: 8.4.20
   sass: 1.57.1
@@ -801,7 +803,7 @@ packages:
     dependencies:
       '@nuogz/json-bigint': 1.0.0
 
-  /@nuogz/vue-alert/1.1.5_afdjtousuw2bewiiobhbxdem3e:
+  /@nuogz/vue-alert/1.1.5_w465kcxwdo4b3oyz2wsyzxl7ia:
     resolution: {integrity: sha512-GWuMGrju1WtHk9QTrTGZMgAkQc8winule1B8OUEVX1W5Nb4Va6GcQuNQGU5DrpR/fq7VMB539wqctzxBJU9K8w==}
     engines: {node: '>=14.18.1'}
     peerDependencies:
@@ -810,12 +812,12 @@ packages:
       vue: ^3
     dependencies:
       '@nuogz/utility': 1.4.1
-      '@nuogz/vue-components': 1.7.0_ug246iqfmix34lrcgrh7oh3b5m
+      '@nuogz/vue-components': 1.8.1_ug246iqfmix34lrcgrh7oh3b5m
       vue: 3.2.45
     dev: true
 
-  /@nuogz/vue-components/1.7.0_ug246iqfmix34lrcgrh7oh3b5m:
-    resolution: {integrity: sha512-qfmYzhhIWieWGoNTluEF7EAsVWFf0YpeUbdzthcUN+lx9C9pVrtjjZ6kl/pNN1gj/u7uCLObMLcHs5POwuQ3zQ==}
+  /@nuogz/vue-components/1.8.1_ug246iqfmix34lrcgrh7oh3b5m:
+    resolution: {integrity: sha512-F9zoRjAX5LP+A+o/Xv0W54Fxtjn9DAhaq7qYF36kKXoc9viGQedtlMAgNNL8N6AgnvDRkYJqSTdRxCpifn+orw==}
     engines: {node: '>=14.18.1'}
     peerDependencies:
       '@fortawesome/free-solid-svg-icons': ^6
@@ -839,21 +841,6 @@ packages:
       '@nuogz/utility': 1.4.1
       moment: 2.29.4
       tippy.js: 6.3.7
-      vue: 3.2.45
-    dev: true
-
-  /@nuogz/vue-sidebar/1.1.4_5xnya4jkoqavgq3c7wzby3q6ye:
-    resolution: {integrity: sha512-dAe7NgpL9fUcBwTuWPXpkTJ+KV8l2p8aKyvp+CUtpZvLP1gdAC0MrY2oUEd9ovz+lLj2xhitdSo47r/TeEZJ2Q==}
-    engines: {node: '>=14.18.1'}
-    peerDependencies:
-      '@fortawesome/vue-fontawesome': ^3
-      '@nuogz/css-var': ^2.0.2
-      '@nuogz/utility': ^1.4.1
-      vue: ^3
-    dependencies:
-      '@fortawesome/vue-fontawesome': 3.0.2_bd5ipvhrqmkjz6wvo6sgrei224
-      '@nuogz/css-var': 2.0.3
-      '@nuogz/utility': 1.4.1
       vue: 3.2.45
     dev: true
 
@@ -1313,6 +1300,14 @@ packages:
       restore-cursor: 3.1.0
     dev: false
 
+  /clipboard/2.0.11:
+    resolution: {integrity: sha512-C+0bbOqkezLIsmWSvlsXS0Q0bmkugu7jcfMIACB+RDEntIzQIkdr148we28AfSloQLRdZlYL/QYyrq05j/3Faw==}
+    dependencies:
+      good-listener: 1.2.2
+      select: 1.1.2
+      tiny-emitter: 2.1.0
+    dev: true
+
   /co-body/6.1.0:
     resolution: {integrity: sha512-m7pOT6CdLN7FuXUcpuz/8lfQ/L77x8SchHCF4G0RBTJO20Wzmhn5Sp4/5WsKy8OSpifBSUrmg83qEqaDHdyFuQ==}
     dependencies:
@@ -1469,6 +1464,10 @@ packages:
   /delayed-stream/1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
+
+  /delegate/3.2.0:
+    resolution: {integrity: sha512-IofjkYBZaZivn0V8nnsMJGBr4jVLxHDheKSW88PyxS5QC4Vo9ZbZVvhzlSxY87fVq3STR6r+4cGepyHkcWOQSw==}
+    dev: true
 
   /delegates/1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
@@ -1771,6 +1770,10 @@ packages:
       reusify: 1.0.4
     dev: true
 
+  /fflate/0.7.4:
+    resolution: {integrity: sha512-5u2V/CDW15QM1XbbgS+0DfPxVB+jUKhWEKuuFuHncbk3tEEqzmoXL+2KyOFuKGqOnmdIy0/davWF1CkuwtibCw==}
+    dev: true
+
   /file-entry-cache/6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -1943,6 +1946,12 @@ packages:
       pify: 3.0.0
       slash: 1.0.0
     dev: false
+
+  /good-listener/1.2.2:
+    resolution: {integrity: sha512-goW1b+d9q/HIwbVYZzZ6SsTr4IgE+WA44A0GmPIQstuOrgsFcT7VEJ48nmr9GaRtNu0XTKacFLGnBPAM6Afouw==}
+    dependencies:
+      delegate: 3.2.0
+    dev: true
 
   /graceful-fs/4.2.10:
     resolution: {integrity: sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==}
@@ -3025,6 +3034,10 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /select/1.1.2:
+    resolution: {integrity: sha512-OwpTSOfy6xSs1+pwcNrv0RBMOzI39Lp3qQKUTPVVPRjCdNa5JH/oPRiqsesIskK8TVgmRiHwO4KXlV2Li9dANA==}
+    dev: true
+
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
@@ -3228,6 +3241,10 @@ packages:
     dependencies:
       any-promise: 1.3.0
     dev: false
+
+  /tiny-emitter/2.1.0:
+    resolution: {integrity: sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==}
+    dev: true
 
   /tippy.js/6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}

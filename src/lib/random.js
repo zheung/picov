@@ -11,4 +11,6 @@ const randomString = function(len = 32) {
 	return result;
 };
 
+
+
 export default randomString;

@@ -1,6 +1,10 @@
+import { faCompass, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
+
+
 export const stateFetchIcon = [
 	false,
-	'compass',
-	'check-circle',
-	'times-circle'
+	faCompass,
+	faCheckCircle,
+	faTimesCircle,
 ];

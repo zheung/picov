@@ -6,23 +6,23 @@
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="6" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
-				<Fas icon="angle-double-right" />
+				<Fas :icon="faAngleDoubleRight" />
 			</p-part>
 
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
-				<Fas icon="book-open" corner />
+				<Fas :icon="faBookOpen" corner />
 				<input v-model="I.pagePre" tabindex="5" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="4" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
-				<Fas icon="angle-double-left" />
+				<Fas :icon="faAngleDoubleLeft" />
 			</p-part>
 
 			<p-part v-tip.bottom="'全部下载'" tabindex="3" panel right @click="IA.saveAll(I.illustsNow)" @keydown.enter.space="IA.saveAll(I.illustsNow)">
-				<Fas icon="download" />
+				<Fas :icon="faDownload" />
 			</p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas :icon="faSave" /> {{counter}}</p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -32,6 +32,8 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
+	import { faAngleDoubleRight, faAngleDoubleLeft, faDownload, faSave, faBookOpen } from '@fortawesome/free-solid-svg-icons';
+
 	import { Tab } from '../../../lib/TabAdmin.js';
 
 	import Illusts from './utility/Illusts.vue';
@@ -39,6 +41,7 @@
 
 	import updatePage from './utility/updatePage.js';
 	import { stateFetchIcon } from './utility/stateFetch.js';
+
 
 
 	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */

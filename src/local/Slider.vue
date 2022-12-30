@@ -16,10 +16,13 @@
 </template>
 
 <script setup>
-	import Clipboard from 'clipboard';
 	import { computed, inject, onActivated, onMounted, ref, watch } from 'vue';
 
+	import { faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+	import Clipboard from 'clipboard';
+
 	import { Tab } from '../lib/TabAdmin.js';
+
 
 
 	/** @type {import('vue').Ref<import('../lib/TabAdmin.js').default>} */
@@ -141,7 +144,7 @@
 	const searchAuthor = async iid => {
 		const [illust] = await IA.value.fetchIllusts([iid]);
 
-		TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid);
+		TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
 	};
 
 
@@ -169,7 +172,7 @@
 			{ line: true },
 			{
 				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${iidNow.value}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', iidNow.value)
+				fn: () => TA.value.addIcon(`【作品】${iidNow.value}`, faListOl, 'number|once', 'pixiv-illust-list-Number', iidNow.value)
 			},
 			{
 				label: '📂 搜索作者 ...',

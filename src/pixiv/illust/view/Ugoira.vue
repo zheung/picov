@@ -11,16 +11,17 @@
 </template>
 
 <script setup>
+	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
+
+	import { faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 	import Clipboard from 'clipboard';
 	import { unzipSync } from 'fflate';
-	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
+
+	import { $get } from '@nuogz/aegis';
+	import { $alert } from '@nuogz/vue-alert';
 
 	import { Tab } from '../../../lib/TabAdmin.js';
 
-
-	const $alert = inject('$alert');
-	/** @type {import('../../../lib/plugin/Aegis.js').$get} */
-	const $get = inject('$get');
 
 
 	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
@@ -35,7 +36,7 @@
 	const searchAuthor = async iid => {
 		const [illust] = await IA.value.fetchIllusts([iid]);
 
-		TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid);
+		TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
 	};
 
 
@@ -74,7 +75,7 @@
 			{ line: true },
 			{
 				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', I.value.illust.iid)
+				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, faListOl, 'number|once', 'pixiv-illust-list-Number', I.value.illust.iid)
 			},
 			{
 				label: '📂 搜索作者 ...',

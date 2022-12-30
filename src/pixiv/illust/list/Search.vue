@@ -5,45 +5,45 @@
 			<p-part>搜索</p-part>
 
 			<p-part v-tip.bottom="'关键词'" panel input _keyword>
-				<Fas icon="search" corner />
+				<Fas :icon="faSearch" corner />
 				<input v-model="I.keywordPre" tabindex="4" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'模式'" panel input _mode>
-				<Fas icon="caret-down" corner />
-				<Combo v-model="I.modePre" :list="listMode" align="center" @update:model-value="atFetch()" />
+				<Fas :icon="faCaretDown" corner />
+				<Combo v-model="I.modePre" :list="listMode" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'匹配模式'" panel input _mode-search>
-				<Fas icon="caret-down" corner />
-				<Combo v-model="I.modeSearchPre" :list="listModeSearch" align="center" @update:model-value="atFetch()" />
+				<Fas :icon="faCaretDown" corner />
+				<Combo v-model="I.modeSearchPre" :list="listModeSearch" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'作品类型'" panel input _mode>
-				<Fas icon="caret-down" corner />
-				<Combo v-model="I.typePre" :list="listType" align="center" @update:model-value="atFetch()" />
+				<Fas :icon="faCaretDown" corner />
+				<Combo v-model="I.typePre" :list="listType" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
-				<Fas icon="angle-double-right" />
+				<Fas :icon="faAngleDoubleRight" />
 			</p-part>
 
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
-				<Fas icon="book-open" corner />
+				<Fas :icon="faBookOpen" corner />
 				<input v-model="I.pagePre" tabindex="6" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
-				<Fas icon="angle-double-left" />
+				<Fas :icon="faAngleDoubleLeft" />
 			</p-part>
 
 			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)">
-				<Fas icon="download" />
+				<Fas :icon="faDownload" />
 			</p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas icon="paint-brush" /> {{I.total}}</p-part>
-			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas :icon="faPaintBrush" /> {{I.total}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas :icon="faSave" /> {{counter}}</p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -53,7 +53,11 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
-	import Combo from '../../../lib/comp/Combo.vue';
+	import { faAngleDoubleRight, faAngleDoubleLeft, faDownload, faSave, faPaintBrush, faBookOpen } from '@fortawesome/free-solid-svg-icons';
+
+
+	import { Combo } from '@nuogz/vue-components';
+
 
 	import { Tab } from '../../../lib/TabAdmin.js';
 
@@ -181,8 +185,8 @@
 
 <style lang="sass" scoped>
 [_mode]
-	@apply w-20
+	@apply w-24
 
 [_mode-search]
-	@apply w-42
+	@apply w-48
 </style>

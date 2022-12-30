@@ -5,7 +5,7 @@
 			<p-part>本地新动画</p-part>
 
 
-			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas icon="sync" /></p-part>
+			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas :icon="faSync" /></p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -15,6 +15,8 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
+	import { faSync } from '@fortawesome/free-solid-svg-icons';
+
 	import { Tab } from '../lib/TabAdmin.js';
 
 
@@ -22,6 +24,7 @@
 	import Topbar from '../pixiv/illust/list/utility/Topbar.vue';
 
 	import { stateFetchIcon } from '../pixiv/illust/list/utility/stateFetch.js';
+
 
 
 	/** @type {import('vue').Ref<import('../lib/TabAdmin.js').default>} */

@@ -7,24 +7,27 @@
 			@mouseup="onMouseUp"
 			@mousemove.exact="onMouseMove"
 		/>
-		<p-info>
+		<p-info v-if="I.imgNow">
 			{{`${I.indexNow + 1}/${I.files?.length ?? 0}`}}
 			<br />
 			{{`${I.imgNow?.file || '（无文件）'}`}}
+			<br />
+			{{`${I.imgNow?.width}x${I.imgNow.height}`}}
 		</p-info>
 	</module>
 </template>
 
 <script setup>
-	import Clipboard from 'clipboard';
 	import { computed, inject, onActivated, onMounted, ref, watch } from 'vue';
+
+	import { faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+	import Clipboard from 'clipboard';
+
+	import { $get, $post } from '@nuogz/aegis';
+	import { $alert } from '@nuogz/vue-alert';
 
 	import { Tab } from '../lib/TabAdmin.js';
 
-
-	const $get = inject('$get');
-	const $post = inject('$post');
-	const $alert = inject('$alert');
 
 
 	/** @type {import('vue').Ref<import('../lib/TabAdmin.js').default>} */
@@ -146,7 +149,7 @@
 	const searchAuthor = async (iid) => {
 		const [illust] = await IA.value.fetchIllusts([iid]);
 
-		TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid);
+		TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
 	};
 
 
@@ -194,7 +197,7 @@
 			{ line: true },
 			{
 				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${iidNow.value}`, 'list-ol', 'number|once', 'pixiv-illust-list-Number', iidNow.value)
+				fn: () => TA.value.addIcon(`【作品】${iidNow.value}`, faListOl, 'number|once', 'pixiv-illust-list-Number', iidNow.value)
 			},
 			{
 				label: '📂 搜索作者 ...',

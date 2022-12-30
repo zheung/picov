@@ -4,7 +4,7 @@
 		<p-profiles ref="domProfiles">
 			<template v-for="name of namesProfile" :key="`profiles-${name}`">
 				<p-profile-name :now="brop(who == name)" @click="changeProfile(name)">
-					<Fas corn :icon="who == name ? 'user-check' : 'user'" />
+					<Fas corn :icon="who == name ? faUserCheck : faUser" />
 					{{name}}
 				</p-profile-name>
 			</template>
@@ -12,26 +12,26 @@
 
 
 		<p-button v-tip.right="'搜索栏'" expand keyword>
-			<Fas corn icon="search" @click="atSearch(keyword)" />
+			<Fas corn :icon="faSearch" @click="atSearch(keyword)" />
 			<input v-model="keyword" tabindex="2" type="text" @keydown.enter.exact="atSearch(keyword)" @keydown.enter.shift="atSearch(keyword, true)" />
 		</p-button>
 
 
 		<p-button ref="domButtonMenu">
-			<Fas icon="stream" />
+			<Fas :icon="faStream" />
 		</p-button>
 		<p-menus ref="domMenus">
 			<p-button v-tip.right="'【本地】新图库'" @click="atOpenLocalGallery">
-				<Fas icon="hdd" />
+				<Fas :icon="faHdd" />
 			</p-button>
 			<p-button v-tip.right="'【本地】幻灯片'" @click="atOpenLocalSlider">
-				<Fas icon="images" />
+				<Fas :icon="faImages" />
 			</p-button>
 			<p-button v-tip.right="'【本地】新动画'" @click="atOpenLocalUgoiraNew">
-				<Fas icon="video" />
+				<Fas :icon="faVideo" />
 			</p-button>
 			<p-button ref="domButtonBookmark">
-				<Fas icon="bookmark" />
+				<Fas :icon="faBookmark" />
 			</p-button>
 			<p-button ref="domButtonProfile" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
 		</p-menus>
@@ -83,54 +83,38 @@
 </template>
 
 <script setup>
-	import { ref, watch, onBeforeMount, inject, provide, computed, onMounted } from 'vue';
+	import { ref, onBeforeMount, provide, computed, onMounted, inject, watch } from 'vue';
+
+	import { faUser, faUserCheck, faSearch, faHome, faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+	import { faStream, faHdd, faImages, faVideo, faBookmark } from '@fortawesome/free-solid-svg-icons';
 
 	import Clipboard from 'clipboard';
 	import Tippy from 'tippy.js';
+
+	import CV from '@nuogz/css-var';
+	import { $wock } from '@nuogz/wock-client';
+	import { $get, $post } from '@nuogz/aegis';
+
 
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import TabAdmin from './lib/TabAdmin.js';
 	import UserAdmin from './pixiv/illust/admin/UserAdmin.js';
 
 
+
 	document.title = 'Picov';
 
 
-	const app = inject('app');
-	const CV = inject('CV');
-	const $alert = inject('$alert');
-	const $get = inject('$get');
-	const $post = inject('$post');
-	const wock = window.W = inject('$wock');
+	CV.widthSidebar = '3.5rem';
+	CV.widthScroll = '0.5rem';
+	CV.heightTopbar = '0rem';
 
 
 	const moduleNow = ref(null);
+	const loadModule = inject('load-module')(moduleNow);
+
 	const modulePre = ref('');
-	watch(modulePre, async slot => {
-		if(app.component(slot)) { return moduleNow.value = slot; }
-
-		try {
-			const parts = String(slot).split('-');
-
-			try {
-				if(parts.length == 2) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}.vue`)).default); }
-				else if(parts.length == 3) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}.vue`)).default); }
-				else if(parts.length == 4) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}.vue`)).default); }
-				else if(parts.length == 5) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/${parts[4]}.vue`)).default); }
-				else { throw TypeError(`模块深度不为[2,3,4,5]: ${slot}`); }
-			}
-			catch(error) {
-				if(parts.length == 2) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/index.vue`)).default); }
-				else if(parts.length == 3) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/index.vue`)).default); }
-				else if(parts.length == 4) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/index.vue`)).default); }
-				else if(parts.length == 5) { app.component(slot, (await import(`./${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/${parts[4]}/index.vue`)).default); }
-				else { throw TypeError(`模块深度不为[2,3,4,5]: ${slot}`); }
-			}
-
-			moduleNow.value = slot;
-		}
-		catch(error) { $alert(`加载模块失败: ${slot}, ${error.message || error}`, '加载模块失败'); }
-	});
+	watch(modulePre, loadModule);
 
 
 	const profile = ref({});
@@ -141,16 +125,16 @@
 	const TA = ref(new TabAdmin(modulePre));
 	provide('tabAdmin', TA);
 
-	const IA = ref(new IllustAdmin(wock, profile, $get, $post).init());
+	const IA = ref(new IllustAdmin($wock, profile, $get, $post).init());
 	provide('illustAdmin', IA);
 
-	const UA = ref(new UserAdmin(wock, profile, $post).init());
+	const UA = ref(new UserAdmin($wock, profile, $post).init());
 	provide('userAdmin', UA);
 
 
-	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|once', 'local-Gallery');
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', 'video', 'local-ugoira|once', 'local-Ugoira');
-	const atOpenLocalSlider = () => TA.value.addIcon('【本地】幻灯片', 'images', 'local-slider|once', 'local-Slider');
+	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', faHdd, 'local-gallery|once', 'local-Gallery');
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', faVideo, 'local-ugoira|once', 'local-Ugoira');
+	const atOpenLocalSlider = () => TA.value.addIcon('【本地】幻灯片', faImages, 'local-slider|once', 'local-Slider');
 
 	const menuTab = {
 		useLongPressInMobile: true,
@@ -178,14 +162,6 @@
 	};
 
 
-	CV.setAll({
-		widthSidebar: '3.5rem',
-
-		widthScroll: '0.5rem',
-		heightTopbar: '0rem',
-	});
-
-
 	const cookies = document.cookie.split(';')
 		.map(raw => raw.split('='))
 		.reduce((cookies, [key, value]) => void (cookies[key] = value) || cookies, {});
@@ -197,17 +173,16 @@
 	const atReady = async () => {
 		let who = cookies.who;
 
-
 		namesProfile.value = await $get('picov/profile/list') ?? [];
 		if(!who) { who = namesProfile.value[0]; }
 
 		await updateProfile(who);
 
 
-		TA.value.addIcon('我的关注', 'home', 'follow', 'pixiv-illust-list-Follow');
+		TA.value.addIcon('我的关注', faHome, 'follow', 'pixiv-illust-list-Follow');
 	};
 
-	onBeforeMount(async () => wock.at('open', atReady, true));
+	onBeforeMount(async () => $wock.at('open', atReady, true));
 
 
 	const keyword = ref('');
@@ -218,21 +193,21 @@
 		const uid = matchUID?.[1] ?? matchUID?.[2];
 
 		if(iid) {
-			TA.value.addIcon('【搜索ID】', 'list-ol', 'number|once', 'pixiv-illust-list-Number', iid);
+			TA.value.addIcon('【搜索ID】', faListOl, 'number|once', 'pixiv-illust-list-Number', iid);
 		}
 		else if(uid) {
-			TA.value.addIcon(`【作者】${uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', uid);
+			TA.value.addIcon(`【作者】${uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', uid);
 		}
 		else if(/^[1-9]\d*$/.test(keywordNew.trim())) {
 			if(author) {
-				TA.value.addIcon(`【作者】${keywordNew}`, 'user-edit', 'user', 'pixiv-illust-list-User', keywordNew);
+				TA.value.addIcon(`【作者】${keywordNew}`, faUserEdit, 'user', 'pixiv-illust-list-User', keywordNew);
 			}
 			else {
-				TA.value.addIcon('【搜索ID】', 'list-ol', 'number|once', 'pixiv-illust-list-Number', keywordNew);
+				TA.value.addIcon('【搜索ID】', faListOl, 'number|once', 'pixiv-illust-list-Number', keywordNew);
 			}
 		}
 		else {
-			TA.value.addIcon(`【搜索】${keywordNew}`, 'search', 'search', 'pixiv-illust-list-Search', keywordNew);
+			TA.value.addIcon(`【搜索】${keywordNew}`, faSearch, 'search', 'pixiv-illust-list-Search', keywordNew);
 		}
 
 

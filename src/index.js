@@ -1,8 +1,21 @@
-import './lib/hack.js';
-
 import { createApp } from 'vue';
+import './lib/moment.js';
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { MouseMenuDirective } from '@howdyjs/mouse-menu';
+
+
+import { brop } from '@nuogz/utility';
+import { aegis } from '@nuogz/aegis';
+import { install as installAlert, $alert } from '@nuogz/vue-alert';
+import { install as installTippy } from '@nuogz/vue-tip';
+import { install as installWocker } from '@nuogz/wock-client';
+
+import { install as installModuleLoader } from './lib/load-module.js';
 
 import App from './index.vue';
+
+
 
 
 const app = createApp(App);
@@ -10,15 +23,22 @@ app.provide('app', app);
 
 
 window.addEventListener('load', async () => {
-	(await import('./lib/plugin/Bus.js')).install(app);
-	(await import('./lib/plugin/Brop.js')).install(app);
-	(await import('./lib/plugin/Alert/Alert.js')).install(app);
-	(await import('./lib/plugin/Aegis.js')).install(app);
-	(await import('./lib/plugin/Fontawesome.js')).install(app);
-	(await import('./lib/plugin/Tippy/Tippy.js')).install(app);
-	(await import('./lib/plugin/CSSVar.js')).install(app);
-	(await import('./lib/plugin/Wocker/Wocker.js')).install(app);
-	(await import('./lib/plugin/RightMenu.js')).install(app);
+	app.mixin({ data() { return { brop }; } });
+
+	await installAlert(app);
+
+	aegis.alert = $alert;
+
+	app.component('Fas', FontAwesomeIcon);
+
+	app.directive('menu', MouseMenuDirective);
+
+	await installTippy(app);
+
+	await installWocker(app);
+
+
+	await installModuleLoader(app);
 
 
 	app.mount('#app');

@@ -4,9 +4,9 @@
 			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part>搜索ID</p-part>
 
-			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas icon="sync" /></p-part>
+			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas :icon="faSync" /></p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas icon="save" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Fas :icon="faSave" /> {{counter}}</p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -16,12 +16,16 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
+	import { faSync, faSave } from '@fortawesome/free-solid-svg-icons';
+
 	import { Tab } from '../../../lib/TabAdmin.js';
+
 
 	import Illusts from './utility/Illusts.vue';
 	import Topbar from './utility/Topbar.vue';
 
 	import { stateFetchIcon } from './utility/stateFetch.js';
+
 
 
 	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */

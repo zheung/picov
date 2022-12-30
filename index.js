@@ -5,12 +5,16 @@ import './lib/db.js';
 
 import { resolve } from 'path';
 
+import { ensureDirSync } from 'fs-extra/esm';
+
 import Desire from '@nuogz/desire';
 import readRoute from '@nuogz/desire-route';
 
 import initMareParseProfile from './lib/mare/parseProfile.mare.js';
 
 
+ensureDirSync(C.dir.cacheThumb);
+ensureDirSync(C.dir.cacheLarge);
 
 
 

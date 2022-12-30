@@ -30,7 +30,9 @@
 <script setup>
 	import { computed, inject } from 'vue';
 
+	import { faUserEdit, faVideo } from '@fortawesome/free-solid-svg-icons';
 	import Clipboard from 'clipboard';
+
 
 
 	const props = defineProps({
@@ -52,23 +54,24 @@
 			? `AI类型：${props.illust.typeAI}`
 			: (
 				props.illust.typeAI == 2
-					? '<AI作品>'
+					? '● AI作品'
 					: ''
 			)
 	);
 	const title = computed(() => `
-	${props.illust.iid} ${textAI.value}
-	标题：${props.illust.title}
-	作者：${props.illust.user}（${props.illust.uid}）
-	标签：${props.illust.tags.join('、')}
-	`.replace(/\t/g, ''));
+		${props.illust.iid}
+		● 标题：${props.illust.title}
+		● 作者：${props.illust.user}（${props.illust.uid}）
+		● 标签：${props.illust.tags.join('、')}
+		${textAI.value}
+	`.replace(/\t/g, '').trim());
 
 
 	const isFetched = (illust) => {
 		return IA.value.state[illust.iid]?.fetch == 1;
 	};
 
-	const atPlay = illust => TA.value.addIcon(`【动画】${illust.iid}`, 'video', 'ugoira', 'pixiv-illust-view-Ugoira', illust);
+	const atPlay = illust => TA.value.addIcon(`【动画】${illust.iid}`, faVideo, 'ugoira', 'pixiv-illust-view-Ugoira', illust);
 	const atOpen = async illust => {
 		const tabLocalGallery = Object.values(TA.value.map).find(tab => tab.typeList == 'local-gallery');
 
@@ -117,7 +120,7 @@
 			{ line: true, hidden: illust => illust.type != 2 },
 			{
 				label: '📂 浏览作者 ...',
-				fn: illust => TA.value.addIcon(`【作者】${illust.uid}`, 'user-edit', 'user', 'pixiv-illust-list-User', illust.uid),
+				fn: illust => TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid),
 			},
 			{
 				label: '⏬ 强制下载',
