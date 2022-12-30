@@ -1,12 +1,16 @@
 import './index.env.js';
 import { dirPackage, C, G } from '@nuogz/pangu';
 
+import './lib/db.js';
+
 import { resolve } from 'path';
 
 import Desire from '@nuogz/desire';
 import readRoute from '@nuogz/desire-route';
 
 import initMareParseProfile from './lib/mare/parseProfile.mare.js';
+
+
 
 
 

@@ -32,7 +32,13 @@
 	"dependencies": {
 		"@nuogz/desire": "^5.1.0",
 		"@nuogz/desire-route": "^2.1.0",
-		"@nuogz/pangu": "^3.1.2"
+		"@nuogz/pangu": "^3.1.2",
+		"@nuogz/postgresql": "^1.0.1",
+		"axios": "^1.2.2",
+		"bluebird": "^3.7.2",
+		"fs-extra": "^11.1.0",
+		"https-proxy-agent": "^5.0.1",
+		"trash": "^8.1.0"
 	},
 	"devDependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.2.1",
