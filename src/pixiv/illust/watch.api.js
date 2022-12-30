@@ -1,8 +1,9 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
 
-import { C } from '../../../lib/global.js';
-
 import stateAdmin from './admin/StateAdmin.lib.js';
+
 
 
 export const method = 'wock';

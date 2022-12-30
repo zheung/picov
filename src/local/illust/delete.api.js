@@ -1,16 +1,15 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
 import { resolve } from 'path';
 
 import Trash from 'trash';
 
-import { C } from '../../../lib/global.js';
 
 
 export const method = 'post';
-export const handle = raw => {
-	const { file } = raw;
-
+export const handle = ({ file }) => {
 	AS(file, `无效~[文件]~{${file}}`);
 
-	return Trash(resolve(C.path.dirIllustSave, file));
+	return Trash(resolve(C.dir.illustSave, file));
 };

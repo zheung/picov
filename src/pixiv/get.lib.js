@@ -1,8 +1,10 @@
+import { C } from '@nuogz/pangu';
+
 import HTTPS from 'https';
+
 import Axios from 'axios';
 import HttpsProxyAgent from 'https-proxy-agent';
 
-import { C } from '../../lib/global.js';
 
 
 const headers = {
@@ -24,6 +26,7 @@ const getProxy = url => {
 
 	return proxies.$;
 };
+
 
 
 export const getText = async (url, cookie, params, returnData = true) => {

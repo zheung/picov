@@ -1,4 +1,8 @@
-import { DB, G } from '../../../../lib/global.js';
+import { G } from '@nuogz/pangu';
+
+import { DB } from '../../../../lib/db.js';
+
+
 
 class StateAdmin {
 	#maps = {};

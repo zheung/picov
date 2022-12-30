@@ -4,8 +4,9 @@ import { posix } from 'path';
 import { getJSON } from '../../get.lib.js';
 
 
-export const optionAPI = { parseProfile: true };
+
 export const method = 'get';
+export const parseProfile = true;
 export const handle = async raw => {
 	const { _profile: profile } = raw;
 

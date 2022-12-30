@@ -1,8 +1,9 @@
-import { C } from '../lib/global.js';
+import { C } from '@nuogz/pangu';
+
+
 
 export default [
 	{ route: '/', path: '../dist' },
-	{ route: '/no_profile.png', path: './no_profile.png' },
-	{ route: '/ugoira-new', path: C.path.dirUgoiraNew },
-	{ route: '/ugoira-saved', path: C.path.dirUgoiraSaved },
+	{ route: '/ugoira-new', path: C.dir.ugoiraNew },
+	{ route: '/ugoira-saved', path: C.dir.ugoiraSaved },
 ];

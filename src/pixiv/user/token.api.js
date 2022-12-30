@@ -1,7 +1,9 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
 
-import { C } from '../../../lib/global.js';
 import { getText } from '../get.lib.js';
+
 
 
 export const method = 'get';

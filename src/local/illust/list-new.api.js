@@ -1,19 +1,17 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
+import { readdirSync } from 'fs';
 
-import FX from 'fs-extra';
-
-import { C } from '../../../lib/global.js';
 
 
 export const method = 'get';
-export const handle = raw => {
-	const { who } = raw;
-
+export const handle = ({ who }) => {
 	const profile = C.profile[who];
 	AS(profile, `未找到~[档案]~{${who}}`);
 
 
-	return FX.readdirSync(C.path.dirIllustSave).sort((a, b) => {
+	return readdirSync(C.dir.illustSave).sort((a, b) => {
 		const [idA, pageA] = a.split(/_p|\./);
 		const [idB, pageB] = b.split(/_p|\./);
 

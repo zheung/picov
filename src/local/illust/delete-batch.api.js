@@ -1,19 +1,18 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
 import { resolve } from 'path';
 
 import Trash from 'trash';
 
-import { C } from '../../../lib/global.js';
 
 
 export const method = 'post';
-export const handle = async raw => {
-	const { files } = raw;
-
+export const handle = async ({ files }) => {
 	AS(files, `无效~[文件集]~{${files}}`);
 
 	for(const file of files) {
-		await Trash(resolve(C.path.dirIllustSave, file));
+		await Trash(resolve(C.dir.illustSave, file));
 	}
 
 	return true;

@@ -1,16 +1,17 @@
+import { C, G } from '@nuogz/pangu';
+import { DB } from '../../../lib/db.js';
+
 import AS from 'assert';
 import { createWriteStream } from 'fs';
 import { parse, resolve } from 'path';
 
 import Bluebird from 'bluebird';
-import FX from 'fs-extra';
-
 import Moment from 'moment';
-import { dirCacheLarge } from '../../../lib/global.dir.js';
-import { C, DB, G } from '../../../lib/global.js';
+import { removeSync, moveSync } from 'fs-extra/esm';
 
 import { getJSON, getStream, head } from '../get.lib.js';
 import stateAdmin from './admin/StateAdmin.lib.js';
+
 
 
 const ensureIllust = async (db, id, type) => {
@@ -90,9 +91,9 @@ const fetch = async (infoFetch, pid, logger, cookie) => {
 		.on('error', error => { throw error; });
 
 	const nameFile = infoFetch.name ?? parse(infoFetch.url).base;
-	const tempPath = resolve(dirCacheLarge, nameFile);
+	const tempPath = resolve(C.dir.cacheLarge, nameFile);
 
-	FX.removeSync(tempPath);
+	removeSync(tempPath);
 
 	await new Promise((resolve, reject) =>
 		fileStream.pipe(createWriteStream(tempPath)
@@ -100,7 +101,7 @@ const fetch = async (infoFetch, pid, logger, cookie) => {
 			.on('error', error => reject(error)))
 	);
 
-	FX.moveSync(tempPath, resolve(infoFetch.dir, nameFile), { overwrite: true });
+	moveSync(tempPath, resolve(infoFetch.dir, nameFile), { overwrite: true });
 
 	logger.done();
 };
@@ -218,7 +219,7 @@ export const handle = async (illust, who, force) => {
 		if(type == 2) {
 			const meta = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, profile.cookie);
 
-			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.path.dirUgoiraNew, name: `ugoira-${iid}.zip` });
+			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.dir.ugoiraNew, name: `ugoira-${iid}.zip` });
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 
@@ -227,7 +228,7 @@ export const handle = async (illust, who, force) => {
 		else {
 			const pages = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/pages`, profile.cookie);
 
-			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: C.path.dirIllustSave }));
+			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: C.dir.illustSave }));
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 

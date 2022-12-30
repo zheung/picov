@@ -1,8 +1,9 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
 
 import Moment from 'moment';
 
-import { C } from '../../../lib/global.js';
 
 
 export const method = 'get';

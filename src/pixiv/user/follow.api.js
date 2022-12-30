@@ -1,11 +1,12 @@
+import { G } from '@nuogz/pangu';
+
 import AS from 'assert';
 
-import { G } from '../../../lib/global.js';
 import { postJSON } from '../get.lib.js';
 
 
-export const optionAPI = { parseProfile: true };
 export const method = 'post';
+export const parseProfile = true;
 export const handle = async raw => {
 	const { _profile: profile } = raw;
 

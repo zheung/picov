@@ -1,14 +1,19 @@
-import { C } from '../../../lib/global.js';
+import { C } from '@nuogz/pangu';
+
+import AS from 'assert';
+
 
 
 export const method = 'post';
 export const handle = ({ path }) => {
-	C.$.edit('path', paths => {
-		paths._dirIllustArch = path.replace(/\\/g, '/');
+	AS(path, `无效~[路径]~{${path}}`);
+
+	C.$.edit('dir', paths => {
+		paths._illustArch = path.replace(/\\/g, '/');
 
 		return paths;
 	});
 
 
-	return C.path.dirIllustArch;
+	return C.dir.illustArch;
 };

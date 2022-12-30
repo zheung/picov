@@ -2,7 +2,7 @@ import AS from 'assert';
 
 import Moment from 'moment';
 
-import { DB } from '../../../lib/global.js';
+import { DB } from '../../../lib/db.js';
 import assignThumbURL from '../../pixiv/illust/list/utility/assignThumbURL.lib.js';
 
 import { handle as fetchIllust } from '../../pixiv/illust/list/illust.api.js';

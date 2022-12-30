@@ -2,6 +2,7 @@ import { getJSON } from '../../get.lib.js';
 import assignThumbURL from './utility/assignThumbURL.lib.js';
 
 
+
 const formatItem = (item, who) => assignThumbURL({
 	iid: ~~item.id,
 	title: item.title,
@@ -15,8 +16,8 @@ const formatItem = (item, who) => assignThumbURL({
 }, who);
 
 
-export const optionAPI = { parseProfile: true };
 export const method = 'get';
+export const parseProfile = true;
 export const handle = async raw => {
 	const { _profile: profile, keyword = '', page = 1, mode = 'all', modeSearch = 's_tag_tc', type: typeRaw = 'artworks' } = raw;
 

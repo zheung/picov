@@ -1,21 +1,20 @@
+import { C } from '@nuogz/pangu';
+
 import AS from 'assert';
 import { resolve } from 'path';
 
-import FX from 'fs-extra';
+import { copySync, moveSync } from 'fs-extra/esm';
 
-import { C } from '../../../lib/global.js';
 
 
 export const method = 'post';
-export const handle = raw => {
-	const { file, type, isCopy } = raw;
-
+export const handle = ({ file, type, isCopy }) => {
 	AS(file, `无效~[文件]~{${file}}`);
-	AS(C.path[type], `无效~[文件夹]~{${file}}`);
+	AS(C.dir[type], `无效~[文件夹]~{${file}}`);
 
 
-	FX[isCopy ? 'copySync' : 'moveSync'](
-		resolve(C.path.dirIllustSave, file),
-		resolve(C.path[type], file),
+	(isCopy ? copySync : moveSync)(
+		resolve(C.dir.illustSave, file),
+		resolve(C.dir[type], file),
 	);
 };

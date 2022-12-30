@@ -1,10 +1,11 @@
-import FX from 'fs-extra';
+import { PKG } from '@nuogz/pangu';
+
 
 
 export const method = 'get';
 export const handle = () => {
 	try {
-		return FX.readJSONSync('package.json', 'utf8').version;
+		return PKG?.version;
 	}
 	catch {
 		throw Error('读取版本失败');

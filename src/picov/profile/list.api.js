@@ -1,4 +1,5 @@
-import { C } from '../../../lib/global.js';
+import { C } from '@nuogz/pangu';
+
 
 
 export const method = 'get';

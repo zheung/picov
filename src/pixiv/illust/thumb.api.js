@@ -1,19 +1,22 @@
+import { C } from '@nuogz/pangu';
+
 import { createReadStream, existsSync, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
-import { dirCacheThumb } from '../../../lib/global.dir.js';
 import { getBuffer } from '../get.lib.js';
 
 
+
 export const method = 'get';
-export const optionAPI = { parseProfile: true, parseResult: false };
+export const parseResult = false;
+export const parseProfile = true;
 export const handle = async (raw, ctx) => {
 	const { _profile: profile, iid, time, type: typeIllust, master } = raw;
 
 
 	const typeThumb = !master ? 'master' : 'square';
 
-	const fileThumb = resolve(dirCacheThumb, `thumb-${typeThumb}-${iid}.jpg`);
+	const fileThumb = resolve(C.dir.cacheThumb, `thumb-${typeThumb}-${iid}.jpg`);
 
 	if(existsSync(fileThumb)) {
 		ctx.set('Cache-Control', 'max-age=3600');

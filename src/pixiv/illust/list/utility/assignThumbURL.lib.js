@@ -5,4 +5,5 @@ const assignThumbURL = (illust, who) => {
 };
 
 
+
 export default assignThumbURL;
