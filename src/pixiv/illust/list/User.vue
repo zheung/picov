@@ -25,8 +25,9 @@
 
 			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atFollow"><Fas :icon="I.isFollowed ? faUserCheck : faUserPlus" /></p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas :icon="faPaintBrush" /> {{I.alls.length}}</p-part>
-			<p-part v-if="I.illustsNow.length" right><Fas :icon="faSave" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right title="最大页数">({{pageMax}})</p-part>
+			<p-part v-if="I.illustsNow.length" right title="作品数"><Fas :icon="faPaintBrush" /> {{I.alls.length}}</p-part>
+			<p-part v-if="I.illustsNow.length" right title="已下载作品数 / 本页作品数"><Fas :icon="faSave" /> {{counter}}</p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -58,8 +59,10 @@
 
 	const now = ref(new Tab());
 	const I = computed(() => now.value.info);
+	const sizePage = 15;
 
 
+	const pageMax = computed(() => Math.ceil(I.value.alls.length / sizePage));
 	const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 
@@ -131,7 +134,7 @@
 		stateFetch.value = 1;
 		try {
 			const { pagePre } = updatePage(info, step_);
-			const iidsNow = info.alls.slice((pagePre - 1) * 15, pagePre * 15);
+			const iidsNow = info.alls.slice((pagePre - 1) * sizePage, pagePre * sizePage);
 			info.illustsNow = await IA.value.fetchIllusts(iidsNow);
 			stateFetch.value = 2;
 

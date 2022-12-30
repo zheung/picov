@@ -19,7 +19,7 @@
 			:multi="brop(illust.count > 1)"
 			:ugoira="brop(illust.type == 2)"
 		>
-			{{illust.count > 1 ? `(${illust.count})` : ''}} {{illust.title}}
+			{{illust.count > 1 ? `(${illust.count})` : ''}} {{props.illust.typeAI == 2 ? '[AI]' : ''}} {{illust.title}}
 		</p-title>
 
 		<p-state v-if="IA.state[illust.iid]?.L" :title="IA.state[illust.iid]?.L">{{IA.state[illust.iid]?.L}}</p-state>
