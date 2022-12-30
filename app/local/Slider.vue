@@ -112,6 +112,7 @@
 
 
 	let intervalSlide = null;
+	let intervalFetch = null;
 
 	const startInterval = () => {
 		if(!intervalSlide) {
@@ -121,15 +122,20 @@
 
 				info.indexNow = (length + (info.indexNow + 1) % length) % length;
 			}, 1000);
+
+		}
+
+		if(!intervalFetch) {
+			intervalFetch = setInterval(atFetch, 1000 * 10);
 		}
 	};
 	const stopInterval = () => {
 		clearInterval(intervalSlide);
-		intervalSlide = 0;
+		intervalSlide = null;
+
+		clearInterval(intervalFetch);
+		intervalFetch = null;
 	};
-
-
-	onMounted(() => setInterval(() => atFetch(), 1000 * 10));
 
 
 	const searchAuthor = async iid => {
@@ -152,11 +158,13 @@
 			{ line: true },
 			{
 				label: '▶️ 开始',
-				fn: startInterval
+				fn: startInterval,
+				hidden: tab => intervalSlide
 			},
 			{
 				label: '⏹️ 暂停',
-				fn: stopInterval
+				fn: stopInterval,
+				hidden: tab => !intervalSlide
 			},
 			{ line: true },
 			{

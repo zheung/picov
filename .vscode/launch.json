@@ -2,15 +2,15 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"type": "pwa-node",
+			"type": "node",
 			"request": "launch",
 			"name": "服务器",
+			"console": "integratedTerminal",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"program": "${workspaceFolder}/index.js",
 			"runtimeExecutable": "node.exe",
-			"console": "integratedTerminal",
+			"program": "${workspaceFolder}/index.js",
 		},
 	]
 }

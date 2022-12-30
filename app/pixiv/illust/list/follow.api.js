@@ -10,7 +10,8 @@ const formatItem = (item, who) => assignThumbURL({
 	tags: item.tags,
 	time: item.url.match(/20(\d{2}\/){5}(\d{2})/g)?.[0],
 	type: ~~item.illustType,
-	count: ~~item.pageCount
+	count: ~~item.pageCount,
+	typeAI: ~~item.aiType,
 }, who);
 
 

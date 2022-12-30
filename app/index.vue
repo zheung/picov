@@ -1,11 +1,10 @@
 <template>
 	<!-- 侧边栏 -->
 	<p-sidebar>
-		<p-button ref="domButtonProfile" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
 		<p-profiles ref="domProfiles">
 			<template v-for="name of namesProfile" :key="`profiles-${name}`">
 				<p-profile-name :now="brop(who == name)" @click="changeProfile(name)">
-					<Fas corn :icon="who == name? 'user-check' : 'user'" />
+					<Fas corn :icon="who == name ? 'user-check' : 'user'" />
 					{{name}}
 				</p-profile-name>
 			</template>
@@ -34,6 +33,7 @@
 			<p-button ref="domButtonBookmark">
 				<Fas icon="bookmark" />
 			</p-button>
+			<p-button ref="domButtonProfile" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
 		</p-menus>
 
 		<p-bookmarks ref="domBookmarks">
@@ -148,8 +148,8 @@
 	provide('userAdmin', UA);
 
 
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', 'video', 'local-ugoira|hidden|once', 'local-Ugoira');
-	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|hidden|once', 'local-Gallery');
+	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', 'hdd', 'local-gallery|once', 'local-Gallery');
+	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', 'video', 'local-ugoira|once', 'local-Ugoira');
 	const atOpenLocalSlider = () => TA.value.addIcon('【本地】幻灯片', 'images', 'local-slider|once', 'local-Slider');
 
 	const menuTab = {

@@ -46,7 +46,22 @@
 
 
 	const backgroundImage = computed(() => `url(${props.illust.urlThumb})`);
-	const title = computed(() => `${props.illust.iid}\n标题：${props.illust.title}\n作者：${props.illust.user}（${props.illust.uid}）\n标签：${props.illust.tags.join('、')}`);
+
+	const textAI = computed(() =>
+		props.illust.typeAI > 2
+			? `AI类型：${props.illust.typeAI}`
+			: (
+				props.illust.typeAI == 2
+					? '<AI作品>'
+					: ''
+			)
+	);
+	const title = computed(() => `
+	${props.illust.iid} ${textAI.value}
+	标题：${props.illust.title}
+	作者：${props.illust.user}（${props.illust.uid}）
+	标签：${props.illust.tags.join('、')}
+	`.replace(/\t/g, ''));
 
 
 	const isFetched = (illust) => {
