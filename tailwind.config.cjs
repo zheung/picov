@@ -1,10 +1,12 @@
+const plugin = require('tailwindcss/plugin');
+
 const spacing = 0.25;
 const unit = 'rem';
 const space = time => `${time * spacing}${unit}`;
-const plugin = require('tailwindcss/plugin');
+
 
 module.exports = {
-	content: ['./app/index.html', './app/**/*.{vue,js,ts,jsx,tsx}'],
+	content: ['./src/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
 			spacing: {

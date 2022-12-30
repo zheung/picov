@@ -1,26 +1,25 @@
+import './index.env.js';
+import { dirPackage, C, G } from '@nuogz/pangu';
+
 import { resolve } from 'path';
 
-import Server from '@nuogz/desire';
+import Desire from '@nuogz/desire';
+import readRoute from '@nuogz/desire-route';
 
-import { dirProject } from './lib/global.dir.js';
-import { C, G } from './lib/global.js';
-
-import initRoute from './lib/initRoute.js';
-
-import initMareParseResult from './lib/mare/parseResult.mare.js';
 import initMareParseProfile from './lib/mare/parseProfile.mare.js';
 
 
-const { folds, faces } = await initRoute(resolve(dirProject, 'app'));
 
-new Server({
+const { folds, faces } = await readRoute(resolve(dirPackage, 'src'));
+
+new Desire({
 	name: '服务',
 	host: C.server.host,
 	port: C.server.port,
 
 	mare: {
 		before: ['parseRaw', initMareParseProfile],
-		after: [initMareParseResult],
+		after: ['toSuccess'],
 	},
 
 	facePrefix: '/api',
@@ -28,6 +27,7 @@ new Server({
 	faces,
 	folds,
 
+	locale: C.log?.locale,
 	logger: G,
 
 	wock: {

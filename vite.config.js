@@ -1,9 +1,12 @@
-import { resolve } from 'path';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
 import { defineConfig } from 'vite';
 import pluginVue from '@vitejs/plugin-vue';
 
-import { dirProject } from './lib/global.dir.js';
+
+
+const dirPackage = dirname(fileURLToPath(import.meta.url));
 
 
 export default defineConfig({
@@ -16,16 +19,20 @@ export default defineConfig({
 			}
 		}),
 	],
-	root: resolve(dirProject, 'app'),
+	root: resolve(dirPackage, 'src'),
 	base: './',
 	build: {
-		outDir: resolve(dirProject, 'dist'),
+		outDir: resolve(dirPackage, 'dist'),
 		emptyOutDir: true,
-		chunkSizeWarningLimit: 1024
+		chunkSizeWarningLimit: 1024,
+		minify: true
 	},
-	publicDir: resolve(dirProject, 'app', 'public'),
+	publicDir: resolve(dirPackage, 'src', 'public'),
 	clearScreen: false,
 	server: {
+		hmr: {
+			port: 4591,
+		},
 		port: 4791,
 		proxy: {
 			'^/ugoira-(new|saved)/': {

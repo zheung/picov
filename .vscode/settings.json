@@ -1,7 +1,7 @@
 {
 	"files.trimTrailingWhitespace": true,
-	"html.format.enable": false,
 	"javascript.preferences.importModuleSpecifierEnding": "js",
+	"html.format.enable": false,
 	"vetur.format.defaultFormatter.html": "none",
 	"vetur.format.defaultFormatter.js": "vscode-typescript",
 	"vetur.format.defaultFormatter.less": "none",
@@ -15,5 +15,5 @@
 	"vetur.format.scriptInitialIndent": true,
 	"vetur.validation.script": false,
 	"vetur.validation.style": false,
-	"vetur.validation.template": false,
+	"vetur.validation.template": false
 }
