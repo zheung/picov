@@ -56,7 +56,7 @@
 
 		caches[file] = new Image();
 		caches[file].addEventListener('load', () => loadImage(caches[file]));
-		caches[file].src = `./api/local/illust/thumb?file=${file}`;
+		caches[file].src = `./api/local/illust/file?location=prepare&file=${file}`;
 		caches[file].file = file;
 	});
 
