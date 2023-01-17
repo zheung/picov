@@ -187,9 +187,9 @@
 
 	const keyword = ref('');
 	const atSearch = (keywordNew = '', author = false) => {
-		const matchIID = keywordNew.trim().match(/pixiv\.net\/artworks\/([1-9]\d*)|^i([1-9]\d*)$/i);
+		const matchIID = keywordNew.trim().match(/pixiv\.net\/artworks\/([1-9]\d*)|^i([1-9]\d*)$|^pixiv #([1-9]\d*)$/i);
 		const matchUID = keywordNew.trim().match(/pixiv\.net\/users\/([1-9]\d*)|^u([1-9]\d*)$/i);
-		const iid = matchIID?.[1] ?? matchIID?.[2];
+		const iid = matchIID?.[1] ?? matchIID?.[2] ?? matchIID?.[3];
 		const uid = matchUID?.[1] ?? matchUID?.[2];
 
 		if(iid) {

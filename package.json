@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "6.3.0",
+	"version": "6.3.1",
 	"description": "",
 	"author": "Nuogz",
 	"license": "LGPL-3.0-or-later",
@@ -26,7 +26,7 @@
 		"locale/**"
 	],
 	"scripts": {
-		"develop": "vite --force",
+		"develop": "vite --force --host",
 		"build": "vite build --force"
 	},
 	"dependencies": {
