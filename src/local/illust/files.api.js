@@ -1,19 +1,15 @@
-import { C } from '@nuogz/pangu';
-
 import AS from 'assert';
 import { readdirSync } from 'fs';
 
 
 
 export const method = 'get';
-export const handle = ({ location, who }) => {
-	const profile = C.profile[who];
-	AS(profile, `未找到~[档案]~{${who}}`);
-
+export const parseProfile = true;
+export const handle = ({ location, $profile: profile }) => {
 	const dirIllust = location == 'prepare'
-		? C.dir.illustPrepare
+		? profile.dir.illustPrepare
 		: location == 'archive'
-			? C.dir.illustArchive
+			? profile.dir.illustArchive
 			: undefined;
 
 

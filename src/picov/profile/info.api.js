@@ -7,10 +7,10 @@ import Moment from 'moment';
 
 
 export const method = 'get';
-export const handle = (raw, ctx) => {
-	const profile = C.profile[raw.who];
+export const handle = ({ who }, ctx) => {
+	const profile = C.profile[who];
 
-	AS(profile, `未找到~[档案]~{${raw.who}}`);
+	AS(profile, `未找到~[档案]~{${who}}`);
 
 	ctx.cookies.set('who', profile.name, {
 		expires: Moment().add(1, 'month').toDate(),

@@ -1,6 +1,3 @@
-import { C } from '@nuogz/pangu';
-
-
-
 export const method = 'get';
-export const handle = raw => C.dir._illustArchive;
+export const parseProfile = true;
+export const handle = ({ $profile: profile }) => profile.dir._illustArchive;

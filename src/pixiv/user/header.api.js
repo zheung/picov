@@ -10,10 +10,7 @@ import { getBuffer } from '../get.lib.js';
 export const method = 'get';
 export const parseResult = false;
 export const parseProfile = true;
-export const handle = async (raw, ctx) => {
-	const { _profile: profile, time, token, size = '50', ext } = raw;
-
-
+export const handle = async ({ time, token, size = '50', ext, $profile: profile }, ctx) => {
 	const fileThumb = resolve(C.dir.cacheIllustThumb, `user-header-${token}-${size}${ext}`);
 
 	if(existsSync(fileThumb)) {
@@ -30,6 +27,7 @@ export const handle = async (raw, ctx) => {
 	writeFileSync(fileThumb, bufferThumb);
 
 	ctx.type = ext;
+
 
 	return bufferThumb;
 };

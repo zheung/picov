@@ -10,10 +10,7 @@ import { getBuffer } from '../get.lib.js';
 export const method = 'get';
 export const parseResult = false;
 export const parseProfile = true;
-export const handle = async (raw, ctx) => {
-	const { _profile: profile, iid, time, type: typeIllust, master } = raw;
-
-
+export const handle = async ({ iid, time, type: typeIllust, master, $profile: profile }, ctx) => {
 	const typeThumb = !master ? 'master' : 'square';
 
 	const fileThumb = resolve(C.dir.cacheIllustThumb, `thumb-${typeThumb}-${iid}.jpg`);
@@ -32,8 +29,10 @@ export const handle = async (raw, ctx) => {
 
 	writeFileSync(fileThumb, bufferThumb);
 
+
 	ctx.set('Cache-Control', 'max-age=3600');
 	ctx.type = '.jpg';
+
 
 	return bufferThumb;
 };

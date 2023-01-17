@@ -3,7 +3,7 @@ import assignThumbURL from './utility/assignThumbURL.lib.js';
 
 
 
-const formatItem = (item, who) => assignThumbURL({
+const formatItem = item => assignThumbURL({
 	iid: ~~item.id,
 	title: item.title,
 	uid: ~~item.userId,
@@ -13,21 +13,18 @@ const formatItem = (item, who) => assignThumbURL({
 	type: ~~item.illustType,
 	count: ~~item.pageCount,
 	typeAI: ~~item.aiType,
-}, who);
+});
 
 
 export const method = 'get';
 export const parseProfile = true;
-export const handle = async raw => {
-	const { _profile: profile } = raw;
-
-
+export const handle = async ({ page, $profile: profile }) => {
 	const data = await getJSON(
-		`https://www.pixiv.net/ajax/follow_latest/illust?p=${raw.page ?? 1}&mode=all`,
+		`https://www.pixiv.net/ajax/follow_latest/illust?p=${page ?? 1}&mode=all`,
 		profile.cookie
 	);
 
 	return data?.body?.thumbnails?.illust
-		?.map(item => formatItem(item, raw.who))
+		?.map(item => formatItem(item))
 		?? [];
 };

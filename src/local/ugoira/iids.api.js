@@ -1,16 +1,15 @@
-import { C } from '@nuogz/pangu';
-
 import AS from 'assert';
 import { readdirSync } from 'fs';
 
 
 
 export const method = 'get';
-export const handle = ({ location }) => {
+export const parseProfile = true;
+export const handle = ({ location, $profile: profile }) => {
 	const dirUgoira = location == 'prepare'
-		? C.dir.ugoiraPrepare
+		? profile.dir.ugoiraPrepare
 		: location == 'archive'
-			? C.dir.ugoiraArchive
+			? profile.dir.ugoiraArchive
 			: undefined;
 
 

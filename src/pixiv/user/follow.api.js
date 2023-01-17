@@ -8,7 +8,7 @@ import { postJSON } from '../get.lib.js';
 export const method = 'post';
 export const parseProfile = true;
 export const handle = async raw => {
-	const { _profile: profile } = raw;
+	const { $profile: profile } = raw;
 
 
 	AS(~~raw.uid, `无效~[用户UID]~{${raw.uid}}`);

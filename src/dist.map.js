@@ -2,8 +2,15 @@ import { C } from '@nuogz/pangu';
 
 
 
-export default [
+const maps = [
 	{ route: '/', path: '../dist' },
-	{ route: '/ugoira-prepare', path: C.dir.ugoiraPrepare },
-	{ route: '/ugoira-archive', path: C.dir.ugoiraArchive },
 ];
+
+Object.entries(C.profile).forEach(([id, profile]) => {
+	maps.push({ route: `/ugoira/prepare/${id}`, path: profile.dir.ugoiraPrepare });
+	maps.push({ route: `/ugoira/archive/${id}`, path: profile.dir.ugoiraArchive });
+});
+
+
+
+export default maps;

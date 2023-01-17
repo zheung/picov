@@ -33,6 +33,9 @@
 	const I = computed(() => now.value.info);
 
 
+	const who = inject('who');
+
+
 	const searchAuthor = async iid => {
 		const [illust] = await IA.value.fetchIllusts([iid]);
 
@@ -210,10 +213,11 @@
 
 		let zipBuffer;
 		try {
-			zipBuffer = await $get(`ugoira-prepare/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			zipBuffer = await $get(`ugoira/prepare/${who}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 		}
 		catch(error) {
-			zipBuffer = await $get(`ugoira-archive/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			zipBuffer = await $get(`ugoira/archive/${who}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+
 			info.isArchive = true;
 		}
 

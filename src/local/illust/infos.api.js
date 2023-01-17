@@ -33,7 +33,7 @@ export const handle = async raw => {
 				time: Moment(illust.timeUpload).utcOffset(540).format('YYYY/MM/DD/HH/mm/ss'),
 				type: illust.type,
 				count: illust.count
-			}, raw.who));
+			}));
 
 		const unfinishedIIDs = result.filter(illust => illust.count == 0).map(illust => illust.iid);
 

@@ -227,7 +227,7 @@ export const handle = async (illust, who, force) => {
 		if(type == 2) {
 			const meta = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, profile.cookie);
 
-			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.dir.ugoiraPrepare, name: `ugoira-${iid}.zip` });
+			infosFetch.push({ iid, url: meta.body.originalSrc, dir: profile.dir.ugoiraPrepare, name: `ugoira-${iid}.zip` });
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 
@@ -236,7 +236,7 @@ export const handle = async (illust, who, force) => {
 		else {
 			const pages = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/pages`, profile.cookie);
 
-			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: C.dir.illustPrepare }));
+			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: profile.dir.illustPrepare }));
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 

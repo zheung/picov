@@ -189,8 +189,10 @@
 				label: '⚙️ 修改保存路径',
 				fn: async () => {
 					const dirIllustArchive = await $get('local/config/dirIllustArchive');
+
 					const dirIllustArchiveNew = prompt('修改作品保存路径', dirIllustArchive);
 					await $post('local/config/update-dirIllustArchive', { path: dirIllustArchiveNew });
+
 					$alert('修改作品保存路径成功');
 				}
 			},
