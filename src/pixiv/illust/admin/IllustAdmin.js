@@ -106,7 +106,12 @@ class IllustAdmin {
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 	async getLocalUgoira(isWatch = true) {
-		const illusts = await this.$get('local/ugoira/new', { who: this.who }) ?? [];
+		const illusts = await this.$get('local/ugoira/list-new', { who: this.who }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+	async getLocalUgoiraSaved(isWatch = true) {
+		const illusts = await this.$get('local/ugoira/list-saved', { who: this.who }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
