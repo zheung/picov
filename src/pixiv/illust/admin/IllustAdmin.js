@@ -79,6 +79,7 @@ class IllustAdmin {
 		return `${countFetched}/${countAll}`;
 	}
 
+
 	async fetchFollow(page, isWatch = true) {
 		const illusts = await this.$get('pixiv/illust/list/follow', { who: this.who, page }) ?? [];
 
@@ -100,21 +101,14 @@ class IllustAdmin {
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 
-	async getLocalIllusts(iids, isWatch = true) {
+
+	async getLocalIllustInfos(iids, isWatch = true) {
 		const illusts = await this.$get('local/illust/list', { who: this.who, iids }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
-	async getLocalUgoira(isWatch = true) {
-		const illusts = await this.$get('local/ugoira/list-new', { who: this.who }) ?? [];
 
-		return isWatch ? this.watch(illusts) : illusts;
-	}
-	async getLocalUgoiraSaved(isWatch = true) {
-		const illusts = await this.$get('local/ugoira/list-saved', { who: this.who }) ?? [];
 
-		return isWatch ? this.watch(illusts) : illusts;
-	}
 	async getLocalGallery(isWatch = true) {
 		const illusts = await this.$get('local/illust/list-new', { who: this.who }) ?? [];
 
@@ -125,6 +119,14 @@ class IllustAdmin {
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
+
+
+	async getLocalUgoiraList(location, isWatch = true) {
+		const illusts = await this.$get('local/ugoira/list', { who: this.who, location }) ?? [];
+
+		return isWatch ? this.watch(illusts) : illusts;
+	}
+
 
 	async keepUgoira(iid) { return this.$post('local/ugoira/keep', { who: this.who, iid }); }
 	async deleteUgoira(iid) { return this.$post('local/ugoira/delete', { who: this.who, iid }); }

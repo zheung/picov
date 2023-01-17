@@ -2,8 +2,12 @@
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
 			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
-			<p-part>本地新动画</p-part>
+			<p-part>本地动画</p-part>
 
+			<p-part v-tip.bottom="'位置'" panel input _mode>
+				<Fas :icon="faCaretDown" corner />
+				<Combo v-model="I.locationPre" :list="listLocation" align="center" drop-align="left" @update:model-value="atFetch()" />
+			</p-part>
 
 			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas :icon="faSync" /></p-part>
 		</Topbar>
@@ -15,7 +19,7 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
-	import { faSync } from '@fortawesome/free-solid-svg-icons';
+	import { faSync, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 	import { Tab } from '../lib/TabAdmin.js';
 
@@ -53,9 +57,11 @@
 
 		stateFetch.value = 1;
 		try {
-			info.iids = await IA.value.getLocalUgoira(false);
+			info.iids = await IA.value.getLocalUgoiraList(info.locationPre, false);
+			info.illustsNow = info.iids.length ? await IA.value.getLocalIllustInfos(info.iids) : [];
 
-			info.illustsNow = info.iids.length ? await IA.value.getLocalIllusts(info.iids) : [];
+
+			info.location = info.locationPre;
 
 			stateFetch.value = 2;
 
@@ -81,6 +87,10 @@
 		if(!tab.info.isInit) {
 			tab.info.isInit = true;
 
+			tab.info.location = 'new';
+
+			tab.info.locationPre = 'new';
+
 
 			atFetch();
 		}
@@ -88,6 +98,12 @@
 
 	const nextPager = ref(null);
 	onActivated(() => nextPager.value?.focus());
+
+
+	const listLocation = [
+		{ text: '未检视', value: 'new' },
+		{ text: '已保存', value: 'saved' },
+	];
 </script>
 
 <style lang="sass" scoped>
