@@ -57,8 +57,8 @@
 
 		stateFetch.value = 1;
 		try {
-			info.iids = await IA.value.getLocalUgoiraIDs(info.locationPre, false);
-			info.illustsNow = info.iids.length ? await IA.value.getLocalIllustInfos(info.iids) : [];
+			info.iids = await IA.value.getLocalUgoiraIIDs(info.locationPre, false);
+			info.illustsNow = info.iids.length ? await IA.value.getLocalIllusts(info.iids) : [];
 
 
 			info.location = info.locationPre;
