@@ -11,5 +11,5 @@ export const method = 'post';
 export const handle = ({ file }) => {
 	AS(file, `无效~[文件]~{${file}}`);
 
-	return Trash(resolve(C.dir.illustSave, file));
+	return Trash(resolve(C.dir.illustPrepare, file));
 };

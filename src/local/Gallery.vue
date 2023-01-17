@@ -71,7 +71,7 @@
 		try {
 			const file = fileNow.value;
 
-			info.files = await IA.value.getLocalGallery(false);
+			info.files = await IA.value.getLocalIllustFiles('prepare', false);
 
 			const indexNew = info.files.indexOf(file);
 			info.indexNow = indexNew == -1 ? 0 : indexNew;
@@ -121,13 +121,13 @@
 	const keepFile = () => {
 		const info = I.value;
 
-		IA.value.keepFile(fileNow.value, 'illustArch');
+		IA.value.keepFile(fileNow.value, 'illustArchive');
 
 		const length = info.files.length;
 		info.indexNow = (length + (info.indexNow + 1) % length) % length;
 	};
 	const copyFile2 = () => {
-		IA.value.keepFile(fileNow.value, 'illustArch2', true);
+		IA.value.keepFile(fileNow.value, 'illustManual', true);
 	};
 	const deleteFile = () => {
 		const info = I.value;
@@ -188,9 +188,9 @@
 			{
 				label: '⚙️ 修改保存路径',
 				fn: async () => {
-					const dirIllustArch = await $get('local/illust/getDirIllustArch');
-					const dirIllustArchNew = prompt('修改作品保存路径', dirIllustArch);
-					await $post('local/illust/changeDirIllustArch', { path: dirIllustArchNew });
+					const dirIllustArchive = await $get('local/illust/getDirIllustArch');
+					const dirIllustArchiveNew = prompt('修改作品保存路径', dirIllustArchive);
+					await $post('local/illust/changeDirIllustArch', { path: dirIllustArchiveNew });
 					$alert('修改作品保存路径成功');
 				}
 			},

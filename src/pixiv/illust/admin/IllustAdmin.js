@@ -108,21 +108,14 @@ class IllustAdmin {
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 
-
-	async getLocalGallery(isWatch = true) {
-		const illusts = await this.$get('local/illust/list-new', { who: this.who }) ?? [];
-
-		return isWatch ? this.watch(illusts) : illusts;
-	}
-	async getLocalGallerySaved(isWatch = true) {
-		const illusts = await this.$get('local/illust/list-saved', { who: this.who }) ?? [];
+	async getLocalIllustFiles(location, isWatch = true) {
+		const illusts = await this.$get('local/illust/files', { who: this.who, location }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
 
-
-	async getLocalUgoiraList(location, isWatch = true) {
-		const illusts = await this.$get('local/ugoira/list', { who: this.who, location }) ?? [];
+	async getLocalUgoiraIDs(location, isWatch = true) {
+		const illusts = await this.$get('local/ugoira/ids', { who: this.who, location }) ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
@@ -130,7 +123,7 @@ class IllustAdmin {
 
 	async keepUgoira(iid) { return this.$post('local/ugoira/keep', { who: this.who, iid }); }
 	async deleteUgoira(iid) { return this.$post('local/ugoira/delete', { who: this.who, iid }); }
-	async keepFile(file, type = 'illustArch', isCopy) { return this.$post('local/illust/keep', { who: this.who, file, type, isCopy }); }
+	async keepFile(file, type = 'illustArchive', isCopy) { return this.$post('local/illust/keep', { who: this.who, file, type, isCopy }); }
 	async deleteFile(file) { return this.$post('local/illust/delete', { who: this.who, file }); }
 	async deleteFileBatch(files) { return this.$post('local/illust/delete-batch', { who: this.who, files }); }
 }

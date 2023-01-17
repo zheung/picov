@@ -14,7 +14,7 @@ export const handle = async (raw, ctx) => {
 	const { _profile: profile, time, token, size = '50', ext } = raw;
 
 
-	const fileThumb = resolve(C.dir.cacheThumb, `user-header-${token}-${size}${ext}`);
+	const fileThumb = resolve(C.dir.cacheIllustThumb, `user-header-${token}-${size}${ext}`);
 
 	if(existsSync(fileThumb)) {
 		ctx.type = ext;

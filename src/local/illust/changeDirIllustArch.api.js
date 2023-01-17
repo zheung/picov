@@ -9,11 +9,11 @@ export const handle = ({ path }) => {
 	AS(path, `无效~[路径]~{${path}}`);
 
 	C.$.edit('dir', paths => {
-		paths._illustArch = path.replace(/\\/g, '/');
+		paths._illustArchive = path.replace(/\\/g, '/');
 
 		return paths;
 	});
 
 
-	return C.dir.illustArch;
+	return C.dir.illustArchive;
 };

@@ -12,5 +12,5 @@ export const handle = ({ iid }) => {
 	AS(~~iid, `无效~[IID]~{${iid}}`);
 
 
-	return Trash(resolve(C.dir.ugoiraNew, `ugoira-${iid}.zip`));
+	return Trash(resolve(C.dir.ugoiraPrepare, `ugoira-${iid}.zip`));
 };

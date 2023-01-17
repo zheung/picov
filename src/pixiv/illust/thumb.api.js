@@ -16,7 +16,7 @@ export const handle = async (raw, ctx) => {
 
 	const typeThumb = !master ? 'master' : 'square';
 
-	const fileThumb = resolve(C.dir.cacheThumb, `thumb-${typeThumb}-${iid}.jpg`);
+	const fileThumb = resolve(C.dir.cacheIllustThumb, `thumb-${typeThumb}-${iid}.jpg`);
 
 	if(existsSync(fileThumb)) {
 		ctx.set('Cache-Control', 'max-age=3600');

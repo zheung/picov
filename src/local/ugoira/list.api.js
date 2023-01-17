@@ -7,17 +7,17 @@ import { readdirSync } from 'fs';
 
 export const method = 'get';
 export const handle = ({ location }) => {
-	const dir = location == 'new'
-		? C.dir.ugoiraNew
-		: location == 'saved'
-			? C.dir.ugoiraSaved
+	const dirUgoira = location == 'prepare'
+		? C.dir.ugoiraPrepare
+		: location == 'archive'
+			? C.dir.ugoiraArchive
 			: undefined;
 
 
-	AS(dir, `无效~[位置]~{${location}}`);
+	AS(dirUgoira, `无效~[位置]~{${location}}`);
 
 
-	return readdirSync(dir, 'utf8')
+	return readdirSync(dirUgoira, 'utf8')
 		.map(name => ~~name.match(/^ugoira-(\d+)\./)?.[1])
 		.filter(i => i);
 };

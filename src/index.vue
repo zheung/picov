@@ -27,7 +27,7 @@
 			<p-button v-tip.right="'【本地】幻灯片'" @click="atOpenLocalSlider">
 				<Fas :icon="faImages" />
 			</p-button>
-			<p-button v-tip.right="'【本地】新动画'" @click="atOpenLocalUgoiraNew">
+			<p-button v-tip.right="'【本地】新动画'" @click="atOpenLocalUgoiraPrepare">
 				<Fas :icon="faVideo" />
 			</p-button>
 			<p-button ref="domButtonBookmark">
@@ -133,7 +133,7 @@
 
 
 	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', faHdd, 'local-gallery|once', 'local-Gallery');
-	const atOpenLocalUgoiraNew = () => TA.value.addIcon('【本地】新动画', faVideo, 'local-ugoira|once', 'local-Ugoira');
+	const atOpenLocalUgoiraPrepare = () => TA.value.addIcon('【本地】新动画', faVideo, 'local-ugoira|once', 'local-Ugoira');
 	const atOpenLocalSlider = () => TA.value.addIcon('【本地】幻灯片', faImages, 'local-slider|once', 'local-Slider');
 
 	const menuTab = {

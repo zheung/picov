@@ -57,7 +57,7 @@
 
 		stateFetch.value = 1;
 		try {
-			info.iids = await IA.value.getLocalUgoiraList(info.locationPre, false);
+			info.iids = await IA.value.getLocalUgoiraIDs(info.locationPre, false);
 			info.illustsNow = info.iids.length ? await IA.value.getLocalIllustInfos(info.iids) : [];
 
 
@@ -87,9 +87,9 @@
 		if(!tab.info.isInit) {
 			tab.info.isInit = true;
 
-			tab.info.location = 'new';
+			tab.info.location = 'prepare';
 
-			tab.info.locationPre = 'new';
+			tab.info.locationPre = 'prepare';
 
 
 			atFetch();
@@ -101,8 +101,8 @@
 
 
 	const listLocation = [
-		{ text: '未检视', value: 'new' },
-		{ text: '已保存', value: 'saved' },
+		{ text: '预备', value: 'prepare' },
+		{ text: '存档', value: 'archive' },
 	];
 </script>
 

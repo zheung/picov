@@ -47,28 +47,28 @@
 		menuList: [
 			{
 				label: '✔ 保留并关闭',
-				hidden: () => I.value.isSaved,
+				hidden: () => I.value.isArchive,
 				fn: () => { IA.value.keepUgoira(I.value.illust.iid); TA.value.del(now.value); }
 			},
 			{
 				label: '✖ 删除并关闭',
-				hidden: () => I.value.isSaved,
+				hidden: () => I.value.isArchive,
 				fn: () => { IA.value.deleteUgoira(I.value.illust.iid); TA.value.del(now.value); }
 			},
 			{
 				label: '🚪 关闭',
-				hidden: () => !I.value.isSaved,
+				hidden: () => !I.value.isArchive,
 				fn: () => TA.value.del(now.value)
 			},
-			{ line: true, hidden: () => I.value.isSaved },
+			{ line: true, hidden: () => I.value.isArchive },
 			{
 				label: '✔ 保留',
-				hidden: () => I.value.isSaved,
+				hidden: () => I.value.isArchive,
 				fn: () => IA.value.keepUgoira(I.value.illust.iid)
 			},
 			{
 				label: '✖ 删除',
-				hidden: () => I.value.isSaved,
+				hidden: () => I.value.isArchive,
 				fn: () => IA.value.deleteUgoira(I.value.illust.iid)
 			},
 
@@ -210,11 +210,11 @@
 
 		let zipBuffer;
 		try {
-			zipBuffer = await $get(`ugoira-new/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			zipBuffer = await $get(`ugoira-prepare/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 		}
 		catch(error) {
-			zipBuffer = await $get(`ugoira-saved/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
-			info.isSaved = true;
+			zipBuffer = await $get(`ugoira-archive/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			info.isArchive = true;
 		}
 
 
@@ -337,7 +337,7 @@
 				if(!tab.info.isInit) {
 					tab.info.isInit = true;
 					info.illust = illustNew;
-					info.isSaved = false;
+					info.isArchive = false;
 
 					info.frames = JSON.parse(JSON.stringify(IA.value.state[illustNew.iid]?.files));
 

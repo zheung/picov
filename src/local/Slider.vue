@@ -66,7 +66,7 @@
 		try {
 			const file = fileNow.value;
 
-			info.files = await IA.value.getLocalGallerySaved(false);
+			info.files = await IA.value.getLocalIllustFiles('archive', false);
 
 			const indexNew = info.files.indexOf(file);
 			info.indexNow = indexNew == -1 ? 0 : indexNew;

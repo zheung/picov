@@ -12,7 +12,7 @@ export const handle = ({ file }, ctx) => {
 	AS(file, `未指定~[文件]~{${file}}`);
 
 
-	const path = resolve(C.dir.illustArch, file);
+	const path = resolve(C.dir.illustArchive, file);
 
 	ctx.type = parse(path).ext;
 	ctx.set('Cache-Control', 'max-age=3600');

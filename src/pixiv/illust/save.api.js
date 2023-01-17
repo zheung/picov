@@ -91,7 +91,7 @@ const fetch = async (infoFetch, pid, logger, cookie) => {
 		.on('error', error => { throw error; });
 
 	const nameFile = infoFetch.name ?? parse(infoFetch.url).base;
-	const tempPath = resolve(C.dir.cacheLarge, nameFile);
+	const tempPath = resolve(C.dir.cacheIllust, nameFile);
 
 	removeSync(tempPath);
 
@@ -174,7 +174,7 @@ export const handle = async (illust, who, force) => {
 	const { iid, count, type } = illust;
 
 
-	G.info('保存', `~[动画]~{${iid}}`, `~[类型]~{${type}} ~[数量]~{${count}} ~[强制]~{${force}}`);
+	G.info('保存', `~[作品]~{${iid}}`, `~[类型]~{${type}} ~[数量]~{${count}} ~[强制]~{${force}}`);
 
 
 	const db = await DB.pick();
@@ -227,7 +227,7 @@ export const handle = async (illust, who, force) => {
 		if(type == 2) {
 			const meta = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/ugoira_meta`, profile.cookie);
 
-			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.dir.ugoiraNew, name: `ugoira-${iid}.zip` });
+			infosFetch.push({ iid, url: meta.body.originalSrc, dir: C.dir.ugoiraPrepare, name: `ugoira-${iid}.zip` });
 
 			await insertFiles(db, meta.body.frames.map(frame => ({ illust: iid, name: frame.file, delay: frame.delay })));
 
@@ -236,7 +236,7 @@ export const handle = async (illust, who, force) => {
 		else {
 			const pages = await getJSON(`https://www.pixiv.net/ajax/illust/${iid}/pages`, profile.cookie);
 
-			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: C.dir.illustSave }));
+			pages.body.forEach(page => infosFetch.push({ iid, url: page.urls.original, dir: C.dir.illustPrepare }));
 
 			await insertFiles(db, infosFetch.map(infoFetch => ({ illust: iid, name: parse(infoFetch.url).base, delay: null })));
 

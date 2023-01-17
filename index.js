@@ -13,8 +13,8 @@ import readRoute from '@nuogz/desire-route';
 import initMareParseProfile from './lib/mare/parseProfile.mare.js';
 
 
-ensureDirSync(C.dir.cacheThumb);
-ensureDirSync(C.dir.cacheLarge);
+ensureDirSync(C.dir.cacheIllustThumb);
+ensureDirSync(C.dir.cacheIllust);
 
 
 

@@ -14,7 +14,7 @@ export const handle = ({ file, type, isCopy }) => {
 
 
 	(isCopy ? copySync : moveSync)(
-		resolve(C.dir.illustSave, file),
+		resolve(C.dir.illustPrepare, file),
 		resolve(C.dir[type], file),
 	);
 };
