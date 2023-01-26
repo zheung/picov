@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "6.3.1",
+	"version": "6.4.0",
 	"description": "",
 	"author": "Nuogz",
 	"license": "LGPL-3.0-or-later",
@@ -34,7 +34,7 @@
 		"@nuogz/desire-route": "^2.1.0",
 		"@nuogz/pangu": "^3.1.2",
 		"@nuogz/postgresql": "^1.0.1",
-		"axios": "^1.2.2",
+		"axios": "^1.2.5",
 		"bluebird": "^3.7.2",
 		"fs-extra": "^11.1.0",
 		"https-proxy-agent": "^5.0.1",
@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.2.1",
 		"@fortawesome/free-solid-svg-icons": "^6.2.1",
-		"@fortawesome/vue-fontawesome": "^3.0.2",
+		"@fortawesome/vue-fontawesome": "^3.0.3",
 		"@howdyjs/mouse-menu": "^2.0.5",
 		"@nuogz/aegis": "^1.2.0",
 		"@nuogz/css-var": "^2.0.3",

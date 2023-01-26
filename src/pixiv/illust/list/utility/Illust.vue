@@ -1,8 +1,11 @@
 <template>
 	<p-illust
+		ref="elIllust"
 		v-menu="{ params: illust, ...menuIllust }"
 		:title="title"
+		:data-index="props.illustIndex"
 		:style="{ backgroundImage }"
+
 		:tabindex="tabIndex"
 		@click.exact="onClick(illust)"
 		@click.ctrl="IA.save(illust, true)"
@@ -19,16 +22,16 @@
 			:multi="brop(illust.count > 1)"
 			:ugoira="brop(illust.type == 2)"
 		>
-			{{illust.count > 1 ? `(${illust.count})` : ''}} {{props.illust.typeAI == 2 ? '[AI]' : ''}} {{illust.title}}
+			{{ illust.count > 1 ? `(${illust.count})` : '' }} {{ props.illust.typeAI == 2 ? '[AI]' : '' }} {{ illust.title }}
 		</p-title>
 
-		<p-state v-if="IA.state[illust.iid]?.L" :title="IA.state[illust.iid]?.L">{{IA.state[illust.iid]?.L}}</p-state>
-		<p-state v-if="IA.state[illust.iid]?.R" right :title="IA.state[illust.iid]?.R">{{IA.state[illust.iid]?.R}}</p-state>
+		<p-state v-if="IA.state[illust.iid]?.L" :title="IA.state[illust.iid]?.L">{{ IA.state[illust.iid]?.L }}</p-state>
+		<p-state v-if="IA.state[illust.iid]?.R" right :title="IA.state[illust.iid]?.R">{{ IA.state[illust.iid]?.R }}</p-state>
 	</p-illust>
 </template>
 
 <script setup>
-	import { computed, inject } from 'vue';
+	import { computed, inject, onMounted, ref } from 'vue';
 
 	import { faUserEdit, faVideo } from '@fortawesome/free-solid-svg-icons';
 	import Clipboard from 'clipboard';
@@ -37,17 +40,25 @@
 
 	const props = defineProps({
 		illust: { type: Object, default: () => ({}) },
-		tabIndex: { type: [Number], default: null },
+		illustIndex: { type: Number, default: null },
+		tabIndex: { type: Number, default: null },
 	});
 
 
-	/** @type {import('vue').Ref<import('../../admin/TabAdmin.js').default>} */
+	/** @type {import('vue').Ref<import('../../../../lib/TabAdmin.js').default>} */
 	const TA = inject('tabAdmin');
 	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
+	/** @type {import('vue').Ref<import('../../admin/SeenAdmin.js').default>} */
+	const SA = inject('seenAdmin');
 
 
-	const backgroundImage = computed(() => `url(${props.illust.urlThumb})`);
+	const backgroundImage = computed(() => {
+		if(!props.illust.urlThumb || !props.illust.isSeen) { return; }
+
+		return `url(${props.illust.urlThumb})`;
+	});
+
 
 	const textAI = computed(() =>
 		props.illust.typeAI > 2
@@ -67,9 +78,7 @@
 	`.replace(/\t/g, '').trim());
 
 
-	const isFetched = (illust) => {
-		return IA.value.state[illust.iid]?.fetch == 1;
-	};
+	const isFetched = (illust) => IA.value.state[illust.iid]?.fetch == 1;
 
 	const atPlay = illust => TA.value.addIcon(`【动画】${illust.iid}`, faVideo, 'ugoira', 'pixiv-illust-view-Ugoira', illust);
 	const atOpen = async illust => {
@@ -146,13 +155,21 @@
 			},
 		]
 	};
+
+
+	const elIllust = ref();
+	onMounted(() => SA.value.observe(props.illust, elIllust.value));
+
+
+	const emit = defineEmits(['mounted']);
+	onMounted(() => emit('mounted', elIllust.value, props.illust, props.illustIndex));
 </script>
 
 <style lang="sass" scoped>
 p-illust
 	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover text-center cursor-pointer
 
-	scroll-snap-align: center
+	scroll-snap-align: start
 
 	transition-property: all
 	transition-duration: 0.4s
