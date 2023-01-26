@@ -21,6 +21,9 @@
 
 	import { faSync, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
+
+	import { Combo } from '@nuogz/vue-components';
+
 	import { Tab } from '../lib/TabAdmin.js';
 
 
@@ -59,6 +62,7 @@
 		try {
 			info.iids = await IA.value.getLocalUgoiraIIDs(info.locationPre, false);
 			info.illustsNow = info.iids.length ? await IA.value.getLocalIllusts(info.iids) : [];
+			info.illustsNow.sort((a, b) => b.iid - a.iid);
 
 
 			info.location = info.locationPre;
@@ -107,4 +111,6 @@
 </script>
 
 <style lang="sass" scoped>
+[_mode]
+	@apply w-24
 </style>

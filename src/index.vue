@@ -5,7 +5,7 @@
 			<template v-for="name of namesProfile" :key="`profiles-${name}`">
 				<p-profile-name :now="brop(who == name)" @click="changeProfile(name)">
 					<Fas corn :icon="who == name ? faUserCheck : faUser" />
-					{{name}}
+					{{ name }}
 				</p-profile-name>
 			</template>
 		</p-profiles>
@@ -27,13 +27,13 @@
 			<p-button v-tip.right="'【本地】幻灯片'" @click="atOpenLocalSlider">
 				<Fas :icon="faImages" />
 			</p-button>
-			<p-button v-tip.right="'【本地】新动画'" @click="atOpenLocalUgoiraPrepare">
+			<p-button v-tip.right="'【本地】动画库'" @click="atOpenLocalUgoiraPrepare">
 				<Fas :icon="faVideo" />
 			</p-button>
 			<p-button ref="domButtonBookmark">
 				<Fas :icon="faBookmark" />
 			</p-button>
-			<p-button ref="domButtonProfile" tabindex="1" profile>{{profile?.name?.[0] ?? ''}}</p-button>
+			<p-button ref="domButtonProfile" tabindex="1" profile>{{ profile?.name?.[0] ?? '' }}</p-button>
 		</p-menus>
 
 		<p-bookmarks ref="domBookmarks">
@@ -42,12 +42,12 @@
 					:now="brop(kindBookmarkNow == kind)"
 					@click="kindBookmarkNow = kind"
 				>
-					{{kind}}
+					{{ kind }}
 				</p-bookmark-kind>
 			</template>
 			<template v-for="bookmark of bookmarksNow" :key="`bookmark-${bookmark[0]}`">
 				<p-bookmark :title="bookmark[1]" @click="atSearch(bookmark[1])">
-					{{bookmark[0]}}
+					{{ bookmark[0]}}
 				</p-bookmark>
 			</template>
 		</p-bookmarks>
@@ -57,7 +57,7 @@
 			<template v-if="!tab.isHidden">
 				<p-button
 					v-tip.right="tab.title"
-					v-menu="{ params: tab, ...menuTab, disabled: ()=>tab.typeList == 'follow' }"
+					v-menu="{ params: tab, ...menuTab, disabled: () => tab.typeList == 'follow' }"
 					:now="brop(TA.now === tab)"
 					:tabindex="100 + index"
 					@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
@@ -133,7 +133,7 @@
 
 
 	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', faHdd, 'local-gallery|once', 'local-Gallery');
-	const atOpenLocalUgoiraPrepare = () => TA.value.addIcon('【本地】新动画', faVideo, 'local-ugoira|once', 'local-Ugoira');
+	const atOpenLocalUgoiraPrepare = () => TA.value.addIcon('【本地】动画库', faVideo, 'local-ugoira|once', 'local-Ugoira');
 	const atOpenLocalSlider = () => TA.value.addIcon('【本地】幻灯片', faImages, 'local-slider|once', 'local-Slider');
 
 	const menuTab = {

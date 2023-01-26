@@ -213,10 +213,10 @@
 
 		let zipBuffer;
 		try {
-			zipBuffer = await $get(`ugoira/prepare/${who}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			zipBuffer = await $get(`ugoira/prepare/${who.value}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 		}
 		catch(error) {
-			zipBuffer = await $get(`ugoira/archive/${who}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+			zipBuffer = await $get(`ugoira/archive/${who.value}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 
 			info.isArchive = true;
 		}

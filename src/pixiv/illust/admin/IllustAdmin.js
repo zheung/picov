@@ -61,7 +61,7 @@ class IllustAdmin {
 	count(illusts) {
 		const state = this.state;
 
-		const countAll = illusts.reduce((acc, illust) => acc + illust.count, 0);
+		const countAll = illusts.reduce((acc, illust) => acc + ~~illust.count, 0);
 
 		const iids = illusts.map(i => i.iid);
 		const states = iids.map(iid => state[iid]).filter(i => i);

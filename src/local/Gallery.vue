@@ -180,7 +180,7 @@
 			},
 			{ line: true },
 			{
-				label: '✔ 复制到【安全】',
+				label: '✔ 复制到【手动保存】',
 				fn: copyFile2
 			},
 
