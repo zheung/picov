@@ -34,7 +34,7 @@ class StateAdmin {
 
 				pushs.push(wock);
 
-				const handleClose = (wockClose) => {
+				const handleClose = wockClose => {
 					if(wockClose !== wock) { return; }
 
 					const index = pushs.indexOf(wock);

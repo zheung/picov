@@ -73,10 +73,10 @@
 	);
 	const title = computed(() => `
 		${props.illust.iid}
-							● 标题：${props.illust.title}
-							● 作者：${props.illust.user}（${props.illust.uid}）
-							● 标签：${props.illust.tags.join('、')}
-							${textAI.value}
+								● 标题：${props.illust.title}
+								● 作者：${props.illust.user}（${props.illust.uid}）
+								● 标签：${props.illust.tags.join('、')}
+								${textAI.value}
 	`.replace(/\t/g, '').trim());
 
 
@@ -85,6 +85,7 @@
 	const atPlay = illust => TA.value.addIcon(`【动画】${illust.iid}`, faVideo, 'ugoira', 'pixiv-illust-view-Ugoira', illust);
 	const atOpen = async illust => {
 		const tabLocalGallery = Object.values(TA.value.map).find(tab => tab.typeList == 'local-gallery');
+		if(!tabLocalGallery) { return; }
 
 		await tabLocalGallery.info.atFetch();
 

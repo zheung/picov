@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
-
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { MouseMenuDirective } from '@howdyjs/mouse-menu';
+
+import './lib/day.js';
 
 
 import { brop } from '@nuogz/utility';
@@ -16,7 +16,6 @@ import App from './index.vue';
 
 
 
-
 const app = createApp(App);
 app.provide('app', app);
 
@@ -25,17 +24,13 @@ window.addEventListener('load', async () => {
 	app.mixin({ data() { return { brop }; } });
 
 	await installAlert(app);
-
 	aegis.alert = $alert;
-
-	app.component('Fas', FontAwesomeIcon);
 
 	app.directive('menu', MouseMenuDirective);
 
 	await installTippy(app);
 
 	await installWocker(app);
-
 
 	await installModuleLoader(app);
 

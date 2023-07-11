@@ -1,15 +1,15 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part><Icon v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part>本地动画</p-part>
 
 			<p-part v-tip.bottom="'位置'" panel input _mode>
-				<Fas :icon="faCaretDown" corner />
+				<Icon :icon="faCaretDown" corner />
 				<Combo v-model="I.locationPre" :list="listLocation" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
-			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Fas :icon="faSync" /></p-part>
+			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Icon :icon="faSync" /></p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -19,6 +19,7 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
+	import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 	import { faSync, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 

@@ -20,16 +20,14 @@ class IllustAdmin {
 	}
 
 	init() {
-		this.wock.add('updateIllustStates', states =>
+		this.wock.add('updateIllustStates', (wock, states) =>
 			states.forEach(state =>
 				this.state[state.iid] = Object.assign(this.state[state.iid] ?? {}, state)
 			)
 		);
 
-		this.wock.at('open', () => {
-			if(this.iids.size) {
-				this.wock.cast('pixiv/illust/watch', [...this.iids], this.who);
-			}
+		this.wock.add('$open', () => {
+			if(this.iids.size) { this.wock.cast('pixiv/illust/watch', [...this.iids], this.who); }
 		});
 
 		return this;

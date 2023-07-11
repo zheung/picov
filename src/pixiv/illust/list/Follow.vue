@@ -1,28 +1,28 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part><Icon v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part>我的关注</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="6" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
-				<Fas :icon="faAngleDoubleRight" />
+				<Icon :icon="faAngleDoubleRight" />
 			</p-part>
 
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
-				<Fas :icon="faBookOpen" corner />
+				<Icon :icon="faBookOpen" corner />
 				<input v-model="I.pagePre" tabindex="5" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="4" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
-				<Fas :icon="faAngleDoubleLeft" />
+				<Icon :icon="faAngleDoubleLeft" />
 			</p-part>
 
 			<p-part v-tip.bottom="'全部下载'" tabindex="3" panel right @click="IA.saveAll(I.illustsNow)" @keydown.enter.space="IA.saveAll(I.illustsNow)">
-				<Fas :icon="faDownload" />
+				<Icon :icon="faDownload" />
 			</p-part>
 
-			<p-part v-if="I.illustsNow.length" right><Fas :icon="faSave" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right><Icon :icon="faSave" /> {{ counter }}</p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -32,6 +32,7 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
+	import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 	import { faAngleDoubleRight, faAngleDoubleLeft, faDownload, faSave, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 
 	import { Tab } from '../../../lib/TabAdmin.js';

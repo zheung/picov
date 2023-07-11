@@ -4,7 +4,7 @@
 		<p-profiles ref="domProfiles">
 			<template v-for="name of namesProfile" :key="`profiles-${name}`">
 				<p-profile-name :now="brop(who == name)" @click="changeProfile(name)">
-					<Fas corn :icon="who == name ? faUserCheck : faUser" />
+					<Icon corn :icon="who == name ? faUserCheck : faUser" />
 					{{ name }}
 				</p-profile-name>
 			</template>
@@ -12,42 +12,39 @@
 
 
 		<p-button v-tip.right="'搜索栏'" expand keyword>
-			<Fas corn :icon="faSearch" @click="atSearch(keyword)" />
+			<Icon corn :icon="faSearch" @click="atSearch(keyword)" />
 			<input v-model="keyword" tabindex="2" type="text" @keydown.enter.exact="atSearch(keyword)" @keydown.enter.shift="atSearch(keyword, true)" />
 		</p-button>
 
 
 		<p-button ref="domButtonMenu">
-			<Fas :icon="faStream" />
+			<Icon :icon="faStream" />
 		</p-button>
 		<p-menus ref="domMenus">
 			<p-button v-tip.right="'【本地】新图库'" @click="atOpenLocalGallery">
-				<Fas :icon="faHdd" />
+				<Icon :icon="faHdd" />
 			</p-button>
 			<p-button v-tip.right="'【本地】幻灯片'" @click="atOpenLocalSlider">
-				<Fas :icon="faImages" />
+				<Icon :icon="faImages" />
 			</p-button>
 			<p-button v-tip.right="'【本地】动画库'" @click="atOpenLocalUgoiraPrepare">
-				<Fas :icon="faVideo" />
+				<Icon :icon="faVideo" />
 			</p-button>
 			<p-button ref="domButtonBookmark">
-				<Fas :icon="faBookmark" />
+				<Icon :icon="faBookmark" />
 			</p-button>
 			<p-button ref="domButtonProfile" tabindex="1" profile>{{ profile?.name?.[0] ?? '' }}</p-button>
 		</p-menus>
 
 		<p-bookmarks ref="domBookmarks">
 			<template v-for="(bookmark, kind) of profile.bookmark" :key="`bookmark-kind-${kind}`">
-				<p-bookmark-kind
-					:now="brop(kindBookmarkNow == kind)"
-					@click="kindBookmarkNow = kind"
-				>
+				<p-bookmark-kind :now="brop(kindBookmarkNow == kind)" @click="kindBookmarkNow = kind">
 					{{ kind }}
 				</p-bookmark-kind>
 			</template>
 			<template v-for="bookmark of bookmarksNow" :key="`bookmark-${bookmark[0]}`">
 				<p-bookmark :title="bookmark[1]" @click="atSearch(bookmark[1])">
-					{{ bookmark[0]}}
+					{{ bookmark[0] }}
 				</p-bookmark>
 			</template>
 		</p-bookmarks>
@@ -55,18 +52,16 @@
 
 		<template v-for="(tab, index) of TA.list" :key="`tab-${tab?.id}`">
 			<template v-if="!tab.isHidden">
-				<p-button
-					v-tip.right="tab.title"
+				<p-button v-tip.right="tab.title"
 					v-menu="{ params: tab, ...menuTab, disabled: () => tab.typeList == 'follow' }"
-					:now="brop(TA.now === tab)"
-					:tabindex="100 + index"
-					@click="TA.change(tab)" @keydown.enter.space="TA.change(tab)"
+					:now="brop(TA.now === tab)" :tabindex="100 + index" @click="TA.change(tab)"
+					@keydown.enter.space="TA.change(tab)"
 				>
 					<template v-if="tab.typeTab == 'icon'">
-						<Fas :icon="tab.icon" />
+						<Icon :icon="tab.icon" />
 					</template>
 					<template v-if="tab.typeTab == 'header'">
-						<Fas corn :icon="tab.icon" />
+						<Icon corn :icon="tab.icon" />
 						<p-header :style="{ backgroundImage: `url(${tab.header})` }" />
 					</template>
 				</p-button>
@@ -85,6 +80,7 @@
 <script setup>
 	import { ref, onBeforeMount, provide, computed, onMounted, inject, watch } from 'vue';
 
+	import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 	import { faUser, faUserCheck, faSearch, faHome, faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
 	import { faStream, faHdd, faImages, faVideo, faBookmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -170,7 +166,7 @@
 	const changeProfile = async name => location.reload(void await updateProfile(cookies.who = name));
 
 	const namesProfile = ref([]);
-	const atReady = async () => {
+	const atWockOpen = async () => {
 		let who = cookies.who;
 
 		namesProfile.value = await $get('picov/profile/list') ?? [];
@@ -182,7 +178,7 @@
 		TA.value.addIcon('我的关注', faHome, 'follow', 'pixiv-illust-list-Follow');
 	};
 
-	onBeforeMount(async () => $wock.at('open', atReady, true));
+	onBeforeMount(async () => $wock.add('$open', atWockOpen, true));
 
 
 	const keyword = ref('');

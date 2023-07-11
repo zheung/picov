@@ -1,6 +1,6 @@
 {
 	"name": "picov",
-	"version": "6.6.0",
+	"version": "6.6.1",
 	"description": "",
 	"author": "DanoR",
 	"license": "LGPL-3.0-or-later",
@@ -32,7 +32,7 @@
 	"dependencies": {
 		"@nuogz/desire": "^6.0.5",
 		"@nuogz/desire-harbour": "^6.1.1",
-		"@nuogz/desire-route": "^2.3.0",
+		"@nuogz/desire-route": "^2.3.1",
 		"@nuogz/pangu": "^4.1.0",
 		"@nuogz/postgresql": "^1.1.4",
 		"axios": "^1.4.0",
@@ -48,24 +48,25 @@
 		"@fortawesome/vue-fontawesome": "^3.0.3",
 		"@howdyjs/mouse-menu": "^2.0.8",
 		"@nuogz/aegis": "^1.4.2",
-		"@nuogz/css-var": "^2.0.3",
+		"@nuogz/css-var": "^3.0.0",
 		"@nuogz/utility": "^1.7.1",
 		"@nuogz/vue-alert": "^1.2.1",
 		"@nuogz/vue-components": "^1.10.0",
 		"@nuogz/vue-tip": "^1.1.0",
-		"@nuogz/wock-client": "^2.0.7",
+		"@nuogz/wock-client": "^3.1.2",
 		"@types/fs-extra": "^11.0.1",
 		"@vitejs/plugin-vue": "^4.2.3",
 		"autoprefixer": "^10.4.14",
 		"clipboard": "^2.0.11",
 		"eslint": "^8.44.0",
 		"eslint-plugin-vue": "^9.15.1",
-		"fflate": "^0.7.4",
+		"fflate": "^0.8.0",
 		"postcss": "^8.4.25",
 		"sass": "^1.63.6",
 		"tailwindcss": "^3.3.2",
 		"tippy.js": "^6.3.7",
 		"vite": "^4.4.2",
-		"vue": "^3.3.4"
+		"vue": "^3.3.4",
+		"vue-eslint-parser": "^9.3.1"
 	}
 }

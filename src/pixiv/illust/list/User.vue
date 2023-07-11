@@ -1,33 +1,33 @@
 <template>
 	<module class="overflow-x-hidden overflow-y-hidden">
 		<Topbar>
-			<p-part><Fas v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
+			<p-part><Icon v-if="stateFetchIcon[stateFetch]" :icon="stateFetchIcon[stateFetch]" :spin="stateFetch == 1" /> </p-part>
 			<p-part v-if="I.urlHeader" header :style="{ backgroundImage: `url(${I.urlHeader})` }" />
-			<p-part v-if="I.uid" :title="I.uid">作者（{{I.name ?? I.uid}}）</p-part>
+			<p-part v-if="I.uid" :title="I.uid">作者（{{ I.name ?? I.uid }}）</p-part>
 
 
 			<p-part ref="nextPager" v-tip.bottom="'下一页'" panel right tabindex="7" @click="atFetch(1)" @keydown.enter.space="atFetch(1)">
-				<Fas :icon="faAngleDoubleRight" />
+				<Icon :icon="faAngleDoubleRight" />
 			</p-part>
 
 			<p-part v-tip.bottom="'当前页'" panel right input _page>
-				<Fas :icon="faBookOpen" corner />
+				<Icon :icon="faBookOpen" corner />
 				<input v-model="I.pagePre" tabindex="6" type="text" @keydown.enter="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'上一页'" panel right tabindex="5" @click="atFetch(-1)" @keydown.enter.space="atFetch(-1)">
-				<Fas :icon="faAngleDoubleLeft" />
+				<Icon :icon="faAngleDoubleLeft" />
 			</p-part>
 
-			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)"><Fas :icon="faDownload" /></p-part>
+			<p-part v-tip.bottom="'全部下载'" panel right @click="IA.saveAll(I.illustsNow)"><Icon :icon="faDownload" /></p-part>
 
-			<p-part v-tip.bottom="'作者主页'" panel right @click="atOpen"><Fas :icon="faHomeUser" /></p-part>
+			<p-part v-tip.bottom="'作者主页'" panel right @click="atOpen"><Icon :icon="faHomeUser" /></p-part>
 
-			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atFollow"><Fas :icon="I.isFollowed ? faUserCheck : faUserPlus" /></p-part>
+			<p-part v-tip.bottom="I.isFollowed ? '已关注' : '未关注'" panel right @click="atFollow"><Icon :icon="I.isFollowed ? faUserCheck : faUserPlus" /></p-part>
 
-			<p-part v-if="I.illustsNow.length" right title="最大页数">({{pageMax}})</p-part>
-			<p-part v-if="I.illustsNow.length" right title="作品数"><Fas :icon="faPaintBrush" /> {{I.alls.length}}</p-part>
-			<p-part v-if="I.illustsNow.length" right title="已下载作品数 / 本页作品数"><Fas :icon="faSave" /> {{counter}}</p-part>
+			<p-part v-if="I.illustsNow.length" right title="最大页数">({{ pageMax }})</p-part>
+			<p-part v-if="I.illustsNow.length" right title="作品数"><Icon :icon="faPaintBrush" /> {{ I.alls.length }}</p-part>
+			<p-part v-if="I.illustsNow.length" right title="已下载作品数 / 本页作品数"><Icon :icon="faSave" /> {{ counter }}</p-part>
 		</Topbar>
 
 		<Illusts :illusts="I.illustsNow" @scroll="atScroll" />
@@ -37,6 +37,7 @@
 <script setup>
 	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
+	import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
 	import { faAngleDoubleRight, faAngleDoubleLeft, faDownload, faSave, faPaintBrush, faBookOpen, faHomeUser, faUserCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 	import { Tab } from '../../../lib/TabAdmin.js';
