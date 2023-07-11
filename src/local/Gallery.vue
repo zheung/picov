@@ -3,6 +3,7 @@
 		<canvas ref="domCanvas" v-menu="menuUgoira" tabindex="1" :grab="brop(isMouseDown)"
 			@keydown.exact="onKeyDown"
 			@wheel="onWheel"
+			@mousedown.middle.prevent.stop="searchAuthor(iidNow)"
 			@mousedown="onMouseDown"
 			@mouseup="onMouseUp"
 			@mousemove.exact="onMouseMove"

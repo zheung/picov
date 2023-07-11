@@ -7,6 +7,7 @@
 		:style="{ backgroundImage: isSeen ? backgroundImage : false }"
 		:safe-background="brop(isSafe)"
 		:tabindex="tabIndex"
+		@mousedown.middle.prevent.stop="openAuthor(illust)"
 		@click.exact="onClick(illust)"
 		@click.ctrl="IA.save(illust, true)"
 	>
@@ -73,10 +74,10 @@
 	);
 	const title = computed(() => `
 		${props.illust.iid}
-								● 标题：${props.illust.title}
-								● 作者：${props.illust.user}（${props.illust.uid}）
-								● 标签：${props.illust.tags.join('、')}
-								${textAI.value}
+										● 标题：${props.illust.title}
+										● 作者：${props.illust.user}（${props.illust.uid}）
+										● 标签：${props.illust.tags.join('、')}
+										${textAI.value}
 	`.replace(/\t/g, '').trim());
 
 
@@ -109,6 +110,8 @@
 	};
 
 
+	const openAuthor = illust => TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
+
 	const menuIllust = {
 		useLongPressInMobile: true,
 		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
@@ -132,7 +135,7 @@
 			{ line: true, hidden: illust => illust.type != 2 },
 			{
 				label: '📂 浏览作者 ...',
-				fn: illust => TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid),
+				fn: openAuthor,
 			},
 			{
 				label: '⏬ 强制下载',

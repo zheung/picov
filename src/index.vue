@@ -12,7 +12,7 @@
 
 
 		<p-button v-tip.right="'搜索栏'" expand keyword>
-			<Icon corn :icon="faSearch" @click="atSearch(keyword)" />
+			<Icon corn :icon="faSearch" @click="atSearch(keyword)" @mousedown.middle.prevent.stop="atSearch(keyword, true)" />
 			<input v-model="keyword" tabindex="2" type="text" @keydown.enter.exact="atSearch(keyword)" @keydown.enter.shift="atSearch(keyword, true)" />
 		</p-button>
 
