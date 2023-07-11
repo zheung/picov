@@ -23,27 +23,31 @@ ensureDirSync(C.dir.cacheIllust);
 const { folds, faces } = await readRoute(resolve(dirPackage, 'src'));
 
 
-new Desire({
+const desire = await new Desire({
 	name: '服务',
 	host: C.server.host,
 	port: C.server.port,
 
-	mare: {
-		before: ['parseRaw', initMareParseProfile],
-		after: ['toSuccess'],
+	/** @type {import('@nuogz/desire-harbour').HarbourOption} */
+	harbour: {
+		mare: {
+			before: ['parseRaw', initMareParseProfile],
+			after: ['toSuccess'],
+		},
+
+		facePrefix: '/api',
+
+		faces,
+		folds,
+
+		wock: {
+			disable: false,
+			route: 'wock',
+			ping: false,
+		},
 	},
 
-	facePrefix: '/api',
+	logger: { logger: G },
+});
 
-	faces,
-	folds,
-
-	locale: C.log?.locale,
-	logger: G,
-
-	wock: {
-		disable: false,
-		route: 'wock',
-		ping: false,
-	},
-}).start();
+desire.start();

@@ -5,7 +5,7 @@ import { parse, resolve } from 'path';
 
 
 export const method = 'get';
-export const parseResult = false;
+export const toSuccess = false;
 export const parseProfile = true;
 export const handle = ({ location, file, $profile: profile }, ctx) => {
 	AS(file, `未指定~[文件]~{${file}}`);

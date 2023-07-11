@@ -8,7 +8,7 @@ import { getBuffer } from '../get.lib.js';
 
 
 export const method = 'get';
-export const parseResult = false;
+export const toSuccess = false;
 export const parseProfile = true;
 export const handle = async ({ iid, time, type: typeIllust, master, $profile: profile }, ctx) => {
 	const typeThumb = !master ? 'master' : 'square';

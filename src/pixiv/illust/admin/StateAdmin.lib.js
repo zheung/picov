@@ -8,6 +8,10 @@ class StateAdmin {
 	#maps = {};
 	#push = {};
 
+	/**
+	 * @param {number[]} iids
+	 * @param {any} wock
+	 */
 	async watch(iids = [], wock) {
 		if(!iids?.length) { return; }
 
@@ -29,11 +33,18 @@ class StateAdmin {
 				const pushs = (this.#push[iid] ?? (this.#push[iid] = []));
 
 				pushs.push(wock);
-				wock.maresClose.push(() => {
+
+				const handleClose = (wockClose) => {
+					if(wockClose !== wock) { return; }
+
 					const index = pushs.indexOf(wock);
 
 					if(index > -1) { pushs.splice(index, 1); }
-				});
+
+					wock.wockman.del('$close', handleClose);
+				};
+
+				wock.wockman.add('$close', handleClose);
 			});
 
 

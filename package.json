@@ -1,8 +1,8 @@
 {
 	"name": "picov",
-	"version": "6.4.0",
+	"version": "6.6.0",
 	"description": "",
-	"author": "Nuogz",
+	"author": "DanoR",
 	"license": "LGPL-3.0-or-later",
 	"repository": {
 		"type": "git",
@@ -11,9 +11,9 @@
 	"private": true,
 	"type": "module",
 	"typesSource": [
+		"node",
 		"browser",
-		"vue",
-		"node-mixin"
+		"vue"
 	],
 	"engines": {
 		"node": ">=14.18.1"
@@ -30,41 +30,42 @@
 		"build": "vite build --force"
 	},
 	"dependencies": {
-		"@nuogz/desire": "^5.1.0",
-		"@nuogz/desire-route": "^2.1.0",
-		"@nuogz/pangu": "^3.1.2",
-		"@nuogz/postgresql": "^1.0.1",
-		"axios": "^1.2.5",
+		"@nuogz/desire": "^6.0.5",
+		"@nuogz/desire-harbour": "^6.1.1",
+		"@nuogz/desire-route": "^2.3.0",
+		"@nuogz/pangu": "^4.1.0",
+		"@nuogz/postgresql": "^1.1.4",
+		"axios": "^1.4.0",
 		"bluebird": "^3.7.2",
-		"fs-extra": "^11.1.0",
+		"dayjs": "^1.11.9",
+		"fs-extra": "^11.1.1",
 		"https-proxy-agent": "^5.0.1",
-		"trash": "^8.1.0"
+		"trash": "^8.1.1"
 	},
 	"devDependencies": {
-		"@fortawesome/fontawesome-svg-core": "^6.2.1",
-		"@fortawesome/free-solid-svg-icons": "^6.2.1",
+		"@fortawesome/fontawesome-svg-core": "^6.4.0",
+		"@fortawesome/free-solid-svg-icons": "^6.4.0",
 		"@fortawesome/vue-fontawesome": "^3.0.3",
-		"@howdyjs/mouse-menu": "^2.0.5",
-		"@nuogz/aegis": "^1.2.0",
+		"@howdyjs/mouse-menu": "^2.0.8",
+		"@nuogz/aegis": "^1.4.2",
 		"@nuogz/css-var": "^2.0.3",
-		"@nuogz/utility": "^1.5.1",
-		"@nuogz/vue-alert": "^1.1.5",
-		"@nuogz/vue-components": "^1.8.1",
-		"@nuogz/vue-tip": "^1.0.1",
+		"@nuogz/utility": "^1.7.1",
+		"@nuogz/vue-alert": "^1.2.1",
+		"@nuogz/vue-components": "^1.10.0",
+		"@nuogz/vue-tip": "^1.1.0",
 		"@nuogz/wock-client": "^2.0.7",
 		"@types/fs-extra": "^11.0.1",
-		"@vitejs/plugin-vue": "^4.0.0",
-		"autoprefixer": "^10.4.13",
+		"@vitejs/plugin-vue": "^4.2.3",
+		"autoprefixer": "^10.4.14",
 		"clipboard": "^2.0.11",
-		"eslint": "^8.32.0",
-		"eslint-plugin-vue": "^9.9.0",
+		"eslint": "^8.44.0",
+		"eslint-plugin-vue": "^9.15.1",
 		"fflate": "^0.7.4",
-		"moment": "^2.29.4",
-		"postcss": "^8.4.21",
-		"sass": "^1.57.1",
-		"tailwindcss": "^3.2.4",
+		"postcss": "^8.4.25",
+		"sass": "^1.63.6",
+		"tailwindcss": "^3.3.2",
 		"tippy.js": "^6.3.7",
-		"vite": "^4.0.4",
-		"vue": "^3.2.45"
+		"vite": "^4.4.2",
+		"vue": "^3.3.4"
 	}
 }

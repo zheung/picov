@@ -22,10 +22,16 @@ export default defineConfig({
 	root: resolve(dirPackage, 'src'),
 	base: './',
 	build: {
+		target: 'esnext',
 		outDir: resolve(dirPackage, 'dist'),
 		emptyOutDir: true,
 		chunkSizeWarningLimit: 1024,
 		minify: true
+	},
+	optimizeDeps: {
+		esbuildOptions: {
+			target: 'esnext'
+		}
 	},
 	publicDir: resolve(dirPackage, 'src', 'public'),
 	clearScreen: false,
@@ -46,6 +52,12 @@ export default defineConfig({
 				target: 'ws://127.0.0.1:14791/wock',
 				ws: true
 			},
+		},
+		watch: {
+			ignored: [
+				'**/*.{api,lib,map}.js',
+				'**/*.lib/**/*.js'
+			]
 		}
 	}
 });

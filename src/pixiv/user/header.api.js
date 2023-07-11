@@ -8,7 +8,7 @@ import { getBuffer } from '../get.lib.js';
 
 
 export const method = 'get';
-export const parseResult = false;
+export const toSuccess = false;
 export const parseProfile = true;
 export const handle = async ({ time, token, size = '50', ext, $profile: profile }, ctx) => {
 	const fileThumb = resolve(C.dir.cacheIllustThumb, `user-header-${token}-${size}${ext}`);

@@ -3,12 +3,12 @@ import { C } from '@nuogz/pangu';
 
 
 const maps = [
-	{ route: '/', path: '../dist' },
+	{ prefix: '/', location: '../dist' },
 ];
 
 Object.entries(C.profile).forEach(([id, profile]) => {
-	maps.push({ route: `/ugoira/prepare/${id}`, path: profile.dir.ugoiraPrepare });
-	maps.push({ route: `/ugoira/archive/${id}`, path: profile.dir.ugoiraArchive });
+	maps.push({ prefix: `/ugoira/prepare/${id}`, location: profile.dir.ugoiraPrepare });
+	maps.push({ prefix: `/ugoira/archive/${id}`, location: profile.dir.ugoiraArchive });
 });
 
 
