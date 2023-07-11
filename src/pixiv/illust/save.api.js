@@ -6,7 +6,7 @@ import { createWriteStream } from 'fs';
 import { parse, resolve } from 'path';
 
 import Bluebird from 'bluebird';
-import Moment from 'moment';
+import Day from 'dayjs';
 import { removeSync, moveSync } from 'fs-extra/esm';
 
 import { getJSON, getStream, head } from '../get.lib.js';
@@ -206,10 +206,10 @@ export const handle = async (illust, who, force) => {
 			count: info.pageCount,
 			comment: info.illustComment,
 			timeUpload: timeUpload1
-				? Moment(timeUpload1).format()
+				? Day(timeUpload1).format()
 				: timeUpload2
-					? Moment(timeUpload2, 'YYYY/MM/DD/HH/mm/ss').utcOffset(420).format()
-					: Moment(timeUpload3).format()
+					? Day(timeUpload2, 'YYYY/MM/DD/HH/mm/ss').utcOffset(420).format()
+					: Day(timeUpload3).format()
 		});
 
 		await updateUserInfo(db, {

@@ -99,7 +99,6 @@
 	import TabAdmin from './lib/TabAdmin.js';
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import UserAdmin from './pixiv/illust/admin/UserAdmin.js';
-	import SeenAdmin from './pixiv/illust/admin/SeenAdmin.js';
 
 
 
@@ -131,9 +130,6 @@
 
 	const UA = ref(new UserAdmin($wock, profile, $post).init());
 	provide('userAdmin', UA);
-
-	const SA = ref(new SeenAdmin());
-	provide('seenAdmin', SA);
 
 
 	const atOpenLocalGallery = () => TA.value.addIcon('【本地】新图库', faHdd, 'local-gallery|once', 'local-Gallery');

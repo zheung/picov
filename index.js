@@ -3,6 +3,8 @@ import { dirPackage, C, G } from '@nuogz/pangu';
 
 import './lib/db.js';
 
+import './src/lib/moment.js';
+
 import { resolve } from 'path';
 
 import { ensureDirSync } from 'fs-extra/esm';

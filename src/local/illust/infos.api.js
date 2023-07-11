@@ -1,12 +1,13 @@
 import AS from 'assert';
 
-import Moment from 'moment';
+import Day from 'dayjs';
 
 import { DB } from '../../../lib/db.js';
 import assignThumbURL from '../../pixiv/illust/list/utility/assignThumbURL.lib.js';
 
 import { handle as fetchIllust } from '../../pixiv/illust/list/illust.api.js';
 import { updateIllustInfo } from '../../pixiv/illust/save.api.js';
+
 
 
 export const method = 'get';
@@ -30,7 +31,7 @@ export const handle = async raw => {
 				uid: illust.user,
 				user: illust.nameLatest,
 				tags: illust.tags,
-				time: Moment(illust.timeUpload).utcOffset(540).format('YYYY/MM/DD/HH/mm/ss'),
+				time: Day(illust.timeUpload).utcOffset(540).format('YYYY/MM/DD/HH/mm/ss'),
 				type: illust.type,
 				count: illust.count
 			}));
@@ -48,7 +49,7 @@ export const handle = async raw => {
 					type: illustPixiv.type,
 					tags: illustPixiv.tags,
 					count: illustPixiv.count,
-					timeUpload: Moment(illustPixiv.time, 'YYYY/MM/DD/HH/mm/ss').utcOffset(420).format(),
+					timeUpload: Day(illustPixiv.time, 'YYYY/MM/DD/HH/mm/ss').utcOffset(420).format(),
 				});
 
 				result.find(illust => illust.iid = illustPixiv.iid).count = illustPixiv.count;

@@ -4,8 +4,8 @@
 		v-menu="{ params: illust, ...menuIllust }"
 		:title="title"
 		:data-index="props.illustIndex"
-		:style="{ backgroundImage }"
-
+		:style="{ backgroundImage: isSeen ? backgroundImage : false }"
+		:safe-background="brop(isSafe)"
 		:tabindex="tabIndex"
 		@click.exact="onClick(illust)"
 		@click.ctrl="IA.save(illust, true)"
@@ -27,6 +27,8 @@
 
 		<p-state v-if="IA.state[illust.iid]?.L" :title="IA.state[illust.iid]?.L">{{ IA.state[illust.iid]?.L }}</p-state>
 		<p-state v-if="IA.state[illust.iid]?.R" right :title="IA.state[illust.iid]?.R">{{ IA.state[illust.iid]?.R }}</p-state>
+
+		<img thumb :src="props.illust.urlThumb" loading="lazy" @load="isSeen = true" />
 	</p-illust>
 </template>
 
@@ -49,12 +51,12 @@
 	const TA = inject('tabAdmin');
 	/** @type {import('vue').Ref<import('../../admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
-	/** @type {import('vue').Ref<import('../../admin/SeenAdmin.js').default>} */
-	const SA = inject('seenAdmin');
 
 
+	const isSafe = new URLSearchParams(location.search).get('safe') == 'true';
+	const isSeen = ref(false);
 	const backgroundImage = computed(() => {
-		if(!props.illust.urlThumb || !props.illust.isSeen) { return; }
+		if(!props.illust.urlThumb) { return; }
 
 		return `url(${props.illust.urlThumb})`;
 	});
@@ -71,10 +73,10 @@
 	);
 	const title = computed(() => `
 		${props.illust.iid}
-		● 标题：${props.illust.title}
-		● 作者：${props.illust.user}（${props.illust.uid}）
-		● 标签：${props.illust.tags.join('、')}
-		${textAI.value}
+							● 标题：${props.illust.title}
+							● 作者：${props.illust.user}（${props.illust.uid}）
+							● 标签：${props.illust.tags.join('、')}
+							${textAI.value}
 	`.replace(/\t/g, '').trim());
 
 
@@ -158,7 +160,6 @@
 
 
 	const elIllust = ref();
-	onMounted(() => SA.value.observe(props.illust, elIllust.value));
 
 
 	const emit = defineEmits(['mounted']);
@@ -167,7 +168,7 @@
 
 <style lang="sass" scoped>
 p-illust
-	@apply inblock relative bg-green-200 bg-no-repeat bg-top bg-cover text-center cursor-pointer
+	@apply inblock relative bg-green-200 bg-no-repeat bg-left-top bg-cover text-center cursor-pointer
 
 	scroll-snap-align: start
 
@@ -176,7 +177,10 @@ p-illust
 	transform: translateZ(0)
 
 	&:hover
-		@apply bg-bottom
+		@apply bg-right-bottom
+
+	&[safe-background]
+		@apply bg-blend-hue
 
 	max-height: calc(100% / 3)
 
@@ -219,4 +223,7 @@ p-illust
 
 		&[right]
 			@apply float-right
+
+	[thumb]
+		@apply absolute w-[1px] h-[1px]
 </style>
