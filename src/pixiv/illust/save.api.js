@@ -1,4 +1,4 @@
-import { C, G } from '@nuogz/pangu';
+import { C, Day, G } from '@nuogz/pangu';
 import { DB } from '../../../lib/db.js';
 
 import AS from 'assert';
@@ -6,7 +6,6 @@ import { createWriteStream } from 'fs';
 import { parse, resolve } from 'path';
 
 import Bluebird from 'bluebird';
-import Day from 'dayjs';
 import { removeSync, moveSync } from 'fs-extra/esm';
 
 import { getJSON, getStream, head } from '../get.lib.js';

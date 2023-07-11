@@ -3,7 +3,7 @@ import { dirPackage, C, G } from '@nuogz/pangu';
 
 import './lib/db.js';
 
-import './src/lib/moment.js';
+import './lib/day.js';
 
 import { resolve } from 'path';
 
@@ -15,12 +15,13 @@ import readRoute from '@nuogz/desire-route';
 import initMareParseProfile from './lib/mare/parseProfile.mare.js';
 
 
+
 ensureDirSync(C.dir.cacheIllustThumb);
 ensureDirSync(C.dir.cacheIllust);
 
 
-
 const { folds, faces } = await readRoute(resolve(dirPackage, 'src'));
+
 
 new Desire({
 	name: '服务',

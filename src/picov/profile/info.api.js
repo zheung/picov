@@ -1,8 +1,6 @@
-import { C } from '@nuogz/pangu';
+import { C, Day } from '@nuogz/pangu';
 
 import AS from 'assert';
-
-import Day from 'dayjs';
 
 
 

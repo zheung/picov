@@ -1,6 +1,6 @@
-import AS from 'assert';
+import { Day } from '@nuogz/pangu';
 
-import Day from 'dayjs';
+import AS from 'assert';
 
 import { DB } from '../../../lib/db.js';
 import assignThumbURL from '../../pixiv/illust/list/utility/assignThumbURL.lib.js';
