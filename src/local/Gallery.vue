@@ -8,11 +8,11 @@
 			@mousemove.exact="onMouseMove"
 		/>
 		<p-info v-if="I.imgNow">
-			{{`${I.indexNow + 1}/${I.files?.length ?? 0}`}}
+			{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }}
 			<br />
-			{{`${I.imgNow?.file || '（无文件）'}`}}
+			{{ `${I.imgNow?.file || '（无文件）'}` }}
 			<br />
-			{{`${I.imgNow?.width}x${I.imgNow.height}`}}
+			{{ `${I.imgNow?.width}x${I.imgNow.height}` }}
 		</p-info>
 	</module>
 </template>

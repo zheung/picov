@@ -8,9 +8,9 @@
 			@mousemove.exact="onMouseMove"
 		/>
 		<p-info>
-			{{`${I.indexNow + 1}/${I.files?.length ?? 0}`}}
+			{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }}
 			<br />
-			{{`${I.imgNow?.file || '（无文件）'}`}}
+			{{ `${I.imgNow?.file || '（无文件）'}` }}
 		</p-info>
 	</module>
 </template>

@@ -6,7 +6,7 @@
 
 			<p-part v-tip.bottom="'位置'" panel input _mode>
 				<Icon :icon="faCaretDown" corner />
-				<Combo v-model="I.locationPre" :list="listLocation" align="center" drop-align="left" @update:model-value="atFetch()" />
+				<Combo v-model="I.locationPre" :options="optionsLocation" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'刷新'" panel right @click="atFetch()"><Icon :icon="faSync" /></p-part>
@@ -105,9 +105,9 @@
 	onActivated(() => nextPager.value?.focus());
 
 
-	const listLocation = [
+	const optionsLocation = [
 		{ text: '预备', value: 'prepare' },
-		{ text: '存档', value: 'archive' },
+		{ text: '本地', value: 'archive' },
 	];
 </script>
 

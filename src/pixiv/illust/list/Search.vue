@@ -11,17 +11,17 @@
 
 			<p-part v-tip.bottom="'模式'" panel input _mode>
 				<Icon :icon="faCaretDown" corner />
-				<Combo v-model="I.modePre" :list="listMode" align="center" drop-align="left" @update:model-value="atFetch()" />
+				<Combo v-model="I.modePre" :options="optionsMode" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'匹配模式'" panel input _mode-search>
 				<Icon :icon="faCaretDown" corner />
-				<Combo v-model="I.modeSearchPre" :list="listModeSearch" align="center" drop-align="left" @update:model-value="atFetch()" />
+				<Combo v-model="I.modeSearchPre" :options="optionsModeSearch" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 			<p-part v-tip.bottom="'作品类型'" panel input _mode>
 				<Icon :icon="faCaretDown" corner />
-				<Combo v-model="I.typePre" :list="listType" align="center" drop-align="left" @update:model-value="atFetch()" />
+				<Combo v-model="I.typePre" :options="optionsType" align="center" drop-align="left" @update:model-value="atFetch()" />
 			</p-part>
 
 
@@ -57,7 +57,7 @@
 	import { faAngleDoubleRight, faAngleDoubleLeft, faDownload, faSave, faPaintBrush, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 
 
-	// import { Combo } from '@nuogz/vue-components';
+	import { Combo } from '@nuogz/vue-components';
 
 
 	import { Tab } from '../../../lib/TabAdmin.js';
@@ -161,13 +161,13 @@
 	onActivated(() => nextPager.value?.focus());
 
 
-	const listMode = [
+	const optionsMode = [
 		{ text: '全部', value: 'all' },
 		{ text: '安全', value: 'safe' },
 		{ text: '成人', value: 'r18' },
 	];
 
-	const listModeSearch = [
+	const optionsModeSearch = [
 		{ text: '标签 (部分一致)', value: 's_tag' },
 		{ text: '标签 (完全一致)', value: 's_tag_full' },
 		{ text: '标签/标题/简介', value: 's_tag_tc' },
@@ -175,7 +175,7 @@
 	];
 
 
-	const listType = [
+	const optionsType = [
 		{ text: '全部', value: 'artworks|all' },
 		{ text: '作品', value: 'illustrations|illust_and_ugoira' },
 		{ text: '插画', value: 'illustrations|illust' },
