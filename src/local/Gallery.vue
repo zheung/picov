@@ -9,9 +9,15 @@
 			@mousemove.exact="onMouseMove"
 		/>
 		<p-info v-if="I.imgNow">
-			{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }} [{{ `${I.imgNow?.width}x${I.imgNow.height}` }}]
-			<br />
-			{{ `${I.imgNow?.file || '（无文件）'}` }}
+			<div>{{ I.indexNow + 1 }}/{{ I.files?.length ?? 0 }}</div>
+			<template v-if="I.imgNow?.file">
+				<template v-if="/^[1-9]\d*_p\d+\./.test(I.imgNow.file)">
+					<div>{{ I.imgNow.file.split('_p')[0] }}</div>
+					<div>第{{ Number(I.imgNow.file.split('_p')[1].split('.')[0]) + 1 }}张</div>
+				</template>
+				<div v-else>{{ I.imgNow.file }}</div>
+				<div>{{ `${I.imgNow.width}x${I.imgNow.height}` }}</div>
+			</template>
 		</p-info>
 	</module>
 </template>
