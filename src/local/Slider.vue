@@ -9,9 +9,14 @@
 			@mousemove.exact="onMouseMove"
 		/>
 		<p-info>
-			{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }}
-			<br />
-			{{ `${I.imgNow?.file || '（无文件）'}` }}
+			<div>{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }}</div>
+			<template v-if="I.imgNow?.file">
+				<template v-if="/^[1-9]\d*_p\d+\./.test(I.imgNow.file)">
+					<div>{{ I.imgNow.file.split('_p')[0] }}</div>
+					<div>第{{ Number(I.imgNow.file.split('_p')[1].split('.')[0]) + 1 }}张</div>
+				</template>
+				<div v-else>{{ I.imgNow.file }}</div>
+			</template>
 		</p-info>
 	</module>
 </template>
@@ -358,6 +363,5 @@ canvas[grab]
 	@apply outline-none select-none cursor-grab
 
 p-info
-	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 bg-white
-
+	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 text-sm bg-[var(--cBack)]
 </style>

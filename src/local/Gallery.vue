@@ -396,12 +396,9 @@
 module
 	height: 100vh
 
-canvas
-	@apply relative z-50
-
-	&[grab]
-		@apply outline-none select-none cursor-grab
+canvas[grab]
+	@apply outline-none select-none cursor-grab
 
 p-info
-	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 text-sm
+	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 text-sm bg-[var(--cBack)]
 </style>
