@@ -1,0 +1,102 @@
+:root
+	--spc: theme("spacing.1")
+
+	--cBase: #0096FA
+	--cBaseComple: #FA6400
+
+	@media (prefers-color-scheme: light)
+		color-scheme: light
+		--cMain: var(--cBase)
+		--cTextMain: theme("colors.gray.100")
+		--cTextMainDisabled: theme("colors.gray.400")
+
+		--cBack: theme("colors.gray.100")
+		--cTextBack: theme("colors.gray.700")
+		--cTextBackDisabled: theme("colors.gray.400")
+		--cBorderBack: theme("colors.gray.700")
+	@media (prefers-color-scheme: dark)
+		color-scheme: dark
+		--cMain: var(--cBase)
+		--cTextMain: theme("colors.gray.100")
+		--cTextMainDisabled: theme("colors.gray.400")
+
+		--cBack: theme("colors.gray.700")
+		--cTextBack: theme("colors.gray.100")
+		--cTextBackDisabled: theme("colors.gray.400")
+		--cBorderBack: theme("colors.gray.100")
+	&.color-scheme-dark
+		color-scheme: dark
+		--cMain: var(--cBase)
+		--cTextMain: theme("colors.gray.100")
+		--cTextMainDisabled: theme("colors.gray.400")
+
+		--cBack: theme("colors.gray.700")
+		--cTextBack: theme("colors.gray.100")
+		--cTextBackDisabled: theme("colors.gray.400")
+		--cBorderBack: theme("colors.gray.100")
+
+	--cOkay: theme("colors.green.400")
+	--cFail: theme("colors.red.400")
+
+	--cSidebarRingFocus: var(--cBaseComple)
+	--cSidebarRingNow: var(--cTextBack)
+
+
+
+html
+	@apply h-full overflow-x-hidden overflow-y-auto
+	color: var(--cTextBack)
+	background: var(--cBack)
+
+input
+	color: var(--cTextBack)
+
+
+
+/** Global Scrollbar Style **/
+*
+	scrollbar-width: thin
+	scrollbar-color: color-mix(in srgb, var(--cMain) 50%, var(--cBack) 20%) color-mix(in srgb, var(--cMain) 20%, var(--cBack) 20%)
+
+::-webkit-scrollbar
+	@apply w-[var(--widthScroll)] h-[var(--widthScroll)]
+
+::-webkit-scrollbar-corner
+	@apply bg-transparent
+
+::-webkit-scrollbar-track:hover
+	background-color: color-mix(in srgb, var(--cMain) 20%, var(--cBack) 20%)
+
+::-webkit-scrollbar-thumb
+	background: color-mix(in srgb, var(--cMain) 50%, var(--cBack) 20%)
+
+	&:vertical
+		border-radius: var(--widthScroll) 0 0 var(--widthScroll)
+	&:horizontal
+		border-radius: var(--widthScroll) var(--widthScroll) 0 0
+	&:hover
+		background: color-mix(in srgb, var(--cMain) 80%, var(--cBack) 20%)
+	&:active
+		@apply bg-[var(--cMain)] border-0 border-solid border-[var(--cBack)]
+
+		&:vertical
+			@apply border-r
+		&:horizontal
+			@apply border-b
+
+
+/** Global Scrollbar Style (with Main color background) **/
+[back-scheme=main]
+	*
+		scrollbar-color: color-mix(in srgb, var(--cBack) 50%, var(--cMain) 20%) color-mix(in srgb, var(--cBack) 20%, var(--cMain) 20%)
+
+	&::-webkit-scrollbar-track:hover
+		background-color: color-mix(in srgb, var(--cBack) 20%, var(--cMain) 20%)
+
+	&::-webkit-scrollbar-thumb
+		background: color-mix(in srgb, var(--cBack) 50%, var(--cMain) 20%)
+
+		&:hover
+			background: color-mix(in srgb, var(--cBack) 80%, var(--cMain) 20%)
+		&:active
+			@apply bg-[var(--cBack)] border-[var(--cMain)]

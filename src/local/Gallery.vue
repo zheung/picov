@@ -9,11 +9,9 @@
 			@mousemove.exact="onMouseMove"
 		/>
 		<p-info v-if="I.imgNow">
-			{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }}
+			{{ `${I.indexNow + 1}/${I.files?.length ?? 0}` }} [{{ `${I.imgNow?.width}x${I.imgNow.height}` }}]
 			<br />
 			{{ `${I.imgNow?.file || '（无文件）'}` }}
-			<br />
-			{{ `${I.imgNow?.width}x${I.imgNow.height}` }}
 		</p-info>
 	</module>
 </template>
@@ -25,7 +23,7 @@
 	import Clipboard from 'clipboard';
 
 	import { $get, $post } from '@nuogz/aegis';
-	import { $alert } from '@nuogz/vue-alert';
+	import { $okay } from '@nuogz/vue-alert';
 
 	import { Tab } from '../lib/TabAdmin.js';
 
@@ -194,7 +192,7 @@
 					const dirIllustArchiveNew = prompt('修改作品保存路径', dirIllustArchive);
 					await $post('local/config/update-dirIllustArchive', { path: dirIllustArchiveNew });
 
-					$alert('修改作品保存路径成功');
+					$okay('修改作品保存路径成功');
 				}
 			},
 			{ line: true },
@@ -392,10 +390,12 @@
 module
 	height: 100vh
 
-canvas[grab]
-	@apply outline-none select-none cursor-grab
+canvas
+	@apply relative z-50
+
+	&[grab]
+		@apply outline-none select-none cursor-grab
 
 p-info
-	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 bg-white
-
+	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 text-sm
 </style>

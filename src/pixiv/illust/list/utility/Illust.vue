@@ -74,10 +74,10 @@
 	);
 	const title = computed(() => `
 		${props.illust.iid}
-										● 标题：${props.illust.title}
-										● 作者：${props.illust.user}（${props.illust.uid}）
-										● 标签：${props.illust.tags.join('、')}
-										${textAI.value}
+		● 标题：${props.illust.title}
+		● 作者：${props.illust.user}（${props.illust.uid}）
+		● 标签：${props.illust.tags.join('、')}
+		${textAI.value}
 	`.replace(/\t/g, '').trim());
 
 
@@ -201,7 +201,7 @@ p-illust
 
 	p-title
 		@apply relative block w-full h-6 leading-6 px-4 elli select-none
-		color: var(--colorText)
+		color: var(--cTextBack)
 
 		&:hover
 			@apply text-black
@@ -215,15 +215,15 @@ p-illust
 		@apply absolute w-full h-6 left-0 top-0 opacity-90
 
 		&::-webkit-progress-bar
-			background-color: var(--colorBackground)
+			background-color: var(--cBack)
 		&::-webkit-progress-value
-			background-color: var(--colorOkay)
+			background-color: var(--cOkay)
 
 	p-state
 		@apply relative inblock float-left text-xs py-1 px-1 elli select-none opacity-70
 		max-width: 50%
-		color: var(--colorText)
-		background-color: var(--colorBackground)
+		color: var(--cTextBack)
+		background-color: var(--cBack)
 
 		&[right]
 			@apply float-right

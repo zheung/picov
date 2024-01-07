@@ -31,8 +31,8 @@ comp-topbar
 			@apply rounded-md text-center text-xl shadow-mdd cursor-pointer outline-none
 			width: calc(var(--widthSidebar) - 1rem)
 			line-height: calc(var(--widthSidebar) - 1rem)
-			background-color: var(--colorTextMain)
-			color: var(--colorText)
+			background-color: var(--cTextMain)
+			color: var(--cTextBack)
 
 			&:focus-within
 				@apply ring-2 ring-yellow-500

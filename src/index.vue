@@ -91,17 +91,19 @@
 	import { $wock } from '@nuogz/wock-client';
 	import { $get, $post } from '@nuogz/aegis';
 
-
 	import TabAdmin from './lib/TabAdmin.js';
 	import IllustAdmin from './pixiv/illust/admin/IllustAdmin.js';
 	import UserAdmin from './pixiv/illust/admin/UserAdmin.js';
+
+	import './index.pcss';
+	import './index.sass';
 
 
 
 	document.title = 'Picov';
 
 
-	CV.widthSidebar = '3.5rem';
+	CV.widthSidebar = '3.6rem';
 	CV.widthScroll = '0.5rem';
 	CV.heightTopbar = '0rem';
 
@@ -183,9 +185,11 @@
 
 	const keyword = ref('');
 	const atSearch = (keywordNew = '', author = false) => {
-		const matchIID = keywordNew.trim().match(/pixiv\.net\/artworks\/([1-9]\d*)|^i([1-9]\d*)$|^pixiv #([1-9]\d*)$/i);
-		const matchUID = keywordNew.trim().match(/pixiv\.net\/users\/([1-9]\d*)|^u([1-9]\d*)$/i);
-		const iid = matchIID?.[1] ?? matchIID?.[2] ?? matchIID?.[3];
+		keywordNew = keywordNew.trim();
+
+		const matchIID = keywordNew.match(/pixiv\.net\/artworks\/([1-9]\d*)|^i([1-9]\d*)$|^pixiv #([1-9]\d*)$|^([1-9]\d*)_p\d+$/i);
+		const matchUID = keywordNew.match(/pixiv\.net\/users\/([1-9]\d*)|^u([1-9]\d*)$/i);
+		const iid = matchIID?.[1] ?? matchIID?.[2] ?? matchIID?.[3] ?? matchIID?.[4];
 		const uid = matchUID?.[1] ?? matchUID?.[2];
 
 		if(iid) {
@@ -194,7 +198,7 @@
 		else if(uid) {
 			TA.value.addIcon(`【作者】${uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', uid);
 		}
-		else if(/^[1-9]\d*$/.test(keywordNew.trim())) {
+		else if(/^[1-9]\d*$/.test(keywordNew)) {
 			if(author) {
 				TA.value.addIcon(`【作者】${keywordNew}`, faUserEdit, 'user', 'pixiv-illust-list-User', keywordNew);
 			}
@@ -221,6 +225,7 @@
 		interactive: true,
 		animation: '',
 		duration: [0, 0],
+		appendTo: 'parent',
 	}));
 
 
@@ -234,6 +239,7 @@
 		interactive: true,
 		animation: '',
 		duration: [0, 0],
+		appendTo: 'parent',
 	}));
 
 
@@ -248,6 +254,7 @@
 		animation: '',
 		duration: [0, 0],
 		offset: [1, 8],
+		appendTo: 'parent',
 	}));
 
 	const kindBookmarkNow = ref('常用');
@@ -260,7 +267,7 @@ p-sidebar
 	width: var(--widthSidebar)
 	height: calc(100% - var(--heightTopbar))
 	top: var(--heightTopbar)
-	background-color: var(--colorMain)
+	background-color: var(--cMain)
 
 
 	svg[corn]
@@ -272,8 +279,8 @@ p-sidebar
 		width: calc( var(--widthSidebar) - 0.55rem)
 		height: calc( var(--widthSidebar) - 0.55rem)
 		line-height: calc( var(--widthSidebar) - 0.55rem)
-		background-color: var(--colorTextMain)
-		color: var(--colorText)
+		background-color: var(--cTextMain)
+		color: var(--cTextBack)
 
 		&:focus
 			@apply ring-2 ring-yellow-500
@@ -309,8 +316,8 @@ p-sidebar
 			@apply relative block rounded-md mt-2 text-center text-xl shadow-mdd cursor-pointer outline-none w-40 elli
 			height: calc( var(--widthSidebar) - 0.55rem)
 			line-height: calc( var(--widthSidebar) - 0.55rem)
-			background-color: var(--colorTextMain)
-			color: var(--colorText)
+			background-color: var(--cTextMain)
+			color: var(--cTextBack)
 
 			&:hover
 				@apply ring-2 ring-green-500
@@ -328,15 +335,15 @@ p-sidebar
 				@apply ring-2 ring-blue-500
 
 	p-bookmarks
-		@apply block pt-0 pb-1 shadow-mdd bg-white rounded-md w-80 overflow-hidden
-		background-color: var(--colorTextMain)
-		color: var(--colorText)
+		@apply block pt-0 pb-1 shadow-mdd bg-white rounded-md w-[20rem] overflow-hidden
+		background-color: var(--cTextMain)
+		color: var(--cTextBack)
 
 		p-bookmark-kind
 			@apply inblock p-2 w-16 whitespace-nowrap select-none text-center cursor-pointer
 
 			&:hover
-				background-color: var(--cAccentSelected)
+				background-color: var(--cTextMainDisabled)
 
 			&[now]
 				@apply font-bold
@@ -345,7 +352,7 @@ p-sidebar
 			@apply inblock text-sm m-1 p-1 px-2 whitespace-nowrap select-none cursor-pointer border border-gray-400 rounded-lg
 
 			&:hover
-				background-color: var(--cAccentSelected)
+				background-color: var(--cTextMainDisabled)
 
 
 
@@ -357,82 +364,4 @@ p-main
 
 	module
 		@apply block relative
-</style>
-
-
-<style lang="postcss">
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-</style>
-
-
-<style lang="sass">
-html
-	--colorMain: theme("colors.blue.500")
-	--colorMainDark: theme("colors.blue.700")
-	--colorMainLight: theme("colors.blue.400")
-	--colorBackground: theme("colors.gray.100")
-	--colorText: theme("colors.gray.900")
-	--colorTextMain: theme("colors.gray.100")
-	--colorDisable: theme("colors.gray.500")
-	--colorOkay: theme("colors.green.500")
-	--colorFail: theme("colors.red.500")
-	--cAccentSelected: theme("colors.blue.200")
-	--cAccentHover: theme("colors.green.200")
-	--cLightD: theme("colors.gray.200")
-
-html
-	@apply h-full overflow-x-hidden overflow-y-auto
-	color: var(--colorText)
-
-
-// body
-// 	@apply bg-gray-500 sm:bg-blue-400 md:bg-red-400 lg:bg-green-500 xl:bg-yellow-500
-
-input
-	color: var(--colorText)
-
-/** Scrollbar Style **/
-*
-	scrollbar-width: thin
-	scrollbar-color: rgba(119, 119, 119, 0.3) rgba(119, 119, 119, 0.1)
-
-::-webkit-scrollbar
-	width: var(--widthScroll)
-	height: var(--widthScroll)
-
-::-webkit-scrollbar-track:hover
-	background-color: rgba(119, 119, 119, 0.1)
-
-::-webkit-scrollbar-thumb
-	border-radius: var(--widthScroll)
-	background: rgba(119, 119, 119, 0.3)
-
-::-webkit-scrollbar-thumb:hover
-	background: rgba(119, 119, 119, 0.4)
-
-::-webkit-scrollbar-thumb:active
-	background: rgba(119, 119, 119, 1)
-
-::-webkit-scrollbar-corner
-	background-color: transparent
-
-
-.transAll, .transAll *, .trans
-	transition-property: all
-	transition-duration: 0.4s
-
-	-webkit-transform: translateZ(0)
-	-moz-transform: translateZ(0)
-	-ms-transform: translateZ(0)
-	-o-transform: translateZ(0)
-	transform: translateZ(0)
-
-	&._d02
-		transition-duration: 0.2s
-	&._d07
-		transition-duration: 0.7s
-	&._d2
-		transition-duration: 2s
 </style>

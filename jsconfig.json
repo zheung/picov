@@ -4,7 +4,9 @@
 		"moduleResolution": "bundler",
 		"target": "esnext",
 		"experimentalDecorators": true,
-		"strict": true
+		"strict": true,
+		"allowJs": true,
+		"jsx": "preserve"
 	},
 	"include": [
 		"**/*.js",
@@ -12,7 +14,6 @@
 	],
 	"exclude": [
 		"node_modules",
-		"test",
 		"dist"
 	]
 }

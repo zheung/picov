@@ -3,7 +3,7 @@ import { C } from '@nuogz/pangu';
 import HTTPS from 'https';
 
 import Axios from 'axios';
-import HttpsProxyAgent from 'https-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 
 

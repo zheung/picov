@@ -1,8 +1,9 @@
 /node_modules
-/dist
 
 /test/local
-/test/*.local.js
+/test/*.local.*
+
+/dist
 
 /config
 

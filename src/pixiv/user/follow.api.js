@@ -18,6 +18,7 @@ export const handle = async raw => {
 	params.set('mode', 'add');
 	params.set('type', 'user');
 	params.set('user_id', raw.uid);
+	params.set('tag', '');
 	params.set('restrict', 0);
 	params.set('format', 'json');
 
