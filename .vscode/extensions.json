@@ -4,7 +4,7 @@
 		"csstools.postcss",
 		"syler.sass-indented",
 		"bradlc.vscode-tailwindcss",
-		"vue.vscode-typescript-vue-plugin",
-		"vue.volar"
+		"vue.volar",
+		"phoenisx.cssvar"
 	]
 }

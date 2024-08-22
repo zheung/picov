@@ -136,7 +136,7 @@
 		try {
 			const { pagePre } = updatePage(info, step_);
 			const iidsNow = info.alls.slice((pagePre - 1) * sizePage, pagePre * sizePage);
-			info.illustsNow = await IA.value.fetchIllusts(iidsNow);
+			info.illustsNow = await IA.value.fetchIllusts(iidsNow, true, info.uid);
 			stateFetch.value = 2;
 
 

@@ -83,8 +83,8 @@ class IllustAdmin {
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
-	async fetchIllusts(iids, isWatch = true) {
-		const illusts = (await this.$get('pixiv/illust/list/illust', { who: this.who, iids }))?.reverse() ?? [];
+	async fetchIllusts(iids, isWatch = true, uid) {
+		const illusts = (await this.$get('pixiv/illust/list/illust', { who: this.who, iids, uid }))?.reverse() ?? [];
 
 		return isWatch ? this.watch(illusts) : illusts;
 	}
@@ -123,9 +123,9 @@ class IllustAdmin {
 	async keepUgoira(iid) { return this.$post('local/ugoira/keep', { who: this.who, iid }); }
 	async deleteUgoira(iid) { return this.$post('local/ugoira/delete', { who: this.who, iid }); }
 
-	async keepFile(file, type = 'illustArchive', isCopy) { return this.$post('local/illust/keep', { who: this.who, file, type, isCopy }); }
-	async deleteFile(file) { return this.$post('local/illust/delete', { who: this.who, file }); }
-	async deleteFileBatch(files) { return this.$post('local/illust/delete-batch', { who: this.who, files }); }
+	async keepFile(file, dir, isCopy) { return this.$post('local/illust/keep', { file, dir, isCopy }); }
+	async deleteFile(file) { return this.$post('local/illust/delete', { file }); }
+	async deleteFileBatch(files) { return this.$post('local/illust/delete-batch', { files }); }
 }
 
 

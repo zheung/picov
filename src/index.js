@@ -20,13 +20,19 @@ const app = createApp(App);
 app.provide('app', app);
 
 
-window.addEventListener('load', async () => {
+const init = async () => {
 	app.mixin({ data() { return { brop }; } });
 
 	await installAlert(app);
 	aegis.alert = $alert;
 
-	app.directive('menu', MouseMenuDirective);
+	app.directive('menu', {
+		mounted: (el, binding, vnode, prevVNode) =>
+			binding.value?.menuList?.length
+				? MouseMenuDirective.mounted(el, binding, vnode, prevVNode)
+				: void 0,
+		unmounted: MouseMenuDirective.unmounted,
+	});
 
 	await installTippy(app);
 
@@ -36,4 +42,7 @@ window.addEventListener('load', async () => {
 
 
 	app.mount('#app');
-});
+};
+
+if(document.readyState == 'complete') { await init(); }
+else { window.addEventListener('load', init); }

@@ -5,11 +5,11 @@ import AS from 'assert';
 
 export const method = 'post';
 export const parseProfile = true;
-export const handle = ({ path, $profile: profile, $who }) => {
+export const handle = ({ path, $who }) => {
 	AS(path, `无效~[路径]~{${path}}`);
 
 	C.$.edit('profile', profiles => {
-		profiles[$who].dir._illustArchive = path.replace(/\\/g, '/');
+		profiles.find(p => p.name == $who).dir._illustArchive = path.replace(/\\/g, '/');
 
 		return profiles;
 	});

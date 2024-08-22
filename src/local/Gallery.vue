@@ -9,23 +9,33 @@
 			@mousemove.exact="onMouseMove"
 		/>
 		<p-info v-if="I.imgNow">
-			<div>{{ I.indexNow + 1 }}/{{ I.files?.length ?? 0 }}</div>
 			<template v-if="I.imgNow?.file">
-				<template v-if="/^[1-9]\d*_p\d+\./.test(I.imgNow.file)">
-					<div>{{ I.imgNow.file.split('_p')[0] }}</div>
-					<div>第{{ Number(I.imgNow.file.split('_p')[1].split('.')[0]) + 1 }}张</div>
-				</template>
-				<div v-else>{{ I.imgNow.file }}</div>
 				<div>{{ `${I.imgNow.width}x${I.imgNow.height}` }}</div>
+				<div>{{ I.imgNow.file }}</div>
 			</template>
+			<div>{{ I.indexNow + 1 }}/{{ I.files?.length ?? 0 }}</div>
 		</p-info>
+		<p-dash>
+			<p-dash-button v-for="(dir, title) of dirsArchive$title" :key="`dir-gallery-${title}`"
+				v-tip.right="dir" :now="brop(title == titleMain)" @click="titleMain = title"
+			>
+				{{ title }}
+			</p-dash-button>
+		</p-dash>
+		<p-dash _right>
+			<p-dash-button v-tip.left="'复制'" @click="copyFile"><Icon :icon="faCopy" /></p-dash-button>
+			<p-dash-button v-tip.left="'舍去'" @click="deleteFile"><Icon :icon="faXmark" /></p-dash-button>
+			<p-dash-button v-tip.left="'保留'" @click="keepFile"><Icon :icon="faCheck" /></p-dash-button>
+		</p-dash>
 	</module>
 </template>
 
 <script setup>
 	import { computed, inject, onActivated, onMounted, ref, watch } from 'vue';
 
-	import { faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+	import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
+	import { faListOl, faUserEdit, faCheck, faXmark, faCopy } from '@fortawesome/free-solid-svg-icons';
+	import Day from '../lib/day.js';
 	import Clipboard from 'clipboard';
 
 	import { $get, $post } from '@nuogz/aegis';
@@ -39,6 +49,30 @@
 	const TA = inject('tabAdmin');
 	/** @type {import('vue').Ref<import('../pixiv/illust/admin/IllustAdmin.js').default>} */
 	const IA = inject('illustAdmin');
+
+
+	/** @type {import('vue').Ref<import('../picov/profile/info.api.js').Profile>>} */
+	const profile = inject('profile');
+	const dirsArchive$title = profile.value.dirArchive;
+
+	const timeNow = Day();
+	for(const title in dirsArchive$title) {
+		dirsArchive$title[title] = dirsArchive$title[title].replace(/<(.*?)(?::(.*?))?>/g, (match, main, paramRaw) => {
+			if('title' == main) { return title; }
+
+			if('today' == main) { return timeNow.format(paramRaw); }
+			if('yesterday' == main) { return timeNow.add(-1, 'day').format(paramRaw); }
+			if('tomorrow' == main) { return timeNow.add(1, 'day').format(paramRaw); }
+		});
+	}
+
+	const titleMain = ref('今天');
+
+
+
+
+
+
 
 
 	const now = ref(new Tab());
@@ -123,16 +157,21 @@
 		}
 	});
 
-	const keepFile = () => {
+	const keepFile = async () => {
 		const info = I.value;
 
-		IA.value.keepFile(fileNow.value, 'illustArchive');
+		IA.value.keepFile(fileNow.value, dirsArchive$title[titleMain.value]);
 
 		const length = info.files.length;
 		info.indexNow = (length + (info.indexNow + 1) % length) % length;
 	};
-	const copyFile2 = () => {
-		IA.value.keepFile(fileNow.value, 'illustManual', true);
+	const copyFile = () => {
+		const info = I.value;
+
+		IA.value.keepFile(fileNow.value, dirsArchive$title[titleMain.value], true);
+
+		const length = info.files.length;
+		info.indexNow = (length + (info.indexNow + 1) % length) % length;
 	};
 	const deleteFile = () => {
 		const info = I.value;
@@ -152,7 +191,7 @@
 
 
 	const searchAuthor = async (iid) => {
-		const [illust] = await IA.value.fetchIllusts([iid]);
+		const [illust] = await IA.value.getLocalIllusts([iid], true);
 
 		TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
 	};
@@ -186,7 +225,7 @@
 			{ line: true },
 			{
 				label: '✔ 复制到【手动保存】',
-				fn: copyFile2
+				fn: copyFile
 			},
 
 			{ line: true },
@@ -295,11 +334,11 @@
 		const info = I.value;
 
 		if(e.altKey) {
-			if(e.deltaY > 0 && info.zoom - 10 > 0) {
-				info.zoom = info.zoom - 10;
+			if(e.deltaY > 0 && info.zoom - 40 > 0) {
+				info.zoom = info.zoom - 40;
 			}
 			else {
-				info.zoom = info.zoom + 10;
+				info.zoom = info.zoom + 40;
 			}
 
 			loadImage(info.imgNow);
@@ -354,11 +393,11 @@
 		const info = I.value;
 		// +：放大
 		if(event.keyCode == 107) {
-			info.zoom += 20;
+			info.zoom += 40;
 		}
 		// -：缩小
-		else if(event.keyCode == 109 && info.zoom - 10 > 0) {
-			info.zoom -= 20;
+		else if(event.keyCode == 109 && info.zoom - 40 > 0) {
+			info.zoom -= 40;
 		}
 		// *: 还原缩放
 		else if(event.keyCode == 106) {
@@ -400,5 +439,24 @@ canvas[grab]
 	@apply outline-none select-none cursor-grab
 
 p-info
-	@apply block absolute left-0 bottom-0 rounded-tr-md p-0.5 text-sm bg-[var(--cBack)]
+	@apply block absolute left-0 top-0 rounded-tr-md p-0.5 text-sm bg-[var(--cBack)]
+
+p-dash
+	@apply block absolute left-0 bottom-0
+
+	&[_right]
+		@apply left-[unset] right-0
+
+	p-dash-button
+		@apply relative block rounded-md text-center shadow-mdd m-2 cursor-pointer outline-none
+		@apply w-12 h-12 leading-[calc(var(--spc)*12)] bg-[var(--cBack)]
+
+		&:focus
+			@apply ring-2 ring-yellow-500
+
+		&:hover
+			@apply font-bold ring-2 ring-yellow-500 text-yellow-500
+
+		&[now]
+			@apply ring-2 ring-pink-400
 </style>

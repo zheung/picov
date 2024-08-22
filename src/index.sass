@@ -54,9 +54,10 @@ input
 
 
 /** Global Scrollbar Style **/
-*
-	scrollbar-width: thin
-	scrollbar-color: color-mix(in srgb, var(--cMain) 50%, var(--cBack) 20%) color-mix(in srgb, var(--cMain) 20%, var(--cBack) 20%)
+@-moz-document url-prefix()
+	*
+		scrollbar-width: thin
+		scrollbar-color: color-mix(in srgb, var(--cMain) 50%, var(--cBack) 20%) color-mix(in srgb, var(--cMain) 20%, var(--cBack) 20%)
 
 ::-webkit-scrollbar
 	@apply w-[var(--widthScroll)] h-[var(--widthScroll)]

@@ -26,13 +26,13 @@ export const handle = async ({ 'iids[]': ids, uid, $profile: profile, }) => {
 	if(!(ids instanceof Array)) { ids = [ids]; }
 
 	const data = await getJSON(
-		`https://www.pixiv.net/ajax/user/${uid ?? 0}/illusts`,
+		`https://www.pixiv.net/ajax/user/${uid ?? 10}/profile/illusts`,
 		profile.cookie,
-		{ ids }
+		{ ids, work_category: 'illust', is_first_page: '0' }
 	);
 
 
-	return Object.values(data?.body ?? {})
+	return Object.values(data?.body?.works ?? {})
 		?.map(item => formatItem(item))
 		?? [];
 };

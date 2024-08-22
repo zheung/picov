@@ -56,6 +56,7 @@
 					v-menu="{ params: tab, ...menuTab, disabled: () => tab.typeList == 'follow' }"
 					:now="brop(TA.now === tab)" :tabindex="100 + index" @click="TA.change(tab)"
 					@keydown.enter.space="TA.change(tab)"
+					@click.middle.exact="tab.typeList != 'follow' ? TA.del(tab) : void 0"
 				>
 					<template v-if="tab.typeTab == 'icon'">
 						<Icon :icon="tab.icon" />
@@ -115,6 +116,7 @@
 	watch(modulePre, loadModule);
 
 
+	/** @type {import('./picov/profile/info.api.js').Profile>} */
 	const profile = ref({});
 	provide('profile', profile);
 	const who = computed(() => profile.value.name);

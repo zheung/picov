@@ -11,378 +11,378 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
-
-	import { faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
-	import Clipboard from 'clipboard';
-	import { unzipSync } from 'fflate';
-
-	import { $get } from '@nuogz/aegis';
-	import { $alert } from '@nuogz/vue-alert';
+import { computed, inject, onActivated, onDeactivated, onMounted, ref } from 'vue';
+
+import { faListOl, faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import Clipboard from 'clipboard';
+import { unzipSync } from 'fflate';
+
+import { $get } from '@nuogz/aegis';
+import { $alert } from '@nuogz/vue-alert';
 
-	import { Tab } from '../../../lib/TabAdmin.js';
+import { Tab } from '../../../lib/TabAdmin.js';
 
 
 
-	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
-	const TA = inject('tabAdmin');
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('illustAdmin');
+/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
+const TA = inject('tabAdmin');
+/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
+const IA = inject('illustAdmin');
 
-	const now = ref(new Tab());
-	const I = computed(() => now.value.info);
+const now = ref(new Tab());
+const I = computed(() => now.value.info);
 
 
-	const who = inject('who');
+const who = inject('who');
 
 
-	const searchAuthor = async iid => {
-		const [illust] = await IA.value.fetchIllusts([iid]);
+const searchAuthor = async iid => {
+	const [illust] = await IA.value.getLocalIllusts([iid]);
 
-		TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
-	};
+	TA.value.addIcon(`【作者】${illust.uid}`, faUserEdit, 'user', 'pixiv-illust-list-User', illust.uid);
+};
 
 
-	const menuUgoira = {
-		useLongPressInMobile: true,
-		menuWrapperCss: { background: 'snow', borderRadius: '4px' },
-		menuItemCss: { hoverBackground: '#bfdbfe' },
-		menuList: [
-			{
-				label: '✔ 保留并关闭',
-				hidden: () => I.value.isArchive,
-				fn: () => { IA.value.keepUgoira(I.value.illust.iid); TA.value.del(now.value); }
-			},
-			{
-				label: '✖ 删除并关闭',
-				hidden: () => I.value.isArchive,
-				fn: () => { IA.value.deleteUgoira(I.value.illust.iid); TA.value.del(now.value); }
-			},
-			{
-				label: '🚪 关闭',
-				hidden: () => !I.value.isArchive,
-				fn: () => TA.value.del(now.value)
-			},
-			{ line: true, hidden: () => I.value.isArchive },
-			{
-				label: '✔ 保留',
-				hidden: () => I.value.isArchive,
-				fn: () => IA.value.keepUgoira(I.value.illust.iid)
-			},
-			{
-				label: '✖ 删除',
-				hidden: () => I.value.isArchive,
-				fn: () => IA.value.deleteUgoira(I.value.illust.iid)
-			},
+const menuUgoira = {
+	useLongPressInMobile: true,
+	menuWrapperCss: { background: 'snow', borderRadius: '4px' },
+	menuItemCss: { hoverBackground: '#bfdbfe' },
+	menuList: [
+		{
+			label: '✔ 保留并关闭',
+			hidden: () => I.value.isArchive,
+			fn: () => { IA.value.keepUgoira(I.value.illust.iid); TA.value.del(now.value); }
+		},
+		{
+			label: '✖ 删除并关闭',
+			hidden: () => I.value.isArchive,
+			fn: () => { IA.value.deleteUgoira(I.value.illust.iid); TA.value.del(now.value); }
+		},
+		{
+			label: '🚪 关闭',
+			hidden: () => !I.value.isArchive,
+			fn: () => TA.value.del(now.value)
+		},
+		{ line: true, hidden: () => I.value.isArchive },
+		{
+			label: '✔ 保留',
+			hidden: () => I.value.isArchive,
+			fn: () => IA.value.keepUgoira(I.value.illust.iid)
+		},
+		{
+			label: '✖ 删除',
+			hidden: () => I.value.isArchive,
+			fn: () => IA.value.deleteUgoira(I.value.illust.iid)
+		},
 
-			{ line: true },
-			{
-				label: '📂 搜索作品 ...',
-				fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, faListOl, 'number|once', 'pixiv-illust-list-Number', I.value.illust.iid)
-			},
-			{
-				label: '📂 搜索作者 ...',
-				fn: () => searchAuthor(I.value.illust.iid)
-			},
-			{
-				label: '📝 复制作品ID',
-				fn: () => Clipboard.copy(String(I.value.illust.iid)),
-			},
-		]
-	};
+		{ line: true },
+		{
+			label: '📂 搜索作品 ...',
+			fn: () => TA.value.addIcon(`【作品】${I.value.illust.iid}`, faListOl, 'number|once', 'pixiv-illust-list-Number', I.value.illust.iid)
+		},
+		{
+			label: '📂 搜索作者 ...',
+			fn: () => searchAuthor(I.value.illust.iid)
+		},
+		{
+			label: '📝 复制作品ID',
+			fn: () => Clipboard.copy(String(I.value.illust.iid)),
+		},
+	]
+};
 
 
-	const domBox = ref(null);
-	const domCanvas = ref(null);
+const domBox = ref(null);
+const domCanvas = ref(null);
 
-	const isMouseDown = ref(false);
-	const isMouseMove = ref(false);
+const isMouseDown = ref(false);
+const isMouseMove = ref(false);
 
 
-	const loadImage = img => {
-		const info = I.value;
+const loadImage = img => {
+	const info = I.value;
 
-		info.imgNow = img;
+	info.imgNow = img;
 
-		const ctx = domCanvas.value.getContext('2d');
-		const box = domBox.value;
+	const ctx = domCanvas.value.getContext('2d');
+	const box = domBox.value;
 
-		const boxWidth = box.offsetWidth - 1;
-		const boxHeight = box.offsetHeight - 1;
+	const boxWidth = box.offsetWidth - 1;
+	const boxHeight = box.offsetHeight - 1;
 
-		const imgWidth = img.width;
-		const imgHeight = img.height;
+	const imgWidth = img.width;
+	const imgHeight = img.height;
 
 
-		let finalWidth = imgWidth;
-		let finalHeight = imgHeight;
+	let finalWidth = imgWidth;
+	let finalHeight = imgHeight;
 
 
-		ctx.clearRect(info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
+	ctx.clearRect(info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
 
-		ctx.canvas.width = boxWidth;
-		ctx.canvas.height = boxHeight;
+	ctx.canvas.width = boxWidth;
+	ctx.canvas.height = boxHeight;
 
-		if(finalWidth < boxWidth) {
-			const diff = 1 - (finalWidth - boxWidth) / finalWidth;
+	if(finalWidth < boxWidth) {
+		const diff = 1 - (finalWidth - boxWidth) / finalWidth;
 
-			finalWidth = ~~(diff * finalWidth);
-			finalHeight = ~~(diff * finalHeight);
-		}
+		finalWidth = ~~(diff * finalWidth);
+		finalHeight = ~~(diff * finalHeight);
+	}
 
-		if(finalHeight < boxHeight) {
-			const diff = 1 - (finalHeight - boxHeight) / finalHeight;
+	if(finalHeight < boxHeight) {
+		const diff = 1 - (finalHeight - boxHeight) / finalHeight;
 
 
-			finalWidth = ~~(diff * finalWidth);
-			finalHeight = ~~(diff * finalHeight);
-		}
+		finalWidth = ~~(diff * finalWidth);
+		finalHeight = ~~(diff * finalHeight);
+	}
 
-		if(finalWidth > boxWidth) {
-			const diff = 1 - (finalWidth - boxWidth) / finalWidth;
+	if(finalWidth > boxWidth) {
+		const diff = 1 - (finalWidth - boxWidth) / finalWidth;
 
-			finalWidth = ~~(diff * finalWidth);
-			finalHeight = ~~(diff * finalHeight);
-		}
+		finalWidth = ~~(diff * finalWidth);
+		finalHeight = ~~(diff * finalHeight);
+	}
 
-		if(finalHeight > boxHeight) {
-			const diff = 1 - (finalHeight - boxHeight) / finalHeight;
+	if(finalHeight > boxHeight) {
+		const diff = 1 - (finalHeight - boxHeight) / finalHeight;
 
-			finalWidth = ~~(diff * finalWidth);
-			finalHeight = ~~(diff * finalHeight);
-		}
+		finalWidth = ~~(diff * finalWidth);
+		finalHeight = ~~(diff * finalHeight);
+	}
 
 
-		info.lastLeft = (boxWidth - finalWidth) / 2 + info.offsetWidth - finalWidth * ((info.zoom / 100 - 1) / 2);
-		info.lastTop = (boxHeight - finalHeight) / 2 + info.offsetHeight - finalHeight * ((info.zoom / 100 - 1) / 2);
+	info.lastLeft = (boxWidth - finalWidth) / 2 + info.offsetWidth - finalWidth * ((info.zoom / 100 - 1) / 2);
+	info.lastTop = (boxHeight - finalHeight) / 2 + info.offsetHeight - finalHeight * ((info.zoom / 100 - 1) / 2);
 
-		info.lastFinalWidth = finalWidth * info.zoom / 100;
-		info.lastFinalHeight = finalHeight * info.zoom / 100;
+	info.lastFinalWidth = finalWidth * info.zoom / 100;
+	info.lastFinalHeight = finalHeight * info.zoom / 100;
 
 
-		ctx.drawImage(img, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
+	ctx.drawImage(img, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
 
-		ctx.font = '14px bold';
-		ctx.fillStyle = 'black';
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
+	ctx.font = '14px bold';
+	ctx.fillStyle = 'black';
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
 
-		ctx.fillText(info.frames.length - info.indexNow, boxWidth - 24, boxHeight - 14);
-	};
+	ctx.fillText(info.frames.length - info.indexNow, boxWidth - 24, boxHeight - 14);
+};
 
-	const onSwitch = () => {
-		if(I.value.isPlaying) { pause(); }
-		else { play(I.value.indexNow); }
-	};
-	const pause = () => {
-		clearTimeout(I.value.timer);
+const onSwitch = () => {
+	if(I.value.isPlaying) { pause(); }
+	else { play(I.value.indexNow); }
+};
+const pause = () => {
+	clearTimeout(I.value.timer);
 
-		I.value.isPlaying = false;
-	};
-	const play = (nowPos = 0) => {
-		const info = I.value;
+	I.value.isPlaying = false;
+};
+const play = (nowPos = 0) => {
+	const info = I.value;
 
-		const frames = info.frames;
+	const frames = info.frames;
 
-		if(nowPos >= frames.length) { nowPos = 0; }
+	if(nowPos >= frames.length) { nowPos = 0; }
 
-		const frameNow = frames[nowPos];
+	const frameNow = frames[nowPos];
 
-		info.indexNow = nowPos;
+	info.indexNow = nowPos;
 
-		loadImage(frameNow.img);
+	loadImage(frameNow.img);
 
-		info.timer = setTimeout(() => play(nowPos + 1), frameNow.delay);
-		info.isPlaying = true;
-	};
+	info.timer = setTimeout(() => play(nowPos + 1), frameNow.delay);
+	info.isPlaying = true;
+};
 
-	const initPlayer = async () => {
-		const info = I.value;
-		const illust = info.illust;
-		const iid = illust.iid;
+const initPlayer = async () => {
+	const info = I.value;
+	const illust = info.illust;
+	const iid = illust.iid;
 
 
-		clearTimeout(info.timer);
+	clearTimeout(info.timer);
 
 
-		info.indexNow = 0;
+	info.indexNow = 0;
 
 
-		const frames = info.frames;
-		if(!frames) { return $alert(`动画（${iid}）缺少序列信息`); }
+	const frames = info.frames;
+	if(!frames) { return $alert(`动画（${iid}）缺少序列信息`); }
 
-		let zipBuffer;
-		try {
-			zipBuffer = await $get(`ugoira/prepare/${who.value}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
-		}
-		catch(error) {
-			zipBuffer = await $get(`ugoira/archive/${who.value}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+	let zipBuffer;
+	try {
+		zipBuffer = await $get(`ugoira/prepare/${who.value}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
+	}
+	catch(error) {
+		zipBuffer = await $get(`ugoira/archive/${who.value}/ugoira-${iid}.zip`, {}, { responseType: 'arraybuffer', prefix: '', return: 'raw' });
 
-			info.isArchive = true;
-		}
+		info.isArchive = true;
+	}
 
 
-		const imagesUint8Array = await unzipSync(new Uint8Array(zipBuffer));
-		const infosImage = Object.entries(imagesUint8Array).reduce((obj, [name, array]) => {
-			obj[name] = URL.createObjectURL(new Blob([array], { type: 'image/*' }));
+	const imagesUint8Array = await unzipSync(new Uint8Array(zipBuffer));
+	const infosImage = Object.entries(imagesUint8Array).reduce((obj, [name, array]) => {
+		obj[name] = URL.createObjectURL(new Blob([array], { type: 'image/*' }));
 
-			return obj;
-		}, {});
+		return obj;
+	}, {});
 
-		await Promise.all(frames.map((frame, index) => {
-			frame.index = index;
-			frame.next = frames[index + 1] ?? frames[0];
-			frame.url = infosImage[frame.file];
+	await Promise.all(frames.map((frame, index) => {
+		frame.index = index;
+		frame.next = frames[index + 1] ?? frames[0];
+		frame.url = infosImage[frame.file];
 
-			return new Promise(resolve => {
-				frame.img = new Image();
-				frame.img.addEventListener('load', resolve);
-				frame.img.src = frame.url;
-			});
-		}));
-	};
+		return new Promise(resolve => {
+			frame.img = new Image();
+			frame.img.addEventListener('load', resolve);
+			frame.img.src = frame.url;
+		});
+	}));
+};
 
 
 
-	const onWheel = e => {
-		const info = I.value;
+const onWheel = e => {
+	const info = I.value;
 
-		if(e.deltaY > 0 && info.zoom - 10 > 0) {
-			info.zoom = info.zoom - 10;
-		}
-		else {
-			info.zoom = info.zoom + 10;
-		}
+	if(e.deltaY > 0 && info.zoom - 10 > 0) {
+		info.zoom = info.zoom - 10;
+	}
+	else {
+		info.zoom = info.zoom + 10;
+	}
+
+	loadImage(info.imgNow);
+};
+const onMouseDown = () => {
+	isMouseDown.value = true;
+	isMouseMove.value = false;
+};
+const onMouseUp = () => {
+	if(isMouseDown.value && !isMouseMove.value) {
+		isMouseDown.value = false;
+		onSwitch();
+	}
+};
+const onMouseMove = e => {
+	const info = I.value;
+
+	if(isMouseDown.value && e.buttons == 1) {
+		isMouseMove.value = true;
+
+		info.offsetHeight += e.movementY;
+		info.offsetWidth += e.movementX;
 
 		loadImage(info.imgNow);
-	};
-	const onMouseDown = () => {
-		isMouseDown.value = true;
-		isMouseMove.value = false;
-	};
-	const onMouseUp = () => {
-		if(isMouseDown.value && !isMouseMove.value) {
-			isMouseDown.value = false;
-			onSwitch();
-		}
-	};
-	const onMouseMove = e => {
-		const info = I.value;
-
-		if(isMouseDown.value && e.buttons == 1) {
-			isMouseMove.value = true;
-
-			info.offsetHeight += e.movementY;
-			info.offsetWidth += e.movementX;
-
-			loadImage(info.imgNow);
-		}
-	};
+	}
+};
 
 
 
 
-	const onKeyDown = event => {
-		const info = I.value;
+const onKeyDown = event => {
+	const info = I.value;
 
-		// SPACE：播放、暂停
-		if(event.keyCode == 32) {
-			onSwitch();
-		}
-		// +：放大
-		else if(event.keyCode == 107) {
-			info.zoom += 20;
-		}
-		// -：缩小
-		else if(event.keyCode == 109 && info.zoom - 10 > 0) {
-			info.zoom -= 20;
-		}
-		// 上下左右：移动
-		else if([37, 38].includes(event.keyCode)) {
-			const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
-			info.offsetWidth -= off;
-		}
-		else if([39, 40].includes(event.keyCode)) {
-			const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
-			info.offsetWidth += off;
-		}
-	};
+	// SPACE：播放、暂停
+	if(event.keyCode == 32) {
+		onSwitch();
+	}
+	// +：放大
+	else if(event.keyCode == 107) {
+		info.zoom += 20;
+	}
+	// -：缩小
+	else if(event.keyCode == 109 && info.zoom - 10 > 0) {
+		info.zoom -= 20;
+	}
+	// 上下左右：移动
+	else if([37, 38].includes(event.keyCode)) {
+		const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
+		info.offsetWidth -= off;
+	}
+	else if([39, 40].includes(event.keyCode)) {
+		const off = event.ctrlKey ? 100 : (event.altKey ? 1 : 10);
+		info.offsetWidth += off;
+	}
+};
 
-	onMounted(() => TA.value.emitChange());
+onMounted(() => TA.value.emitChange());
 
-	TA.value.addChanger('ugoira', async tab => {
-		const [illustNew] = tab.params;
+TA.value.addChanger('ugoira', async tab => {
+	const [illustNew] = tab.params;
 
-		const old = now.value;
-		const info = tab.info;
+	const old = now.value;
+	const info = tab.info;
 
-		if(tab.typeList == 'ugoira' && (illustNew?.type == 2 || info.illust?.type == 2)) {
-			const canvas = domCanvas.value;
-			const ctx = canvas?.getContext('2d');
+	if(tab.typeList == 'ugoira' && (illustNew?.type == 2 || info.illust?.type == 2)) {
+		const canvas = domCanvas.value;
+		const ctx = canvas?.getContext('2d');
 
-			ctx?.clearRect(0, 0, canvas.width, canvas.height);
+		ctx?.clearRect(0, 0, canvas.width, canvas.height);
 
-			if(old == tab) {
-				if(info.isPlaying && info.isDeactive) {
-					play(info.indexNow + 1);
-				}
-				else {
-					ctx?.drawImage(info.imgNow, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
-				}
-
-				info.isDeactive = false;
+		if(old == tab) {
+			if(info.isPlaying && info.isDeactive) {
+				play(info.indexNow + 1);
 			}
 			else {
-				clearTimeout(old.info.timer);
-				old.info.isDeactive = true;
-
-				now.value = tab;
-
-				if(!tab.info.isInit) {
-					tab.info.isInit = true;
-					info.illust = illustNew;
-					info.isArchive = false;
-
-					info.frames = JSON.parse(JSON.stringify(IA.value.state[illustNew.iid]?.files));
-
-					info.indexNow = 0;
-					info.imgNow = 0;
-
-					info.timer = null;
-					info.isPlaying = true;
-					info.isDeactive = false;
-
-					info.zoom = 100;
-					info.offsetWidth = 0;
-					info.offsetHeight = 0;
-
-					info.lastLeft = 0;
-					info.lastTop = 0;
-					info.lastFinalWidth = 0;
-					info.lastFinalHeight = 0;
-
-					await initPlayer();
-
-					play();
-				}
-				else if(info.isPlaying && info.isDeactive) {
-					play(info.indexNow + 1);
-				}
-				else {
-					ctx?.drawImage(info.imgNow, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
-				}
-
-				info.isDeactive = false;
+				ctx?.drawImage(info.imgNow, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
 			}
+
+			info.isDeactive = false;
 		}
-	});
+		else {
+			clearTimeout(old.info.timer);
+			old.info.isDeactive = true;
+
+			now.value = tab;
+
+			if(!tab.info.isInit) {
+				tab.info.isInit = true;
+				info.illust = illustNew;
+				info.isArchive = false;
+
+				info.frames = JSON.parse(JSON.stringify(IA.value.state[illustNew.iid]?.files));
+
+				info.indexNow = 0;
+				info.imgNow = 0;
+
+				info.timer = null;
+				info.isPlaying = true;
+				info.isDeactive = false;
+
+				info.zoom = 100;
+				info.offsetWidth = 0;
+				info.offsetHeight = 0;
+
+				info.lastLeft = 0;
+				info.lastTop = 0;
+				info.lastFinalWidth = 0;
+				info.lastFinalHeight = 0;
+
+				await initPlayer();
+
+				play();
+			}
+			else if(info.isPlaying && info.isDeactive) {
+				play(info.indexNow + 1);
+			}
+			else {
+				ctx?.drawImage(info.imgNow, info.lastLeft, info.lastTop, info.lastFinalWidth, info.lastFinalHeight);
+			}
+
+			info.isDeactive = false;
+		}
+	}
+});
 
 
-	onActivated(() => domCanvas.value?.focus());
-	onDeactivated(() => {
-		clearTimeout(I.value.timer);
-		I.value.isDeactive = true;
-	});
+onActivated(() => domCanvas.value?.focus());
+onDeactivated(() => {
+	clearTimeout(I.value.timer);
+	I.value.isDeactive = true;
+});
 </script>
 
 <style lang="sass" scoped>

@@ -14,107 +14,107 @@
 </template>
 
 <script setup>
-	import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
+import { computed, inject, onActivated, onMounted, provide, ref } from 'vue';
 
-	import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
-	import { faSync, faSave } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon as Icon } from '@fortawesome/vue-fontawesome';
+import { faSync, faSave } from '@fortawesome/free-solid-svg-icons';
 
-	import { Tab } from '../../../lib/TabAdmin.js';
-
-
-	import Illusts from './utility/Illusts.vue';
-	import Topbar from './utility/Topbar.vue';
-
-	import { stateFetchIcon } from './utility/stateFetch.js';
+import { Tab } from '../../../lib/TabAdmin.js';
 
 
+import Illusts from './utility/Illusts.vue';
+import Topbar from './utility/Topbar.vue';
 
-	/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
-	const TA = inject('tabAdmin');
-	/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
-	const IA = inject('illustAdmin');
-
-	const now = ref(new Tab());
-	const I = computed(() => now.value.info);
+import { stateFetchIcon } from './utility/stateFetch.js';
 
 
-	const counter = computed(() => IA.value.countText(I.value.illustsNow));
+
+/** @type {import('vue').Ref<import('../../../lib/TabAdmin.js').default>} */
+const TA = inject('tabAdmin');
+/** @type {import('vue').Ref<import('../admin/IllustAdmin.js').default>} */
+const IA = inject('illustAdmin');
+
+const now = ref(new Tab());
+const I = computed(() => now.value.info);
 
 
-	const recoverScrollTop = ref(null);
-	provide('recoverScrollTop', recoverScrollTop);
-	const updateScrollTop = tab => recoverScrollTop.value = [tab];
-	onActivated(() => updateScrollTop(now.value));
-
-	const atScroll = top => now.value.scrollTop = top;
+const counter = computed(() => IA.value.countText(I.value.illustsNow));
 
 
-	const stateFetch = ref(0);
-	const atFetchNew = async iid => {
-		const tabNow = now.value;
-		const info = tabNow.info;
+const recoverScrollTop = ref(null);
+provide('recoverScrollTop', recoverScrollTop);
+const updateScrollTop = tab => recoverScrollTop.value = [tab];
+onActivated(() => updateScrollTop(now.value));
 
-		stateFetch.value = 1;
-		try {
-			info.iids.unshift(iid);
-			info.illustsNow.unshift(...await IA.value.fetchIllusts([iid]));
-
-			stateFetch.value = 2;
+const atScroll = top => now.value.scrollTop = top;
 
 
-			tabNow.scrollTop = 0;
-			updateScrollTop(tabNow);
-		}
-		catch(error) {
-			stateFetch.value = 3;
+const stateFetch = ref(0);
+const atFetchNew = async iid => {
+	const tabNow = now.value;
+	const info = tabNow.info;
 
-			throw error;
-		}
-	};
-	const atFetch = async () => {
-		const tabNow = now.value;
-		const info = tabNow.info;
+	stateFetch.value = 1;
+	try {
+		info.iids.unshift(iid);
+		info.illustsNow.unshift(...await IA.value.fetchIllusts([iid]));
 
-		stateFetch.value = 1;
-		try {
-			info.illustsNow = await IA.value.fetchIllusts(info.iids);
-
-			stateFetch.value = 2;
+		stateFetch.value = 2;
 
 
-			tabNow.scrollTop = 0;
-			updateScrollTop(tabNow);
-		}
-		catch(error) {
-			stateFetch.value = 3;
+		tabNow.scrollTop = 0;
+		updateScrollTop(tabNow);
+	}
+	catch(error) {
+		stateFetch.value = 3;
 
-			throw error;
-		}
-	};
+		throw error;
+	}
+};
+const atFetch = async () => {
+	const tabNow = now.value;
+	const info = tabNow.info;
+
+	stateFetch.value = 1;
+	try {
+		info.illustsNow = await IA.value.fetchIllusts(info.iids);
+
+		stateFetch.value = 2;
 
 
-	onMounted(() => TA.value.emitChange());
+		tabNow.scrollTop = 0;
+		updateScrollTop(tabNow);
+	}
+	catch(error) {
+		stateFetch.value = 3;
 
-	TA.value.addChanger('number', tab => {
-		now.value = tab;
+		throw error;
+	}
+};
 
 
-		if(!tab.info.isInit) {
-			tab.info.isInit = true;
+onMounted(() => TA.value.emitChange());
 
-			tab.title = '【搜索ID】';
+TA.value.addChanger('number', tab => {
+	now.value = tab;
 
-			tab.info.illustsNow = [];
 
-			tab.info.iids = [];
-		}
+	if(!tab.info.isInit) {
+		tab.info.isInit = true;
 
-		const [iid] = tab.params;
+		tab.title = '【搜索ID】';
 
-		if(iid) {
-			atFetchNew(iid);
-		}
-	});
+		tab.info.illustsNow = [];
+
+		tab.info.iids = [];
+	}
+
+	const [iid] = tab.params;
+
+	if(iid) {
+		atFetchNew(iid);
+	}
+});
 </script>
 
 <style lang="sass" scoped>

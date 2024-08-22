@@ -6,14 +6,20 @@
 		"experimentalDecorators": true,
 		"strict": true,
 		"allowJs": true,
-		"jsx": "preserve"
+		"jsx": "preserve",
+		"declaration": true,
+		"declarationDir": "./types",
+		"emitDeclarationOnly": true
 	},
 	"include": [
+		"bases.d.ts",
+		"shims.d.ts",
 		"**/*.js",
 		"**/*.vue"
 	],
 	"exclude": [
+		"eslint.config.js",
 		"node_modules",
-		"dist"
+		"test"
 	]
 }

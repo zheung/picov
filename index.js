@@ -1,5 +1,4 @@
-import './index.env.js';
-import { dirPackage, C, G } from '@nuogz/pangu';
+import { dirWorking, C, G } from '@nuogz/pangu/index.js?i18n&dir&config=.db&log&day';
 
 import './lib/db.js';
 
@@ -12,7 +11,7 @@ import { ensureDirSync } from 'fs-extra/esm';
 import Desire from '@nuogz/desire';
 import readRoute from '@nuogz/desire-route';
 
-import initMareParseProfile from './lib/mare/parseProfile.mare.js';
+import initMareParseProfile from './src/lib/mare/parse-profile.mare.lib.js';
 
 
 
@@ -20,7 +19,7 @@ ensureDirSync(C.dir.cacheIllustThumb);
 ensureDirSync(C.dir.cacheIllust);
 
 
-const { folds, faces } = await readRoute(resolve(dirPackage, 'src'));
+const { folds, faces } = await readRoute(resolve(dirWorking, 'src'));
 
 
 const desire = await new Desire({

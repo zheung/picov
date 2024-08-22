@@ -6,9 +6,9 @@ const maps = [
 	{ prefix: '/', location: '../dist' },
 ];
 
-Object.entries(C.profile).forEach(([id, profile]) => {
-	maps.push({ prefix: `/ugoira/prepare/${id}`, location: profile.dir.ugoiraPrepare });
-	maps.push({ prefix: `/ugoira/archive/${id}`, location: profile.dir.ugoiraArchive });
+C.profile.forEach((profile) => {
+	maps.push({ prefix: `/ugoira/prepare/${profile.name}`, location: profile.dir.ugoiraPrepare });
+	maps.push({ prefix: `/ugoira/archive/${profile.name}`, location: profile.dir.ugoiraArchive });
 });
 
 

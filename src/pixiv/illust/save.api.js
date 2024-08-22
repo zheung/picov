@@ -167,7 +167,7 @@ const fetchMap = async (db, infosFetch, iid, cookie) => {
 
 export const method = 'wock';
 export const handle = async (illust, who, force) => {
-	const profile = C.profile[who];
+	const profile = C.profile.find(profile => profile.name == who);
 	AS(profile, `未找到~[档案]~{${who}}`);
 
 	const { iid, count, type } = illust;

@@ -8,7 +8,7 @@ import { getText } from '../get.lib.js';
 
 export const method = 'get';
 export const handle = async ({ who }) => {
-	const profile = C.profile[who];
+	const profile = C.profile.find(profile => profile.name == who);
 	AS(profile, `未找到~[档案]~{${who}}`);
 
 
