@@ -186,10 +186,11 @@ p-illust
 	&[safe-background]
 		@apply bg-blend-hue
 
-	max-height: calc(100% / 3)
+	&
+		max-height: calc(100% / 3)
 
-	width: calc((100vw - var(--widthSidebar) - var(--widthScroll)) / 3)
-	height: calc(100% / 4)
+		width: calc((100vw - var(--widthSidebar) - var(--widthScroll)) / 3)
+		height: calc(100% / 4)
 
 	@media (min-width: 768px)
 		width: calc((100vw - var(--widthSidebar) - var(--widthScroll)) / 4)
