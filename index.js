@@ -1,4 +1,5 @@
-import { dirWorking, C, G } from '@nuogz/pangu/index.js?i18n&dir&config=.db&log&day';
+import '@nuogz/pangu/index.js?i18n&dir&config=.db&log&day';
+import { dirWorking, C, G } from '@nuogz/pangu';
 
 import './lib/db.js';
 
@@ -29,21 +30,22 @@ const desire = await new Desire({
 
 	/** @type {import('@nuogz/desire-harbour').HarbourOption} */
 	harbour: {
+		facePrefix: '/api',
+		faces,
+		folds,
 		mare: {
 			before: ['parseRaw', initMareParseProfile],
 			after: ['toSuccess'],
 		},
-
-		facePrefix: '/api',
-
-		faces,
-		folds,
-
 		wock: {
 			disable: false,
 			route: 'wock',
 			ping: false,
 		},
+	},
+
+	module: {
+		favicon: false,
 	},
 
 	logger: { logger: G },
