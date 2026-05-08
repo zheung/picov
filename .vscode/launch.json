@@ -4,19 +4,6 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Current File",
-			"console": "integratedTerminal",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"cwd": "${fileDirname}",
-			"runtimeExecutable": "node",
-			"program": "${fileBasename}",
-			"args": []
-		},
-		{
-			"type": "node",
-			"request": "launch",
 			"name": "Server",
 			"console": "integratedTerminal",
 			"skipFiles": [
@@ -25,6 +12,19 @@
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "node",
 			"program": "index.js",
+			"args": []
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch Current File",
+			"console": "integratedTerminal",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"cwd": "${fileDirname}",
+			"runtimeExecutable": "node",
+			"program": "${fileBasename}",
 			"args": []
 		}
 	]

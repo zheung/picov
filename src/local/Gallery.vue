@@ -197,7 +197,7 @@
 	};
 
 
-	const iidNow = computed(() => fileNow.value?.split('_')?.[0]);
+	const iidNow = computed(() => fileNow.value?.split(/[_-]/)?.[0]);
 
 	const menuUgoira = {
 		useLongPressInMobile: true,

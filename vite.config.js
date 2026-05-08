@@ -1,5 +1,6 @@
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { defineConfig } from 'vite';
 import pluginVue from '@vitejs/plugin-vue';
@@ -7,6 +8,7 @@ import pluginVue from '@vitejs/plugin-vue';
 
 
 const dirPackage = dirname(fileURLToPath(import.meta.url));
+const PKG = JSON.parse(readFileSync(resolve(dirPackage, 'package.json'), 'utf-8'));
 
 export default defineConfig(({ mode }) => {
 	return {
@@ -19,6 +21,7 @@ export default defineConfig(({ mode }) => {
 				}
 			})
 		],
+		define: { PACKAGE_VERSION: JSON.stringify(PKG.version) },
 		root: resolve(dirPackage, 'src'),
 		base: './',
 		build: {
@@ -26,20 +29,13 @@ export default defineConfig(({ mode }) => {
 			outDir: resolve(dirPackage, 'dist'),
 			emptyOutDir: true,
 			chunkSizeWarningLimit: 1024,
-			minify: true,
-		},
-		optimizeDeps: {
-			esbuildOptions: {
-				target: 'esnext'
-			}
+			minify: false
 		},
 		publicDir: resolve(dirPackage, 'src', 'public'),
 		clearScreen: false,
 		server: {
-			hmr: {
-				port: 4591,
-			},
-			port: 4791,
+			hmr: { port: 4500 },
+			port: 4700,
 			proxy: {
 				'^/ugoira/(prepare|archive)/': {
 					target: 'http://127.0.0.1:14791',
@@ -55,6 +51,7 @@ export default defineConfig(({ mode }) => {
 			},
 			watch: {
 				ignored: [
+					'!**/@nuogz/**',
 					'**/*.{api,lib,map}.js',
 					'**/*.lib/**/*.js'
 				]
